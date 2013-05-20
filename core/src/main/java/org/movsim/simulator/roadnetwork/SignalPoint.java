@@ -28,9 +28,8 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.Iterator;
 
-import javax.annotation.Nullable;
-
 import org.movsim.simulator.roadnetwork.controller.RoadObjectController;
+import org.movsim.simulator.roadnetwork.predicates.VehiclePassedPosition;
 import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Preconditions;
@@ -68,25 +67,6 @@ public class SignalPoint {
 
     Predicate<Vehicle> predicate() {
         return vehiclePassedPosition;
-    }
-
-    private static final class VehiclePassedPosition implements Predicate<Vehicle> {
-
-        private final double position;
-
-        public VehiclePassedPosition(double position) {
-            this.position = position;
-        }
-
-        @Override
-        public boolean apply(@Nullable Vehicle vehicle) {
-            if (vehicle == null) {
-                return false;
-            }
-            assert vehicle.getFrontPositionOld() <= vehicle.getFrontPosition() : "oldPos > pos!";
-            return vehicle.getFrontPositionOld() <= position && vehicle.getFrontPosition() > position;
-        }
-
     }
 
 }

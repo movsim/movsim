@@ -1,4 +1,4 @@
-package org.movsim.simulator.trafficlights;
+package org.movsim.simulator.roadnetwork.controller;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-abstract class TrafficLightController implements SimulationTimeStep, TriggerCallback, Iterable<TrafficLight> {
+public abstract class TrafficLightController implements SimulationTimeStep, TriggerCallback, Iterable<TrafficLight> {
     /** The Constant LOG. */
-    static final Logger LOG = LoggerFactory.getLogger(TrafficLightController.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(TrafficLightController.class);
 
     /** mapping from the 'physical' controller.control.type to the 'logical' trafficlight */
     final Map<String, TrafficLight> trafficLights;
@@ -30,6 +30,8 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
     final List<Phase> phases;
 
     String firstSignalId; // needed for logging
+
+    private TrafficLightRecordDataCallback recordDataCallback;
 
     TrafficLightController(ControllerGroup controllerGroup) {
         trafficLights = new HashMap<>();
@@ -51,14 +53,14 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
 
         trafficLight.setState(getInitTrafficLightState(trafficLight.signalType()));
         // determine possible states
-        for (Phase phase : phases) {
-            for (TrafficLightState trafficlightState : phase.getTrafficLightState()) {
-                String type = Preconditions.checkNotNull(trafficlightState.getType());
-                if (trafficLight.signalType().equals(type)) {
-                    trafficLight.addPossibleState(trafficlightState.getStatus());
-                }
-            }
-        }
+        // for (Phase phase : phases) {
+        // for (TrafficLightState trafficlightState : phase.getTrafficLightState()) {
+        // String type = Preconditions.checkNotNull(trafficlightState.getType());
+        // if (trafficLight.signalType().equals(type)) {
+        // trafficLight.addPossibleState(trafficlightState.getStatus());
+        // }
+        // }
+        // }
     }
 
     private TrafficLightStatus getInitTrafficLightState(String signalType) {
@@ -86,7 +88,7 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
     }
 
     // for logging
-    String firstSignalId() {
+    public String firstSignalId() {
         return Preconditions.checkNotNull(firstSignalId);
     }
 
@@ -118,22 +120,8 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
         }
     }
 
-    public interface RecordDataCallback {
-        /**
-         * Callback to allow the application to process or record the traffic light data.
-         * 
-         * @param simulationTime
-         *            the current logical time in the simulation
-         * @param iterationCount
-         * @param trafficLights
-         */
-        public void recordData(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights);
-    }
-
-    private RecordDataCallback recordDataCallback;
-
-    public void setRecorder(RecordDataCallback recordDataCallback) {
-        this.recordDataCallback = recordDataCallback;
+    public final void setRecorder(TrafficLightRecordDataCallback recordDataCallback) {
+        this.recordDataCallback = Preconditions.checkNotNull(recordDataCallback);
     }
 
 }

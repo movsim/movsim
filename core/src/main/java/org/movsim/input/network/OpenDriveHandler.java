@@ -38,7 +38,7 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.controller.GradientProfile;
 import org.movsim.simulator.roadnetwork.controller.RoadObject;
 import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
-import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.xml.NetworkLoadAndValidation;
 import org.slf4j.Logger;
@@ -208,9 +208,14 @@ public class OpenDriveHandler {
                     LOG.info("add speed limit={}", speedLimit);
                     roadSegment.roadObjects().add(speedLimit);
                     if (roadObject.isSetValidLength()) {
-                        double position = roadObject.getS() + roadObject.getValidLength();
+                        double endPosition = roadObject.getS() + roadObject.getValidLength();
+                        if (endPosition > roadSegment.roadLength()) {
+                            throw new IllegalArgumentException("speedlimit validity range="
+                                    + roadObject.getValidLength() + " results in=" + endPosition
+                                    + " which exceeds the roadlength of roadSegment=" + roadSegment.userId());
+                        }
                         roadSegment.roadObjects().add(
-                                new SpeedLimit(position, MovsimConstants.MAX_VEHICLE_SPEED, roadSegment));
+                                new SpeedLimit(endPosition, MovsimConstants.MAX_VEHICLE_SPEED, roadSegment));
                     }
                 } else {
                     LOG.error("road object type " + roadObjectType + " not supported.");

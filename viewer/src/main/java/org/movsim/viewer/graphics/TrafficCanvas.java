@@ -43,7 +43,6 @@ import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMapping.PosTheta;
 import org.movsim.roadmappings.RoadMappingPeer;
@@ -56,7 +55,7 @@ import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
 import org.movsim.simulator.roadnetwork.controller.GradientProfile;
 import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
-import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
 import org.movsim.utilities.Units;
@@ -637,28 +636,28 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @param g
      * @param trafficLight
      */
-    private static void drawTrafficLight1(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
-            double radius) {
-        g.setColor(Color.DARK_GRAY);
-        g.fill(trafficLightRect);
-        switch (trafficLight.status()) {
-        case GREEN:
-            g.setColor(Color.GREEN);
-            break;
-        case GREEN_RED:
-            g.setColor(Color.YELLOW);
-            break;
-        case RED:
-            g.setColor(Color.RED);
-            break;
-        case RED_GREEN:
-            g.setColor(Color.ORANGE);
-            break;
-        }
-        final double x = trafficLightRect.getCenterX();
-        final double y = trafficLightRect.getCenterY();
-        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    }
+    // private static void drawTrafficLight1(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
+    // double radius) {
+    // g.setColor(Color.DARK_GRAY);
+    // g.fill(trafficLightRect);
+    // switch (trafficLight.status()) {
+    // case GREEN:
+    // g.setColor(Color.GREEN);
+    // break;
+    // case GREEN_RED:
+    // g.setColor(Color.YELLOW);
+    // break;
+    // case RED:
+    // g.setColor(Color.RED);
+    // break;
+    // case RED_GREEN:
+    // g.setColor(Color.ORANGE);
+    // break;
+    // }
+    // final double x = trafficLightRect.getCenterX();
+    // final double y = trafficLightRect.getCenterY();
+    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
+    // }
 
     /**
      * Draw a traffic light that has two lights
@@ -666,28 +665,28 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @param g
      * @param trafficLight
      */
-    private static void drawTrafficLight2(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
-            double radius) {
-        g.setColor(Color.DARK_GRAY);
-        g.fill(trafficLightRect);
-        final Double width = trafficLightRect.getWidth();
-        final Double height = trafficLightRect.getHeight();
-
-        // draw the top light
-        g.setColor(trafficLight.status() == TrafficLightStatus.RED ? Color.RED : Color.LIGHT_GRAY);
-        Rectangle2D rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY(), width, height / 2.0);
-        double x = rect.getCenterX();
-        double y = rect.getCenterY();
-        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-
-        // draw the bottom light
-        g.setColor(trafficLight.status() == TrafficLightStatus.GREEN ? Color.GREEN : Color.LIGHT_GRAY);
-        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 2.0, width,
-                height / 2.0);
-        x = rect.getCenterX();
-        y = rect.getCenterY();
-        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    }
+    // private static void drawTrafficLight2(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
+    // double radius) {
+    // g.setColor(Color.DARK_GRAY);
+    // g.fill(trafficLightRect);
+    // final Double width = trafficLightRect.getWidth();
+    // final Double height = trafficLightRect.getHeight();
+    //
+    // // draw the top light
+    // g.setColor(trafficLight.status() == TrafficLightStatus.RED ? Color.RED : Color.LIGHT_GRAY);
+    // Rectangle2D rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY(), width, height / 2.0);
+    // double x = rect.getCenterX();
+    // double y = rect.getCenterY();
+    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
+    //
+    // // draw the bottom light
+    // g.setColor(trafficLight.status() == TrafficLightStatus.GREEN ? Color.GREEN : Color.LIGHT_GRAY);
+    // rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 2.0, width,
+    // height / 2.0);
+    // x = rect.getCenterX();
+    // y = rect.getCenterY();
+    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
+    // }
 
     /**
      * Draw a traffic light that has three lights
@@ -695,42 +694,42 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @param g
      * @param trafficLight
      */
-    private static void drawTrafficLight3(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
-            double radius) {
-        g.setColor(Color.DARK_GRAY);
-        g.fill(trafficLightRect);
-        final Double width = trafficLightRect.getWidth();
-        final Double height = trafficLightRect.getHeight();
-
-        // draw the top light
-        g.setColor(trafficLight.status() == TrafficLightStatus.RED ? Color.RED : Color.LIGHT_GRAY);
-        Rectangle2D rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY(), width, height / 3.0);
-        double x = rect.getCenterX();
-        double y = rect.getCenterY();
-        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-
-        // draw the middle light
-        if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
-            g.setColor(Color.YELLOW);
-        } else if (trafficLight.status() == TrafficLightStatus.RED_GREEN) {
-            g.setColor(Color.ORANGE);
-        } else {
-            g.setColor(Color.LIGHT_GRAY);
-        }
-        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 3.0, width,
-                height / 3.0);
-        x = rect.getCenterX();
-        y = rect.getCenterY();
-        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-
-        // draw the bottom light
-        g.setColor(trafficLight.status() == TrafficLightStatus.GREEN ? Color.GREEN : Color.LIGHT_GRAY);
-        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + 2.0 * height / 3.0, width,
-                height / 3.0);
-        x = rect.getCenterX();
-        y = rect.getCenterY();
-        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    }
+    // private static void drawTrafficLight3(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
+    // double radius) {
+    // g.setColor(Color.DARK_GRAY);
+    // g.fill(trafficLightRect);
+    // final Double width = trafficLightRect.getWidth();
+    // final Double height = trafficLightRect.getHeight();
+    //
+    // // draw the top light
+    // g.setColor(trafficLight.status() == TrafficLightStatus.RED ? Color.RED : Color.LIGHT_GRAY);
+    // Rectangle2D rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY(), width, height / 3.0);
+    // double x = rect.getCenterX();
+    // double y = rect.getCenterY();
+    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
+    //
+    // // draw the middle light
+    // if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
+    // g.setColor(Color.YELLOW);
+    // } else if (trafficLight.status() == TrafficLightStatus.RED_GREEN) {
+    // g.setColor(Color.ORANGE);
+    // } else {
+    // g.setColor(Color.LIGHT_GRAY);
+    // }
+    // rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 3.0, width,
+    // height / 3.0);
+    // x = rect.getCenterX();
+    // y = rect.getCenterY();
+    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
+    //
+    // // draw the bottom light
+    // g.setColor(trafficLight.status() == TrafficLightStatus.GREEN ? Color.GREEN : Color.LIGHT_GRAY);
+    // rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + 2.0 * height / 3.0, width,
+    // height / 3.0);
+    // x = rect.getCenterX();
+    // y = rect.getCenterY();
+    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
+    // }
 
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
         assert roadSegment.trafficLights() != null;

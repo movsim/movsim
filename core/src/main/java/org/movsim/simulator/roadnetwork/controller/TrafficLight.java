@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.trafficlights;
+package org.movsim.simulator.roadnetwork.controller;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +35,6 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.controller.RoadObjectController;
 
 import com.google.common.base.Preconditions;
 
@@ -119,7 +118,7 @@ public class TrafficLight extends RoadObjectController {
         return controller.getId();
     }
 
-    Controller getController() {
+    public Controller getController() {
         return controller;
     }
 
@@ -147,11 +146,11 @@ public class TrafficLight extends RoadObjectController {
         triggerCallback.nextPhase();
     }
 
-    void setTriggerCallback(TriggerCallback triggerCallback) {
+    public void setTriggerCallback(TriggerCallback triggerCallback) {
         this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
     }
 
-    boolean hasTriggerCallback() {
+    public boolean hasTriggerCallback() {
         return triggerCallback != null;
     }
 
@@ -168,7 +167,8 @@ public class TrafficLight extends RoadObjectController {
      */
     @Deprecated
     public int lightCount() {
-        return Math.min(3, possibleStati.size());
+        // return Math.min(3, possibleStati.size());
+        return 3;
     }
 
     @Override

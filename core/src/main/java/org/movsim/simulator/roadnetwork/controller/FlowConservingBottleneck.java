@@ -26,55 +26,64 @@
 
 package org.movsim.simulator.roadnetwork.controller;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Iterator;
 
 import org.movsim.autogen.Inhomogeneity;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.roadnetwork.SignalPoint.SignalPointType;
+import org.movsim.simulator.roadnetwork.predicates.VehicleWithRange;
 import org.movsim.simulator.vehicles.Vehicle;
 
+import com.google.common.base.Predicate;
+
+/**
+ * Modifies the driving behavior within a spatial range of a RoadSection. The range is limited to the extend of one roadSection only.
+ * 
+ * <p>
+ * The spatial profile and the parameter values are configured in the movsim input file.
+ * 
+ * <br>
+ * created: May 20, 2013<br>
+ * 
+ */
 public class FlowConservingBottleneck extends RoadObjectController {
 
     private final Inhomogeneity inhomogeneity;
 
-    private final Set<Vehicle> controlledVehicles = new HashSet<>();
-
     private final double endPosition;
+
+    private final Predicate<Vehicle> vehiclesWithRange;
 
     public FlowConservingBottleneck(Inhomogeneity inhomogeneity, RoadSegment roadSegment) {
         super(RoadObjectType.FLOW_CONSERVING_BOTTLENECK, inhomogeneity.getPosition(), roadSegment);
         this.inhomogeneity = inhomogeneity;
-        this.endPosition = position + inhomogeneity.getValidLength();
+        this.endPosition = inhomogeneity.isSetValidLength() ? position + inhomogeneity.getValidLength() : roadSegment
+                .roadLength();
         if (endPosition > roadSegment().roadLength()) {
             throw new IllegalArgumentException(
                     "FlowConservingBottleneckController can only be applied to a single roadSegment, but endPosition="
                             + endPosition + " is larger than road=" + roadSegment().userId());
         }
+        this.vehiclesWithRange = new VehicleWithRange(position, endPosition);
     }
 
     @Override
     public void createSignalPositions() {
-        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.BEGIN, position, this));
+        // needs only one signal at the end to reset all vehicles that have been influenced before.
         roadSegment.signalPoints().add(new SignalPoint(SignalPointType.END, endPosition, this));
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        LOG.debug("controlledVehicles.size={}, vehiclesPassedEnd={}", controlledVehicles.size(),
-                vehiclesPassedEnd.size());
-        controlledVehicles.addAll(vehiclesPassedStart);
-        for (Vehicle vehicle : vehiclesPassedEnd) {
-            vehicle.inhomogeneityAdaptation().reset();
-            controlledVehicles.remove(vehicle);
-        }
-        for (Vehicle vehicle : controlledVehicles) {
+        LOG.debug("vehiclesPassedEnd={}", vehiclesPassedEnd.size());
+        Iterator<Vehicle> iterator = roadSegment.filteredVehicles(vehiclesWithRange);
+        while (iterator.hasNext()) {
+            Vehicle vehicle = iterator.next();
             apply(vehicle);
         }
-        if (controlledVehicles.size() > 100) {
-            // precautionary measure: check if removing mechanism is working proplery
-            LOG.warn("Danger of memory leak: controlledVehicles.size={}", controlledVehicles.size());
+        for (Vehicle vehicle : vehiclesPassedEnd) {
+            vehicle.inhomogeneityAdaptation().reset();
         }
     }
 

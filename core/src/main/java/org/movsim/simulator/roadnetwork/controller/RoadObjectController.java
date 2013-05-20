@@ -62,7 +62,7 @@ public abstract class RoadObjectController implements RoadObject {
 
     protected double simulationTime;
 
-    protected List<Vehicle> vehiclesPassedStart = new ArrayList<>();
+    protected List<Vehicle> vehiclesPassedBegin = new ArrayList<>();
 
     protected List<Vehicle> vehiclesPassedEnd = new ArrayList<>();
 
@@ -131,8 +131,8 @@ public abstract class RoadObjectController implements RoadObject {
             Iterator<Vehicle> passedVehicles) {
         this.simulationTime = simulationTime;
         if (signalPointType == SignalPointType.BEGIN) {
-            vehiclesPassedStart.clear();
-            Iterators.addAll(vehiclesPassedStart, passedVehicles);
+            vehiclesPassedBegin.clear();
+            Iterators.addAll(vehiclesPassedBegin, passedVehicles);
         } else {
             vehiclesPassedEnd.clear();
             Iterators.addAll(vehiclesPassedEnd, passedVehicles);

@@ -35,6 +35,17 @@ import org.movsim.utilities.Units;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Sets the externally given maximum speed for vehicles passing the position of the 'speedlimit'.
+ * 
+ * <p>
+ * The position, the speedlimit value and the validity length are given in the xodr network input file. Note that a second 'speedlimit'
+ * cancelling the first speedlimit will be created if a 'validity length' is defined.
+ * 
+ * <br>
+ * created: May 20, 2013<br>
+ * 
+ */
 public class SpeedLimit extends RoadObjectController {
 
     private final double speedLimitValue;
@@ -58,7 +69,7 @@ public class SpeedLimit extends RoadObjectController {
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        for (Vehicle vehicle : vehiclesPassedStart) {
+        for (Vehicle vehicle : vehiclesPassedBegin) {
             vehicle.setSpeedlimit(speedLimitValue);
             LOG.debug("pos={} --> speedlimit in km/h={}", position, 3.6 * speedLimitValue);
         }

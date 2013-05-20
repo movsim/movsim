@@ -1,4 +1,4 @@
-package org.movsim.simulator.trafficlights;
+package org.movsim.simulator.roadnetwork.controller;
 
 import org.movsim.autogen.ControllerGroup;
 import org.movsim.autogen.Phase;

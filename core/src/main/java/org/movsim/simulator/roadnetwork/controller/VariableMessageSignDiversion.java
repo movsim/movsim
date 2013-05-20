@@ -58,10 +58,10 @@ public class VariableMessageSignDiversion extends RoadObjectController {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         LOG.debug("VMS isActive={}, controlledVehicles.size={}", diversionActive, controlledVehicles.size());
-        LOG.debug("VMS vehiclesPassedStart={}, vehiclesPassedEnd={}", vehiclesPassedStart.size(),
+        LOG.debug("VMS vehiclesPassedBegin={}, vehiclesPassedEnd={}", vehiclesPassedBegin.size(),
                 vehiclesPassedEnd.size());
         if (diversionActive) {
-            for (Vehicle vehicle : vehiclesPassedStart) {
+            for (Vehicle vehicle : vehiclesPassedBegin) {
                 // apply only to vehicles in most right lane!
                 if (vehicle.lane() == roadSegment.laneCount()) {
                     final LaneSegment laneSegment = roadSegment.laneSegment(Lanes.LANE1);

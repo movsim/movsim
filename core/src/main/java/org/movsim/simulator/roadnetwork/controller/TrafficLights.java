@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.trafficlights;
+package org.movsim.simulator.roadnetwork.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 
 import org.movsim.autogen.ControllerGroup;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller.Control;
+import org.movsim.output.FileTrafficLightControllerRecorder;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;

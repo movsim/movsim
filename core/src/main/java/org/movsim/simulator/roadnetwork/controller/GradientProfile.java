@@ -27,7 +27,7 @@
 package org.movsim.simulator.roadnetwork.controller;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -39,8 +39,21 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile.Elev
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.roadnetwork.SignalPoint.SignalPointType;
+import org.movsim.simulator.roadnetwork.predicates.VehicleWithRange;
 import org.movsim.simulator.vehicles.Vehicle;
 
+import com.google.common.base.Predicate;
+
+/**
+ * Sets the road slope within a spatial range of a RoadSection. The range is limited to the extend of one roadSection only.
+ * 
+ * <p>
+ * The slope is calculated from the elevation profile given in the xodr network input file.
+ * 
+ * <br>
+ * created: May 20, 2013<br>
+ * 
+ */
 public class GradientProfile extends RoadObjectController {
 
     private final double endPosition;
@@ -48,7 +61,7 @@ public class GradientProfile extends RoadObjectController {
     /** mapping of positions to gradients along track */
     private final SortedMap<Double, Double> gradients = new TreeMap<>();
 
-    private final Set<Vehicle> controlledVehicles = new HashSet<>();
+    private final Predicate<Vehicle> vehiclesWithRange;
 
     public GradientProfile(ElevationProfile elevationProfile, RoadSegment roadSegment) {
         super(RoadObjectType.GRADIENT_PROFILE, elevationProfile.getElevation().get(0).getS(), roadSegment);
@@ -62,29 +75,24 @@ public class GradientProfile extends RoadObjectController {
             throw new IllegalArgumentException("elevation profile track position s=" + endPosition
                     + " exceeds roadlength.");
         }
+        this.vehiclesWithRange = new VehicleWithRange(position, endPosition);
     }
 
     @Override
     public void createSignalPositions() {
-        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.BEGIN, position, this));
         roadSegment.signalPoints().add(new SignalPoint(SignalPointType.END, endPosition, this));
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        LOG.debug("controlledVehicles.size={}, vehiclesPassedEnd={}", controlledVehicles.size(),
-                vehiclesPassedEnd.size());
-        controlledVehicles.addAll(vehiclesPassedStart);
-        for (Vehicle vehicle : vehiclesPassedEnd) {
-            vehicle.setSlope(0); // reset
-            controlledVehicles.remove(vehicle);
-        }
-        for (Vehicle vehicle : controlledVehicles) {
+        LOG.debug("vehiclesPassedEnd={}", vehiclesPassedEnd.size());
+        Iterator<Vehicle> iterator = roadSegment.filteredVehicles(vehiclesWithRange);
+        while (iterator.hasNext()) {
+            Vehicle vehicle = iterator.next();
             apply(vehicle);
         }
-        if (controlledVehicles.size() > 100) {
-            // precautionary measure: check if removing mechanism is working properly
-            LOG.warn("Danger of memory leak: controlledVehicles.size={}", controlledVehicles.size());
+        for (Vehicle vehicle : vehiclesPassedEnd) {
+            vehicle.setSlope(0); // reset
         }
     }
 
@@ -117,11 +125,6 @@ public class GradientProfile extends RoadObjectController {
             }
         }
         gradients.put(elevation.lastKey(), 0.0);
-        // // note: perhaps is iterating the sorted map even faster?!
-        // Double posUpstream = elevation.headMap(vehiclePosition).lastKey();
-        // Double posDownstream = elevation.headMap(vehiclePosition).lastKey();
-        // double diff = posDownstream - posUpstream;
-        // return diff == 0 ? 0 : (elevation.get(posDownstream) - elevation.get(posUpstream)) / diff;
     }
 
     public Set<Entry<Double, Double>> gradientEntries() {

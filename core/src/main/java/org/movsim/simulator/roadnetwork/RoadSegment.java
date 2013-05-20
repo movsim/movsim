@@ -40,13 +40,15 @@ import org.movsim.simulator.roadnetwork.controller.RoadObject;
 import org.movsim.simulator.roadnetwork.controller.RoadObject.RoadObjectType;
 import org.movsim.simulator.roadnetwork.controller.RoadObjects;
 import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
+import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
-import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.roadnetwork.predicates.VehicleWithRange;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 
@@ -679,6 +681,14 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         for (SignalPoint signalPoint : signalPoints) {
             signalPoint.registerPassingVehicles(simulationTime, Iterators.filter(iterator(), signalPoint.predicate()));
         }
+    }
+
+    public Iterator<Vehicle> vehiclesWithinRange(double begin, double end) {
+        return Iterators.filter(iterator(), new VehicleWithRange(begin, end));
+    }
+
+    public Iterator<Vehicle> filteredVehicles(Predicate<Vehicle> predicate) {
+        return Iterators.filter(iterator(), predicate);
     }
 
     // /**

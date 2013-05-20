@@ -23,9 +23,10 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.fileoutput;
+package org.movsim.output;
 
 import org.movsim.input.ProjectMetaData;
+import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
@@ -57,8 +56,6 @@ public final class RoadObjects implements Iterable<RoadObject> {
     final RoadSegment roadSegment;
 
     final EnumMap<RoadObjectType, SortedSet<RoadObject>> roadObjects = new EnumMap<>(RoadObjectType.class);
-
-    Predicate<RoadObject> predicate = null;
 
     public RoadObjects(RoadSegment roadSegment) {
         this.roadSegment = Preconditions.checkNotNull(roadSegment);

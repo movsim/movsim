@@ -598,7 +598,8 @@
     <xs:element name="Inhomogeneity">
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="valid_length" type="nonNegativeDouble" use="required" />
+            <!-- optional: if not set the valid length is set to the end of the roadSegment -->
+            <xs:attribute name="valid_length" type="nonNegativeDouble" />
             <xs:attribute name="adaptation_length" type="nonNegativeDouble" default="0" />
             <xs:attribute name="start_alpha_T" type="nonNegativeDouble" default="1" />
             <xs:attribute name="start_alpha_v0" type="nonNegativeDouble" default="1" />

@@ -25,7 +25,7 @@
                 </TrafficSource>
                 <!-- improve vehicle performance at inflow -->
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="200" valid_length="2200" adaptation_length="0" start_alpha_T="0.8" target_alpha_T="1" />
+                    <Inhomogeneity position="0" valid_length="2000" adaptation_length="0" start_alpha_T="0.8" target_alpha_T="1" />
                 </FlowConservingInhomogeneities>
                 <Detectors sample_interval="60" logging="true">
                     <CrossSection position="1000" />

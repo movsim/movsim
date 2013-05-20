@@ -109,7 +109,7 @@ public class LoopDetector extends RoadObjectController {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        for (Vehicle vehicle : vehiclesPassedStart) {
+        for (Vehicle vehicle : vehiclesPassedBegin) {
             countVehiclesAndDataForLane(vehicle);
         }
 

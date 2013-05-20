@@ -23,19 +23,21 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.trafficlights;
+package org.movsim.output;
 
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.simulator.roadnetwork.controller.TrafficLight;
+import org.movsim.simulator.roadnetwork.controller.TrafficLightController;
+import org.movsim.simulator.roadnetwork.controller.TrafficLightRecordDataCallback;
 
 import com.google.common.base.Preconditions;
 
 /**
  * The Class FileTrafficLightControllerRecorder.
  */
-public class FileTrafficLightControllerRecorder extends FileOutputBase implements
-        TrafficLightController.RecordDataCallback {
+public class FileTrafficLightControllerRecorder extends FileOutputBase implements TrafficLightRecordDataCallback {
 
     private static final String extensionFormat = ".controllerGroup_%s.firstSignal_%s.csv";
     private final int nTimestep;
