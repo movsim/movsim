@@ -31,7 +31,6 @@ import java.util.Iterator;
 import org.movsim.autogen.Inhomogeneity;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
-import org.movsim.simulator.roadnetwork.SignalPoint.SignalPointType;
 import org.movsim.simulator.roadnetwork.predicates.VehicleWithRange;
 import org.movsim.simulator.vehicles.Vehicle;
 
@@ -55,6 +54,8 @@ public class FlowConservingBottleneck extends RoadObjectController {
 
     private final Predicate<Vehicle> vehiclesWithRange;
 
+    private final SignalPoint endSignalPoint;
+
     public FlowConservingBottleneck(Inhomogeneity inhomogeneity, RoadSegment roadSegment) {
         super(RoadObjectType.FLOW_CONSERVING_BOTTLENECK, inhomogeneity.getPosition(), roadSegment);
         this.inhomogeneity = inhomogeneity;
@@ -66,23 +67,24 @@ public class FlowConservingBottleneck extends RoadObjectController {
                             + endPosition + " is larger than road=" + roadSegment().userId());
         }
         this.vehiclesWithRange = new VehicleWithRange(position, endPosition);
+        endSignalPoint = new SignalPoint(endPosition, roadSegment);
     }
 
     @Override
     public void createSignalPositions() {
         // needs only one signal at the end to reset all vehicles that have been influenced before.
-        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.END, endPosition, this));
+        roadSegment.signalPoints().add(endSignalPoint);
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        LOG.debug("vehiclesPassedEnd={}", vehiclesPassedEnd.size());
+        LOG.debug("vehiclesPassedEnd={}", endSignalPoint.passedVehicles().size());
         Iterator<Vehicle> iterator = roadSegment.filteredVehicles(vehiclesWithRange);
         while (iterator.hasNext()) {
             Vehicle vehicle = iterator.next();
             apply(vehicle);
         }
-        for (Vehicle vehicle : vehiclesPassedEnd) {
+        for (Vehicle vehicle : endSignalPoint.passedVehicles()) {
             vehicle.inhomogeneityAdaptation().reset();
         }
     }

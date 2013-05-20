@@ -423,7 +423,6 @@ public class Vehicle {
      *            new rear position
      */
     public final void setRearPosition(double rearPosition) {
-
         this.frontPosition = rearPosition + length;
     }
 
@@ -438,6 +437,10 @@ public class Vehicle {
 
     public final double getFrontPositionOld() {
         return frontPositionOld;
+    }
+
+    public final double getRearPositionOld() {
+        return frontPositionOld - length;
     }
 
     /**
@@ -973,6 +976,11 @@ public class Vehicle {
         this.lane = newLane;
         this.laneOld = newLane;
         laneOld = Math.max(Lanes.MOST_INNER_LANE, Math.min(laneOld, newRoadSegment.laneCount()));
+        double offsetPosition = getRearPosition() - newRearPosition;
+        LOG.debug("move to new segment: rearPosOld={} --> new rearPosOld={}", frontPositionOld - length,
+                frontPositionOld - offsetPosition - length);
+        this.frontPositionOld -= offsetPosition;
+
         setRearPosition(newRearPosition);
         setRoadSegment(newRoadSegment.id(), newRoadSegment.roadLength());
     }

@@ -30,12 +30,12 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
-import org.movsim.simulator.roadnetwork.SignalPoint.SignalPointType;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
  * The Class LoopDetector.
  */
+// TODO refactoring needed, add unittests
 public class LoopDetector extends RoadObjectController {
 
     private final double dtSample;
@@ -59,6 +59,8 @@ public class LoopDetector extends RoadObjectController {
     private final LaneQuantity[] laneQuantities;
 
     private final FileDetector fileDetector;
+
+    private final SignalPoint crossSectionSignalPoint;
 
     /**
      * Constructor
@@ -85,10 +87,6 @@ public class LoopDetector extends RoadObjectController {
 
         timeOffset = 0;
 
-        // for (int i = 0; i < laneCount; i++) {
-        // reset(i);
-        // vehCumulatedCountOutput[i] = 0; // initalization
-        // }
         resetLaneAverages();
 
         fileDetector = (logging) ? new FileDetector(this, roadSegment.userId(), roadSegment.laneCount(), loggingLanes)
@@ -96,6 +94,12 @@ public class LoopDetector extends RoadObjectController {
         if (fileDetector != null) {
             fileDetector.writeAggregatedData(0);
         }
+        crossSectionSignalPoint = new SignalPoint(position, roadSegment);
+    }
+
+    @Override
+    public void createSignalPositions() {
+        roadSegment.signalPoints().add(crossSectionSignalPoint);
     }
 
     private void resetLaneAverages() {
@@ -109,18 +113,9 @@ public class LoopDetector extends RoadObjectController {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        for (Vehicle vehicle : vehiclesPassedBegin) {
+        for (Vehicle vehicle : crossSectionSignalPoint.passedVehicles()) {
             countVehiclesAndDataForLane(vehicle);
         }
-
-        // brute force search: iterate over all lanes
-        // for (LaneSegment laneSegment : roadSegment.laneSegments()) {
-        // for (final Vehicle vehicle : laneSegment) {
-        // if ((vehicle.getFrontPositionOld() < position) && (vehicle.getFrontPosition() >= position)) {
-        // countVehiclesAndDataForLane(laneSegment, laneSegment.lane() - 1, vehicle);
-        // }
-        // }
-        // }
 
         if ((simulationTime - timeOffset + MovsimConstants.SMALL_VALUE) >= dtSample) {
             for (LaneQuantity laneQuantity : laneQuantities) {
@@ -150,7 +145,7 @@ public class LoopDetector extends RoadObjectController {
         laneQuantity.occTime += (speedVeh > 0) ? veh.getLength() / speedVeh : 0;
         laneQuantity.sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
         // brut timegap not calculate from local detector data:
-        Vehicle vehFront = roadSegment.laneSegment(veh.lane()).frontVehicle(veh);
+        Vehicle vehFront = roadSegment.frontVehicleOnLane(veh);
         double brutTimegap = (vehFront == null) ? 0 : veh.getBrutDistance(vehFront) / vehFront.getSpeed();
         // "microscopic flow"
         laneQuantity.sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0;
@@ -245,11 +240,6 @@ public class LoopDetector extends RoadObjectController {
         return vehCumulatedCountOutputAllLanes;
     }
 
-    @Override
-    public void createSignalPositions() {
-        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.BEGIN, position, this));
-    }
-
     private static final class LaneQuantity {
         int vehCount;
         double vSum;
@@ -264,7 +254,6 @@ public class LoopDetector extends RoadObjectController {
         double meanTimegapHarmonic;
 
         public LaneQuantity() {
-            // TODO Auto-generated constructor stub
         }
 
         void reset() {

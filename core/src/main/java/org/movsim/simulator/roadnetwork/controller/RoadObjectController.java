@@ -26,20 +26,14 @@
 
 package org.movsim.simulator.roadnetwork.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.SignalPoint.SignalPointType;
-import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterators;
 
 /**
  * 
@@ -59,12 +53,6 @@ public abstract class RoadObjectController implements RoadObject {
     protected final RoadSegment roadSegment;
 
     private boolean laneValidity[];
-
-    protected double simulationTime;
-
-    protected List<Vehicle> vehiclesPassedBegin = new ArrayList<>();
-
-    protected List<Vehicle> vehiclesPassedEnd = new ArrayList<>();
 
     public RoadObjectController(RoadObjectType type, double position, RoadSegment roadSegment) {
         this.type = type;
@@ -126,17 +114,5 @@ public abstract class RoadObjectController implements RoadObject {
 
     @Override
     public abstract void timeStep(double dt, double simulationTime, long iterationCount);
-
-    public void registerVehicles(SignalPointType signalPointType, double simulationTime,
-            Iterator<Vehicle> passedVehicles) {
-        this.simulationTime = simulationTime;
-        if (signalPointType == SignalPointType.BEGIN) {
-            vehiclesPassedBegin.clear();
-            Iterators.addAll(vehiclesPassedBegin, passedVehicles);
-        } else {
-            vehiclesPassedEnd.clear();
-            Iterators.addAll(vehiclesPassedEnd, passedVehicles);
-        }
-    }
 
 }

@@ -26,47 +26,54 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
-import org.movsim.simulator.roadnetwork.controller.RoadObjectController;
 import org.movsim.simulator.roadnetwork.predicates.VehiclePassedPosition;
 import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 
 public class SignalPoint {
 
-    public enum SignalPointType {
-        BEGIN, END;
-    }
-
-    private final SignalPointType type;
-
     private final double position;
 
-    private final RoadObjectController roadObjectController;
+    private final Predicate<Vehicle> predicate; // TODO measure performance for this vehicle iterator
 
-    private final Predicate<Vehicle> vehiclePassedPosition; // TODO measure performance for this lookup
+    protected double simulationTime;
 
-    public SignalPoint(SignalPointType type, double position, RoadObjectController roadObjectController) {
-        this.type = type;
-        this.roadObjectController = Preconditions.checkNotNull(roadObjectController);
-        Preconditions.checkArgument(position >= 0 && position <= roadObjectController.roadSegment().roadLength());
+    protected Set<Vehicle> vehiclesPassed = new HashSet<>(); // to assure uniqueness of entries
+
+    // TODO roadSegment not needed as reference, just check here for correct position
+    public SignalPoint(double position, RoadSegment roadSegment) {
+        Preconditions.checkArgument(position >= 0 && position <= roadSegment.roadLength());
         this.position = position;
-        vehiclePassedPosition = new VehiclePassedPosition(position);
+        predicate = new VehiclePassedPosition(position);
     }
 
-    void registerPassingVehicles(double simulationTime, Iterator<Vehicle> passedVehicles) {
-        roadObjectController.registerVehicles(type, simulationTime, passedVehicles);
+    void registerPassingVehicles(double simulationTime, Iterator<Vehicle> vehicles) {
+        this.simulationTime = simulationTime;
+        Iterators.addAll(vehiclesPassed, Iterators.filter(vehicles, predicate));
     }
 
     double position() {
         return position;
     }
 
-    Predicate<Vehicle> predicate() {
-        return vehiclePassedPosition;
+    public Collection<Vehicle> passedVehicles() {
+        return vehiclesPassed;
+    }
+
+    double getSimulationTimeOfRegistering() {
+        return simulationTime;
+    }
+
+    void clear() {
+        vehiclesPassed.clear();
     }
 
 }

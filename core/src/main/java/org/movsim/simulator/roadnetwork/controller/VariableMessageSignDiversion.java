@@ -33,7 +33,6 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
-import org.movsim.simulator.roadnetwork.SignalPoint.SignalPointType;
 import org.movsim.simulator.vehicles.Vehicle;
 
 public class VariableMessageSignDiversion extends RoadObjectController {
@@ -41,27 +40,35 @@ public class VariableMessageSignDiversion extends RoadObjectController {
     private boolean diversionActive = false; // also set in viewer !!
 
     private Set<Vehicle> controlledVehicles = new HashSet<>();
+    
+    // TODO set SignalPoints in RoadNetwork ... needs iterating over them all
+    private final SignalPoint begin;
+    private final SignalPoint end;
+    
 
     public VariableMessageSignDiversion(double position, double validLength, RoadSegment roadSegment) {
         super(RoadObjectType.VMS_DIVERSION, position, roadSegment);
+        begin = new SignalPoint(position, roadSegment);
+
+        // FIXME hack here, use valid length instead and put SP on *all* roadSegments
+        RoadSegment sinkRoadSegment = roadSegment().sinkRoadSegment(1);
+        end = new SignalPoint(sinkRoadSegment.roadLength(), sinkRoadSegment);
     }
 
     @Override
     public void createSignalPositions() {
-        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.BEGIN, position, this));
-
-        // FIXME hack here, use valid length instead and put SP on *all* roadSegments
+        roadSegment.signalPoints().add(begin);
         RoadSegment sinkRoadSegment = roadSegment().sinkRoadSegment(1);
-        sinkRoadSegment.signalPoints().add(new SignalPoint(SignalPointType.END, sinkRoadSegment.roadLength(), this));
+        sinkRoadSegment.signalPoints().add(end);
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         LOG.debug("VMS isActive={}, controlledVehicles.size={}", diversionActive, controlledVehicles.size());
-        LOG.debug("VMS vehiclesPassedBegin={}, vehiclesPassedEnd={}", vehiclesPassedBegin.size(),
-                vehiclesPassedEnd.size());
+        LOG.debug("VMS vehiclesPassedBegin={}, vehiclesPassedEnd={}", begin.passedVehicles().size(), end
+                .passedVehicles().size());
         if (diversionActive) {
-            for (Vehicle vehicle : vehiclesPassedBegin) {
+            for (Vehicle vehicle : begin.passedVehicles()) {
                 // apply only to vehicles in most right lane!
                 if (vehicle.lane() == roadSegment.laneCount()) {
                     final LaneSegment laneSegment = roadSegment.laneSegment(Lanes.LANE1);
@@ -76,7 +83,7 @@ public class VariableMessageSignDiversion extends RoadObjectController {
             }
         }
 
-        for (Vehicle vehicle : vehiclesPassedEnd) {
+        for (Vehicle vehicle : end.passedVehicles()) {
             controlledVehicles.remove(vehicle);
         }
 

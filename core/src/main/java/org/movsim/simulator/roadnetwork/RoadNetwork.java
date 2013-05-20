@@ -152,13 +152,15 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
+     * The main timestep of the simulation. Updates the vehicle accelerations, movements, lane-changing decisions and the boundary
+     * conditions.
+     * 
      * <p>
-     * The main timestep of the simulation. Update of calculation of vehicle accelerations, movements, lane-changing decisions. Each update
-     * step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise, inconsistencies would occur. In particular, the
-     * complete old state (positions, lanes, speeds ...) is made available during the complete update step of one timestep. Then the outflow
-     * is performed for each road segment, moving vehicles onto the next road segment (or removing them entirely from the road network) when
-     * required. Then the inflow is performed for each road segment, adding any new vehicles supplied by any traffic sources. Finally the
-     * vehicle detectors are updated.
+     * Each update step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise, inconsistencies would occur. In
+     * particular, the complete old state (positions, lanes, speeds ...) is made available during the complete update step of one timestep.
+     * Then the inflow is performed for each road segment, adding any new vehicles supplied by any traffic sources. Then the outflow is
+     * performed for each road segment, moving vehicles onto the next road segment (or removing them entirely from the road network) when
+     * required. Finally the 'signal points' are updated.
      * </p>
      * 
      * <p>
@@ -221,11 +223,11 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
-            roadSegment.updateSignalPoints(simulationTime);
+            roadSegment.outFlow(dt, simulationTime, iterationCount);
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
-            roadSegment.outFlow(dt, simulationTime, iterationCount);
+            roadSegment.updateSignalPointsAfterOutflow(simulationTime);
         }
 
         for (final RoadSegment roadSegment : roadSegments) {

@@ -672,15 +672,28 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *            the number of iterations that have been executed
      */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
-        for (RoadObject trafficSign : roadObjects) {
-            trafficSign.timeStep(dt, simulationTime, iterationCount);
+        for (RoadObject roadObject : roadObjects) {
+            roadObject.timeStep(dt, simulationTime, iterationCount);
         }
     }
 
-    public void updateSignalPoints(double simulationTime) {
+    // NOT ELEGANT: must be called twice because vehicles are shifted between roadSegments so that they have to be registered twice!
+    // new concept needed here, perhaps temporary vehicle objects, could also be used for LaneChanges
+    private boolean updateSignalPointsBeforeOutflowCalled;
+    protected void updateSignalPointsBeforeOutflow(double simulationTime) {
+        updateSignalPointsBeforeOutflowCalled = true;
         for (SignalPoint signalPoint : signalPoints) {
-            signalPoint.registerPassingVehicles(simulationTime, Iterators.filter(iterator(), signalPoint.predicate()));
+            signalPoint.clear();
+            signalPoint.registerPassingVehicles(simulationTime, iterator());
         }
+    }
+
+    public void updateSignalPointsAfterOutflow(double simulationTime) {
+        assert updateSignalPointsBeforeOutflowCalled; // hack for assuring right calling process
+        for (SignalPoint signalPoint : signalPoints) {
+            signalPoint.registerPassingVehicles(simulationTime, iterator());
+        }
+        updateSignalPointsBeforeOutflowCalled = false;
     }
 
     public Iterator<Vehicle> vehiclesWithinRange(double begin, double end) {
@@ -839,6 +852,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *            the number of iterations that have been executed
      */
     public void outFlow(double dt, double simulationTime, long iterationCount) {
+        updateSignalPointsBeforeOutflow(simulationTime);
         for (final LaneSegment laneSegment : laneSegments) {
             laneSegment.outFlow(dt, simulationTime, iterationCount);
             assert laneSegment.assertInvariant();
@@ -868,22 +882,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             simpleRamp.timeStep(dt, simulationTime, iterationCount);
         }
     }
-
-    /**
-     * Updates the detectors, if there are any.
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     */
-    // public void updateDetectors(double dt, double simulationTime, long iterationCount) {
-    // if (loopDetectors != null) {
-    // loopDetectors.timeStep(dt, simulationTime, iterationCount);
-    // }
-    // }
 
     /**
      * Returns the rear vehicle on the given lane.
@@ -966,16 +964,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public Vehicle frontVehicle(int lane, double vehiclePos) {
         return laneSegments[lane - 1].frontVehicle(vehiclePos);
     }
-
-    // /**
-    // * Sets the slopes for this road segment.
-    // *
-    // * @param slopes
-    // */
-    // public void setElevationProfile(GradientProfile elevationProfile) {
-    // this.slopes = new Slopes(elevationProfile.getElevation());
-    //
-    // }
 
     /**
      * Returns true if each lane in the vehicle array is sorted.
@@ -1210,6 +1198,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return roadObjects;
     }
 
+    public SignalPoints signalPoints() {
+        return signalPoints;
+    }
+
     public final boolean hasDownstreamConnection() {
         for (LaneSegment laneSegment : laneSegments) {
             if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment() != null) {
@@ -1266,10 +1258,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public String toString() {
         return "RoadSegment [nodeId=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength="
                 + roadLength + ", laneCount=" + laneCount + ", " + getOriginNode() + ", " + getDestinationNode() + "]";
-    }
-
-    public SignalPoints signalPoints() {
-        return signalPoints;
     }
 
 }

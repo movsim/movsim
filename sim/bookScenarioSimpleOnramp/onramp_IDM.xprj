@@ -36,6 +36,7 @@
                     <CrossSection position="11000" />
                     <CrossSection position="12000" />
                     <CrossSection position="13000" />
+                    <CrossSection position="14000" /> <!-- testwise, identical with x=0 of successor  -->
                 </Detectors>
             </Road>
             <Road id="2">

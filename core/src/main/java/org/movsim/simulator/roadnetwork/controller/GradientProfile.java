@@ -38,7 +38,6 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile.Elevation;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
-import org.movsim.simulator.roadnetwork.SignalPoint.SignalPointType;
 import org.movsim.simulator.roadnetwork.predicates.VehicleWithRange;
 import org.movsim.simulator.vehicles.Vehicle;
 
@@ -63,6 +62,8 @@ public class GradientProfile extends RoadObjectController {
 
     private final Predicate<Vehicle> vehiclesWithRange;
 
+    private final SignalPoint endSignalPoint;
+
     public GradientProfile(ElevationProfile elevationProfile, RoadSegment roadSegment) {
         super(RoadObjectType.GRADIENT_PROFILE, elevationProfile.getElevation().get(0).getS(), roadSegment);
         createGradientProfile(elevationProfile.getElevation());
@@ -76,22 +77,23 @@ public class GradientProfile extends RoadObjectController {
                     + " exceeds roadlength.");
         }
         this.vehiclesWithRange = new VehicleWithRange(position, endPosition);
+        endSignalPoint = new SignalPoint(endPosition, roadSegment);
     }
 
     @Override
     public void createSignalPositions() {
-        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.END, endPosition, this));
+        roadSegment.signalPoints().add(endSignalPoint);
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        LOG.debug("vehiclesPassedEnd={}", vehiclesPassedEnd.size());
+        LOG.debug("vehiclesPassedEnd={}", endSignalPoint.passedVehicles().size());
         Iterator<Vehicle> iterator = roadSegment.filteredVehicles(vehiclesWithRange);
         while (iterator.hasNext()) {
             Vehicle vehicle = iterator.next();
             apply(vehicle);
         }
-        for (Vehicle vehicle : vehiclesPassedEnd) {
+        for (Vehicle vehicle : endSignalPoint.passedVehicles()) {
             vehicle.setSlope(0); // reset
         }
     }

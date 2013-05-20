@@ -48,6 +48,7 @@ public interface RoadObject extends Comparable<RoadObject> {
 
     boolean isValidLane(int lane);
 
+    /** Separately called, signalPoints to be added after whole roadNetwork is constructed! */
     void createSignalPositions();
 
     void timeStep(double dt, double simulationTime, long iterationCount);
