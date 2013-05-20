@@ -41,9 +41,6 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSourceMacro.class);
 
-    /** upper limit of insertion range, needs to be fixed for placing SignalPositions at the boundary. */
-    private static final double MAX_POSITION_ENTER = 200;
-
     private final InflowTimeSeries inflowTimeSeries;
 
     private TestVehicle testVehicle;
@@ -179,9 +176,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         final double lengthLast = leader.getLength();
 
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
-        double xEnter = Math.min(vEnterTest * nWait / Math.max(qBC, 0.001), xLast - sFreeMin - lengthLast);
-        // limit xEnter for flowConserving bottleneck which needs specific SignalPoint position.
-        xEnter = Math.min(xEnter, MAX_POSITION_ENTER);
+        final double xEnter = Math.min(vEnterTest * nWait / Math.max(qBC, 0.001), xLast - sFreeMin - lengthLast);
         final double rhoEnter = 1. / (xLast - xEnter);
         final double vMaxEq = testVehicle.getEquilibriumSpeed(0.5 * rhoEnter);
         final double bMax = 4; // max. kinematic deceleration at boundary
