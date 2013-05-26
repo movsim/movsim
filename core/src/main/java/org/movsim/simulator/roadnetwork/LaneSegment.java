@@ -145,12 +145,20 @@ public class LaneSegment implements Iterable<Vehicle> {
         return sourceLaneSegment;
     }
 
+    public final boolean hasSourceLaneSegment() {
+        return sourceLaneSegment != null;
+    }
+
     final void setSinkLaneSegment(LaneSegment sinkLaneSegment) {
         this.sinkLaneSegment = sinkLaneSegment;
     }
 
     public final LaneSegment sinkLaneSegment() {
         return sinkLaneSegment;
+    }
+
+    public final boolean hasSinkLaneSegment() {
+        return sinkLaneSegment != null;
     }
 
     /**

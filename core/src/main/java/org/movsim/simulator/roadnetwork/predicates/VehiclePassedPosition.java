@@ -54,7 +54,8 @@ public final class VehiclePassedPosition implements Predicate<Vehicle> {
         if (vehicle == null) {
             return false;
         }
-        assert vehicle.getRearPositionOld() <= vehicle.getRearPosition() : "oldPos > pos!";
+        assert vehicle.getRearPositionOld() <= vehicle.getRearPosition() : "oldPos=" + vehicle.getRearPositionOld()
+                + " > pos=" + vehicle.getRearPosition();
         return vehicle.getRearPositionOld() <= position && vehicle.getRearPosition() > position;
     }
 

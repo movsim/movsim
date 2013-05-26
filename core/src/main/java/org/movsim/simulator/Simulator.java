@@ -210,7 +210,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     private void createSignalPoints() {
-        // all RoadObjects must be added to RoadSegment
+        // adding of RoadObjects to RoadSegment must be finished here
         for (RoadSegment roadSegment : roadNetwork) {
             for (RoadObject roadObject : roadSegment.roadObjects()) {
                 roadObject.createSignalPositions();

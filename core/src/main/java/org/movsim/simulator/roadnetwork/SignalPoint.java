@@ -55,6 +55,7 @@ public class SignalPoint {
         predicate = new VehiclePassedPosition(position);
     }
 
+    // will be called twice, therefore cleaning separately
     void registerPassingVehicles(double simulationTime, Iterator<Vehicle> vehicles) {
         this.simulationTime = simulationTime;
         Iterators.addAll(vehiclesPassed, Iterators.filter(vehicles, predicate));
@@ -72,6 +73,7 @@ public class SignalPoint {
         return simulationTime;
     }
 
+    // called by RoadSegment
     void clear() {
         vehiclesPassed.clear();
     }

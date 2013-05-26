@@ -25,12 +25,20 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * The class TrafficLightApproaching.
@@ -41,7 +49,8 @@ public class TrafficLightApproaching {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLightApproaching.class);
 
-    // public static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
+    // order in list given by signal points
+    private List<TrafficLight> trafficLights = new ArrayList<>();
 
     private boolean considerTrafficLight;
 
@@ -57,31 +66,41 @@ public class TrafficLightApproaching {
         distanceToTrafficlight = MovsimConstants.INVALID_GAP;
     }
 
+    public void addTrafficLight(TrafficLight trafficLight) {
+        Preconditions.checkNotNull(trafficLight);
+        assert !alreadyAdded(trafficLight); // not necessarily needed
+        trafficLights.add(trafficLight);
+        LOG.debug("vehicle: trafficLightSize={}, added trafficlight={}", trafficLights.size(), trafficLight);
+    }
+
+    private boolean alreadyAdded(TrafficLight trafficLightToAdd) {
+        for (TrafficLight trafficLight : trafficLights) {
+            if (trafficLightToAdd == trafficLight) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Update.
      * 
-     * @param me
-     * @param trafficLight
-     * @param distanceToTrafficlight
-     * @param longModel
+     * @param vehicle
      */
-    public void update(Vehicle me, TrafficLight trafficLight, double distanceToTrafficlight) {
-        accTrafficLight = 0;
-        considerTrafficLight = false;
+    public void update(Vehicle vehicle, RoadSegment roadSegment) {
+        reset();
+        removePassedTrafficLights(vehicle, roadSegment);
 
-        // if (distanceToTrafficlight > MAX_LOOK_AHEAD_DISTANCE) {
-        // LOG.debug("traffic light at distance={} to far away -- MAX_LOOK_AHEAD_DISTANCE={}", distanceToTrafficlight,
-        // MAX_LOOK_AHEAD_DISTANCE);
-        // return;
-        // }
+        // TODO for lane-specific trafficlight check more than first TL
+        TrafficLight trafficLight = getRelevantTrafficLight(vehicle, roadSegment);
+        if (trafficLight == null) {
+            return;
+        }
 
-        if (trafficLight.status() == TrafficLightStatus.GREEN && me.getLength() > 30 && distanceToTrafficlight < 500) {
-            // special case here: only relevant if vehicle is really long and next trafficlight is quite close
-            checkSpaceBeforePassingTrafficlight(me, trafficLight, distanceToTrafficlight);
-        } else if (trafficLight.status() != TrafficLightStatus.GREEN) {
+        if (trafficLight.status() != TrafficLightStatus.GREEN) {
             final double maxRangeOfSight = MovsimConstants.GAP_INFINITY;
             if (distanceToTrafficlight < maxRangeOfSight) {
-                accTrafficLight = calcAccelerationToTrafficlight(me, distanceToTrafficlight);
+                accTrafficLight = calcAccelerationToTrafficlight(vehicle, distanceToTrafficlight);
                 if (accTrafficLight < 0) {
                     considerTrafficLight = true;
                     LOG.debug("distance to trafficLight = {}, accTL = {}", distanceToTrafficlight, accTrafficLight);
@@ -94,7 +113,7 @@ public class TrafficLightApproaching {
                 if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
                     final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax
                     final double comfortBrakeDecel = 4;
-                    final double brakeDist = (me.getSpeed() * me.getSpeed()) / (2 * bKinMax);
+                    final double brakeDist = (vehicle.getSpeed() * vehicle.getSpeed()) / (2 * bKinMax);
                     if ((accTrafficLight <= -comfortBrakeDecel || brakeDist >= distanceToTrafficlight)) {
                         // ignore traffic light
                         considerTrafficLight = false;
@@ -103,18 +122,67 @@ public class TrafficLightApproaching {
 
                 // traffic light is already red
                 if (trafficLight.status() == TrafficLightStatus.RED) {
-                    final double maxDeceleration = me.getMaxDeceleration();
-                    final double minBrakeDist = (me.getSpeed() * me.getSpeed()) / (2 * maxDeceleration);
+                    final double maxDeceleration = vehicle.getMaxDeceleration();
+                    final double minBrakeDist = (vehicle.getSpeed() * vehicle.getSpeed()) / (2 * maxDeceleration);
                     if (accTrafficLight <= -maxDeceleration || minBrakeDist >= distanceToTrafficlight) {
                         // ignore traffic light
                         LOG.info(String
                                 .format("veh id=%d in dilemma zone is going to pass red light at distance=%.2fm due to physics (assuming user-defined max. possible braking=%.2fm/s^2!",
-                                        me.getId(), distanceToTrafficlight, maxDeceleration));
+                                        vehicle.getId(), distanceToTrafficlight, maxDeceleration));
                         considerTrafficLight = false;
                     }
                 }
             }
         }
+    }
+
+    private void removePassedTrafficLights(Vehicle vehicle, RoadSegment roadSegment) {
+        // order of trafficlights not defined, loop over all
+        for (Iterator<TrafficLight> iterator = trafficLights.iterator(); iterator.hasNext();) {
+            TrafficLight trafficLight = iterator.next();
+            double distance = trafficLight.distanceTo(vehicle, roadSegment);
+            if (distance < 0) {
+                LOG.info("vehicle at pos={} , remove trafficLight={}", vehicle.getFrontPosition(), trafficLight);
+                iterator.remove();
+            }
+        }
+    }
+
+    private TrafficLight getRelevantTrafficLight(Vehicle vehicle, RoadSegment roadSegment) {
+        for(TrafficLight trafficLight : trafficLights){
+            distanceToTrafficlight = trafficLight.distanceTo(vehicle, roadSegment);
+            assert distanceToTrafficlight >= 0 : "trafficlight already passed, cleaning not working!";
+            int relevantLaneDownstream = determineRelevantLane(vehicle, roadSegment, trafficLight);
+            if (relevantLaneDownstream < 0) {
+                // no trafficlight in downstream roadsegment that is directly connected to vehicle's lane
+                continue;
+            }
+            // trafficlight's valid lane is relative to RoadSegment on which it is located.
+            if (trafficLight.isValidLane(relevantLaneDownstream)) {
+                return trafficLight;
+            }
+        }
+        reset();
+        return null;
+    }
+
+    private static int determineRelevantLane(Vehicle vehicle, RoadSegment roadSegment, TrafficLight trafficLight) {
+        if (roadSegment == trafficLight.roadSegment()) {
+            return vehicle.lane();
+        }
+        LaneSegment laneSegment = roadSegment.laneSegment(vehicle.lane());
+        if (laneSegment.hasSinkLaneSegment()
+                && laneSegment.sinkLaneSegment().roadSegment() == trafficLight.roadSegment()) {
+            // vehicle considers downstream trafficlight in directly connected lane
+            return roadSegment.laneSegment(vehicle.lane()).sinkLaneSegment().lane();
+        }
+        return -1; // invalid lane
+    }
+
+    private void reset() {
+        accTrafficLight = 0;
+        considerTrafficLight = false;
+        distanceToTrafficlight = MovsimConstants.GAP_INFINITY;
     }
 
     private static double calcAccelerationToTrafficlight(Vehicle me, double distanceToTrafficlight) {

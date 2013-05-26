@@ -420,6 +420,15 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return laneSegments[lane - 1].sinkLaneSegment().lane();
     }
 
+    public boolean hasPredecessor() {
+        for (LaneSegment laneSegment : laneSegments) {
+            if (laneSegment.hasSourceLaneSegment()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean exitsOnto(int exitRoadSegmentId) {
         for (final LaneSegment laneSegment : laneSegments) {
             if (laneSegment.type() == Lanes.Type.EXIT) {
@@ -689,7 +698,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         }
     }
 
-    public void updateSignalPointsAfterOutflow(double simulationTime) {
+    public void updateSignalPointsAfterOutflowAndInflow(double simulationTime) {
         assert updateSignalPointsBeforeOutflowCalled; // hack for assuring right calling process
         for (SignalPoint signalPoint : signalPoints) {
             signalPoint.registerPassingVehicles(simulationTime, iterator());
@@ -704,55 +713,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public Iterator<Vehicle> filteredVehicles(Predicate<Vehicle> predicate) {
         return Iterators.filter(iterator(), predicate);
     }
-
-    // /**
-    // * finds the next traffic light in downstream direction relative to the given position. Returns null if there is no
-    // * traffic light located.
-    // *
-    // * @param position
-    // * @return the next downstream traffic or null
-    // */
-    // TrafficLight getNextDownstreamTrafficLight(double position) {
-    // for (TrafficLight trafficLight : trafficLights) {
-    // double distance = trafficLight.position() - position;
-    // if (distance > 0) {
-    // // !!! assume that traffic lights are sorted with increasing position
-    // // so that first traffic light can be considered as the next downstream one
-    // return trafficLight;
-    // }
-    // }
-    // return null;
-    // }
-    //
-    // // TODO profiling ... lookup done quite often even w/o any trafficlights
-    // public TrafficLightWithDistance getNextDownstreamTrafficLight(double position, int lane,
-    // double maxLookAheadDistance) {
-    // TrafficLight trafficLight = getNextDownstreamTrafficLight(position);
-    // double distance = (trafficLight != null) ? trafficLight.position() - position : roadLength
-    // - position;
-    // RoadSegment segment = this;
-    // while (trafficLight == null && distance < maxLookAheadDistance) {
-    // segment = segment.sinkRoadSegment(Math.min(lane, segment.laneCount));
-    // if (segment == null) {
-    // break;
-    // }
-    // trafficLight = segment.getNextDownstreamTrafficLight(0);
-    // distance += (trafficLight != null) ? trafficLight.position() : segment.roadLength();
-    // }
-    // return trafficLight == null ? null : new TrafficLightWithDistance(trafficLight,
-    // distance);
-    // }
-
-    // private void applySlopes() {
-    // if (slopes != null && slopes.isEmpty() == false) {
-    // for (final LaneSegment laneSegment : laneSegments) {
-    // for (final Vehicle vehicle : laneSegment) {
-    // assert vehicle.roadSegmentId() == id;
-    // slopes.apply(vehicle);
-    // }
-    // }
-    // }
-    // }
 
     /**
      * Lanes change.

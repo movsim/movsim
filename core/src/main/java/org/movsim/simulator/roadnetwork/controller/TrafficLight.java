@@ -25,7 +25,10 @@
  */
 package org.movsim.simulator.roadnetwork.controller;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.movsim.autogen.TrafficLightStatus;
@@ -33,15 +36,22 @@ import org.movsim.network.autogen.opendrive.LaneValidity;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.SignalPoint;
+import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Preconditions;
 
 /**
- * The Class TrafficLight.
+ * Represents a 'traffic light' to which vehicles will react. The visibility range is limited to {@code MAX_LOOK_AHEAD_DISTANCE}, e.g.
+ * {@literal 1000m}, or to two {@link RoadSegment}s.
+ * 
  */
 public class TrafficLight extends RoadObjectController {
+
+    private static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
 
     /** The status. */
     private TrafficLightStatus status;
@@ -56,6 +66,9 @@ public class TrafficLight extends RoadObjectController {
     private final Controller controller;
     private final String signalType;
 
+    private final SignalPoint signalPointEnd;
+    private final Map<RoadSegment, SignalPoint> signalPointsBegin = new HashMap<>();
+
     public TrafficLight(Signal signal, Controller controller, RoadSegment roadSegment) {
         super(RoadObjectType.TRAFFICLIGHT, signal.getS(), roadSegment);
         this.controller = Preconditions.checkNotNull(controller);
@@ -66,6 +79,7 @@ public class TrafficLight extends RoadObjectController {
         this.signalType = Preconditions.checkNotNull(checkTypesAndExtractSignalType());
         this.groupId = controller.getId();
         setLaneValidity();
+        signalPointEnd = new SignalPoint(position, roadSegment);
     }
 
     private void setLaneValidity() {
@@ -180,12 +194,51 @@ public class TrafficLight extends RoadObjectController {
 
     @Override
     public void createSignalPositions() {
-        // TODO Auto-generated method stub
+        // downstream signal point is on local roadSegment
+        roadSegment.signalPoints().add(signalPointEnd);
+        LOG.info("trafficlight={}", this);
+        LOG.info("trafficlight *end* signal point placed at position={} on roadSegment={}.", position,
+                roadSegment);
+
+        // create signal points for upstream signal points on potentially other roadsegments
+        double upstreamPosition = position - MAX_LOOK_AHEAD_DISTANCE;
+        if (upstreamPosition >= 0 || !roadSegment.hasPredecessor()) {
+            upstreamPosition = Math.max(0, upstreamPosition);
+            signalPointsBegin.put(roadSegment, new SignalPoint(upstreamPosition, roadSegment));
+            LOG.info("trafficlight signal start point placed at position={} on *same* roadSegment={}",
+                    upstreamPosition, roadSegment);
+        } else {
+            // put signal points to all upstream road segments
+            for (LaneSegment laneSegment : roadSegment.laneSegments()) {
+                double upstreamPositionNewRoad = Math.max(0, laneSegment.roadLength()
+                        + (position - MAX_LOOK_AHEAD_DISTANCE));
+                if (laneSegment.hasSourceLaneSegment()) {
+                    RoadSegment upstreamRoadSegment = laneSegment.sourceLaneSegment().roadSegment();
+                    signalPointsBegin.put(upstreamRoadSegment, new SignalPoint(upstreamPositionNewRoad,
+                            upstreamRoadSegment));
+                    if (upstreamPositionNewRoad == 0) {
+                        LOG.info("trafficlight signal start point placed at position={} on upstream roadSegment={}",
+                                upstreamPositionNewRoad, upstreamRoadSegment);
+                    }
+                }
+            }
+        }
+
+        // add created signals to roadSegments
+        for (Entry<RoadSegment, SignalPoint> entry : signalPointsBegin.entrySet()) {
+            entry.getKey().signalPoints().add(entry.getValue());
+        }
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        // nothing to do, single TrafficLight will be controlled by ControllerGroup
+        for (SignalPoint signalPoint : signalPointsBegin.values()) {
+            for (Vehicle vehicle : signalPoint.passedVehicles()) {
+                vehicle.addTrafficLight(this);
+                LOG.debug("vehicle pos={} --> set trafficlight={}", vehicle.getFrontPosition(), this);
+            }
+        }
+        // Vehicle handles cleaning process for already passed trafficlights autonomously
     }
 
 }

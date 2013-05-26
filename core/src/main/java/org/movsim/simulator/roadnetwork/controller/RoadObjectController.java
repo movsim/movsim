@@ -27,9 +27,12 @@
 package org.movsim.simulator.roadnetwork.controller;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,5 +117,42 @@ public abstract class RoadObjectController implements RoadObject {
 
     @Override
     public abstract void timeStep(double dt, double simulationTime, long iterationCount);
+
+    // TODO write javadoc
+    public double distanceTo(Vehicle vehicle, RoadSegment vehicleRoadSegment) throws IllegalStateException {
+        if (roadSegment == vehicleRoadSegment) {
+            // on same roadSegment
+            return position - vehicle.getFrontPosition();
+        }
+
+        // look *one* roadsegment upstream to find vehicle's roadSegment
+        double distance = position; // vehicleRoadSegment.roadLength() - vehicle.getFrontPosition();
+        Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
+        while (laneSegmentIterator.hasNext()) {
+            LaneSegment laneSegment = laneSegmentIterator.next();
+            if (laneSegment.hasSourceLaneSegment()
+                    && laneSegment.sourceLaneSegment().roadSegment() == vehicleRoadSegment) {
+                distance += vehicleRoadSegment.roadLength() - vehicle.getFrontPosition();
+                return distance;
+            }
+        }
+
+        // also checks *one* roadSegment downstream for consistency, results in negative distance
+        distance = roadSegment.roadLength() - position;
+        laneSegmentIterator = roadSegment.laneSegmentIterator();
+        while (laneSegmentIterator.hasNext()) {
+            LaneSegment laneSegment = laneSegmentIterator.next();
+            if (laneSegment.hasSinkLaneSegment() && laneSegment.sinkLaneSegment().roadSegment() == vehicleRoadSegment) {
+                distance -= vehicle.getFrontPosition();
+                return distance;
+            }
+        }
+
+        // FIXME
+        // shouldn't happen if signal points are working correctly
+        // throw new IllegalStateException(
+        // "cannot calculate distance to vehicle within 1 RoadSegment up/downstream lookup!");
+        return -1;
+    }
 
 }
