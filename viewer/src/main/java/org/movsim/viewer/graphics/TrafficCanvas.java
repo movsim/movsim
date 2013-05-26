@@ -37,6 +37,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -490,6 +491,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 assert roadMapping != null;
                 PaintRoadMapping.setClipPath(g, roadMapping, clipPath);
                 for (final Vehicle vehicle : roadSegment) {
+                    drawVehicle(g, simulationTime, roadMapping, vehicle);
+                }
+                for(Iterator<Vehicle> vehIter = roadSegment.overtakingVehicles(); vehIter.hasNext(); ) {
+                    Vehicle vehicle = vehIter.next();
                     drawVehicle(g, simulationTime, roadMapping, vehicle);
                 }
             }

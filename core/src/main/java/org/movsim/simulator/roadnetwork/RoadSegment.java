@@ -109,10 +109,16 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private final RoadObjects roadObjects;
     private final SignalPoints signalPoints = new SignalPoints();
 
+    /** will be initialized lazily */
+    private final LaneSegment overtakingSegment;
+    private boolean overtakingSegmentInitialized = false;
+
     // Sources and Sinks
     private AbstractTrafficSource trafficSource;
     private TrafficSink sink;
     private RoadMapping roadMapping;
+
+    private RoadSegment peerRoadSegment;
 
     /** simple ramp (source) with dropping mechanism */
     private SimpleRamp simpleRamp;
@@ -160,21 +166,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.roadLength = roadLength;
         this.laneCount = laneCount;
         this.roadObjects = new RoadObjects(this);
+        overtakingSegment = new LaneSegment(this, Lanes.OVERTAKING);
     }
 
     public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping) {
+        this(roadLength, laneCount);
         this.roadMapping = Preconditions.checkNotNull(roadMapping);
-        assert roadLength > 0.0;
-        assert laneCount >= 1 : "laneCount=" + laneCount;
-        laneSegments = new LaneSegment[laneCount];
-        for (int index = 0; index < laneCount; ++index) {
-            laneSegments[index] = new LaneSegment(this, index + 1);
-        }
-        id = nextId++;
-        assert roadLength > 0;
-        this.roadLength = roadLength;
-        this.laneCount = laneCount;
-        this.roadObjects = new RoadObjects(this);
     }
 
     /**
@@ -732,25 +729,99 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *            the number of iterations that have been executed
      */
     public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
-        if (laneCount < 2) {
-            // need at least 2 lanes for lane changing
+        if (!hasPeer() && laneCount < 2) {
+            // need at least 2 lanes or a peerRoad for lane changing
             return;
         }
+        
+        if (!overtakingSegmentInitialized) {
+            initOvertakingLane();
+        }
+
         // TODO assure priority for lane changes from slow to fast lanes
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
             for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
                 Vehicle vehicle = vehIterator.next();
                 assert vehicle.roadSegmentId() == id;
-                if (vehicle.considerLaneChange(dt, this)) {
+                if(vehicle.inProcessOfLaneChange()){
+                    // !!! assure update in each simulation timestep
+                    vehicle.updateLaneChangeDelay(dt);
+                } else if (vehicle.considerLaneChange(dt, this)) {
                     final int targetLane = vehicle.getTargetLane();
                     assert targetLane != Lanes.NONE;
                     assert laneSegments[targetLane - 1].type() != Lanes.Type.ENTRANCE;
-                    // iteratorRemove avoids ConcurrentModificationException
                     vehIterator.remove();
                     vehicle.setLane(targetLane);
                     laneSegments[targetLane - 1].addVehicle(vehicle);
+                } else if (laneSegment.lane() == Lanes.MOST_INNER_LANE && laneCount() == 1
+                        && vehicle.considerOvertaking(dt, this, peerRoadSegment)) {
+                    LOG.info("### perform overtaking: vehicle={}", vehicle);
+                    int targetLane = vehicle.getTargetLane();
+                    assert targetLane == Lanes.OVERTAKING;
+                    vehIterator.remove();
+                    vehicle.setLane(targetLane);
+                    overtakingSegment.addVehicle(vehicle);
                 }
+            }
+        }
+        checkFinishingOvertaking(dt);
+    }
+
+    private void initOvertakingLane() {
+        // connect overtaking lane according to connections of Lane1
+        LaneSegment sinkLane1 = laneSegment(Lanes.MOST_INNER_LANE).sinkLaneSegment();
+        if (sinkLane1 != null) {
+            overtakingSegment.setSinkLaneSegment(sinkLane1.roadSegment().overtakingSegment);
+        }
+        LaneSegment sourceLane1 = laneSegment(Lanes.MOST_INNER_LANE).sourceLaneSegment();
+        if (sourceLane1 != null) {
+            overtakingSegment.setSourceLaneSegment(sourceLane1.roadSegment().overtakingSegment);
+        }
+        overtakingSegmentInitialized = true;
+    }
+
+    // private void makeOvertaking(double dt) {
+    // assert hasPeer();
+    // if (userId.endsWith("-")) {
+    // // TODO HACK FOR DEVELOPMENT
+    // return;
+    // }
+    // checkFinishingOvertaking(dt);
+    // checkOvertakingIsPossible(dt);
+    // }
+
+    // private void checkOvertakingIsPossible(double dt) {
+    // final LaneSegment laneSegment = laneSegment(Lanes.MOST_INNER_LANE);
+    // for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
+    // Vehicle vehicle = vehIterator.next();
+    // assert vehicle.roadSegmentId() == id;
+    // assert vehicle.lane() == Lanes.MOST_INNER_LANE;
+    // if (vehicle.considerOvertaking(dt, this, peerRoadSegment)) {
+    // LOG.info("##### perform overtaking: vehicle={}", vehicle);
+    // int targetLane = vehicle.getTargetLane();
+    // assert targetLane == Lanes.OVERTAKING;
+    // vehIterator.remove();
+    // vehicle.setLane(targetLane);
+    // overtakingSegment.addVehicle(vehicle);
+    // }
+    // }
+    // }
+
+    private void checkFinishingOvertaking(double dt) {
+        LaneSegment lane1 = laneSegment(Lanes.MOST_INNER_LANE);
+        for (Iterator<Vehicle> vehIterator = overtakingSegment.iterator(); vehIterator.hasNext();) {
+           Vehicle vehicle = vehIterator.next();
+            if (vehicle.inProcessOfLaneChange()) {
+                // assure update in each simulation timestep
+                vehicle.updateLaneChangeDelay(dt);
+            } else if (vehicle.considerFinishOvertaking(dt, lane1)) {
+                LOG.info("### turn back into lane after overtaking: vehicle={}", vehicle);
+                int targetLane = vehicle.getTargetLane();
+                assert targetLane == Lanes.MOST_INNER_LANE;
+                vehIterator.remove();
+                vehicle.setLane(targetLane);
+                lane1.addVehicle(vehicle);
             }
         }
     }
@@ -772,6 +843,11 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             final LaneSegment leftLaneSegment = getLeftLane(laneSegment);
             for (final Vehicle vehicle : laneSegment) {
                 vehicle.updateAcceleration(dt, this, laneSegment, leftLaneSegment);
+            }
+        }
+        if (overtakingSegment.vehicleCount() > 0) {
+            for (final Vehicle vehicle : overtakingSegment) {
+                vehicle.updateAcceleration(dt, this, overtakingSegment, null);
             }
         }
     }
@@ -797,6 +873,11 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.laneIsSorted();
             for (final Vehicle vehicle : laneSegment) {
+                vehicle.updatePositionAndSpeed(dt);
+            }
+        }
+        if (overtakingSegment.vehicleCount() > 0) {
+            for (final Vehicle vehicle : overtakingSegment) {
                 vehicle.updatePositionAndSpeed(dt);
             }
         }
@@ -915,7 +996,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
-     * vehicle.positon() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
+     * vehicle.position() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
      * be in the rear.
      * 
      * @param lane
@@ -1007,6 +1088,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     @Override
     public final Iterator<Vehicle> iterator() {
         return new VehicleIterator();
+    }
+
+    public final Iterator<Vehicle> overtakingVehicles() {
+        return overtakingSegment.iterator();
     }
 
     /**
@@ -1221,4 +1306,17 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                 + roadLength + ", laneCount=" + laneCount + ", " + getOriginNode() + ", " + getDestinationNode() + "]";
     }
 
+    RoadSegment getPeerRoadSegment() {
+        return peerRoadSegment;
+    }
+
+    public final boolean hasPeer() {
+        return peerRoadSegment != null;
+    }
+
+    public void setPeerRoadSegment(RoadSegment peerRoadSegment) {
+        Preconditions.checkNotNull(peerRoadSegment);
+        Preconditions.checkArgument(!peerRoadSegment.equals(this));
+        this.peerRoadSegment = peerRoadSegment;
+    }
 }

@@ -316,7 +316,9 @@ public abstract class RoadMappingAbstract implements RoadMapping {
             // TODO hack here, should be not necessary if relative to centerline
             return 0;
         }
-        return (lane == Lanes.NONE) ? 0.0 : (lane - 0.5) * laneWidth;
+        // TODO correct mapping from laneIndex to real lateral coordinate !!!
+        double offset = lane == Lanes.NONE ? 0.0 : (Math.abs(lane) - 0.5) * laneWidth;
+        return lane < 0 ? -offset : offset;
         // (0.5 * (1 - laneCount) + (lane - 1)) *
         // return (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
     }

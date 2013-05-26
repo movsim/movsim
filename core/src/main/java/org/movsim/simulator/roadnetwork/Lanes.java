@@ -45,8 +45,9 @@ public final class Lanes {
         // private constructor
     }
 
+
     // from inner to outer lanes
-    public static final int LANE1 = 1; // NOT DRIVABLE TODO avoid lane index 0, opendrive reserves this for middlelane
+    public static final int LANE1 = 1;
     public static final int LANE2 = 2;
     public static final int LANE3 = 3;
     public static final int LANE4 = 4;
@@ -60,6 +61,9 @@ public final class Lanes {
     public final static int NO_CHANGE = 0;
 
     public static final int MOST_INNER_LANE = LANE1;
+
+    /** laneIndex=0 is the internal overtaking lane (xodr reserves this for middlelane) */
+    public static final int OVERTAKING = -1;
 
     /**
      * Lanes type.

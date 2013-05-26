@@ -50,7 +50,7 @@ public class LaneChangeModel {
 
         NONE(Lanes.NO_CHANGE), STAY_IN_LANE(Lanes.NO_CHANGE), DISCRETIONARY_TO_LEFT(Lanes.TO_LEFT), DISCRETIONARY_TO_RIGHT(
                 Lanes.TO_RIGHT), MANDATORY_TO_LEFT(Lanes.TO_LEFT), MANDATORY_TO_RIGHT(Lanes.TO_RIGHT), MANDATORY_STAY_IN_LANE(
-                Lanes.NO_CHANGE);
+                Lanes.NO_CHANGE), OVERTAKE_VIA_PEER(Lanes.TO_LEFT);
 
         private final int laneChangeDirection;
 
@@ -80,11 +80,6 @@ public class LaneChangeModel {
         }
 
     }
-
-    // private final boolean withEuropeanRules;
-    //
-    // /** critical speed for kicking in European rules (in m/s) */
-    // private final double vCritEur;
 
     private Vehicle me;
 
@@ -404,6 +399,68 @@ public class LaneChangeModel {
             }
         }
         return laneChangeDecision;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private double minTargetGap = 100;
+    private double maxGapBehindLeader = 200;
+    private double safetyTimeGapParameter = 2; // could be taken from IDM family but no access
+
+    private double critFactorTTC = 4; // 6
+    private double magicFactorReduceFreeAcc = 4;
+
+    public LaneChangeDecision makeDecisionForOvertaking(Vehicle vehicleOnPeer, RoadSegment roadSegment,
+            double distanceToVehicleOnPeer) {
+
+        assert me.lane() == Lanes.MOST_INNER_LANE;
+        assert vehicleOnPeer != null;
+        assert distanceToVehicleOnPeer > 0;
+
+        LaneChangeDecision decision = LaneChangeDecision.NONE;
+
+        // TODO handling of connecting RS
+        Vehicle frontVehicleInLane = roadSegment.frontVehicleOnLane(me);
+        if (frontVehicleInLane != null && !frontVehicleInLane.inProcessOfLaneChange()
+                && frontVehicleInLane.type() == Vehicle.Type.VEHICLE) {
+            double brutDistanceToFrontVehicleInLane = me.getBrutDistance(frontVehicleInLane);
+            LOG.debug("brutDistance={}, frontVehicle={}", brutDistanceToFrontVehicleInLane, frontVehicleInLane);
+
+            Vehicle secondFrontVehicleInLane = roadSegment.laneSegment(frontVehicleInLane.lane()).roadSegment()
+                    .frontVehicleOnLane(frontVehicleInLane);
+            double spaceOnTargetLane = (secondFrontVehicleInLane != null) ? frontVehicleInLane
+                    .getNetDistance(secondFrontVehicleInLane) : 100000 /* infinite gap */;
+            LOG.debug("space on targetlane={}", spaceOnTargetLane);
+
+            if (me.getLongitudinalModel().getDesiredSpeed() > frontVehicleInLane.getLongitudinalModel()
+                    .getDesiredSpeed()
+                    && me.getBrutDistance(frontVehicleInLane) < maxGapBehindLeader
+                    && spaceOnTargetLane > minTargetGap) {
+
+                double spaceToFrontVeh = brutDistanceToFrontVehicleInLane + me.getLongitudinalModel().getMinimumGap();
+                // free model acceleration: large distance, dv=0
+                double accConst = me.getLongitudinalModel().calcAccSimple(10000, me.getSpeed(), 0);
+                accConst /= magicFactorReduceFreeAcc;
+
+                // time needed when accelerating constantly
+                double timeManeuver = Math.sqrt(2 * spaceToFrontVeh / accConst);
+                double safetyMargin = critFactorTTC * me.getSpeed() * safetyTimeGapParameter;
+                double neededDist = timeManeuver * (me.getSpeed() + vehicleOnPeer.getSpeed()) + spaceToFrontVeh
+                        + safetyMargin;
+                if (distanceToVehicleOnPeer > neededDist) {
+                    decision = LaneChangeDecision.OVERTAKE_VIA_PEER;
+                }
+            }
+        }
+        return decision;
+    }
+
+    public LaneChangeDecision makeDecisionForFinishOvertaking(LaneSegment newLaneSegment) {
+        // evaluate situation on the right lane
+        if (isSafeLaneChange(newLaneSegment)) {
+            return LaneChangeDecision.MANDATORY_TO_RIGHT;
+        }
+        return LaneChangeDecision.NONE;
     }
 
 }
