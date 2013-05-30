@@ -31,35 +31,64 @@ import java.util.Set;
 
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
+import org.movsim.simulator.roadnetwork.Lanes.Type;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.vehicles.Vehicle;
 
+// Tricky modeling: decision making may take a while until exit will be reached.
+// Assignment of exit decision at cross-sections (via SignalPoints) produces most reasonale behavior in routing game.
+// Note that the "VMS" model is not general but very specific for the routing game.
 public class VariableMessageSignDiversion extends RoadObjectController {
 
     private boolean diversionActive = false; // also set in viewer !!
 
     private Set<Vehicle> controlledVehicles = new HashSet<>();
     
-    // TODO set SignalPoints in RoadNetwork ... needs iterating over them all
+    private final double validLength;
     private final SignalPoint begin;
-    private final SignalPoint end;
-    
+    private SignalPoint end;
+    private RoadSegment roadSegmentEnd;
 
     public VariableMessageSignDiversion(double position, double validLength, RoadSegment roadSegment) {
         super(RoadObjectType.VMS_DIVERSION, position, roadSegment);
+        this.validLength = validLength;
         begin = new SignalPoint(position, roadSegment);
-
-        // FIXME hack here, use valid length instead and put SP on *all* roadSegments
-        RoadSegment sinkRoadSegment = roadSegment().sinkRoadSegment(1);
-        end = new SignalPoint(sinkRoadSegment.roadLength(), sinkRoadSegment);
     }
 
     @Override
     public void createSignalPositions() {
         roadSegment.signalPoints().add(begin);
-        RoadSegment sinkRoadSegment = roadSegment().sinkRoadSegment(1);
-        sinkRoadSegment.signalPoints().add(end);
+        // non-local roadSegment needs fully inialized roadNetwork
+        roadSegmentEnd = getRoadSegmentToPlaceEndPoint(position, validLength);
+        if (roadSegmentEnd.laneType(roadSegmentEnd.laneCount()) != Type.EXIT) {
+            throw new IllegalArgumentException("end of VariableMessageSignDiversion lies on roadSegment "
+                    + roadSegmentEnd.userId() + " without exit lane!");
+        }
+        end = new SignalPoint(roadSegmentEnd.roadLength(), roadSegmentEnd);
+        roadSegmentEnd.signalPoints().add(end);
+    }
+
+    private RoadSegment getRoadSegmentToPlaceEndPoint(double position, double validLength) {
+        if(position + validLength < roadSegment.roadLength()){
+            return roadSegment;  // downstream end lies on same roadSegment
+        }
+
+        // downstream end lies on next downstream roadSegment
+        RoadSegment downstreamRoadSegment = roadSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
+        for (LaneSegment laneSegment : roadSegment.laneSegments()) {
+            if (laneSegment.hasSinkLaneSegment()
+                    && laneSegment.sinkLaneSegment().roadSegment() != downstreamRoadSegment) {
+                throw new IllegalArgumentException("downstream end of VariableMessageSignDiversion from RoadSegment="
+                        + roadSegment.userId() + " not unique. VMS model not intended for this case.");
+            }
+        }
+
+        if (validLength - roadSegment.roadLength() + position > downstreamRoadSegment.roadLength()) {
+            throw new IllegalArgumentException("valid length exceeds the roadlength of the downstream roadSegment="
+                    + downstreamRoadSegment.roadLength());
+        }
+        return downstreamRoadSegment;
     }
 
     @Override
@@ -67,12 +96,12 @@ public class VariableMessageSignDiversion extends RoadObjectController {
         LOG.debug("VMS isActive={}, controlledVehicles.size={}", diversionActive, controlledVehicles.size());
         LOG.debug("VMS vehiclesPassedBegin={}, vehiclesPassedEnd={}", begin.passedVehicles().size(), end
                 .passedVehicles().size());
+
         if (diversionActive) {
             for (Vehicle vehicle : begin.passedVehicles()) {
-                // apply only to vehicles in most right lane!
-                if (vehicle.lane() == roadSegment.laneCount()) {
-                    final LaneSegment laneSegment = roadSegment.laneSegment(Lanes.LANE1);
-                    vehicle.setExitRoadSegmentId(laneSegment.sinkLaneSegment().roadSegment().id());
+                // apply only to vehicles not in most left lane!
+                if (vehicle.lane() != Lanes.MOST_INNER_LANE) {
+                    vehicle.setExitRoadSegmentId(roadSegmentEnd.id());
                     controlledVehicles.add(vehicle);
                     LOG.debug("set exitRoadSegmentId to vehicle={}", vehicle);
                 }
@@ -84,12 +113,13 @@ public class VariableMessageSignDiversion extends RoadObjectController {
         }
 
         for (Vehicle vehicle : end.passedVehicles()) {
+            vehicle.setExitRoadSegmentId(Vehicle.ROAD_SEGMENT_ID_NOT_SET); // reset
             controlledVehicles.remove(vehicle);
         }
 
-        if (controlledVehicles.size() > 100) {
+        if (controlledVehicles.size() > 200) {
             // precautionary measure: check if removing mechanism is working proplery
-            LOG.warn("Danger of memory leak: controlledVehicles.size={}", controlledVehicles.size());
+            LOG.warn("Check possible memory leak: controlledVehicles.size={}", controlledVehicles.size());
         }
     }
 

@@ -327,7 +327,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @return type of lane
      */
     public Lanes.Type laneType(int lane) {
-        return laneSegments[lane].type();
+        return laneSegments[lane - 1].type();
     }
 
     /**
