@@ -85,6 +85,8 @@ public class LaneChangeModel {
 
     private MOBIL lcModelMOBIL;
 
+    private OvertakingViaPeerModel overtakingViaPeerModel;
+
     private final org.movsim.autogen.LaneChangeModelType parameter;
 
     // Exit Handling
@@ -124,6 +126,9 @@ public class LaneChangeModel {
         Preconditions.checkNotNull(vehicle);
         this.me = vehicle;
         lcModelMOBIL = new MOBIL(me, parameter.getModelParameterMOBIL());
+        if (parameter.isSetOvertakingViaPeer()) {
+            overtakingViaPeerModel = new OvertakingViaPeerModel(this, parameter.getOvertakingViaPeer());
+        }
     }
 
     /**
@@ -168,19 +173,17 @@ public class LaneChangeModel {
         return decision;
     }
 
-    private boolean isSafeLaneChange(LaneSegment laneSegment) {
-        final Vehicle front = laneSegment.frontVehicle(me);
-        final Vehicle back = laneSegment.rearVehicle(me);
-        final boolean changeSafe = checkSafetyCriterion(front, back);
+    boolean isSafeLaneChange(Vehicle subjectVehicle, LaneSegment laneSegment) {
+        final Vehicle front = laneSegment.frontVehicle(subjectVehicle);
+        final Vehicle back = laneSegment.rearVehicle(subjectVehicle);
+        final boolean changeSafe = checkSafetyCriterion(subjectVehicle, front, back);
         return changeSafe;
     }
 
-    private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh) {
-
+    boolean checkSafetyCriterion(Vehicle subjectVehicle, Vehicle frontVeh, Vehicle backVeh) {
         final double safeDeceleration = lcModelMOBIL.getParameter().getSafeDeceleration();
-
         // check distance to front vehicle
-        final double gapFront = me.getNetDistance(frontVeh);
+        final double gapFront = subjectVehicle.getNetDistance(frontVeh);
         if (gapFront < lcModelMOBIL.getParameter().getMinimumGap()) {
             LOG.debug("gapFront={}", gapFront);
             return false;
@@ -188,13 +191,13 @@ public class LaneChangeModel {
 
         // check distance to vehicle at behind
         if (backVeh != null) {
-            final double gapBack = backVeh.getNetDistance(me);
+            final double gapBack = backVeh.getNetDistance(subjectVehicle);
             if (gapBack < lcModelMOBIL.getParameter().getMinimumGap()) {
                 LOG.debug("gapBack={}", gapBack);
                 return false;
             }
             // check acceleration of back vehicle
-            final double backNewAcc = backVeh.getLongitudinalModel().calcAcc(backVeh, me);
+            final double backNewAcc = backVeh.getLongitudinalModel().calcAcc(backVeh, subjectVehicle);
             if (backNewAcc <= -safeDeceleration) {
                 LOG.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
                 LOG.debug("backNewAcc={}, bSafe={}", backNewAcc, safeDeceleration);
@@ -203,7 +206,7 @@ public class LaneChangeModel {
         }
 
         // check acceleration of vehicle ahead
-        final double meNewAcc = me.getLongitudinalModel().calcAcc(me, frontVeh);
+        final double meNewAcc = subjectVehicle.getLongitudinalModel().calcAcc(subjectVehicle, frontVeh);
         if (meNewAcc >= -safeDeceleration) {
             LOG.debug("meNewAcc={}, bSafe={}", meNewAcc, safeDeceleration);
             return true;
@@ -259,7 +262,7 @@ public class LaneChangeModel {
             final int direction = (currentLane == roadSegment.laneCount()) ? Lanes.TO_LEFT : Lanes.TO_RIGHT;
             if (currentLane + direction >= Lanes.MOST_INNER_LANE) {
                 final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + direction);
-                if (isSafeLaneChange(newLaneSegment)) {
+                if (isSafeLaneChange(me, newLaneSegment)) {
                     double distanceToRoadSegmentEnd = me.getDistanceToRoadSegmentEnd();
                     if (distanceToRoadSegmentEnd < 0) {
                         // just a hack. should not happen.
@@ -307,7 +310,7 @@ public class LaneChangeModel {
             } else if (currentLane < roadSegment.laneCount()) {
                 // evaluate situation on the right lane
                 final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lanes.TO_RIGHT);
-                if (isSafeLaneChange(newLaneSegment)) {
+                if (isSafeLaneChange(me, newLaneSegment)) {
                     return LaneChangeDecision.MANDATORY_TO_RIGHT;
                 }
                 return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
@@ -325,7 +328,7 @@ public class LaneChangeModel {
                     return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
                 } else if (currentLane < roadSegment.laneCount()) {
                     final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lanes.TO_RIGHT);
-                    if (isSafeLaneChange(newLaneSegment)) {
+                    if (isSafeLaneChange(me, newLaneSegment)) {
                         return LaneChangeDecision.MANDATORY_TO_RIGHT;
                     }
                     return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
@@ -401,64 +404,19 @@ public class LaneChangeModel {
         return laneChangeDecision;
     }
 
-    // ---------------------------------------------------------------------------------------------
-
-    private double minTargetGap = 100;
-    private double maxGapBehindLeader = 200;
-    private double safetyTimeGapParameter = 2; // could be taken from IDM family but no access
-
-    private double critFactorTTC = 4; // 6
-    private double magicFactorReduceFreeAcc = 4;
-
-    public LaneChangeDecision makeDecisionForOvertaking(Vehicle vehicleOnPeer, RoadSegment roadSegment,
-            double distanceToVehicleOnPeer) {
-
-        assert me.lane() == Lanes.MOST_INNER_LANE;
-        assert vehicleOnPeer != null;
-        assert distanceToVehicleOnPeer > 0;
-
-        LaneChangeDecision decision = LaneChangeDecision.NONE;
-
-        // TODO handling of connecting RS
-        Vehicle frontVehicleInLane = roadSegment.frontVehicleOnLane(me);
-        if (frontVehicleInLane != null && !frontVehicleInLane.inProcessOfLaneChange()
-                && frontVehicleInLane.type() == Vehicle.Type.VEHICLE) {
-            double brutDistanceToFrontVehicleInLane = me.getBrutDistance(frontVehicleInLane);
-            LOG.debug("brutDistance={}, frontVehicle={}", brutDistanceToFrontVehicleInLane, frontVehicleInLane);
-
-            Vehicle secondFrontVehicleInLane = roadSegment.laneSegment(frontVehicleInLane.lane()).roadSegment()
-                    .frontVehicleOnLane(frontVehicleInLane);
-            double spaceOnTargetLane = (secondFrontVehicleInLane != null) ? frontVehicleInLane
-                    .getNetDistance(secondFrontVehicleInLane) : 100000 /* infinite gap */;
-            LOG.debug("space on targetlane={}", spaceOnTargetLane);
-
-            if (me.getLongitudinalModel().getDesiredSpeed() > frontVehicleInLane.getLongitudinalModel()
-                    .getDesiredSpeed()
-                    && me.getBrutDistance(frontVehicleInLane) < maxGapBehindLeader
-                    && spaceOnTargetLane > minTargetGap) {
-
-                double spaceToFrontVeh = brutDistanceToFrontVehicleInLane + me.getLongitudinalModel().getMinimumGap();
-                // free model acceleration: large distance, dv=0
-                double accConst = me.getLongitudinalModel().calcAccSimple(10000, me.getSpeed(), 0);
-                accConst /= magicFactorReduceFreeAcc;
-
-                // time needed when accelerating constantly
-                double timeManeuver = Math.sqrt(2 * spaceToFrontVeh / accConst);
-                double safetyMargin = critFactorTTC * me.getSpeed() * safetyTimeGapParameter;
-                double neededDist = timeManeuver * (me.getSpeed() + vehicleOnPeer.getSpeed()) + spaceToFrontVeh
-                        + safetyMargin;
-                if (distanceToVehicleOnPeer > neededDist) {
-                    decision = LaneChangeDecision.OVERTAKE_VIA_PEER;
-                }
-            }
+    // --------------------------------------------------------------------------------------------
+    // delegate overtaking decision on rural road via peer road to dedicated model
+    public LaneChangeDecision makeDecisionForOvertaking(RoadSegment roadSegment) {
+        assert roadSegment.hasPeer();
+        if (overtakingViaPeerModel != null) {
+            return overtakingViaPeerModel.makeDecisionForOvertaking(me, roadSegment);
         }
-        return decision;
+        return LaneChangeDecision.NONE;
     }
 
-    public LaneChangeDecision makeDecisionForFinishOvertaking(LaneSegment newLaneSegment) {
-        // evaluate situation on the right lane
-        if (isSafeLaneChange(newLaneSegment)) {
-            return LaneChangeDecision.MANDATORY_TO_RIGHT;
+    public LaneChangeDecision finishOvertaking(LaneSegment laneSegment) {
+        if (overtakingViaPeerModel != null) {
+            return overtakingViaPeerModel.finishOvertaking(me, laneSegment);
         }
         return LaneChangeDecision.NONE;
     }

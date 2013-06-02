@@ -794,44 +794,19 @@ public class Vehicle {
     // lane-changing related methods
     // ---------------------------------------------------------------------------------
 
-    public boolean considerOvertaking(double dt, RoadSegment roadSegment, RoadSegment peerRoadSegment) {
+    public boolean considerOvertakingViaPeer(double dt, RoadSegment roadSegment) {
         LaneChangeDecision lcDecision = LaneChangeDecision.NONE;
-        if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
+        if (!roadSegment.hasPeer() || roadSegment.laneCount() > 1 || lane() != Lanes.MOST_INNER_LANE
+                || laneChangeModel == null || !laneChangeModel.isInitialized() || inProcessOfLaneChange()) {
             return false;
         }
-        if (peerRoadSegment == null) {
-            return false;
-        }
-        assert !inProcessOfLaneChange();
-        assert lane() == Lanes.MOST_INNER_LANE;
-        double vehiclePositionOnPeer = peerRoadSegment.roadLength() - getFrontPosition();
-        Vehicle vehicleOnPeer = peerRoadSegment.rearVehicle(Lanes.MOST_INNER_LANE, vehiclePositionOnPeer);
-        LOG.debug("check for rear vehicle on peer at position={}, see vehicle={}", vehiclePositionOnPeer,
-                (vehicleOnPeer != null ? vehicleOnPeer : "null"));
-        
-        if (vehicleOnPeer != null) {
-            double distance = calcDistance(peerRoadSegment, vehicleOnPeer);
-            // LOG.info("========== consider vehicle in other direction of travel: distance={}", distance);
-            // LOG.info("net distance from me={}, netDistancefromOther={}", getNetDistance(vehicleOnPeer),
-            // vehicleOnPeer.getNetDistance(this));
-            // LOG.info("roadSegmentId={}, vehiclePos={}, vehicleOnPeerPos=" + vehicleOnPeer.getFrontPosition()
-            // + ", vehiclePosOnPeer=" + vehiclePositionOnPeer, roadSegment.userId(), getFrontPosition());
-            if (distance > 0) {
-                lcDecision = laneChangeModel.makeDecisionForOvertaking(vehicleOnPeer, roadSegment, distance);
-            }
-        }
+        lcDecision = laneChangeModel.makeDecisionForOvertaking(roadSegment);
         if (lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER) {
             setTargetLane(Lanes.OVERTAKING);
             resetDelay(dt);
-            // updateLaneChangeDelay(dt);
             LOG.debug("do overtaking lane change to={} into target lane={}", lcDecision, targetLane);
         }
         return lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER;
-    }
-
-    private double calcDistance(RoadSegment peerRoadSegment, Vehicle vehicleOnPeerRoad) {
-        double vehiclePositionOnPeer = peerRoadSegment.roadLength() - getFrontPosition();
-        return vehiclePositionOnPeer - vehicleOnPeerRoad.getFrontPosition();
     }
 
     public boolean considerFinishOvertaking(double dt, LaneSegment laneSegment) {
@@ -840,19 +815,11 @@ public class Vehicle {
         if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
             return false;
         }
-
-        // if (inProcessOfLaneChange()) {
-        // // need some adaptation time for performing overtaking, void turning back too early
-        // updateLaneChangeDelay(dt);
-        // return false;
-        // }
-
-        LaneChangeDecision lcDecision = laneChangeModel.makeDecisionForFinishOvertaking(laneSegment);
+        LaneChangeDecision lcDecision = laneChangeModel.finishOvertaking(laneSegment);
         if (lcDecision == LaneChangeDecision.MANDATORY_TO_RIGHT) {
             setTargetLane(Lanes.MOST_INNER_LANE);
             resetDelay(dt);
-            // updateLaneChangeDelay(dt);
-            LOG.info("finish overtaking, turn from lane={} into target lane={}", laneOld, targetLane);
+            LOG.debug("finish overtaking, turn from lane={} into target lane={}", laneOld, targetLane);
         }
         return lcDecision == LaneChangeDecision.MANDATORY_TO_RIGHT;
     }
@@ -867,12 +834,7 @@ public class Vehicle {
         if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
             return false;
         }
-
         assert !inProcessOfLaneChange();
-        // if (inProcessOfLaneChange()) {
-        // updateLaneChangeDelay(dt);
-        // return false;
-        // }
 
         // if not in lane-changing process do determine if new lane is more attractive and lane change is possible
         LaneChangeDecision lcDecision = laneChangeModel.makeDecision(roadSegment);
@@ -882,7 +844,6 @@ public class Vehicle {
         if (laneChangeDirection != Lanes.NO_CHANGE) {
             setTargetLane(lane + laneChangeDirection);
             resetDelay(dt);
-            // updateLaneChangeDelay(dt); // updating when checking for finishing maneuver
             LOG.debug("do lane change to={} into target lane={}", laneChangeDirection, targetLane);
             return true;
         }
@@ -936,7 +897,7 @@ public class Vehicle {
     }
 
     // ---------------------------------------------------------------------------------
-    // braking lights for neat viewers
+    // braking lights for viewer
     // ---------------------------------------------------------------------------------
 
     public boolean isBrakeLightOn() {
@@ -1000,7 +961,7 @@ public class Vehicle {
         FLOATING_CAR
     }
 
-    private Type type = Type.VEHICLE; // init!
+    private Type type = Type.VEHICLE;
 
     /**
      * Returns this vehicle's type.

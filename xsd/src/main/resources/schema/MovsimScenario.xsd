@@ -411,6 +411,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="ModelParameterMOBIL" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="OvertakingViaPeer" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="european_rules" type="xs:boolean" default="false" />
             <xs:attribute name="crit_speed_eur" type="nonNegativeDouble" default="25" />
@@ -424,6 +425,10 @@
             <xs:attribute name="threshold_acceleration" type="xs:double" default="0.2" />
             <xs:attribute name="right_bias_acceleration" type="xs:double" default="0.25" />
             <xs:attribute name="politeness" type="xs:double" default="0.1" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="OvertakingViaPeer">
+        <xs:complexType>
         </xs:complexType>
     </xs:element>
     <xs:element name="NoiseParameter">
