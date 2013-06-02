@@ -815,13 +815,14 @@ public class Vehicle {
         if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
             return false;
         }
-        LaneChangeDecision lcDecision = laneChangeModel.finishOvertaking(laneSegment);
+        LaneChangeDecision lcDecision = laneChangeModel.finishOvertakingViaPeer(laneSegment);
         if (lcDecision == LaneChangeDecision.MANDATORY_TO_RIGHT) {
             setTargetLane(Lanes.MOST_INNER_LANE);
             resetDelay(dt);
             LOG.debug("finish overtaking, turn from lane={} into target lane={}", laneOld, targetLane);
+            return true;
         }
-        return lcDecision == LaneChangeDecision.MANDATORY_TO_RIGHT;
+        return false;
     }
 
     public boolean considerLaneChange(double dt, RoadSegment roadSegment) {

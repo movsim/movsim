@@ -407,14 +407,13 @@ public class LaneChangeModel {
     // --------------------------------------------------------------------------------------------
     // delegate overtaking decision on rural road via peer road to dedicated model
     public LaneChangeDecision makeDecisionForOvertaking(RoadSegment roadSegment) {
-        assert roadSegment.hasPeer();
         if (overtakingViaPeerModel != null) {
             return overtakingViaPeerModel.makeDecisionForOvertaking(me, roadSegment);
         }
         return LaneChangeDecision.NONE;
     }
 
-    public LaneChangeDecision finishOvertaking(LaneSegment laneSegment) {
+    public LaneChangeDecision finishOvertakingViaPeer(LaneSegment laneSegment) {
         if (overtakingViaPeerModel != null) {
             return overtakingViaPeerModel.finishOvertaking(me, laneSegment);
         }

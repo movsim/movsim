@@ -202,7 +202,7 @@ public class TrafficLight extends RoadObjectController {
 
         // create signal points for upstream signal points on potentially other roadsegments
         double upstreamPosition = position - MAX_LOOK_AHEAD_DISTANCE;
-        if (upstreamPosition >= 0 || !roadSegment.hasPredecessor()) {
+        if (upstreamPosition >= 0 || !roadSegment.hasUpstreamConnection()) {
             upstreamPosition = Math.max(0, upstreamPosition);
             signalPointsBegin.put(roadSegment, new SignalPoint(upstreamPosition, roadSegment));
             LOG.info("trafficlight signal start point placed at position={} on *same* roadSegment={}",

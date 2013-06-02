@@ -35,6 +35,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * <p>
  * A LaneSegment represents a lane within a RoadSegment.
@@ -79,7 +81,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      *            (not the laneIndex)
      */
     LaneSegment(RoadSegment roadSegment, int lane) {
-        this.roadSegment = roadSegment;
+        this.roadSegment = Preconditions.checkNotNull(roadSegment);
         // overtaking lane is Lane == 0
         // assert lane >= Lanes.MOST_INNER_LANE;
         this.lane = lane;
@@ -549,13 +551,13 @@ public class LaneSegment implements Iterable<Vehicle> {
         // subject vehicle is front vehicle on this road segment, so check for vehicles
         // on sink lane segment
         if (sinkLaneSegment != null) {
-            // didn't find a front vehicle in the current road segment, so
-            // check the next (sink) road segment
-            // find the rear vehicle in the sink lane on the sink road segment
-
-            // TODO !!! continue until a vehicle is found or no further source is connected to laneSegment
-            // SEE in rearVehicle
-            final Vehicle sinkRearVehicle = sinkLaneSegment.rearVehicle();
+            // didn't find a front vehicle in the current road segment, so check the next (sink) road segments
+            Vehicle sinkRearVehicle = null;
+            LaneSegment sink = sinkLaneSegment;
+            do {
+                sinkRearVehicle = sink.rearVehicle();
+                sink = sink.sinkLaneSegment();
+            } while (sinkRearVehicle == null && sink != null);
             if (sinkRearVehicle != null) {
                 // return a copy of the rear vehicle on the sink road segment, with its position
                 // set relative to the current road segment
@@ -566,7 +568,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         return null;
     }
-
+    
     /**
      * Returns the vehicle in front of the given vehicle.
      * 

@@ -27,7 +27,9 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.movsim.roadmappings.RoadMapping;
@@ -105,6 +107,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private final double roadLength;
     private final int laneCount;
     private final LaneSegment laneSegments[];
+
+    // TODO extend Node idea to keep information of connecting roadSegments
+    private int sizeSourceRoadSegments = -1;
+    private int sizeSinkRoadSegments = -1;
 
     private final RoadObjects roadObjects;
     private final SignalPoints signalPoints = new SignalPoints();
@@ -373,7 +379,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return laneSegments[lane - 1].sourceLaneSegment();
     }
 
-    final RoadSegment sourceRoadSegment(int lane) {
+    public final RoadSegment sourceRoadSegment(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sourceLaneSegment() == null) {
             return null;
@@ -401,7 +407,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public final RoadSegment sinkRoadSegment(int lane) {
-        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane + " but lanecount="
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane + " but laneCount="
                 + laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
             return null;
@@ -417,13 +423,38 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return laneSegments[lane - 1].sinkLaneSegment().lane();
     }
 
-    public boolean hasPredecessor() {
-        for (LaneSegment laneSegment : laneSegments) {
-            if (laneSegment.hasSourceLaneSegment()) {
-                return true;
+    public final boolean hasUpstreamConnection() {
+        return sizeSourceRoadSegments() > 0;
+    }
+
+    public final boolean hasDownstreamConnection() {
+        return sizeSinkRoadSegments() > 0;
+    }
+
+    public final int sizeSinkRoadSegments() {
+        if (sizeSinkRoadSegments < 0) {
+            Set<RoadSegment> sinkRoadSegments = new HashSet<>();
+            for (LaneSegment laneSegment : laneSegments) {
+                if (laneSegment.hasSinkLaneSegment()) {
+                    sinkRoadSegments.add(laneSegment.sinkLaneSegment().roadSegment());
+                }
             }
+            sizeSinkRoadSegments = sinkRoadSegments.size();
         }
-        return false;
+        return sizeSinkRoadSegments;
+    }
+
+    public final int sizeSourceRoadSegments() {
+        if (sizeSourceRoadSegments < 0) {
+            Set<RoadSegment> sourceRoadSegments = new HashSet<>();
+            for (LaneSegment laneSegment : laneSegments) {
+                if (laneSegment.hasSourceLaneSegment()) {
+                    sourceRoadSegments.add(laneSegment.sourceLaneSegment().roadSegment());
+                }
+            }
+            sizeSourceRoadSegments = sourceRoadSegments.size();
+        }
+        return sizeSourceRoadSegments;
     }
 
     public boolean exitsOnto(int exitRoadSegmentId) {
@@ -781,19 +812,18 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     private void checkFinishingOvertaking(double dt) {
-        LaneSegment lane1 = laneSegment(Lanes.MOST_INNER_LANE);
         for (Iterator<Vehicle> vehIterator = overtakingSegment.iterator(); vehIterator.hasNext();) {
            Vehicle vehicle = vehIterator.next();
             if (vehicle.inProcessOfLaneChange()) {
                 // assure update in each simulation timestep
                 vehicle.updateLaneChangeDelay(dt);
-            } else if (vehicle.considerFinishOvertaking(dt, lane1)) {
+            } else if (vehicle.considerFinishOvertaking(dt, laneSegment(Lanes.MOST_INNER_LANE))) {
                 LOG.debug("vehicle turns back into lane after overtaking: vehicle={}", vehicle);
                 int targetLane = vehicle.getTargetLane();
                 assert targetLane == Lanes.MOST_INNER_LANE;
                 vehIterator.remove();
                 vehicle.setLane(targetLane);
-                lane1.addVehicle(vehicle);
+                laneSegment(Lanes.MOST_INNER_LANE).addVehicle(vehicle);
             }
         }
     }
@@ -867,6 +897,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             laneSegment.outFlow(dt, simulationTime, iterationCount);
             assert laneSegment.assertInvariant();
         }
+        overtakingSegment.outFlow(dt, simulationTime, iterationCount);
         if (sink != null) {
             sink.timeStep(dt, simulationTime, iterationCount);
         }
@@ -921,26 +952,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     Vehicle secondLastVehicleOnSinkLanePosAdjusted(int lane) {
         return laneSegments[lane - 1].secondLastVehicleOnSinkLanePosAdjusted();
     }
-
-    // /**
-    // * Finds the most downstream vehicle immediately at or behind the given position.
-    // *
-    // * @param vehiclePos
-    // * @return the nearest vehicle over all lanes
-    // */
-    // Vehicle rearVehicle(double vehiclePos) {
-    // Vehicle mostDownstreamRearVehicle = null;
-    // for (LaneSegment laneSegment : laneSegments) {
-    // Vehicle rearVehicle = laneSegment.rearVehicle(vehiclePos);
-    // if (mostDownstreamRearVehicle == null) {
-    // mostDownstreamRearVehicle = rearVehicle;
-    // } else if (rearVehicle != null
-    // && rearVehicle.getFrontPosition() > mostDownstreamRearVehicle.getFrontPosition()) {
-    // mostDownstreamRearVehicle = rearVehicle;
-    // }
-    // }
-    // return mostDownstreamRearVehicle;
-    // }
 
     /**
      * Returns the front vehicle on the given lane.
@@ -1214,15 +1225,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     public SignalPoints signalPoints() {
         return signalPoints;
-    }
-
-    public final boolean hasDownstreamConnection() {
-        for (LaneSegment laneSegment : laneSegments) {
-            if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment() != null) {
-                return true;
-            }
-        }
-        return false;
     }
 
     // TODO new concept, think about refactoring
