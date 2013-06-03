@@ -148,7 +148,6 @@ public abstract class RoadObjectController implements RoadObject {
             }
         }
 
-        // FIXME
         // shouldn't happen if signal points are working correctly
         // throw new IllegalStateException(
         // "cannot calculate distance to vehicle within 1 RoadSegment up/downstream lookup!");
