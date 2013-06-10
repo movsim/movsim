@@ -438,6 +438,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * 
      * @return reference to the rear vehicle
      */
+    // TODO this critical method deserves a unit test!
     public Vehicle rearVehicle(double vehiclePos) {
         final int index = positionBinarySearch(vehiclePos);
         final int insertionPoint = -index - 1;
@@ -460,7 +461,9 @@ public class LaneSegment implements Iterable<Vehicle> {
             // and continue until a vehicle is found or no further source is connected to laneSegment
             Vehicle sourceFrontVehicle = null;
             LaneSegment source = sourceLaneSegment;
+            double accumDistance = 0;
             do{
+                accumDistance += source.roadLength();
                 sourceFrontVehicle = source.frontVehicle();
                 source = source.sourceLaneSegment();
             }while (sourceFrontVehicle == null && source != null);
@@ -468,7 +471,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // return a copy of the front vehicle on the source road segment, with its
                 // position set relative to the current road segment
                 final Vehicle rearVehicle = new Vehicle(sourceFrontVehicle);
-                rearVehicle.setFrontPosition(rearVehicle.getFrontPosition() - sourceLaneSegment.roadLength());
+                rearVehicle.setFrontPosition(rearVehicle.getFrontPosition() - accumDistance);
                 return rearVehicle;
             }
         }
@@ -479,43 +482,43 @@ public class LaneSegment implements Iterable<Vehicle> {
         return rearVehicle(vehicle.getRearPosition());
     }
 
-    Vehicle rearVehicleOnSinkLanePosAdjusted() {
+    // Vehicle rearVehicleOnSinkLanePosAdjusted() {
+    //
+    // // subject vehicle is front vehicle on this road segment, so check sink road segment
+    // if (sinkLaneSegment == null) {
+    // return null;
+    // }
+    // // find the rear vehicle in the sink lane on the sink lane segment
+    // final Vehicle sinkRearVehicle = sinkLaneSegment.rearVehicle();
+    // if (sinkRearVehicle == null) {
+    // return null;
+    // }
+    // // return a copy of the rear vehicle on the sink road segment, with its position
+    // // set relative to the current road segment
+    // final Vehicle ret = new Vehicle(sinkRearVehicle);
+    // ret.setFrontPosition(ret.getFrontPosition() + roadSegment.roadLength());
+    // return ret;
+    // }
 
-        // subject vehicle is front vehicle on this road segment, so check sink road segment
-        if (sinkLaneSegment == null) {
-            return null;
-        }
-        // find the rear vehicle in the sink lane on the sink lane segment
-        final Vehicle sinkRearVehicle = sinkLaneSegment.rearVehicle();
-        if (sinkRearVehicle == null) {
-            return null;
-        }
-        // return a copy of the rear vehicle on the sink road segment, with its position
-        // set relative to the current road segment
-        final Vehicle ret = new Vehicle(sinkRearVehicle);
-        ret.setFrontPosition(ret.getFrontPosition() + roadSegment.roadLength());
-        return ret;
-    }
-
-    Vehicle secondLastVehicleOnSinkLanePosAdjusted() {
-        // subject vehicle is front vehicle on this lane segment, so check sink lane segment
-        if (sinkLaneSegment == null) {
-            return null;
-        }
-        // find the rear vehicle in the sink lane segment
-        final int sinkLaneVehicleCount = sinkLaneSegment.vehicleCount();
-        if (sinkLaneVehicleCount < 2) {
-            // should actually check sinkLane of sinkLane, but as long as sinkLane not
-            // outrageously short, the assumption that there is no vehicle is reasonable
-            return null;
-        }
-        final Vehicle vehicle = sinkLaneSegment.getVehicle(sinkLaneVehicleCount - 2);
-        // return a copy of the rear vehicle on the sink lane segment, with its position
-        // set relative to the current road segment
-        final Vehicle ret = new Vehicle(vehicle);
-        ret.setFrontPosition(ret.getFrontPosition() + roadSegment.roadLength());
-        return ret;
-    }
+    // Vehicle secondLastVehicleOnSinkLanePosAdjusted() {
+    // // subject vehicle is front vehicle on this lane segment, so check sink lane segment
+    // if (sinkLaneSegment == null) {
+    // return null;
+    // }
+    // // find the rear vehicle in the sink lane segment
+    // final int sinkLaneVehicleCount = sinkLaneSegment.vehicleCount();
+    // if (sinkLaneVehicleCount < 2) {
+    // // should actually check sinkLane of sinkLane, but as long as sinkLane not
+    // // outrageously short, the assumption that there is no vehicle is reasonable
+    // return null;
+    // }
+    // final Vehicle vehicle = sinkLaneSegment.getVehicle(sinkLaneVehicleCount - 2);
+    // // return a copy of the rear vehicle on the sink lane segment, with its position
+    // // set relative to the current road segment
+    // final Vehicle ret = new Vehicle(vehicle);
+    // ret.setFrontPosition(ret.getFrontPosition() + roadSegment.roadLength());
+    // return ret;
+    // }
 
     /**
      * Returns the front vehicle which is the most downstream vehicle in the {@link LaneSegment}.
@@ -537,6 +540,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * 
      * @return reference to the front vehicle
      */
+    // TODO this critical method deserves a unit test!
     public Vehicle frontVehicle(double vehiclePos) {
         // index = Collections.binarySearch(vehicles, subjectVehicle, vehiclePositionComparator);
         final int index = positionBinarySearch(vehiclePos);
@@ -554,15 +558,19 @@ public class LaneSegment implements Iterable<Vehicle> {
             // didn't find a front vehicle in the current road segment, so check the next (sink) road segments
             Vehicle sinkRearVehicle = null;
             LaneSegment sink = sinkLaneSegment;
+            double accumDistance = roadLength();
             do {
                 sinkRearVehicle = sink.rearVehicle();
+                if(sinkRearVehicle == null){
+                    accumDistance += sink.roadLength();
+                }
                 sink = sink.sinkLaneSegment();
             } while (sinkRearVehicle == null && sink != null);
             if (sinkRearVehicle != null) {
                 // return a copy of the rear vehicle on the sink road segment, with its position
                 // set relative to the current road segment
                 final Vehicle frontVehicle = new Vehicle(sinkRearVehicle);
-                frontVehicle.setFrontPosition(frontVehicle.getFrontPosition() + roadSegment.roadLength());
+                frontVehicle.setFrontPosition(frontVehicle.getFrontPosition() + accumDistance);
                 return frontVehicle;
             }
         }

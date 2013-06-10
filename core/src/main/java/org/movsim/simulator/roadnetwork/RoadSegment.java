@@ -945,13 +945,13 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return laneSegments[lane - 1].rearVehicle(vehiclePos);
     }
 
-    public Vehicle rearVehicleOnSinkLanePosAdjusted(int lane) {
-        return laneSegments[lane - 1].rearVehicleOnSinkLanePosAdjusted();
-    }
+    // public Vehicle rearVehicleOnSinkLanePosAdjusted(int lane) {
+    // return laneSegments[lane - 1].rearVehicleOnSinkLanePosAdjusted();
+    // }
 
-    Vehicle secondLastVehicleOnSinkLanePosAdjusted(int lane) {
-        return laneSegments[lane - 1].secondLastVehicleOnSinkLanePosAdjusted();
-    }
+    // Vehicle secondLastVehicleOnSinkLanePosAdjusted(int lane) {
+    // return laneSegments[lane - 1].secondLastVehicleOnSinkLanePosAdjusted();
+    // }
 
     /**
      * Returns the front vehicle on the given lane.
@@ -1096,10 +1096,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                 if (netDistance < 0) {
                     LOG.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
-                    sb.append(String.format("Crash of Vehicle i=%d (nodeId=%d) at x=%.4f ", index, vehicle.getId(),
+                    sb.append(String.format("Crash of Vehicle i=%d (vehId=%d) at x=%.4f ", index, vehicle.getId(),
                             vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh (nodeId=%d) in front at x=%.4f on lane=%d\n",
+                        sb.append(String.format("with veh (vehId=%d) in front at x=%.4f on lane=%d\n",
                                 vehFront.getId(), vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("internal nodeId=").append(id);
