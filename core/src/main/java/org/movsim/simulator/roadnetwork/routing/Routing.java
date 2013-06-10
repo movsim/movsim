@@ -131,9 +131,9 @@ public class Routing {
         if (path == null) {
             LOG.error("cannot find route from startRoadId=" + startRoadId + " to destinationRoadId="
                     + destinationRoadId);
-            return null;
-            // throw new IllegalStateException("cannot find route from startRoadId=" + startRoadId
-            // + " to destinationRoadId=" + destinationRoadId);
+            // return null;
+            throw new IllegalStateException("cannot find route from startRoadId=" + startRoadId
+                    + " to destinationRoadId=" + destinationRoadId);
         }
 
         for (RoadSegment roadSegment : path) {
