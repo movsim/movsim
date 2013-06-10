@@ -210,15 +210,20 @@ public class OpenDriveHandler {
                 String roadObjectType = roadObject.getType();
                 if (roadObjectType.equals(RoadObject.XodrRoadObjectType.SPEEDLIMIT.xodrIdentifier())) {
                     SpeedLimit speedLimit = new SpeedLimit(roadObject, roadSegment);
-                    LOG.info("add speed limit={}", speedLimit);
+                    LOG.info("try adding speed limit={}", speedLimit);
                     roadSegment.roadObjects().add(speedLimit);
                     if (roadObject.isSetValidLength()) {
+                        if(roadObject.getValidLength() <= 0){
+                            throw new IllegalArgumentException("validLength=" + roadObject.getValidLength()
+                                    + " but movsim's speedlimit expects a nontrivial length > 0.");
+                        }
                         double endPosition = roadObject.getS() + roadObject.getValidLength();
                         if (endPosition > roadSegment.roadLength()) {
                             throw new IllegalArgumentException("speedlimit validity range="
                                     + roadObject.getValidLength() + " results in=" + endPosition
                                     + " which exceeds the roadlength of roadSegment=" + roadSegment.userId());
                         }
+                        // adds the cancelation
                         roadSegment.roadObjects().add(
                                 new SpeedLimit(endPosition, MovsimConstants.MAX_VEHICLE_SPEED, roadSegment));
                     }
