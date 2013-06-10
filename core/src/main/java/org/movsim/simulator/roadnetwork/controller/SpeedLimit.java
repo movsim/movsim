@@ -80,7 +80,7 @@ public class SpeedLimit extends RoadObjectController {
 
     @Override
     public String toString() {
-        return "SpeedLimit [speedLimitValue=" + speedLimitValue + super.toString() + "]";
+        return "SpeedLimit [speedLimitValue=" + speedLimitValue + ", " + super.toString() + "]";
     }
 
     @Override

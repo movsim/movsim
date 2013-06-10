@@ -142,7 +142,7 @@ public class TrafficLightApproaching {
             TrafficLight trafficLight = iterator.next();
             double distance = trafficLight.distanceTo(vehicle, roadSegment);
             if (distance < 0) {
-                LOG.info("vehicle at pos={} , remove trafficLight={}", vehicle.getFrontPosition(), trafficLight);
+                LOG.debug("vehicle at pos={} , remove trafficLight={}", vehicle.getFrontPosition(), trafficLight);
                 iterator.remove();
             }
         }

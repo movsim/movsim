@@ -1018,7 +1018,7 @@ public class Vehicle {
      * 
      */
 
-    int routeIndex = 0;
+    private int routeIndex = 0;
 
     public final void setRoadSegment(int roadSegmentId, double roadSegmentLength) {
         if (originRoadSegmentId == ROAD_SEGMENT_ID_NOT_SET) {
