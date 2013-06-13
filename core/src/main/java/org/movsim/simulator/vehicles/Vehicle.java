@@ -189,14 +189,13 @@ public class Vehicle {
 
     private PhysicalQuantities physQuantities;
 
+    private final VehicleUserData userData;
+
     // Exit Handling
     private int roadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
     private double roadSegmentLength;
     private int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
     private int originRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
-
-    // information handling
-    private String infoComment = "";
 
     /**
      * Resets the next id.
@@ -252,6 +251,7 @@ public class Vehicle {
 
         trafficLightApproaching = new TrafficLightApproaching();
         inhomogeneity = new InhomogeneityAdaption();
+        userData = new VehicleUserData();
     }
 
     /**
@@ -280,6 +280,7 @@ public class Vehicle {
         route = null;
         trafficLightApproaching = new TrafficLightApproaching();
         inhomogeneity = new InhomogeneityAdaption();
+        userData = new VehicleUserData();
     }
 
     /**
@@ -307,6 +308,7 @@ public class Vehicle {
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = source.slope;
         route = source.route;
+        userData = source.userData;
     }
 
     private void initialize() {
@@ -1199,31 +1201,8 @@ public class Vehicle {
         this.fuelModel = fuelModel;
     }
 
-    /**
-     * @return the infoComment
-     */
-    public String getInfoComment() {
-        return infoComment;
-    }
-
-    /**
-     * @param infoComment
-     *            the infoComment to set
-     */
-    public void setInfoComment(String infoComment) {
-        this.infoComment = infoComment;
-    }
-
     public void setLength(double length) {
         this.length = length;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
     }
 
     public void setRoute(Route route) {
@@ -1232,6 +1211,10 @@ public class Vehicle {
 
     public InhomogeneityAdaption inhomogeneityAdaptation() {
         return inhomogeneity;
+    }
+
+    public VehicleUserData getUserData() {
+        return userData;
     }
 
 }

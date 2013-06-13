@@ -26,6 +26,7 @@
 package org.movsim.output.floatingcars;
 
 import java.io.PrintWriter;
+import java.util.Map;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
@@ -72,8 +73,8 @@ class FileFloatingCars extends FileOutputBase {
 
     static void writeHeader(PrintWriter writer, Vehicle vehicle, Route route) {
         writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, vehicle.getId()));
-        writer.println(String.format("%s random fix= %.8f", COMMENT_CHAR, vehicle.getRandomFix()));
-        writer.println(String.format("%s model label  = %s", COMMENT_CHAR, vehicle.getLabel()));
+        writer.println(String.format("%s random fix = %.8f", COMMENT_CHAR, vehicle.getRandomFix()));
+        writer.println(String.format("%s model label = %s", COMMENT_CHAR, vehicle.getLabel()));
         writer.println(String.format("%s model category = %s", COMMENT_CHAR, vehicle.getLongitudinalModel().modelName()
                 .getCategory().toString()));
         writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, vehicle
@@ -86,8 +87,10 @@ class FileFloatingCars extends FileOutputBase {
         writer.println(String.format("%s origin roadsegment id= %d, exit roadsegment id= %d (not set=%d)",
                 COMMENT_CHAR, vehicle.originRoadSegmentId(), vehicle.exitRoadSegmentId(),
                 Vehicle.ROAD_SEGMENT_ID_NOT_SET));
-        writer.println(String.format("%s %s", COMMENT_CHAR, vehicle.getInfoComment()));
         writer.println(String.format("%s %s", COMMENT_CHAR, route.toString()));
+        for(Map.Entry<String, String> entry : vehicle.getUserData()){
+            writer.println(String.format("%s userData: %s=%s", COMMENT_CHAR, entry.getKey(), entry.getValue()));
+        }
         writer.println(outputHeading);
     }
 

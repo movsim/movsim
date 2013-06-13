@@ -121,8 +121,8 @@
     
 	<!-- id maps to movsim controllerGroupID -->
     <controller id="group1">
-		<control signalId="tl_r2"/>
-		<control signalId="tl_r4"/>
+		<control signalId="tl_r2" type="first" />
+		<control signalId="tl_r4" type="second" />
     </controller>
     
     <!-- connector of merging and main road -->

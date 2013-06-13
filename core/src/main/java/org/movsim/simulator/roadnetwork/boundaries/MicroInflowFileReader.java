@@ -126,18 +126,18 @@ public final class MicroInflowFileReader {
             }
             vehicle.setRoute(route);
         }
-        if (record.hasComment()) {
-            vehicle.setInfoComment(record.getComment());
-        }
         if (record.hasLength()) {
             vehicle.setLength(record.getLength());
         }
+        if (record.hasComment()) {
+            vehicle.getUserData().put("comment", record.getComment());
+        }
         if (record.hasWeight()) {
-            vehicle.setWeight(record.getWeight());
+            vehicle.getUserData().put("weight", String.valueOf(record.getWeight()));
         }
         if (record.hasLength() || record.hasWeight()) {
-            LOG.info("and set individual length or weight: length={}, weight={}", vehicle.getLength(),
-                    vehicle.getWeight());
+            LOG.info("and set individual length or weight: length={}, weight={}", vehicle.getLength(), vehicle
+                    .getUserData().get("weight"));
         }
         if (record.hasSpeed()) {
             vehicle.setSpeed(record.getSpeed());

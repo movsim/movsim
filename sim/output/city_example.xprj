@@ -66,20 +66,20 @@
         <TrafficLights logging="true" n_timestep="5">
             <ControllerGroup id="group1"  >
                 <Phase duration="35">
-                    <TrafficLightState name="first" status="Green" />
-                    <TrafficLightState name="second" status="Red" />
+                    <TrafficLightState type="first" status="Green" />
+                    <TrafficLightState type="second" status="Red" />
                 </Phase>
                 <Phase duration="3">
-                    <TrafficLightState name="first" status="GreenRed" /> 
+                    <TrafficLightState type="first" status="GreenRed" /> 
                     <!-- <TrafficLightState name="second" status="RedGreen" /> -->
                 </Phase>
                 <Phase duration="40">
-                    <TrafficLightState name="first" status="Red" />
-                    <TrafficLightState name="second" status="Green" />
+                    <TrafficLightState type="first" status="Red" />
+                    <TrafficLightState type="second" status="Green" />
                 </Phase>
                 <Phase duration="2">
                     <!-- <TrafficLightState name="first" status="RedGreen" /> -->
-                    <TrafficLightState name="second" status="GreenRed" />
+                    <TrafficLightState type="second" status="GreenRed" />
                 </Phase>
             </ControllerGroup>
         </TrafficLights>
