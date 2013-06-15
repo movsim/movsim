@@ -27,8 +27,8 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="regulator.xodr">
-        <Simulation timestep="0.2" crash_exit="false">
+    <Scenario network_filename="regulator.xodr" >
+        <Simulation timestep="0.4" crash_exit="true" duration="120">
             <TrafficComposition>
                 <VehicleType label="IDM1" fraction="0.4" relative_v0_randomization="0.2" />
                 <VehicleType label="ACC1" fraction="0.4" relative_v0_randomization="0.2" />

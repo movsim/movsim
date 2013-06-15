@@ -26,6 +26,7 @@
 package org.movsim.simulator;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -169,6 +170,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         matchRoadSegmentsAndRoadInput(simulationInput.getRoad());
 
         reset();
+        startTimeMillis = System.currentTimeMillis();
     }
 
     public Iterable<String> getVehiclePrototypeLabels() {
@@ -526,11 +528,16 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     @Override
     public void simulationComplete(double simulationTime) {
         LOG.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s",
-                simulationTime, simulationTime / 3600, projectName));
-        final double elapsedTime = 0.001 * (System.currentTimeMillis() - startTimeMillis);
+                simulationTime, simulationTime / 3600., projectName));
+
+        regulators.simulationCompleted(simulationTime);
+
+        long elapsedTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTimeMillis);
         LOG.info(String.format(
-                "time elapsed = %.3fs --> simulation time warp = %.2f, time per 1000 update steps=%.3fs", elapsedTime,
-                simulationTime / elapsedTime, 1000 * elapsedTime / simulationRunnable.iterationCount()));
+                "time elapsed=%d seconds --> simulation time warp = %.2f, time per 1000 update steps=%.3fs",
+                elapsedTime, (simulationTime / elapsedTime),
+                (1000. * elapsedTime / simulationRunnable.iterationCount())));
+
     }
 
     @Override

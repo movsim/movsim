@@ -128,6 +128,10 @@ public class Regulator implements SimulationTimeStep {
         }
     }
 
+    public void simulationCompleted(double simulationTime) {
+        LOG.info("simulation completed at={}", simulationTime);
+    }
+
     public String getName() {
         return parameter.isSetName() ? parameter.getName() : "-";
     }

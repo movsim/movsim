@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.movsim.autogen.RegulatorType;
 import org.movsim.autogen.RegulatorsType;
+import org.movsim.simulator.SimulationRun;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-public final class Regulators implements SimulationTimeStep {
+public final class Regulators implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(Regulators.class);
@@ -77,8 +78,15 @@ public final class Regulators implements SimulationTimeStep {
         }
     }
 
-    public final void endSimulation(double dt, double simulationTime, long iterationCount) {
-        // TODO
+    public void simulationCompleted(double simulationTime) {
+        for (Regulator regulator : regulators) {
+            regulator.simulationCompleted(simulationTime);
+        }
+    }
+
+    @Override
+    public void simulationComplete(double simulationTime) {
+        LOG.info("simulation completed at simTime={}", simulationTime);
     }
 
     static boolean addNotifyObjectId(String id) {
