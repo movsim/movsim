@@ -34,9 +34,10 @@
                 </TrafficSource>
             </Road>
             <Road id="4">
-                <TrafficSink logging="true">
-					<Parking source_road_id="7" time_delay="60" />
-                </TrafficSink>
+                <TrafficSink logging="true" />
+            </Road>
+            <Road id="6">
+                <TrafficSink logging="true" />
             </Road>
         </Simulation>
         <OutputConfiguration>

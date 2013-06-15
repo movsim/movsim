@@ -40,12 +40,13 @@ import org.movsim.autogen.InitialConditions;
 import org.movsim.autogen.MacroIC;
 import org.movsim.autogen.MicroIC;
 import org.movsim.autogen.Movsim;
-import org.movsim.autogen.Parking;
 import org.movsim.autogen.Road;
 import org.movsim.autogen.Simulation;
-import org.movsim.autogen.TrafficSink;
+import org.movsim.autogen.TrafficSinkType;
+import org.movsim.autogen.TrafficSourceType;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.network.OpenDriveReader;
+import org.movsim.output.FileTrafficSinkData;
 import org.movsim.output.FileTrafficSourceData;
 import org.movsim.output.SimulationOutput;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
@@ -278,7 +279,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         // set up the traffic source
         if (roadInput.isSetTrafficSource()) {
-            final org.movsim.autogen.TrafficSource trafficSourceData = roadInput.getTrafficSource();
+            TrafficSourceType trafficSourceData = roadInput.getTrafficSource();
             AbstractTrafficSource trafficSource = null;
             if (trafficSourceData.isSetInflow()) {
                 InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
@@ -299,7 +300,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         // set up the traffic sink
         if (roadInput.isSetTrafficSink()) {
-            createParkingSink(roadInput.getTrafficSink(), roadSegment);
+            configureTrafficSink(roadInput.getTrafficSink(), roadSegment);
         }
 
         // set up simple ramp with dropping mechanism
@@ -345,26 +346,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (roadInput.isSetInitialConditions()) {
             initialConditions(roadSegment, roadInput.getInitialConditions(), composition);
         }
-
     }
 
-    // TODO can be removed because not needed
-    @Deprecated
-    private void createParkingSink(TrafficSink trafficSink, RoadSegment roadSegment) {
-        // setup source which models the re-entrance of vehicles leaving the parking lot
-        if (!trafficSink.isSetParking()) {
-            return;
+    private static void configureTrafficSink(TrafficSinkType trafficSinkType, RoadSegment roadSegment) {
+        if (trafficSinkType.isLogging()) {
+            roadSegment.sink().setRecorder(new FileTrafficSinkData(roadSegment.userId()));
         }
-        Parking parking = trafficSink.getParking();
-        RoadSegment sourceRoadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(parking.getSourceRoadId()),
-                "cannot find roadSegment=" + parking.getSourceRoadId() + " specified as re-entrance from the road="
-                        + roadSegment.id());
-        TrafficSourceMicro trafficSource = new TrafficSourceMicro(defaultTrafficComposition, sourceRoadSegment);
-        if (trafficSink.isLogging()) {
-            trafficSource.setRecorder(new FileTrafficSourceData(sourceRoadSegment.userId()));
-        }
-        sourceRoadSegment.setTrafficSource(trafficSource);
-        roadSegment.sink().setupParkingLot(parking, timeOffsetMillis, trafficSource);
     }
 
     private static void initialConditions(RoadSegment roadSegment, InitialConditions initialConditions,
@@ -532,11 +519,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         regulators.simulationCompleted(simulationTime);
 
-        long elapsedTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTimeMillis);
+        long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         LOG.info(String.format(
-                "time elapsed=%d seconds --> simulation time warp = %.2f, time per 1000 update steps=%.3fs",
-                elapsedTime, (simulationTime / elapsedTime),
-                (1000. * elapsedTime / simulationRunnable.iterationCount())));
+                "time elapsed=%d milliseconds --> simulation time warp = %.2f, time per 1000 update steps=%.3fs",
+                elapsedTimeMillis, simulationTime / TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis),
+                (1000. * TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) / simulationRunnable.iterationCount())));
 
     }
 

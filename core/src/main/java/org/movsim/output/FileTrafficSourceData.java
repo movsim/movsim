@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FileTrafficSourceData extends FileOutputBase implements TrafficSourceMacro.RecordDataCallback {
 
-    final static Logger logger = LoggerFactory.getLogger(FileTrafficSourceData.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileTrafficSourceData.class);
 
     private static final String extensionFormat = ".source.road_%s.csv";
     private static final String outputHeading = COMMENT_CHAR

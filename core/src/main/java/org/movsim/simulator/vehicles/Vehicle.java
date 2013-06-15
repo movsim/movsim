@@ -1209,6 +1209,10 @@ public class Vehicle {
         this.route = route;
     }
 
+    public String getRouteName() {
+        return route != null ? route.getName() : "noRoute";
+    }
+
     public InhomogeneityAdaption inhomogeneityAdaptation() {
         return inhomogeneity;
     }

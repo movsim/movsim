@@ -504,8 +504,8 @@
                 <xs:element ref="TrafficComposition" minOccurs="0" maxOccurs="1" />
                 <!-- todo: rethink if IC and BC could be nested together with trafficComposition-->
                 <xs:element ref="InitialConditions" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="TrafficSource" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="TrafficSink" minOccurs="0" maxOccurs="1" />
+                <xs:element name="TrafficSource" type="TrafficSourceType" minOccurs="0" maxOccurs="1" />
+                <xs:element name="TrafficSink" type="TrafficSinkType" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="FlowConservingInhomogeneities" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="VariableMessageSignDiversions" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="SimpleRamp" minOccurs="0" maxOccurs="1" />
@@ -539,15 +539,13 @@
             <xs:attribute name="label" type="xs:string" default="" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="TrafficSource">
-        <xs:complexType>
-            <xs:choice>
-                <xs:element ref="Inflow" maxOccurs="unbounded" />
-                <xs:element ref="InflowFromFile" minOccurs="1" maxOccurs="1" />
-            </xs:choice>
-            <xs:attribute name="logging" type="xs:boolean" default="false" />
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="TrafficSourceType">
+        <xs:choice>
+            <xs:element ref="Inflow" maxOccurs="unbounded" />
+            <xs:element ref="InflowFromFile" minOccurs="1" maxOccurs="1" />
+        </xs:choice>
+        <xs:attribute name="logging" type="xs:boolean" default="false" />
+    </xs:complexType>
     <xs:element name="Inflow">
         <xs:annotation>
             <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time (ie traffic flow q) and a defined traffic composition.</xs:documentation>
@@ -578,20 +576,9 @@
             <xs:attribute name="column_separator" type="xs:string" default=";" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="TrafficSink">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="Parking" minOccurs="0" maxOccurs="1" />
-            </xs:sequence>
-            <xs:attribute name="logging" type="xs:boolean" default="false" />
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Parking">
-        <xs:complexType>
-            <xs:attribute name="source_road_id" type="xs:string" use="required" />
-            <xs:attribute name="time_delay" type="positiveDouble" default="60" />
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="TrafficSinkType">
+        <xs:attribute name="logging" type="xs:boolean" default="false" />
+    </xs:complexType>
     <xs:element name="FlowConservingInhomogeneities">
         <xs:complexType>
             <xs:sequence>

@@ -26,13 +26,14 @@
 
 package org.movsim.simulator.roadnetwork.boundaries;
 
-import org.movsim.autogen.Parking;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Default sink: just removes vehicles that have reached the end of a road segment.
@@ -42,12 +43,12 @@ public class TrafficSink implements SimulationTimeStep {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSink.class);
 
-    // For sinks roadSegment is the source road
-    protected RoadSegment roadSegment;
+    protected final RoadSegment roadSegment;
+
     // measure actual outflow
     private static final double MEASURING_INTERVAL_S = 60.0;
     private int vehiclesRemovedInInterval;
-    private double measuredOutflow;
+    private double measuredOutflow;// vehicles per second
     private double measuredTime;
     private double dQ;
     private int totalVehiclesRemoved;
@@ -55,8 +56,19 @@ public class TrafficSink implements SimulationTimeStep {
     private double totalVehicleTravelTime;
     private double totalVehicleFuelUsedLiters;
 
-    private TrafficSourceMicro reEntranceTrafficSource;
-    private double timeDelayReentrance;
+    RecordDataCallback recordDataCallback;
+    private double simulationTime;
+
+    public interface RecordDataCallback {
+        /**
+         * Callback to allow the application to process or record the traffic sink data.
+         * 
+         * @param vehicle
+         * @param totalVehiclesRemoved
+         * 
+         */
+        public void recordData(double simulationTime, int totalVehiclesRemoved, Vehicle vehicle);
+    }
 
     /**
      * Constructor.
@@ -64,29 +76,19 @@ public class TrafficSink implements SimulationTimeStep {
      * @param roadSegment
      */
     public TrafficSink(RoadSegment roadSegment) {
-        // for TrafficSinks and similar roadSegment is the source road
-        setRoadSegment(roadSegment);
+        this.roadSegment = Preconditions.checkNotNull(roadSegment);
         measuredTime = 0;
         measuredOutflow = 0;
-    }
-
-    protected final void setRoadSegment(RoadSegment roadSegment) {
-        // a source has its road segment set once and only once, by the road segment
-        // in its setSource method
-        assert this.roadSegment == null;
-        assert roadSegment != null;
-        // assert roadSegment.source() == this || type != Type.SOURCE;
-
-        this.roadSegment = roadSegment;
+        totalVehiclesRemoved = 0;
     }
 
     /**
-     * Returns this traffic source's source road segment.
+     * Sets the traffic sink recorder.
      * 
-     * @return this traffic source's source road segment
+     * @param recordDataCallback
      */
-    public final RoadSegment sourceRoad() {
-        return roadSegment;
+    public void setRecorder(RecordDataCallback recordDataCallback) {
+        this.recordDataCallback = Preconditions.checkNotNull(recordDataCallback);
     }
 
     /**
@@ -141,6 +143,9 @@ public class TrafficSink implements SimulationTimeStep {
         totalVehicleTravelTime += vehicle.totalTravelTime();
         totalVehicleFuelUsedLiters += vehicle.totalFuelUsedLiters();
         ++totalVehiclesRemoved;
+        if (recordDataCallback != null) {
+            recordDataCallback.recordData(simulationTime, totalVehiclesRemoved, vehicle);
+        }
     }
 
     /**
@@ -148,29 +153,17 @@ public class TrafficSink implements SimulationTimeStep {
      */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (reEntranceTrafficSource != null) {
-            addVehiclesToSource(simulationTime, sourceRoad().getVehiclesPastEnd());
-        }
-        vehiclesRemovedInInterval += sourceRoad().removeVehiclesPastEnd();
+        this.simulationTime = simulationTime;
+        vehiclesRemovedInInterval += roadSegment.removeVehiclesPastEnd();
         measuredTime += dt;
+
         if (measuredTime > MEASURING_INTERVAL_S) {
-            measuredOutflow = vehiclesRemovedInInterval / MEASURING_INTERVAL_S; // vehicles per second
+            measuredOutflow = vehiclesRemovedInInterval / MEASURING_INTERVAL_S;
             vehiclesRemovedInInterval = 0;
             measuredTime = 0.0;
-            LOG.debug("sink in roadSegment with id={} has measured outflow of {} over all lanes ", sourceRoad().id(),
-                    measuredOutflow * Units.INVS_TO_INVH);
+            LOG.debug("sink in roadSegment with userId={} has measured outflow of {} over all lanes ",
+                    roadSegment.userId(), measuredOutflow * Units.INVS_TO_INVH);
         }
     }
 
-    private void addVehiclesToSource(double simulationTime, Iterable<Vehicle> vehiclesPastEnd) {
-        for (Vehicle vehicle : vehiclesPastEnd) {
-            long reEntranceTime = (long) (simulationTime + timeDelayReentrance);
-            reEntranceTrafficSource.addVehicleToQueue(reEntranceTime, vehicle);
-        }
-    }
-
-    public void setupParkingLot(Parking parking, long timeOffsetMillis, TrafficSourceMicro trafficSource) {
-        this.reEntranceTrafficSource = trafficSource;
-        this.timeDelayReentrance = parking.getTimeDelay();
-    }
 }

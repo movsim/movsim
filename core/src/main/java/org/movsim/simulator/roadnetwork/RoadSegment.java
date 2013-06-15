@@ -283,15 +283,15 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return sink != null;
     }
 
-    /**
-     * Sets the traffic sink for this road segment.
-     * 
-     * @param sink
-     *            the traffic sink
-     */
-    final void setSink(TrafficSink sink) {
-        this.sink = sink;
-    }
+    // /**
+    // * Sets the traffic sink for this road segment.
+    // *
+    // * @param sink
+    // * the traffic sink
+    // */
+    // final void setSink(TrafficSink sink) {
+    // this.sink = sink;
+    // }
 
     /**
      * Returns this road segment's length.
