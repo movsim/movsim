@@ -29,6 +29,8 @@ package org.movsim.simulator.roadnetwork;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.annotation.CheckForNull;
+
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.slf4j.Logger;
@@ -87,6 +89,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * @param userId
      * @return the road segment with the given userId
      */
+    @CheckForNull
     public RoadSegment findByUserId(String userId) {
         for (final RoadSegment roadSegment : roadSegments) {
             if (roadSegment.userId() != null && roadSegment.userId().equals(userId)) {

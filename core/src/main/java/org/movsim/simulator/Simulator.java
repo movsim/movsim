@@ -61,8 +61,10 @@ import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMicro;
 import org.movsim.simulator.roadnetwork.controller.FlowConservingBottleneck;
 import org.movsim.simulator.roadnetwork.controller.LoopDetector;
 import org.movsim.simulator.roadnetwork.controller.RoadObject;
+import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.TrafficLights;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
+import org.movsim.simulator.roadnetwork.regulator.Regulators;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
@@ -91,6 +93,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private VehicleFactory vehicleFactory;
     private TrafficCompositionGenerator defaultTrafficComposition;
     private TrafficLights trafficLights;
+    private Regulators regulators;
+
     private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
     private Routing routing;
@@ -156,6 +160,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights(), roadNetwork);
 
+        regulators = new Regulators(inputData.getScenario().getRegulators(), roadNetwork);
+
+        checkTrafficLightseInitialized();
+
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
         matchRoadSegmentsAndRoadInput(simulationInput.getRoad());
@@ -207,6 +215,17 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             addInputToRoadSegment(roadSegment, roadInput);
         }
         createSignalPoints();
+    }
+
+    private void checkTrafficLightseInitialized() {
+        for (RoadSegment roadSegment : roadNetwork) {
+            for (TrafficLight trafficLight : roadSegment.trafficLights()) {
+                if (trafficLight.status() == null) {
+                    throw new IllegalArgumentException("trafficLight=" + trafficLight.signalId() + " on road="
+                            + roadSegment.userId() + " hat not been initialized. Check movsim regulator input.");
+                }
+            }
+        }
     }
 
     private void createSignalPoints() {
@@ -524,6 +543,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
 
         trafficLights.timeStep(dt, simulationTime, iterationCount);
+        regulators.timeStep(dt, simulationTime, iterationCount);
         roadNetwork.timeStep(dt, simulationTime, iterationCount);
         if (simOutput != null) {
             simOutput.timeStep(dt, simulationTime, iterationCount);

@@ -24,15 +24,14 @@
     <!-- define own integer types based on xs:int because they are bound to Integer -->
     <xs:simpleType name="positiveInteger">
         <xs:restriction base="xs:int">
-        <xs:minExclusive value="0"/>
-     </xs:restriction>
+            <xs:minExclusive value="0" />
+        </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="nonNegativeInteger">
         <xs:restriction base="xs:int">
-        <xs:minInclusive value="0"/>
-     </xs:restriction>
+            <xs:minInclusive value="0" />
+        </xs:restriction>
     </xs:simpleType>
-    
     <!--     <xs:include schemaLocation="./MovsimSimpleTypes.xsd"/>  -->
     <!-- root element -->
     <xs:element name="Movsim">
@@ -65,7 +64,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="Columns" />
-                <xs:element ref="Conversions" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="Conversions" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="inputfile" type="xs:string" use="required" />
             <xs:attribute name="outputfile" type="xs:string" use="required" />
@@ -428,8 +427,7 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="OvertakingViaPeer">
-        <xs:complexType>
-        </xs:complexType>
+        <xs:complexType />
     </xs:element>
     <xs:element name="NoiseParameter">
         <xs:complexType>
@@ -447,6 +445,7 @@
             <xs:sequence>
                 <xs:element ref="Simulation" />
                 <xs:element ref="TrafficLights" minOccurs="0" maxOccurs="1" />
+                <xs:element name="Regulators" type="RegulatorsType" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Routes" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="OutputConfiguration" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
@@ -470,9 +469,9 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="TrafficComposition">
-		  <xs:annotation>
-        <xs:documentation>Defines the composition of vehicle types for the whole simulation or for a specific road boundary.</xs:documentation>
-    </xs:annotation>
+        <xs:annotation>
+            <xs:documentation>Defines the composition of vehicle types for the whole simulation or for a specific road boundary.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="VehicleType" minOccurs="1" maxOccurs="unbounded" />
@@ -480,11 +479,11 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="VehicleType">
-		  <xs:annotation>
-        <xs:documentation>Defines the vehicle type used in the initial or boundary conditions.</xs:documentation>
-    </xs:annotation>
+        <xs:annotation>
+            <xs:documentation>Defines the vehicle type used in the initial or boundary conditions.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
-			<!-- prototype label-->
+            <!-- prototype label-->
             <xs:attribute name="label" type="xs:string" use="required" />
             <xs:attribute name="fraction" type="nonNegativeDouble" use="required" />
             <xs:attribute name="relative_v0_randomization" type="nonNegativeDouble" default="0.0" />
@@ -535,14 +534,14 @@
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
             <xs:attribute name="speed" type="nonNegativeDouble" use="required" />
-            <!-- By convention the lane index starts with 1 for the most inner lane. --> 
+            <!-- By convention the lane index starts with 1 for the most inner lane. -->
             <xs:attribute name="lane" type="nonNegativeInteger" default="1" />
             <xs:attribute name="label" type="xs:string" default="" />
         </xs:complexType>
     </xs:element>
     <xs:element name="TrafficSource">
         <xs:complexType>
-			<xs:choice>
+            <xs:choice>
                 <xs:element ref="Inflow" maxOccurs="unbounded" />
                 <xs:element ref="InflowFromFile" minOccurs="1" maxOccurs="1" />
             </xs:choice>
@@ -550,9 +549,9 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="Inflow">
-		 <xs:annotation>
-        <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time (ie traffic flow q) and a defined traffic composition.</xs:documentation>
-    </xs:annotation>
+        <xs:annotation>
+            <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time (ie traffic flow q) and a defined traffic composition.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:attribute name="t" type="nonNegativeDouble" use="required" />
             <xs:attribute name="q_per_hour" type="nonNegativeDouble" use="required" />
@@ -560,17 +559,17 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="InflowFromFile">
-     <xs:annotation>
-        <xs:documentation>Time-dependent microscopic boundary conditions. The vehicle type refers to the type defined in the vehicle composition. Optionally a route etc. can be set to overrule the settings in the composition definition.</xs:documentation>
-    </xs:annotation>
+        <xs:annotation>
+            <xs:documentation>Time-dependent microscopic boundary conditions. The vehicle type refers to the type defined in the vehicle composition. Optionally a route etc. can be set to overrule the settings in the composition definition.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
-			<xs:attribute name="filename" type="xs:string" use="required" />
+            <xs:attribute name="filename" type="xs:string" use="required" />
             <xs:attribute name="column_time" type="positiveInteger" use="required" />
             <xs:attribute name="column_vehicle_type" type="positiveInteger" use="required" />
             <xs:attribute name="column_route_or_destination" type="positiveInteger" />
             <!-- Notation for JodaTime.DateTimeFormatter, eg "HH:mm:ss" -->
-            <xs:attribute name="format_time" type="xs:string" default="" /> 
-            <xs:attribute name="column_speed" type="positiveInteger"  />
+            <xs:attribute name="format_time" type="xs:string" default="" />
+            <xs:attribute name="column_speed" type="positiveInteger" />
             <xs:attribute name="format_speed" type="positiveDouble" default="1" />
             <xs:attribute name="column_length" type="positiveInteger" />
             <xs:attribute name="column_weight" type="positiveInteger" />
@@ -581,9 +580,9 @@
     </xs:element>
     <xs:element name="TrafficSink">
         <xs:complexType>
-			<xs:sequence>
-			  <xs:element ref="Parking" minOccurs="0" maxOccurs="1" />
-			</xs:sequence>
+            <xs:sequence>
+                <xs:element ref="Parking" minOccurs="0" maxOccurs="1" />
+            </xs:sequence>
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
@@ -612,7 +611,7 @@
             <xs:attribute name="target_alpha_v0" type="nonNegativeDouble" default="1" />
         </xs:complexType>
     </xs:element>
-     <xs:element name="VariableMessageSignDiversions">
+    <xs:element name="VariableMessageSignDiversions">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="VariableMessageSignDiversion" minOccurs="0" maxOccurs="unbounded" />
@@ -669,7 +668,7 @@
             <xs:attribute name="id" type="xs:string" use="required" />
             <!-- spatial range for checking conditions in meters -->
             <xs:attribute name="range" type="positiveDouble" default="100" />
-            <!-- external control of traffic lights, no change within movsim --> 
+            <!-- external control of traffic lights, no change within movsim -->
             <xs:attribute name="external" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
@@ -683,10 +682,10 @@
     </xs:element>
     <xs:element name="TrafficLightState">
         <xs:complexType>
-			<!-- serves as reference to the xodr controller.control.type attribute -->
+            <!-- serves as reference to the xodr controller.control.type attribute -->
             <xs:attribute name="type" type="xs:string" use="required" />
             <xs:attribute name="status" type="TrafficLightStatus" use="required" />
-            <xs:attribute name="condition" type="TrafficLightCondition" default="none"/>
+            <xs:attribute name="condition" type="TrafficLightCondition" default="none" />
         </xs:complexType>
     </xs:element>
     <xs:simpleType name="TrafficLightStatus">
@@ -699,11 +698,46 @@
     </xs:simpleType>
     <xs:simpleType name="TrafficLightCondition">
         <xs:restriction base="xs:string">
-			<xs:enumeration value="none" />
+            <xs:enumeration value="none" />
             <xs:enumeration value="clear" />
             <xs:enumeration value="request" />
         </xs:restriction>
     </xs:simpleType>
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <xs:complexType name="RegulatorsType">
+        <xs:sequence>
+            <xs:element name="Regulator" type="RegulatorType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RegulatorType">
+        <xs:sequence>
+            <xs:element name="NotifyObject" type="NotifyObjectType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="Signal" type="SignalType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="type" type="RegulatorTypeEnum" use="required" />
+        <xs:attribute name="id" type="xs:string" />
+        <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+    <xs:simpleType name="RegulatorTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AdaptiveSpeedLimit" />
+            <xs:enumeration value="ParkingDeck" />
+            <xs:enumeration value="Ferry" />
+            <xs:enumeration value="ControlledSection" />
+            <xs:enumeration value="Communication" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="NotifyObjectType">
+        <!-- road-id from xodr plus additional directional (+/-) -->
+        <xs:attribute name="road_id" type="xs:string" use="required" />
+        <!-- s-coordinate along road segment -->
+        <xs:attribute name="position" type="nonNegativeDouble" use="required" />
+        <xs:attribute name="id" type="xs:string" />
+        <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="SignalType">
+        <xs:attribute name="signal_id" type="xs:string" use="required" />
+    </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Routes">
         <xs:complexType>
@@ -758,11 +792,11 @@
         <xs:complexType>
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
             <!-- selection of every n'th vehicle not yet implemented -->
-			<!-- <xs:attribute name="dn" type="positiveInteger" default="1" /> -->
+            <!-- <xs:attribute name="dn" type="positiveInteger" default="1" /> -->
             <xs:attribute name="start_time" type="nonNegativeDouble" />
-            <xs:attribute name="end_time" type="nonNegativeDouble"  />
+            <xs:attribute name="end_time" type="nonNegativeDouble" />
             <xs:attribute name="route" type="xs:string" use="required" />
-            <xs:attribute name="random_fraction" type="probability"  />
+            <xs:attribute name="random_fraction" type="probability" />
             <!-- convenience offset in additional column -->
             <xs:attribute name="offset_position" type="nonNegativeDouble" default="0" />
         </xs:complexType>
@@ -779,7 +813,7 @@
             <xs:attribute name="route" type="xs:string" use="required" />
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
             <xs:attribute name="tauEMA" type="nonNegativeDouble" default="20" />
-            <xs:attribute name="start_time" type="nonNegativeDouble"  />
+            <xs:attribute name="start_time" type="nonNegativeDouble" />
             <xs:attribute name="end_time" type="nonNegativeDouble" />
         </xs:complexType>
     </xs:element>

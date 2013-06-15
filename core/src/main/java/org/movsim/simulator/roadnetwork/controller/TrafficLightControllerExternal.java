@@ -8,4 +8,10 @@ public class TrafficLightControllerExternal extends TrafficLightController {
         super(controllerGroup);
     }
 
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
+        // do nothing
+        super.timeStep(dt, simulationTime, iterationCount);
+    }
+
 }

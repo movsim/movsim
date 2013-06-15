@@ -62,10 +62,12 @@ public class TrafficLights implements SimulationTimeStep {
     public TrafficLights(@Nullable org.movsim.autogen.TrafficLights trafficLightsInput, RoadNetwork roadNetwork) {
         this.trafficLightControllers = new ArrayList<>();
         if (trafficLightsInput == null) {
-            if (networkContainsTrafficlights(roadNetwork)) {
-                throw new IllegalStateException(
-                        "inconsistent input: traffic lights defined in network but not in movsim input.");
-            }
+            // trafficlights can alternatively controlled by Regulator
+            LOG.warn("no trafficLights configured in movsim input. Assure that created TrafficLights are controlled from elsewhere.");
+            // if (networkContainsTrafficlights(roadNetwork)) {
+            // throw new IllegalStateException(
+            // "inconsistent input: traffic lights defined in network but not in movsim input.");
+            // }
         } else {
             setUp(trafficLightsInput, roadNetwork);
             checkIfAllTrafficlightsAreReferenced();

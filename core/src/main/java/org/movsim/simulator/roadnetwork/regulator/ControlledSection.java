@@ -24,13 +24,15 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.simulator.roadnetwork.controller;
+package org.movsim.simulator.roadnetwork.regulator;
 
-public interface TriggerCallback {
+import org.movsim.autogen.RegulatorType;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
 
-    /**
-     * Triggers (interactively) the next phase of the controller group.
-     */
-    void nextPhase();
+public class ControlledSection extends Regulator {
+
+    protected ControlledSection(RegulatorType regulatorType, RoadNetwork roadNetwork) {
+        super(regulatorType, roadNetwork);
+    }
 
 }

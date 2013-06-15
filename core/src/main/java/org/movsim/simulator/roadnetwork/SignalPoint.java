@@ -50,7 +50,8 @@ public class SignalPoint {
 
     // TODO roadSegment not needed as reference, just check here for correct position
     public SignalPoint(double position, RoadSegment roadSegment) {
-        Preconditions.checkArgument(position >= 0 && position <= roadSegment.roadLength());
+        Preconditions.checkArgument(position >= 0 && position <= roadSegment.roadLength(),
+                "cannot create signalPoint at invalid position=" + position);
         this.position = position;
         predicate = new VehiclePassedPosition(position);
     }
@@ -61,7 +62,7 @@ public class SignalPoint {
         Iterators.addAll(vehiclesPassed, Iterators.filter(vehicles, predicate));
     }
 
-    double position() {
+    public double position() {
         return position;
     }
 
@@ -76,6 +77,11 @@ public class SignalPoint {
     // called by RoadSegment
     void clear() {
         vehiclesPassed.clear();
+    }
+
+    @Override
+    public String toString() {
+        return "SignalPoint [position=" + position + ", vehiclesPassed.size=" + vehiclesPassed.size() + "]";
     }
 
 }

@@ -40,6 +40,7 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
+import org.movsim.simulator.roadnetwork.regulator.Regulator;
 import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Preconditions;
@@ -149,8 +150,17 @@ public class TrafficLight extends RoadObjectController {
         return status;
     }
 
-    // must be package-private, access only from controller
-    void setState(TrafficLightStatus newStatus) {
+    /**
+     * sets the {@link TrafficLightStatus}.
+     * 
+     * <p>
+     * The user has to assure that a single traffic light is not simultaneously controlled by the {@link TrafficLightController} and one (or
+     * more) {@link Regulator}(s).
+     * </p>
+     * 
+     * @param newStatus
+     */
+    public void setState(TrafficLightStatus newStatus) {
         this.status = newStatus;
     }
 
