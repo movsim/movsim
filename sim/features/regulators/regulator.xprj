@@ -27,40 +27,42 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="regulator.xodr" >
-        <Simulation timestep="0.4" crash_exit="true" duration="120">
+    <Scenario network_filename="regulator.xodr">
+        <Simulation timestep="0.4" crash_exit="false" duration="600">
             <TrafficComposition>
                 <VehicleType label="IDM1" fraction="0.4" relative_v0_randomization="0.2" />
                 <VehicleType label="ACC1" fraction="0.4" relative_v0_randomization="0.2" />
                 <VehicleType label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
             </TrafficComposition>
-             <Road id="4+">
+            <Road id="4+">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="500" />
                 </TrafficSource>
             </Road>
-            <Road id="4-">
+            <Road id="6-">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
             </Road>
         </Simulation>
         <Regulators>
-			<Regulator type="Ferry" id="test1">
-				<NotifyObject road_id="4+" position="500" name="test" id="testId1" />
-				<NotifyObject road_id="4+" position="1000" name="test" id="testId2" />
-				<Signal signal_id="r4_1+" />
-				<Signal signal_id="r4_2+" />
-			    <Signal signal_id="r4_1-" />
-			</Regulator>
-			
-			<Regulator type="AdaptiveSpeedLimit" name="ttt" id="test2">
-				<NotifyObject road_id="4-" position="500" name="test" id="testId3" />
-				<NotifyObject road_id="4-" position="1000" name="test" id="testId4" />
-			</Regulator>
+            <Regulator type="Ferry" id="test1">
+                <NotifyObject road_id="4+" position="100" name="test" id="suppressLaneChanges" />
+                <NotifyObject road_id="4+" position="350" name="test" id="testId1" />
+                <NotifyObject road_id="4+" position="800" name="test" id="stopToStandstill" />
+                <Signal signal_id="r4_1+" />
+                <Signal signal_id="r4_2+" />
+                <Signal signal_id="r4_1-" />
+            </Regulator>
+          <!--   <Regulator type="AdaptiveSpeedLimit" name="ttt" id="test2">
+                <NotifyObject road_id="4-" position="500" name="test" id="testId3" />
+                <NotifyObject road_id="4-" position="1000" name="test" id="testId4" />
+            </Regulator>
+            -->
+            <Regulator type="ParkingDeck" name="changeToRestrictedLane" id="test3">
+                <NotifyObject road_id="5+" position="1" name="test" id="1" />
+            </Regulator>
         </Regulators>
-			
-        
     </Scenario>
 </Movsim>
 

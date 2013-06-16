@@ -78,7 +78,7 @@ public class OpenDriveHandler {
         createRoadSegments(openDriveNetwork, roadNetwork);
         joinRoads(openDriveNetwork, roadNetwork);
         handleJunctions(openDriveNetwork, roadNetwork);
-        addDefaultSinksForUnconnectedRoad(roadNetwork);
+        addDefaultSinksToUnconnectedRoad(roadNetwork);
         checkIfAllLanesAreConnected(roadNetwork);
         return true;
     }
@@ -396,6 +396,11 @@ public class OpenDriveHandler {
             Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneNumber, 1.0, 1.0);
             obstacle.setType(Vehicle.Type.OBSTACLE);
             roadSegment.addObstacle(obstacle);
+        } else if (lane.getType().equals(Lanes.Type.RESTRICTED.getOpenDriveIdentifier())) {
+            roadSegment.setLaneType(laneNumber, Lanes.Type.RESTRICTED);
+            Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneNumber, 1.0, 1.0);
+            obstacle.setType(Vehicle.Type.OBSTACLE);
+            roadSegment.addObstacle(obstacle);
         } else if (lane.getType().equals(Lanes.Type.EXIT.getOpenDriveIdentifier())) {
             roadSegment.setLaneType(laneNumber, Lanes.Type.EXIT);
         } else if (lane.getType().equals(Lanes.Type.SHOULDER.getOpenDriveIdentifier())) {
@@ -548,7 +553,8 @@ public class OpenDriveHandler {
                 continue;
             }
             for (LaneSegment laneSegment : roadSegment.laneSegments()) {
-                if (laneSegment.sinkLaneSegment() == null && laneSegment.type() != Lanes.Type.ENTRANCE) {
+                if (laneSegment.sinkLaneSegment() == null
+                        && (laneSegment.type() != Lanes.Type.ENTRANCE && laneSegment.type() != Lanes.Type.RESTRICTED)) {
                     LOG.error("no sinklane for lane={} on RoadSegment={}", laneSegment.lane(), laneSegment
                             .roadSegment().userId());
                     valid = false;
@@ -590,7 +596,7 @@ public class OpenDriveHandler {
      * 
      * @param roadNetwork
      */
-    private static void addDefaultSinksForUnconnectedRoad(RoadNetwork roadNetwork) {
+    private static void addDefaultSinksToUnconnectedRoad(RoadNetwork roadNetwork) {
         int countSinks = 0;
         for (RoadSegment roadSegment : roadNetwork) {
             if (!roadSegment.hasDownstreamConnection()) {

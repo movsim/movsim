@@ -174,8 +174,6 @@ public class Vehicle {
     /** can be null */
     private LaneChangeModel laneChangeModel;
 
-    private boolean considerLaneChanges = true;
-
     /** Memory model. Can be null */
     private Memory memory = null;
     /** Acceleration noise model. Can be null */
@@ -846,7 +844,7 @@ public class Vehicle {
         }
 
         // no lane changing when not configured in xml.
-        if (laneChangeModel == null || !laneChangeModel.isInitialized() || !isConsiderLaneChanges()) {
+        if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
             return false;
         }
         assert !inProcessOfLaneChange();
@@ -1247,14 +1245,6 @@ public class Vehicle {
 
     public void unsetExternalAcceleration() {
         this.externalAcceleration = Double.NaN;
-    }
-
-    public boolean isConsiderLaneChanges() {
-        return considerLaneChanges;
-    }
-
-    public void setConsiderLaneChanges(boolean considerLaneChanges) {
-        this.considerLaneChanges = considerLaneChanges;
     }
 
 }

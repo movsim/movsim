@@ -78,8 +78,15 @@ public class LaneChangeModel {
         public String toString() {
             return name();
         }
-
     }
+
+    private boolean considerLaneChanges = true;
+
+    private boolean considerDiscretionaryLaneChanges = true;
+
+    private int mandatoryChangeToRestrictedLane = Integer.MIN_VALUE;
+
+    private int mandatoryChangeToLane = Integer.MIN_VALUE;
 
     private Vehicle me;
 
@@ -151,6 +158,20 @@ public class LaneChangeModel {
     public LaneChangeDecision makeDecision(RoadSegment roadSegment) {
         LaneChangeDecision decision = LaneChangeDecision.NONE;
 
+        if (!considerLaneChanges) {
+            return decision;
+        }
+
+        decision = checkForMandatoryLaneChangeToRestrictedLane(roadSegment);
+        if (decision.isMandatory()) {
+            return decision;
+        }
+
+        decision = checkForMandatoryLaneChangeToLane(roadSegment);
+        if (decision.isMandatory()) {
+            return decision;
+        }
+
         // check for mandatory lane changes to reach exit lane
         decision = checkForMandatoryLaneChangeToExit(roadSegment);
         if (decision.isMandatory()) {
@@ -168,7 +189,9 @@ public class LaneChangeModel {
         }
 
         // check discretionary lane changes
-        decision = determineDiscretionaryLaneChangeDirection(roadSegment);
+        if (considerDiscretionaryLaneChanges) {
+            decision = determineDiscretionaryLaneChangeDirection(roadSegment);
+        }
 
         return decision;
     }
@@ -287,6 +310,69 @@ public class LaneChangeModel {
                 }
             }
             return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
+        }
+
+        return LaneChangeDecision.NONE;
+    }
+
+    private LaneChangeDecision checkForMandatoryLaneChangeToRestrictedLane(RoadSegment roadSegment) {
+        if (!hasMandatoryChangeToRestrictedLane()) {
+            return LaneChangeDecision.NONE;
+        }
+
+        final int currentLane = me.lane();
+        final LaneSegment currentLaneSegment = roadSegment.laneSegment(currentLane);
+        if (currentLane == mandatoryChangeToRestrictedLane && currentLaneSegment.type() == Lanes.Type.RESTRICTED) {
+            LOG.debug("restricted lane={} already reached from veh={}", currentLane, me);
+            return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
+        }
+
+        if (roadSegment.laneCount() < mandatoryChangeToRestrictedLane) {
+            LOG.debug("requested restricted lane={} not available on roadSegment={}", mandatoryChangeToRestrictedLane,
+                    roadSegment);
+            return LaneChangeDecision.NONE;
+        }
+
+        if (roadSegment.laneSegment(mandatoryChangeToRestrictedLane).type() != Lanes.Type.RESTRICTED) {
+            LOG.debug("requested restricted lane={} available but not of restricted type on roadSegment={}",
+                    mandatoryChangeToRestrictedLane, roadSegment);
+        }
+
+        final int direction = (currentLane < mandatoryChangeToRestrictedLane) ? Lanes.TO_RIGHT : Lanes.TO_LEFT;
+        if (currentLane + direction >= Lanes.MOST_INNER_LANE) {
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + direction);
+            if (isSafeLaneChange(me, newLaneSegment)) {
+                return (direction == Lanes.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
+                        : LaneChangeDecision.MANDATORY_TO_RIGHT;
+            }
+        }
+
+        return LaneChangeDecision.NONE;
+    }
+
+    private LaneChangeDecision checkForMandatoryLaneChangeToLane(RoadSegment roadSegment) {
+        if (!hasMandatoryChangeToLane()) {
+            return LaneChangeDecision.NONE;
+        }
+
+        final int currentLane = me.lane();
+        if (currentLane == mandatoryChangeToLane) {
+            LOG.debug("lane={} already reached from veh={}", currentLane, me);
+            return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
+        }
+
+        if (roadSegment.laneCount() < mandatoryChangeToLane) {
+            LOG.debug("requested lane={} not available on roadSegment={}", mandatoryChangeToLane, roadSegment);
+            return LaneChangeDecision.NONE;
+        }
+
+        final int direction = (currentLane < mandatoryChangeToLane) ? Lanes.TO_RIGHT : Lanes.TO_LEFT;
+        if (currentLane + direction >= Lanes.MOST_INNER_LANE) {
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + direction);
+            if (isSafeLaneChange(me, newLaneSegment)) {
+                return (direction == Lanes.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
+                        : LaneChangeDecision.MANDATORY_TO_RIGHT;
+            }
         }
 
         return LaneChangeDecision.NONE;
@@ -418,6 +504,48 @@ public class LaneChangeModel {
             return overtakingViaPeerModel.finishOvertaking(me, laneSegment);
         }
         return LaneChangeDecision.NONE;
+    }
+
+    public boolean isConsiderLaneChanges() {
+        return considerLaneChanges;
+    }
+
+    public void setConsiderLaneChanges(boolean considerLaneChanges) {
+        this.considerLaneChanges = considerLaneChanges;
+    }
+
+    public boolean isConsiderDiscretionaryLaneChanges() {
+        return considerDiscretionaryLaneChanges;
+    }
+
+    public void setConsiderDiscretionaryLaneChanges(boolean considerDiscretionaryLaneChanges) {
+        this.considerDiscretionaryLaneChanges = considerDiscretionaryLaneChanges;
+    }
+
+    public boolean hasMandatoryChangeToRestrictedLane() {
+        return mandatoryChangeToRestrictedLane != Integer.MIN_VALUE;
+    }
+
+    public void setMandatoryChangeToRestrictedLane(int restrictedLane) {
+        Preconditions.checkArgument(restrictedLane >= Lanes.MOST_INNER_LANE);
+        this.mandatoryChangeToRestrictedLane = restrictedLane;
+    }
+
+    public void unsetMandatoryChangeToRestrictedLane() {
+        this.mandatoryChangeToRestrictedLane = Integer.MIN_VALUE;
+    }
+
+    public boolean hasMandatoryChangeToLane() {
+        return mandatoryChangeToLane != Integer.MIN_VALUE;
+    }
+
+    public void setMandatoryChangeToLane(int lane) {
+        Preconditions.checkArgument(lane >= Lanes.MOST_INNER_LANE);
+        this.mandatoryChangeToLane = lane;
+    }
+
+    public void unsetMandatoryChangeToLane() {
+        this.mandatoryChangeToLane = Integer.MIN_VALUE;
     }
 
 }
