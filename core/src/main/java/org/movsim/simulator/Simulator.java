@@ -349,6 +349,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     private static void configureTrafficSink(TrafficSinkType trafficSinkType, RoadSegment roadSegment) {
+        if(!roadSegment.hasSink()){
+            throw new IllegalArgumentException("roadsegment=" + roadSegment.userId() + " does not have a TrafficSink.");
+        }
         if (trafficSinkType.isLogging()) {
             roadSegment.sink().setRecorder(new FileTrafficSinkData(roadSegment.userId()));
         }
