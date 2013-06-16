@@ -143,6 +143,8 @@ public class Vehicle {
     /** The max deceleration . */
     private final double maxDeceleration;
 
+    private double externalAcceleration = Double.NaN;
+
     /** The unique id of the vehicle. */
     final long id;
 
@@ -171,6 +173,8 @@ public class Vehicle {
     private LongitudinalModelBase longitudinalModel;
     /** can be null */
     private LaneChangeModel laneChangeModel;
+
+    private boolean considerLaneChanges = true;
 
     /** Memory model. Can be null */
     private Memory memory = null;
@@ -586,9 +590,9 @@ public class Vehicle {
         if (noise != null) {
             noise.update(dt);
             accError = noise.getAccError();
-            final Vehicle frontVehicle = laneSegment.frontVehicle(this);
+            Vehicle frontVehicle = laneSegment.frontVehicle(this);
             if (getNetDistance(frontVehicle) < MovsimConstants.CRITICAL_GAP) {
-                accError = Math.min(accError, 0.); // !!!
+                accError = Math.min(accError, 0.);
             }
         }
 
@@ -599,20 +603,18 @@ public class Vehicle {
         // TODO check concept here: combination with alphaV0 (consideration of reference v0 instead of dynamic v0 which
         // depends on speedlimits)
         if (memory != null) {
-            final double v0 = longitudinalModel.getDesiredSpeed();
+            double v0 = longitudinalModel.getDesiredSpeed();
             memory.update(dt, speed, v0);
             alphaTLocal *= memory.alphaT();
             alphaV0Local *= memory.alphaV0();
             alphaALocal *= memory.alphaA();
         }
 
-        accModel = calcAccModel(laneSegment, leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
+        acc = accModel = calcAccModel(laneSegment, leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
 
-        // moderate acceleration by traffic lights or for preparing mandatory lane changes to exit sliproads
         if (lane() != Lanes.OVERTAKING) {
+            // moderate acceleration by traffic lights or for preparing mandatory lane changes to exit sliproads
             acc = moderateAcceleration(accModel, roadSegment);
-        } else {
-            acc = accModel;
         }
 
         acc = Math.max(acc + accError, -maxDeceleration); // limited to maximum deceleration
@@ -621,20 +623,31 @@ public class Vehicle {
     /**
      * Moderates this vehicle's acceleration according to factors other than the LDM. For
      * example, the presence of traffic lights, motorway exits or tactical considerations (say,
-     * the desire to make a lane change).
+     * the desire to make a lane change). Due to basic safety reasons it is crucial to use the minimum acceleration.
      * 
      * @param acc
      *            acceleration as calculated by LDM
      * @param roadSegment
      * @return moderated acceleration
      */
-    protected final double moderateAcceleration(double acc, RoadSegment roadSegment) {
+    private final double moderateAcceleration(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
         // if (acc < -7.5) {
         //     System.out.println("High braking, vehicle:" + id + " acc:" + acc); //$NON-NLS-1$ //$NON-NLS-2$
         // }
-        moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc, roadSegment);
-        moderatedAcc = accelerationConsideringExit(moderatedAcc, roadSegment);
+        double accTrafficLight = accelerationConsideringTrafficLight(roadSegment);
+        if (!Double.isNaN(accTrafficLight)) {
+            moderatedAcc = Math.min(moderatedAcc, accTrafficLight);
+        }
+
+        double accExit = accelerationConsideringExit(roadSegment);
+        if (!Double.isNaN(accExit)) {
+            moderatedAcc = Math.min(moderatedAcc, accExit);
+        }
+
+        if (hasExternalAcceleration()) {
+            moderatedAcc = Math.min(moderatedAcc, externalAcceleration);
+        }
         return moderatedAcc;
     }
 
@@ -645,16 +658,15 @@ public class Vehicle {
      * 
      * @return acceleration considering traffic light
      */
-    protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
-        double moderatedAcc = acc;
+    private double accelerationConsideringTrafficLight(RoadSegment roadSegment) {
         trafficLightApproaching.update(this, roadSegment);
         if (trafficLightApproaching.considerTrafficLight()) {
-            moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
+            return trafficLightApproaching.accApproaching();
         }
-        return moderatedAcc;
+        return Double.NaN;
     }
 
-    public void addTrafficLight(TrafficLight trafficLight){
+    public void addTrafficLight(TrafficLight trafficLight) {
         trafficLightApproaching.addTrafficLight(trafficLight);
     }
 
@@ -665,7 +677,7 @@ public class Vehicle {
      * 
      * @return acceleration considering exit
      */
-    protected double accelerationConsideringExit(double acc, RoadSegment roadSegment) {
+    private double accelerationConsideringExit(RoadSegment roadSegment) {
         assert roadSegment.id() == roadSegmentId;
         if (exitRoadSegmentId == roadSegment.id() && lane() != Lanes.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
@@ -678,7 +690,7 @@ public class Vehicle {
                 // but the deceleration is limited anyway
                 Vehicle frontVehicle = exitLaneSegment.frontVehicle(this);
                 double accToVehicleInExitLane = longitudinalModel.calcAcc(this, frontVehicle);
-                final double decelLimit = 4.0;
+                final double decelLimit = 4.0; // assumption!
                 accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -decelLimit);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String
@@ -686,10 +698,10 @@ public class Vehicle {
                                     exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
                                     accToVehicleInExitLane));
                 }
-                return Math.min(acc, accToVehicleInExitLane);
+                return accToVehicleInExitLane;
             }
         }
-        return acc;
+        return Double.NaN;
     }
 
     // TODO this acceleration is the base for MOBIL decision: could consider
@@ -834,7 +846,7 @@ public class Vehicle {
         }
 
         // no lane changing when not configured in xml.
-        if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
+        if (laneChangeModel == null || !laneChangeModel.isInitialized() || !isConsiderLaneChanges()) {
             return false;
         }
         assert !inProcessOfLaneChange();
@@ -1219,6 +1231,30 @@ public class Vehicle {
 
     public VehicleUserData getUserData() {
         return userData;
+    }
+
+    public double getExternalAcceleration() {
+        return externalAcceleration;
+    }
+
+    public boolean hasExternalAcceleration() {
+        return !Double.isNaN(externalAcceleration);
+    }
+
+    public void setExternalAcceleration(double externalAcceleration) {
+        this.externalAcceleration = externalAcceleration;
+    }
+
+    public void unsetExternalAcceleration() {
+        this.externalAcceleration = Double.NaN;
+    }
+
+    public boolean isConsiderLaneChanges() {
+        return considerLaneChanges;
+    }
+
+    public void setConsiderLaneChanges(boolean considerLaneChanges) {
+        this.considerLaneChanges = considerLaneChanges;
     }
 
 }
