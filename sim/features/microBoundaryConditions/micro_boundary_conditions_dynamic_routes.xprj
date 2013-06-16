@@ -36,7 +36,10 @@
             <Road id="4">
                 <TrafficSink logging="true" />
             </Road>
-            <Road id="6">
+            <Road id="9">
+                <TrafficSink logging="true" />
+            </Road>
+            <Road id="10">
                 <TrafficSink logging="true" />
             </Road>
         </Simulation>

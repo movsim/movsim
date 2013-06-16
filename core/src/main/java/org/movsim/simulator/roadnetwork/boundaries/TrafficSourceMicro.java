@@ -49,7 +49,8 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
     }
 
     public void addVehicleToQueue(long time, Vehicle vehicle) {
-        Preconditions.checkArgument(vehicleQueue.put(time, vehicle) == null);
+        Preconditions.checkArgument(vehicleQueue.put(time, vehicle) == null,
+                "cannot add vehicle to queue with same time=" + time);
         LOG.debug("added vehicle with (re)entering-time={}, queueSize={}", time, vehicleQueue.size());
         // vehicle.setSpeed(0);
         showQueue();
