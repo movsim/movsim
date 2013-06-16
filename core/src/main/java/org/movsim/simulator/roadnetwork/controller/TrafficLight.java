@@ -220,10 +220,10 @@ public class TrafficLight extends RoadObjectController {
         } else {
             // put signal points to all upstream road segments
             for (LaneSegment laneSegment : roadSegment.laneSegments()) {
-                double upstreamPositionNewRoad = Math.max(0, laneSegment.roadLength()
-                        + (position - MAX_LOOK_AHEAD_DISTANCE));
                 if (laneSegment.hasSourceLaneSegment()) {
                     RoadSegment upstreamRoadSegment = laneSegment.sourceLaneSegment().roadSegment();
+                    double upstreamPositionNewRoad = Math.max(0, upstreamRoadSegment.roadLength()
+                            + (position - MAX_LOOK_AHEAD_DISTANCE));
                     signalPointsBegin.put(upstreamRoadSegment, new SignalPoint(upstreamPositionNewRoad,
                             upstreamRoadSegment));
                     if (upstreamPositionNewRoad == 0) {
