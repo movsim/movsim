@@ -26,7 +26,10 @@
 
 package org.movsim.simulator.roadnetwork.regulator;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.CheckForNull;
 
@@ -34,15 +37,18 @@ import org.movsim.autogen.NotifyObjectType;
 import org.movsim.autogen.RegulatorType;
 import org.movsim.autogen.SignalType;
 import org.movsim.autogen.TrafficLightStatus;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class Regulator implements SimulationTimeStep {
 
@@ -54,6 +60,10 @@ public class Regulator implements SimulationTimeStep {
     protected final List<NotifyObject> notifyObjects = Lists.newLinkedList();
 
     protected final List<TrafficLight> trafficLights = Lists.newLinkedList();
+
+    protected final Set<Vehicle> influencedVehicles = Sets.newHashSet();
+
+    protected RegulatorFileLogging fileLogging = null;
 
     public static final Regulator create(RegulatorType regulatorParameter, RoadNetwork roadNetwork) {
         switch (regulatorParameter.getType()) {
@@ -77,6 +87,23 @@ public class Regulator implements SimulationTimeStep {
         Preconditions.checkNotNull(roadNetwork);
         initializeNotifyObjects(roadNetwork);
         initializeTrafficLights(roadNetwork);
+        if (regulatorType.isLogging()) {
+            initFileLogger();
+        }
+    }
+
+    private void initFileLogger() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ProjectMetaData.getInstance().getProjectName());
+        sb.append(".regulator_").append(parameter.getType().toString());
+        sb.append(".id_").append(parameter.getId());
+        sb.append(".csv");
+        File file = new File(ProjectMetaData.getInstance().getPathToProjectFile(), sb.toString());
+        try {
+            fileLogging = new RegulatorFileLogging(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initializeTrafficLights(RoadNetwork roadNetwork) {
@@ -116,11 +143,49 @@ public class Regulator implements SimulationTimeStep {
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        LOG.info("update regulator at time={}, controlled trafficLights={}", simulationTime, trafficLights.size());
-        for (NotifyObject notifyObject : notifyObjects) {
-            LOG.info("notifyObject={}: passedVehicles={}", notifyObject, notifyObject.getPassedVehicles().size());
+        // LOG.info("update regulator at time={}, controlled trafficLights={}", simulationTime, trafficLights.size());
+        // for (NotifyObject notifyObject : notifyObjects) {
+        // LOG.info("notifyObject={}: passedVehicles={}", notifyObject, notifyObject.getPassedVehicles().size());
+        // }
+
+        // just dummy tests
+        controllTrafficLightsDummy(iterationCount);
+        // controllVehicles(iterationCount);
+        // LOG.info("influencedVehicles.size={}", influencedVehicles.size());
+    }
+
+    private void controllVehicles(long iterationCount) {
+        if (iterationCount % 200 == 0) {
+            letVehiclesContinue();
+        } else {
+            letVehiclesStopAndPermitLaneChanges();
         }
-        if (iterationCount % 100 == 0) {
+    }
+
+    private void letVehiclesContinue() {
+        for (Vehicle vehicle : influencedVehicles) {
+            vehicle.unsetExternalAcceleration();
+            // vehicle.getLaneChangeModel().setConsiderLaneChanges(true);
+            // vehicle.getLaneChangeModel().setConsiderDiscretionaryLaneChanges(true);
+            vehicle.getLaneChangeModel().unsetMandatoryChangeToRestrictedLane();
+        }
+        influencedVehicles.clear();
+    }
+
+    private void letVehiclesStopAndPermitLaneChanges() {
+        for (NotifyObject notifyObject : notifyObjects) {
+            if (!notifyObject.getId().equals("suppressLaneChanges")) {
+                for (Vehicle vehicle : notifyObject.getPassedVehicles()) {
+                    vehicle.setExternalAcceleration(-1.0);
+                    vehicle.getLaneChangeModel().setConsiderLaneChanges(false);
+                    influencedVehicles.add(vehicle);
+                }
+            }
+        }
+    }
+
+    private void controllTrafficLightsDummy(long iterationCount) {
+        if (iterationCount != 0 && iterationCount % 1000 == 0) {
             for (TrafficLight trafficLight : trafficLights) {
                 trafficLight.setState(trafficLight.status() == TrafficLightStatus.GREEN ? TrafficLightStatus.RED
                         : TrafficLightStatus.GREEN);
