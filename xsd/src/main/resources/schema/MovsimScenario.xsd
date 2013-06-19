@@ -715,6 +715,9 @@
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="NotifyObjectType">
+		<xs:sequence>
+            <xs:element name="userData" type="UserData" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
         <!-- road-id from xodr plus additional directional (+/-) -->
         <xs:attribute name="road_id" type="xs:string" use="required" />
         <!-- s-coordinate along road segment -->
@@ -724,6 +727,13 @@
     </xs:complexType>
     <xs:complexType name="SignalType">
         <xs:attribute name="signal_id" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="UserData" >
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="code" type="xs:string" />
+        <xs:attribute name="value" type="xs:string" />
     </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Routes">
@@ -741,6 +751,7 @@
             <xs:attribute name="label" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
+    
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="OutputConfiguration">
         <xs:complexType>

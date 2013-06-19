@@ -28,7 +28,7 @@
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
     <Scenario network_filename="regulator.xodr">
-        <Simulation timestep="0.4" crash_exit="false" duration="600">
+        <Simulation timestep="0.4" crash_exit="false" duration="600" time_offset="2013-02-01T00:00:00Z">
             <TrafficComposition>
                 <VehicleType label="IDM1" fraction="0.4" relative_v0_randomization="0.2" />
                 <VehicleType label="ACC1" fraction="0.4" relative_v0_randomization="0.2" />
@@ -47,7 +47,11 @@
         </Simulation>
         <Regulators>
             <Regulator type="Ferry" id="test1">
-                <NotifyObject road_id="4+" position="100" name="test" id="suppressLaneChanges" />
+                <NotifyObject road_id="4+" position="100" name="test" id="suppressLaneChanges">
+					 <userData code="comment" value="50 m vor Schleuse (OW)" />
+                     <userData code="notifier_subfunction" value="lock_in" />
+                     <userData code="regulator_name" value="Schleuse 7_Hermelingen" />
+                </NotifyObject>
                 <NotifyObject road_id="4+" position="350" name="test" id="testId1" />
                 <NotifyObject road_id="4+" position="800" name="test" id="stopToStandstill" />
                 <Signal signal_id="r4_1+" />
