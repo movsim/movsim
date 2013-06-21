@@ -71,6 +71,10 @@ public class NotifyObject {
         return signalPoint.position();
     }
 
+    public RoadSegment getRoadSegment() {
+        return roadSegment;
+    }
+
     public String getRoadId() {
         return roadSegment.userId();
     }
@@ -79,6 +83,10 @@ public class NotifyObject {
     public String toString() {
         return "NotifyObject [name=" + getName() + ", id=" + getId() + ", position=" + getPosition()
                 + ", roadSegmentId=" + roadSegment.userId() + "]";
+    }
+
+    public NotifyObjectType getParameter() {
+        return parameter;
     }
 
 }

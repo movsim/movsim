@@ -28,6 +28,7 @@ package org.movsim.simulator.roadnetwork.regulator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-public final class Regulators implements SimulationTimeStep, SimulationRun.CompletionCallback {
+public final class Regulators implements Iterable<Regulator>, SimulationTimeStep, SimulationRun.CompletionCallback {
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(Regulators.class);
@@ -92,6 +93,11 @@ public final class Regulators implements SimulationTimeStep, SimulationRun.Compl
     static boolean addNotifyObjectId(String id) {
         Preconditions.checkArgument(id != null && !id.isEmpty(), "invalid id=" + id);
         return NOTIFY_OBJECTS_ID_CACHE.add(id);
+    }
+
+    @Override
+    public Iterator<Regulator> iterator() {
+        return regulators.iterator();
     }
 
 }
