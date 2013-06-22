@@ -1077,7 +1077,7 @@ public class Vehicle {
             RoadSegment routeRoadSegment = route.get(routeIndex);
             ++routeIndex;
             if (routeRoadSegment.id() != roadSegmentId) {
-                LOG.warn("vehicle={} has left its route={}.", this, route);
+                LOG.warn("vehicle={} has left its route={}.", this, route.getName());
                 routeIndex = Integer.MAX_VALUE; // skip further warning logs
                 exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
                 return;
