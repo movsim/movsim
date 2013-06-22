@@ -121,8 +121,8 @@ public class Routing {
         Route route = new Route(createRouteName(startRoadId, destinationRoadId));
         route.add(startRoadSegment);
 
-        LOG.info("Shortest path from roadSegment={} to={}", startRoadId, destinationRoadId);
-        LOG.info("From node={} to node={}", startRoadSegment.getDestinationNode().getId(), endRoadSegment
+        LOG.debug("Shortest path from roadSegment={} to={}", startRoadId, destinationRoadId);
+        LOG.debug("From node={} to node={}", startRoadSegment.getDestinationNode().getId(), endRoadSegment
                 .getDestinationNode().getId());
 
         List<RoadSegment> path = DijkstraShortestPath.findPathBetween(graph, startRoadSegment.getDestinationNode()
@@ -138,7 +138,7 @@ public class Routing {
 
         for (RoadSegment roadSegment : path) {
             route.add(roadSegment);
-            LOG.info("add roadSegment={} to route={}", roadSegment, route.getName());
+            LOG.debug("add roadSegment={} to route={}", roadSegment, route.getName());
         }
         return route;
     }

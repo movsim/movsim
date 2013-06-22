@@ -121,7 +121,7 @@ public final class MicroInflowFileReader {
                 if (route == null) {
                     LOG.error("no route assigned to vehicle={}", vehicle);
                 } else {
-                    LOG.info("found route and overwrites vehicle's default route: route={}", route.getName());
+                    LOG.debug("found route and overwrites vehicle's default route: route={}", route.getName());
                 }
             }
             vehicle.setRoute(route);
@@ -224,7 +224,7 @@ public final class MicroInflowFileReader {
                 DateTimeZone.UTC);
 
         long timeInSeconds = (dateTime.getMillis() - timeOffsetMillis) / 1000L;
-        LOG.info("time={} --> dateTime={} --> seconds with offset=" + timeInSeconds, time, dateTime);
+        LOG.debug("time={} --> dateTime={} --> seconds with offset=" + timeInSeconds, time, dateTime);
         return timeInSeconds;
     }
 

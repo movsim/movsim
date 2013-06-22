@@ -399,6 +399,7 @@ public class LaneChangeModel {
                 if (isSafeLaneChange(me, newLaneSegment)) {
                     return LaneChangeDecision.MANDATORY_TO_RIGHT;
                 }
+                LOG.warn("cannot turn into exit lane: {} on roadSegment={}", me, roadSegment);
                 return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
             }
         }
