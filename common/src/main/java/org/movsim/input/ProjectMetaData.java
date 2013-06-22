@@ -60,7 +60,7 @@ public final class ProjectMetaData {
     private String consumptionPath;
 
     private boolean instantaneousFileOutput = true;
-    // private boolean onlyValidation = false;
+    private boolean writeDotFile = false;
 
     private long timeOffsetMillis = 0;
 
@@ -321,5 +321,13 @@ public final class ProjectMetaData {
     public String getFormatedTimeWithOffset(double simulationTime) {
         DateTime dateTime = new DateTime(timeOffsetMillis + Math.round(1000 * simulationTime), DateTimeZone.UTC);
         return ISODateTimeFormat.dateTimeNoMillis().print(dateTime);
+    }
+
+    public void setWriteDotFile(boolean writeDotFile) {
+        this.writeDotFile = writeDotFile;
+    }
+
+    public boolean isWriteDotFile() {
+        return writeDotFile;
     }
 }

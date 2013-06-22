@@ -99,7 +99,9 @@ final class NetworkGraph {
             LOG.info("weight={}, roadSegment={}", graph.getEdgeWeight(roadSegment), roadSegment.toString());
         }
 
-        exportToFile(graph);
+        if (ProjectMetaData.getInstance().isWriteDotFile()) {
+            exportToFile(graph);
+        }
         return graph;
     }
 
@@ -139,7 +141,7 @@ final class NetworkGraph {
     }
 
     private static void exportToFile(DefaultDirectedWeightedGraph<Long, RoadSegment> graph) {
-        String fileName = ProjectMetaData.getInstance().getProjectName() + ".dot";
+        String fileName = ProjectMetaData.getInstance().getProjectName() + GraphExporter.FILE_ENDING_DOT;
         GraphExporter.exportDOT(graph, fileName);
         LOG.info("export graph to file={}", fileName);
     }

@@ -45,6 +45,8 @@ class GraphExporter {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(GraphExporter.class);
 
+    static final String FILE_ENDING_DOT = ".dot";
+
     static void exportDOT(DirectedGraph<Long, RoadSegment> graph, String fileName) {
         StringWriter writer = new StringWriter();
 

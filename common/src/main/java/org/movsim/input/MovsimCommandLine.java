@@ -89,17 +89,17 @@ public class MovsimCommandLine {
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
         options.addOption("v", "validate", false, "parses xml input file for validation (without simulation)");
-        options.addOption("w", "write xsd", false,
+        options.addOption("w", "write_xsd", false,
                 "writes xsd file to output (for convenience/lookup schema definitions)");
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
+        options.addOption("d", "write_dot", false, "writes a 'dot' network file for further analysis of the xodr");
 
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
         ProjectMetaData.getInstance();
         OptionBuilder.withDescription("movsim main configuration file (ending \""
-                + ProjectMetaData.getMovsimConfigFileEnding()
-                + "\" will be added automatically if not provided.");
+                + ProjectMetaData.getMovsimConfigFileEnding() + "\" will be added automatically if not provided.");
         final Option xmlSimFile = OptionBuilder.create("f");
         options.addOption(xmlSimFile);
 
@@ -128,6 +128,9 @@ public class MovsimCommandLine {
         }
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
+        }
+        if (cmdline.hasOption("d")) {
+            ProjectMetaData.getInstance().setWriteDotFile(true);
         }
         requiredOptionOutputPath(cmdline);
         requiredOptionSimulation(cmdline);
@@ -158,7 +161,6 @@ public class MovsimCommandLine {
         final InputStream is = MovsimCommandLine.class.getResourceAsStream(resource);
         FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
         System.out.println("logger properties file written to " + ProjectMetaData.getLog4jFilename());
-
         System.exit(0);
     }
 
