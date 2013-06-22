@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -523,20 +524,38 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         regulators.simulationCompleted(simulationTime);
 
         long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
-        LOG.info(String.format(
-                "time elapsed=%d milliseconds --> simulation time warp = %.2f, time per 1000 update steps=%.3fs",
-                elapsedTimeMillis, simulationTime / TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis),
-                (1000. * TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) / simulationRunnable.iterationCount())));
+        if (LOG.isInfoEnabled()) {
+            LOG.info(String.format(
+                    "time elapsed=%d milliseconds --> simulation time warp = %.2f, time per 1000 update steps=%.3fs",
+                    elapsedTimeMillis, simulationTime / TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis),
+                    (1000. * TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) / simulationRunnable.iterationCount())));
+            LOG.info("remaining vehicles in simulation after completion:\n {}", showAllVehicles());
+        }
+    }
 
+    private String showAllVehicles() {
+        int counter = 0;
+        StringBuilder sb = new StringBuilder();
+        for (RoadSegment roadSegment : roadNetwork) {
+            Iterator<Vehicle> iterator = roadSegment.iterator();
+            while (iterator.hasNext()) {
+                Vehicle vehicle = iterator.next();
+                if (vehicle.type() == Vehicle.Type.OBSTACLE) {
+                    continue;
+                }
+                counter++;
+                sb.append(counter).append(": ").append(vehicle.toString()).append("\n");
+            }
+        }
+        sb.append("in total ").append(counter).append(" vehicles");
+        return sb.toString();
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (iterationCount % 200 == 0) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s",
-                        simulationTime, simulationTime / 3600, dt, projectName));
-            }
+        if (LOG.isDebugEnabled() && iterationCount % 2000 == 0) {
+            LOG.debug(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s",
+                    simulationTime, simulationTime / 3600, dt, projectName));
         }
 
         trafficLights.timeStep(dt, simulationTime, iterationCount);
