@@ -410,7 +410,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="ModelParameterMOBIL" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="OvertakingViaPeer" minOccurs="0" maxOccurs="1" />
+                <xs:element name="OvertakingViaPeer" type="OvertakingViaPeerType" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="european_rules" type="xs:boolean" default="false" />
             <xs:attribute name="crit_speed_eur" type="nonNegativeDouble" default="25" />
@@ -426,9 +426,15 @@
             <xs:attribute name="politeness" type="xs:double" default="0.1" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="OvertakingViaPeer">
-        <xs:complexType />
-    </xs:element>
+    <xs:complexType name="OvertakingViaPeerType">
+        <!-- safety criterion in terms of 'Time to Collison' (TTC) relative to car-following model's desired timegap parameter -->
+        <xs:attribute name="criticalTimeToCollisonRel" type="nonNegativeDouble" default="4" />
+        <!-- minimum gap between vehicles on target lane. Must be considerably larger than effective vehicle length -->
+        <xs:attribute name="minTargetGap" type="nonNegativeDouble" default="100" />
+        <xs:attribute name="maxGapBehindLeaderForOvertaking" type="nonNegativeDouble" default="150" />
+        <!-- reduction factor of the calculated free accleration for approximation -->
+        <xs:attribute name="reductionFactorFreeAcceleration" type="nonNegativeDouble" default="0.25" />
+    </xs:complexType>
     <xs:element name="NoiseParameter">
         <xs:complexType>
             <!-- wiener process if tau>0  -->
@@ -716,7 +722,7 @@
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="NotifyObjectType">
-		<xs:sequence>
+        <xs:sequence>
             <xs:element name="userData" type="UserData" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
         <!-- road-id from xodr plus additional directional (+/-) -->
@@ -729,7 +735,7 @@
     <xs:complexType name="SignalType">
         <xs:attribute name="signal_id" type="xs:string" use="required" />
     </xs:complexType>
-    <xs:complexType name="UserData" >
+    <xs:complexType name="UserData">
         <xs:sequence>
             <xs:any minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
@@ -752,7 +758,6 @@
             <xs:attribute name="label" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
-    
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="OutputConfiguration">
         <xs:complexType>

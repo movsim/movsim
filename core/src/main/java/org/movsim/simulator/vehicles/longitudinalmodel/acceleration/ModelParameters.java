@@ -33,7 +33,27 @@ public final class ModelParameters {
         modelParameterIDM.isSetB();
 
         // IDM idm = new IDM(ModelParameterIDM);
-
+    }
+    
+    /**
+     * Returns the model parameter 'desired timegap' if provided by the model. Otherwise the default value is provided.
+     * 
+     * @param longModel
+     * @param defaultValue
+     * @return the timegap parameter if supported by model or the default value
+     */
+    public static double determineTimeGapParmeter(LongitudinalModelBase longModel, double defaultValue) {
+        if (longModel instanceof IDM) {
+            return ((IDM) longModel).getParameter().getT();
+        } else if (longModel instanceof ACC) {
+            return ((ACC) longModel).getParameter().getT();
+        } else if (longModel instanceof OVM_FVDM) {
+            return ((OVM_FVDM) longModel).getParameter().getTau();
+        } else if (longModel instanceof Gipps) {
+            return ((Gipps) longModel).getParameterT();
+        }
+        // TODO check if a useful time gap value can be derived/approximated
+        return defaultValue;
     }
 
     public static ModelParameterIDM getDefaultModelParameterIDM() {
