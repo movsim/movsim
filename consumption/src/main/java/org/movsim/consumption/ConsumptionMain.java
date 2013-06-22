@@ -34,7 +34,6 @@ import org.movsim.autogen.BatchData;
 import org.movsim.autogen.Consumption;
 import org.movsim.autogen.ConsumptionModel;
 import org.movsim.autogen.Movsim;
-import org.movsim.consumption.logging.ConsumptionLogger;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.consumption.model.EnergyFlowModels;
 import org.movsim.consumption.offline.ConsumptionCalculation;
@@ -43,6 +42,7 @@ import org.movsim.consumption.offline.InputReader;
 import org.movsim.consumption.offline.OutputWriter;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
+import org.movsim.logging.Logger;
 import org.movsim.xml.MovsimInputLoader;
 
 import com.google.common.base.Preconditions;
@@ -58,7 +58,7 @@ public class ConsumptionMain {
         System.out
                 .println("Movsim Energy-Flow Model (Consumption). (c) Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden, see: www.movsim.org");
 
-        ConsumptionLogger.initializeLogger();
+        Logger.initializeLogger();
 
         // ConsumptionCommandLine.parse(ProjectMetaData.getInstance(), args);
         MovsimCommandLine.parse(args);

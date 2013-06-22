@@ -553,7 +553,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (LOG.isInfoEnabled() && iterationCount % 500 == 0) {
+        if (LOG.isInfoEnabled() && iterationCount % 1000 == 0) {
             int numberOfVehicles = roadNetwork.vehicleCount() - roadNetwork.getObstacleCount();
             LOG.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, vehicles=%d, projectName=%s",
                     simulationTime, simulationTime / 3600, dt, numberOfVehicles, projectName));
