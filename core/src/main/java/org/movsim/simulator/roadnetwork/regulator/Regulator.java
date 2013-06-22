@@ -47,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -203,6 +204,10 @@ public class Regulator implements SimulationTimeStep {
 
     public String getId() {
         return parameter.isSetId() ? parameter.getId() : "-";
+    }
+
+    public Iterable<NotifyObject> getNotifyObjects() {
+        return Iterables.unmodifiableIterable(notifyObjects);
     }
 
 }

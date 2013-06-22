@@ -57,6 +57,8 @@ import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
 import org.movsim.simulator.roadnetwork.controller.GradientProfile;
 import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
+import org.movsim.simulator.roadnetwork.regulator.NotifyObject;
+import org.movsim.simulator.roadnetwork.regulator.Regulator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
 import org.movsim.utilities.Units;
@@ -138,6 +140,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected boolean drawSinks;
     protected boolean drawSpeedLimits;
     protected boolean drawSlopes;
+    protected boolean drawNotifyObjects;
 
     // brake light handling
     protected Color brakeLightColor = Color.RED;
@@ -213,6 +216,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         setDrawSources(Boolean.parseBoolean(properties.getProperty("drawSources")));
         setDrawSlopes(Boolean.parseBoolean(properties.getProperty("drawSlopes")));
         setDrawSpeedLimits(Boolean.parseBoolean(properties.getProperty("drawSpeedLimits")));
+        setDrawNotifyObjects(Boolean.parseBoolean(properties.getProperty("drawNotifyObjects")));
 
         final int hexRadix = 16;
         setBackgroundColor(new Color(Integer.parseInt(properties.getProperty("backgroundColor"), hexRadix)));
@@ -393,6 +397,15 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         repaint();
     }
 
+    public boolean isDrawNotifyObjects() {
+        return drawNotifyObjects;
+    }
+
+    public void setDrawNotifyObjects(boolean drawNotifyObjects) {
+        this.drawNotifyObjects = drawNotifyObjects;
+        repaint();
+    }
+
     /**
      * Returns the color of the vehicle. The color may depend on the vehicle's properties, such as its velocity.
      * 
@@ -552,6 +565,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
         if (drawRoadId) {
             drawRoadSectionIds(g);
+        }
+
+        if (drawNotifyObjects) {
+            drawNotifyObjects(g);
         }
     }
 
@@ -953,6 +970,15 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
                 String outflowString = "outflow: " + (int) (Units.INVS_TO_INVH * sink.measuredOutflow()) + " veh/h";
                 g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
+            }
+        }
+    }
+
+    private void drawNotifyObjects(Graphics2D g) {
+        for (Regulator regulator : simulator.getRegulators()) {
+            for (NotifyObject notifyObject : regulator.getNotifyObjects()) {
+                // RoadMapping roadMapping = notifyObject.getRoadSegment().roadMapping();
+                // notifyObject.getParameter() etc
             }
         }
     }

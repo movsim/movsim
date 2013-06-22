@@ -565,4 +565,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             simOutput.timeStep(dt, simulationTime, iterationCount);
         }
     }
+
+    public Regulators getRegulators() {
+        return regulators;
+    }
 }
