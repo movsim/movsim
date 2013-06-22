@@ -544,7 +544,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                     continue;
                 }
                 counter++;
-                sb.append(counter).append(": ").append(vehicle.toString()).append("\n");
+                sb.append(counter).append(": ").append(vehicle.toString());
+                sb.append(" on segment: ").append(roadSegment.toString());
+                sb.append("\n");
             }
         }
         sb.append("total vehicles remaining in network after completion: ").append(counter).append(" vehicles");
