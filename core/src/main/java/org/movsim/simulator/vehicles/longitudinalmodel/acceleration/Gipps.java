@@ -126,4 +126,8 @@ class Gipps extends LongitudinalModelBase {
         return param;
     }
 
+    protected double getParameterT() {
+        return parameterT;
+    }
+
 }
