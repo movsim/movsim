@@ -92,7 +92,7 @@ public class LaneChangeModel {
 
     private MOBIL lcModelMOBIL;
 
-    private OvertakingViaPeerModel overtakingViaPeerModel;
+    private OvertakingViaPeer overtakingViaPeerModel;
 
     private final org.movsim.autogen.LaneChangeModelType parameter;
 
@@ -134,7 +134,7 @@ public class LaneChangeModel {
         this.me = vehicle;
         lcModelMOBIL = new MOBIL(me, parameter.getModelParameterMOBIL());
         if (parameter.isSetOvertakingViaPeer()) {
-            overtakingViaPeerModel = new OvertakingViaPeerModel(this, parameter.getOvertakingViaPeer());
+            overtakingViaPeerModel = new OvertakingViaPeer(this, parameter.getOvertakingViaPeer());
         }
     }
 
@@ -399,7 +399,7 @@ public class LaneChangeModel {
                 if (isSafeLaneChange(me, newLaneSegment)) {
                     return LaneChangeDecision.MANDATORY_TO_RIGHT;
                 }
-                LOG.warn("cannot turn into exit lane: {} on roadSegment={}", me, roadSegment);
+                LOG.debug("cannot turn into exit lane: {} on roadSegment={}", me, roadSegment);
                 return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
             }
         }

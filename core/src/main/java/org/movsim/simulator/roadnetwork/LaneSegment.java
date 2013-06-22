@@ -190,7 +190,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public int stoppedVehicleCount() {
         int stoppedVehicleCount = 0;
         for (final Vehicle vehicle : vehicles) {
-            if (vehicle.type() != Vehicle.Type.OBSTACLE && vehicle.getSpeed() <= 0.01) {
+            if (vehicle.type() == Vehicle.Type.VEHICLE && vehicle.getSpeed() <= 0.01) {
                 ++stoppedVehicleCount;
             }
         }

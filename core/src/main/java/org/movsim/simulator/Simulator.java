@@ -547,15 +547,16 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 sb.append(counter).append(": ").append(vehicle.toString()).append("\n");
             }
         }
-        sb.append("in total ").append(counter).append(" vehicles");
+        sb.append("total vehicles remaining in network after completion: ").append(counter).append(" vehicles");
         return sb.toString();
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (LOG.isDebugEnabled() && iterationCount % 2000 == 0) {
-            LOG.debug(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s",
-                    simulationTime, simulationTime / 3600, dt, projectName));
+        if (LOG.isInfoEnabled() && iterationCount % 500 == 0) {
+            int numberOfVehicles = roadNetwork.vehicleCount() - roadNetwork.getObstacleCount();
+            LOG.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, vehicles=%d, projectName=%s",
+                    simulationTime, simulationTime / 3600, dt, numberOfVehicles, projectName));
         }
 
         trafficLights.timeStep(dt, simulationTime, iterationCount);

@@ -186,6 +186,7 @@ public class Vehicle {
     private EnergyFlowModel fuelModel;
     /** can be null */
     private Route route;
+    private int routeIndex;
 
     private boolean isBrakeLightOn;
 
@@ -310,6 +311,7 @@ public class Vehicle {
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = source.slope;
         route = source.route;
+        routeIndex = source.routeIndex;
         userData = source.userData;
     }
 
@@ -321,6 +323,10 @@ public class Vehicle {
         isBrakeLightOn = false;
         slope = 0;
         unsetSpeedlimit();
+        routeIndex = 0;
+        roadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+        exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+        originRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
     }
 
     public String getLabel() {
@@ -630,9 +636,7 @@ public class Vehicle {
      */
     private final double moderateAcceleration(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        // if (acc < -7.5) {
-        //     System.out.println("High braking, vehicle:" + id + " acc:" + acc); //$NON-NLS-1$ //$NON-NLS-2$
-        // }
+
         double accTrafficLight = accelerationConsideringTrafficLight(roadSegment);
         if (!Double.isNaN(accTrafficLight)) {
             moderatedAcc = Math.min(moderatedAcc, accTrafficLight);
@@ -676,25 +680,49 @@ public class Vehicle {
      * @return acceleration considering exit
      */
     private double accelerationConsideringExit(RoadSegment roadSegment) {
-        assert roadSegment.id() == roadSegmentId;
-        if (exitRoadSegmentId == roadSegment.id() && lane() != Lanes.LANE1) {
-            // the vehicle is in the exit road segment, but not in the exit lane
-            // react to vehicle ahead in exit lane
-            // TODO this reaction is in same situations too short-sighted so that the vehicle in the exit lane must be
-            // considered already in the upstream segment
-            final LaneSegment exitLaneSegment = roadSegment.laneSegment(roadSegment.trafficLaneMax());
-            if (exitLaneSegment != null && exitLaneSegment.type() == Lanes.Type.EXIT) {
-                // this front vehicle could also result in negative net distances
-                // but the deceleration is limited anyway
-                Vehicle frontVehicle = exitLaneSegment.frontVehicle(this);
-                double accToVehicleInExitLane = longitudinalModel.calcAcc(this, frontVehicle);
-                final double decelLimit = 4.0; // assumption!
-                accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -decelLimit);
+        double accToVehicleInExitLane = Double.NaN;
+        // valid exit road segment id indicates that exit has to be reached
+        // ASSUMPTION: routing horizon looks one roadSegment ahead
+        if (exitRoadSegmentId == EXIT_POSITION_NOT_SET) {
+            return accToVehicleInExitLane;
+        }
+        LOG.debug("exitRoadSectionId={}, current roadSegment={}", exitRoadSegmentId, roadSegment.id());
+        // unfortunately we have to distinguish the following two cases:
+        // (1) vehicle is on roadsegment with exit lane
+        if (roadSegment.id() == exitRoadSegmentId) {
+            LaneSegment firstExitLaneSegment = roadSegment.laneSegment(roadSegment.trafficLaneMax() + Lanes.TO_RIGHT);
+            assert firstExitLaneSegment != null && firstExitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment="
+                    + firstExitLaneSegment;
+            Vehicle frontVehicle = firstExitLaneSegment.frontVehicle(this);
+            accToVehicleInExitLane = longitudinalModel.calcAcc(this, frontVehicle);
+            accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -maxDeceleration);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String
+                    .format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, calcAcc=%.2f, accLimit=%.2f",
+                            exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
+                            longitudinalModel.calcAcc(this, frontVehicle), accToVehicleInExitLane));
+            }
+            return accToVehicleInExitLane;
+        } 
+        
+        // (2) exit lane is one roadSegment ahead but cannot be reached via sink connection
+        RoadSegment sinkRoadSegmentWithExit = roadSegment.sinkRoadSegmentPerId(exitRoadSegmentId);
+        if (sinkRoadSegmentWithExit != null) {
+            LaneSegment exitLaneSegment = sinkRoadSegmentWithExit.laneSegment(sinkRoadSegmentWithExit.trafficLaneMax()
+                    + Lanes.TO_RIGHT);
+            assert exitLaneSegment != null && exitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment="
+                    + exitLaneSegment;
+            Vehicle frontVehicle = exitLaneSegment.rearVehicle();
+            if (frontVehicle != null) {
+                double s = roadSegment.roadLength() - this.getFrontPosition() + frontVehicle.getRearPosition();
+                double dv = getSpeed() - frontVehicle.getSpeed();
+                accToVehicleInExitLane = longitudinalModel.calcAccSimple(s, getSpeed(), dv);
+                accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -maxDeceleration);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String
-                            .format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
-                                    exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
-                                    accToVehicleInExitLane));
+                        .format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
+                                exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
+                                accToVehicleInExitLane));
                 }
                 return accToVehicleInExitLane;
             }
@@ -1030,8 +1058,6 @@ public class Vehicle {
      * 
      */
 
-    private int routeIndex = 0;
-
     public final void setRoadSegment(int roadSegmentId, double roadSegmentLength) {
         if (originRoadSegmentId == ROAD_SEGMENT_ID_NOT_SET) {
             originRoadSegmentId = roadSegmentId;
@@ -1039,80 +1065,44 @@ public class Vehicle {
         this.roadSegmentId = roadSegmentId;
         this.roadSegmentLength = roadSegmentLength;
 
-        // assume this vehicle does not exit on this road segment
-        if (roadSegmentId != exitRoadSegmentId) {
-            exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
-        }
-        if (route != null && routeIndex < route.size()) {
-            final RoadSegment routeRoadSegment = route.get(routeIndex);
-            ++routeIndex;
-            if (routeRoadSegment.id() == roadSegmentId) {
-                // this vehicle is on the route
-                if (routeIndex < route.size()) {
-                    // there is another roadSegment on the route
-                    // so check if the next roadSegment is joined to an exit lane
-                    // of the current roadSegment
-                    final RoadSegment nextRouteRoadSegment = route.get(routeIndex);
-                    if (routeRoadSegment.exitsOnto(nextRouteRoadSegment.id())) {
-                        // this vehicle needs to exit on this roadSegment
-                        exitRoadSegmentId = roadSegmentId;
-                    } else {
-                        if (routeIndex + 1 < route.size()) {
-                            // there is another roadSegment on the route
-                            // so check if the next roadSegment is joined to an exit lane
-                            // of the current roadSegment
-                            final RoadSegment nextNextRouteRoadSegment = route.get(routeIndex + 1);
-                            if (nextRouteRoadSegment.exitsOnto(nextNextRouteRoadSegment.id())) {
-                                // this vehicle needs to exit on this roadSegment
-                                exitRoadSegmentId = roadSegmentId;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        // determineExitRoadSegmentId();
+        updateRoute();
     }
 
-    private void determineExitRoadSegmentId() {
-        Preconditions.checkArgument(originRoadSegmentId != ROAD_SEGMENT_ID_NOT_SET);
-        Preconditions.checkArgument(roadSegmentId != ROAD_SEGMENT_ID_NOT_SET);
-        // assume this vehicle does not exit on this road segment
+    private void updateRoute() {
         if (roadSegmentId != exitRoadSegmentId) {
-            exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+            exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET; // reset
         }
 
-        int routeIndex = 0;
         if (route != null && routeIndex < route.size()) {
-            final RoadSegment routeRoadSegment = route.get(routeIndex);
+            RoadSegment routeRoadSegment = route.get(routeIndex);
             ++routeIndex;
-            if (routeRoadSegment.id() == roadSegmentId) {
-                // this vehicle is on the route
-                if (routeIndex < route.size()) {
+            if (routeRoadSegment.id() != roadSegmentId) {
+                LOG.warn("vehicle={} has left its route={}.", this, route);
+                routeIndex = Integer.MAX_VALUE; // skip further warning logs
+                exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+                return;
+            }
+            // vehicle is still on track following its route
+            if (routeIndex < route.size()) {
+                // there is another roadSegment on the route, so check if the next roadSegment is joined to an exit lane
+                RoadSegment nextRouteRoadSegment = route.get(routeIndex);
+                if (routeRoadSegment.exitsOnto(nextRouteRoadSegment.id())) {
+                    // this vehicle needs to exit on this roadSegment
+                    exitRoadSegmentId = roadSegmentId;
+                } else if (routeIndex + 1 < route.size()) {
                     // there is another roadSegment on the route
                     // so check if the next roadSegment is joined to an exit lane
                     // of the current roadSegment
-                    final RoadSegment nextRouteRoadSegment = route.get(routeIndex);
-                    if (routeRoadSegment.exitsOnto(nextRouteRoadSegment.id())) {
+                    final RoadSegment nextNextRouteRoadSegment = route.get(routeIndex + 1);
+                    if (nextRouteRoadSegment.exitsOnto(nextNextRouteRoadSegment.id())) {
                         // this vehicle needs to exit on this roadSegment
-                        exitRoadSegmentId = roadSegmentId;
-                    } else {
-                        if (routeIndex + 1 < route.size()) {
-                            // there is another roadSegment on the route
-                            // so check if the next roadSegment is joined to an exit lane
-                            // of the current roadSegment
-                            final RoadSegment nextNextRouteRoadSegment = route.get(routeIndex + 1);
-                            if (nextRouteRoadSegment.exitsOnto(nextNextRouteRoadSegment.id())) {
-                                // this vehicle needs to exit on this roadSegment
-                                exitRoadSegmentId = roadSegmentId;
-                            }
-                        }
+                        exitRoadSegmentId = nextRouteRoadSegment.id(); // roadSegmentId;
                     }
                 }
             }
         }
     }
-
+ 
     /**
      * Returns the id of the first road segment occupied by this vehicle.
      * 

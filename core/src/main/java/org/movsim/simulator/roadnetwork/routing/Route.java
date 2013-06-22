@@ -34,7 +34,7 @@ import org.movsim.simulator.roadnetwork.RoadSegments;
 import com.google.common.base.Preconditions;
 
 /**
- * Iterable collection of the road segments that form a route that can be take through the road network.
+ * Iterable collection of the road segments that form a route that can be taken through the road network.
  */
 public class Route implements Iterable<RoadSegment> {
 
@@ -128,7 +128,7 @@ public class Route implements Iterable<RoadSegment> {
 
     @Override
     public String toString() {
-        return "Route [roadSegments=" + roadSegments + ", name=" + name + ", length=" + length + "]";
+        return "Route [name=" + name + ", length=" + length + ", roadSegments=" + roadSegments + "]";
     }
 
     @Override

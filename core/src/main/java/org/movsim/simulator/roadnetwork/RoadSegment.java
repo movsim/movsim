@@ -31,6 +31,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.annotation.CheckForNull;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
@@ -413,6 +415,19 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             return null;
         }
         return laneSegments[lane - 1].sinkLaneSegment().roadSegment();
+    }
+
+    @CheckForNull
+    public RoadSegment sinkRoadSegmentPerId(int exitRoadSegmentId) {
+        for (LaneSegment laneSegment : laneSegments) {
+            if (laneSegment.hasSinkLaneSegment()) {
+                RoadSegment sinkRoadSegment = laneSegment.sinkLaneSegment().roadSegment();
+                if (sinkRoadSegment.id() == exitRoadSegmentId) {
+                    return sinkRoadSegment;
+                }
+            }
+        }
+        return null;
     }
 
     final int sinkLane(int lane) {
@@ -1289,4 +1304,5 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         Preconditions.checkArgument(!peerRoadSegment.equals(this));
         this.peerRoadSegment = peerRoadSegment;
     }
+
 }

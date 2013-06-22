@@ -108,7 +108,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
     private void enterVehicle(LaneSegment laneSegment, double vEnter, Vehicle vehicle) {
         double xEnter = 0;
         initVehicle(laneSegment, xEnter, vEnter, vehicle);
-        LOG.info("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
+        LOG.debug("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }
 
     @Override
