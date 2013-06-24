@@ -119,6 +119,10 @@ public class TrafficLight extends RoadObjectController {
         return signal.getId();
     }
 
+    public Signal signal() {
+        return signal;
+    }
+
     /**
      * Returns the signal type assigned in the controller.control xodr input. This type links from a 'physical' signal to a 'logical'
      * representation of the trafficlight state.
