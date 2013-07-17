@@ -128,6 +128,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private RoadSegment peerRoadSegment;
 
+    private Node origin = new NodeImpl("origin");
+    private Node destination = new NodeImpl("destination");
+
     /** simple ramp (source) with dropping mechanism */
     private SimpleRamp simpleRamp;
 
@@ -1241,41 +1244,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public SignalPoints signalPoints() {
         return signalPoints;
     }
-
-    // TODO new concept, think about refactoring
-    public class Node {
-
-        private long nodeId = Long.MAX_VALUE;
-        private final String type;
-
-        public Node(String type) {
-            this.type = Preconditions.checkNotNull(type);
-        }
-
-        public boolean hasId() {
-            return nodeId != Long.MAX_VALUE;
-        }
-
-        public long getId() {
-            return nodeId;
-        }
-
-        public void setId(long id) {
-            if (hasId() && this.nodeId != id) {
-                throw new IllegalArgumentException("nodetype=" + this + " already set with value=" + this.nodeId);
-            }
-            this.nodeId = id;
-        }
-
-        @Override
-        public String toString() {
-            return "Node[type=" + type + ", nodeId=" + (this.hasId() ? this.getId() : "") + "]";
-        }
-
-    }
-
-    private Node origin = new Node("origin");
-    private Node destination = new Node("destination");
 
     public Node getOriginNode() {
         return origin;

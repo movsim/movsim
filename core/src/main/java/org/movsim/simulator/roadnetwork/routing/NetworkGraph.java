@@ -32,9 +32,9 @@ import org.jgrapht.WeightedGraph;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.Node;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.RoadSegment.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
