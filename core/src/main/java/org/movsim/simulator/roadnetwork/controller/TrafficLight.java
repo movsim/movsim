@@ -194,7 +194,7 @@ public class TrafficLight extends RoadObjectController {
      * @return
      */
     @Deprecated
-    public int lightCount() {
+    public static int lightCount() {
         // return Math.min(3, possibleStati.size());
         return 3;
     }
