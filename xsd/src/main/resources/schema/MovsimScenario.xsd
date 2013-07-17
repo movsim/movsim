@@ -727,8 +727,11 @@
         </xs:sequence>
         <!-- road-id from xodr plus additional directional (+/-) -->
         <xs:attribute name="road_id" type="xs:string" use="required" />
-        <!-- s-coordinate along road segment -->
-        <xs:attribute name="position" type="nonNegativeDouble" use="required" />
+        <!-- Alternative placement on road segment (one positional information is needed) -->
+        <!-- 'position' is the absolute position along the roadSegment -->
+        <!-- 's' is the track coordinate according to xodr convention along the road, ie the position on the road will be transformed to roadlength-s for a backward edge -->
+        <xs:attribute name="position" type="nonNegativeDouble" />
+        <xs:attribute name="s" type="nonNegativeDouble" />
         <xs:attribute name="id" type="xs:string" />
         <xs:attribute name="name" type="xs:string" />
     </xs:complexType>

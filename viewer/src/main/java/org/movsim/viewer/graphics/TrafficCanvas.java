@@ -645,7 +645,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLight trafficLight) {
-        final double offset = (roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
+        final double offset = (roadMapping.laneCount() / 2.0 /* + 1.5 */) * roadMapping.laneWidth();
         final double size = 2 * roadMapping.laneWidth();
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.x - size / 2, posTheta.y - size / 2, size, size
@@ -786,15 +786,26 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private static void drawTrafficLightBar(Graphics2D g, RoadMapping roadMapping, TrafficLight trafficLight, int lane) {
-        // TODO drawn bar does not seem centered.
-        final double height = 5;
+        final double height = 3;
         final double width = roadMapping.laneWidth();
-        double offset = lane * roadMapping.laneWidth();
+        double offset = (lane - 1) * roadMapping.laneWidth();
         if (trafficLight.roadSegment().directionType() == RoadSegmentDirection.BACKWARD) {
+            offset += roadMapping.laneWidth();
             offset *= -1;
+
         }
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
-        final Rectangle2D rect = new Rectangle2D.Double(posTheta.x, posTheta.y, width, height);
+        final Rectangle2D rect = new Rectangle2D.Double(posTheta.x, posTheta.y, height, width);
+
+        // final Point2D from = new Point2D.Double();
+        // final Point2D to = new Point2D.Double();
+        // PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
+        // from.setLocation(posTheta.x, posTheta.y);
+        // posTheta = roadMapping.map(trafficLight.position(), offset + width);
+        // to.setLocation(posTheta.x, posTheta.y);
+        // final Line2D.Double line = new Line2D.Double();
+        // line.setLine(from, to);
+        // g.setStroke(new BasicStroke(2));
 
         switch (trafficLight.status()) {
         case GREEN:
@@ -811,6 +822,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             break;
         }
         g.fill(rect);
+        // g.draw(line);
+        // g.setStroke(new BasicStroke());
     }
 
     private void drawSpeedLimits(Graphics2D g) {
@@ -984,15 +997,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 PosTheta posTheta = roadMapping.map(notifyObject.getPosition(), 0);
                 from.setLocation(posTheta.x, posTheta.y);
                 double lateralOffset = (roadMapping.laneCount() / 2) * roadMapping.laneWidth();
+                if (notifyObject.getRoadSegment().directionType() == RoadSegmentDirection.BACKWARD) {
+                    lateralOffset *= -1;
+                }
                 posTheta = roadMapping.map(notifyObject.getPosition(), lateralOffset);
                 to.setLocation(posTheta.x, posTheta.y);
                 line.setLine(from, to);
                 g.setStroke(new BasicStroke(2));
                 g.draw(line);
-
-                // TODO lateral offsets for one driving direction! number of lanes in one direction
-                // TODO draw text
-                // TODO handle other driving direction
+                // g.drawString(notifyObject.getId() + "@" + Integer.toString((int) notifyObject.getPosition()),
+                // (int) posTheta.x, (int) posTheta.y);
             }
         }
     }

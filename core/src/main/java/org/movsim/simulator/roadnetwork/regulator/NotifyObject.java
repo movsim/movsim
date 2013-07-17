@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import org.movsim.autogen.NotifyObjectType;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadSegmentDirection;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.vehicles.Vehicle;
 
@@ -46,7 +47,16 @@ public class NotifyObject {
     public NotifyObject(NotifyObjectType notifyObjectType, RoadSegment roadSegment) {
         this.parameter = Preconditions.checkNotNull(notifyObjectType);
         this.roadSegment = Preconditions.checkNotNull(roadSegment);
-        signalPoint = new SignalPoint(parameter.getPosition(), roadSegment);
+        Preconditions.checkArgument(notifyObjectType.isSetPosition() || notifyObjectType.isSetS(), "no position or s-coordinate provided in NotifyObject="+notifyObjectType.getId());
+        double position;
+        
+        if (notifyObjectType.isSetS()) {
+            position = roadSegment.directionType() == RoadSegmentDirection.FORWARD ? notifyObjectType.getS()
+                    : roadSegment.roadLength() - notifyObjectType.getS();
+        } else {
+            position = notifyObjectType.getPosition();
+        }
+        signalPoint = new SignalPoint(position, roadSegment);
         // roadNetwork already constructed: adding of signalPoint to roadSegments possible here
         roadSegment.signalPoints().add(signalPoint);
         if (notifyObjectType.isSetId() && !Regulators.addNotifyObjectId(notifyObjectType.getId())) {

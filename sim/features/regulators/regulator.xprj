@@ -52,17 +52,16 @@
                      <userData code="notifier_subfunction" value="lock_in" />
                      <userData code="regulator_name" value="Schleuse 7_Hermelingen" />
                 </NotifyObject>
-                <NotifyObject road_id="4+" position="350" name="test" id="testId1" />
-                <NotifyObject road_id="4+" position="800" name="test" id="stopToStandstill" />
+                <NotifyObject road_id="4+" s="350" name="test" id="testS" />
+                <NotifyObject road_id="4+" position="800" name="test" id="stopToStandstill-pos" />
                 <Signal signal_id="r4_1+" />
                 <Signal signal_id="r4_2+" />
                 <Signal signal_id="r4_1-" />
             </Regulator>
-          <!--   <Regulator type="AdaptiveSpeedLimit" name="ttt" id="test2">
-                <NotifyObject road_id="4-" position="500" name="test" id="testId3" />
+           <Regulator type="AdaptiveSpeedLimit" name="ttt" id="test2">
+                <NotifyObject road_id="4-" s="500" name="test" id="testId3-s" />
                 <NotifyObject road_id="4-" position="1000" name="test" id="testId4" />
             </Regulator>
-            -->
             <Regulator type="ParkingDeck" name="changeToRestrictedLane" id="test3">
                 <NotifyObject road_id="5+" position="1" name="test" id="1" />
             </Regulator>
