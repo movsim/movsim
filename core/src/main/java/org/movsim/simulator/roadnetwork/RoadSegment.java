@@ -99,6 +99,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     static final int INITIAL_ID = 1;
     private static int nextId = INITIAL_ID;
 
+    private RoadSegmentDirection directionType = RoadSegmentDirection.FORWARD;
+
     /** the nodeId is an internally used unique identifier for the road. */
     private final int id;
     /** the userId is the nodeId specified in the .xodr and .xml files. */
@@ -180,8 +182,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         overtakingSegment = new LaneSegment(this, Lanes.OVERTAKING);
     }
 
-    public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping) {
+    public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping,
+            RoadSegmentDirection roadSegmentDirection) {
         this(roadLength, laneCount);
+        this.directionType = roadSegmentDirection;
         this.roadMapping = Preconditions.checkNotNull(roadMapping);
     }
 
@@ -233,6 +237,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      */
     public final String userId() {
         return userId == null ? Integer.toString(id) : userId;
+    }
+
+    public final RoadSegmentDirection directionType() {
+        return directionType;
     }
 
     /**

@@ -35,6 +35,7 @@ import org.movsim.simulator.roadnetwork.Lanes.RoadLinkElementType;
 import org.movsim.simulator.roadnetwork.Link;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadSegmentDirection;
 import org.movsim.simulator.roadnetwork.controller.GradientProfile;
 import org.movsim.simulator.roadnetwork.controller.RoadObject;
 import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
@@ -165,8 +166,8 @@ public class OpenDriveHandler {
         // final RoadMapping roadMapping = createRoadMapping(laneType, road);
 
         final RoadSegment roadSegment = laneType.isReverseDirection() ? new RoadSegment(roadMapping.roadLength(),
-                lanes.size(), new RoadMappingPeer(roadMapping)) : new RoadSegment(roadMapping.roadLength(),
-                lanes.size(), roadMapping);
+                lanes.size(), new RoadMappingPeer(roadMapping), RoadSegmentDirection.BACKWARD) : new RoadSegment(
+                roadMapping.roadLength(), lanes.size(), roadMapping, RoadSegmentDirection.FORWARD);
 
         roadSegment.setUserId(getRoadSegmentId(road.getId(), laneType, hasPeer));
         roadSegment.setUserRoadname(road.getName());

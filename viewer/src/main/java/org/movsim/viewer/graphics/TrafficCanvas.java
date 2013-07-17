@@ -35,6 +35,7 @@ import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,12 +47,12 @@ import javax.xml.bind.JAXBException;
 
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMapping.PosTheta;
-import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadSegmentDirection;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
 import org.movsim.simulator.roadnetwork.controller.GradientProfile;
@@ -506,7 +507,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 for (final Vehicle vehicle : roadSegment) {
                     drawVehicle(g, simulationTime, roadMapping, vehicle);
                 }
-                for(Iterator<Vehicle> vehIter = roadSegment.overtakingVehicles(); vehIter.hasNext(); ) {
+                for (Iterator<Vehicle> vehIter = roadSegment.overtakingVehicles(); vehIter.hasNext();) {
                     Vehicle vehicle = vehIter.next();
                     drawVehicle(g, simulationTime, roadMapping, vehicle);
                 }
@@ -789,8 +790,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final double height = 5;
         final double width = roadMapping.laneWidth();
         double offset = lane * roadMapping.laneWidth();
-        // TODO hack here: find more elegant solution (sign from lane)
-        if (roadMapping instanceof RoadMappingPeer) {
+        if (trafficLight.roadSegment().directionType() == RoadSegmentDirection.BACKWARD) {
             offset *= -1;
         }
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
@@ -977,8 +977,22 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private void drawNotifyObjects(Graphics2D g) {
         for (Regulator regulator : simulator.getRegulators()) {
             for (NotifyObject notifyObject : regulator.getNotifyObjects()) {
-                // RoadMapping roadMapping = notifyObject.getRoadSegment().roadMapping();
-                // notifyObject.getParameter() etc
+                RoadMapping roadMapping = notifyObject.getRoadSegment().roadMapping();
+                final Line2D.Double line = new Line2D.Double();
+                final Point2D from = new Point2D.Double();
+                final Point2D to = new Point2D.Double();
+                PosTheta posTheta = roadMapping.map(notifyObject.getPosition(), 0);
+                from.setLocation(posTheta.x, posTheta.y);
+                double lateralOffset = (roadMapping.laneCount() / 2) * roadMapping.laneWidth();
+                posTheta = roadMapping.map(notifyObject.getPosition(), lateralOffset);
+                to.setLocation(posTheta.x, posTheta.y);
+                line.setLine(from, to);
+                g.setStroke(new BasicStroke(2));
+                g.draw(line);
+
+                // TODO lateral offsets for one driving direction! number of lanes in one direction
+                // TODO draw text
+                // TODO handle other driving direction
             }
         }
     }
