@@ -45,8 +45,6 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
     private double nextArrivalInterval;
 
-    private double numVehicles;
-
     private int vehiclesWaiting;
 
     /**
@@ -104,7 +102,6 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
             final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment, simulationTime, totalInflow);
             if (isEntered) {
                 testVehicle = null;
-                numVehicles += 1;
                 incrementInflowCount(1);
                 recordData(simulationTime, totalInflow);
                 return true;
