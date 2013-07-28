@@ -636,6 +636,9 @@ public class Vehicle {
      */
     private final double moderateAcceleration(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
+        if (type == Vehicle.Type.OBSTACLE) {
+            return moderatedAcc; // quick hack, better structure needed here
+        }
 
         double accTrafficLight = accelerationConsideringTrafficLight(roadSegment);
         if (!Double.isNaN(accTrafficLight)) {
