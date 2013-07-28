@@ -44,6 +44,7 @@ import org.movsim.simulator.roadnetwork.regulator.Regulator;
 import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 
 /**
  * Represents a 'traffic light' to which vehicles will react. The visibility range is limited to {@code MAX_LOOK_AHEAD_DISTANCE}, e.g.
@@ -52,7 +53,7 @@ import com.google.common.base.Preconditions;
  */
 public class TrafficLight extends RoadObjectController {
 
-    private static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
+    public static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
 
     /** The status. */
     private TrafficLightStatus status;
@@ -117,6 +118,15 @@ public class TrafficLight extends RoadObjectController {
      */
     public String signalId() {
         return signal.getId();
+    }
+
+    /**
+     * Returns the signal Name.
+     * 
+     * @return the label
+     */
+    public String signalName() {
+        return signal.getName();
     }
 
     public Signal signal() {
@@ -214,36 +224,53 @@ public class TrafficLight extends RoadObjectController {
         // downstream signal point is on local roadSegment
         roadSegment.signalPoints().add(signalPointEnd);
         LOG.info("trafficlight={}", this);
-        LOG.info("trafficlight *end* signal point placed at position={} on roadSegment={}.", position,
-                roadSegment);
+        LOG.info("trafficlight end signal point placed at position={} on roadSegment={}.", position, roadSegment);
 
         // create signal points for upstream signal points on potentially other roadsegments
         double upstreamPosition = position - MAX_LOOK_AHEAD_DISTANCE;
         if (upstreamPosition >= 0 || !roadSegment.hasUpstreamConnection()) {
             upstreamPosition = Math.max(0, upstreamPosition);
-            signalPointsBegin.put(roadSegment, new SignalPoint(upstreamPosition, roadSegment));
-            LOG.info("trafficlight signal start point placed at position={} on *same* roadSegment={}",
-                    upstreamPosition, roadSegment);
+            addSignalPointBegin(upstreamPosition, roadSegment);
         } else {
-            // put signal points to all upstream road segments
-            for (LaneSegment laneSegment : roadSegment.laneSegments()) {
-                if (laneSegment.hasSourceLaneSegment()) {
-                    RoadSegment upstreamRoadSegment = laneSegment.sourceLaneSegment().roadSegment();
-                    double upstreamPositionNewRoad = Math.max(0, upstreamRoadSegment.roadLength()
-                            + (position - MAX_LOOK_AHEAD_DISTANCE));
-                    signalPointsBegin.put(upstreamRoadSegment, new SignalPoint(upstreamPositionNewRoad,
-                            upstreamRoadSegment));
-                    if (upstreamPositionNewRoad == 0) {
-                        LOG.info("trafficlight signal start point placed at position={} on upstream roadSegment={}",
-                                upstreamPositionNewRoad, upstreamRoadSegment);
-                    }
-                }
-            }
+            // put signal points to all upstream road segments while checking recursively
+            Set<RoadSegment> visitedRoadSegments = Sets.newHashSet();
+            double dxToGo = MAX_LOOK_AHEAD_DISTANCE - position;
+            addSignalPointsToUpstreamRoadSegments(roadSegment, dxToGo, visitedRoadSegments);
+        }
+
+        if (signalPointsBegin.isEmpty()) {
+            throw new IllegalStateException("did not set any upstream signal points for traffic light=" + toString());
         }
 
         // add created signals to roadSegments
         for (Entry<RoadSegment, SignalPoint> entry : signalPointsBegin.entrySet()) {
             entry.getKey().signalPoints().add(entry.getValue());
+        }
+    }
+
+    private void addSignalPointBegin(double upstreamPosition, RoadSegment upstreamRoadSegment) {
+        SignalPoint signalPoint = new SignalPoint(upstreamPosition, upstreamRoadSegment);
+        signalPointsBegin.put(upstreamRoadSegment, signalPoint);
+        LOG.info("trafficlight signal start point placed at position={} on roadSegment={}", upstreamPosition,
+                upstreamRoadSegment);
+    }
+
+    private void addSignalPointsToUpstreamRoadSegments(RoadSegment startRoadSegment, double dxToGo,
+            Set<RoadSegment> visitedRoadSegments) {
+        for (LaneSegment laneSegment : startRoadSegment.laneSegments()) {
+            if (laneSegment.hasSourceLaneSegment()) {
+                RoadSegment upstreamRoadSegment = laneSegment.sourceLaneSegment().roadSegment();
+                if (!visitedRoadSegments.contains(upstreamRoadSegment)) {
+                    visitedRoadSegments.add(upstreamRoadSegment);
+                    double posSignalPoint = upstreamRoadSegment.roadLength() - dxToGo;
+                    if (posSignalPoint >= 0 || !upstreamRoadSegment.hasUpstreamConnection()) {
+                        addSignalPointBegin(Math.max(0, posSignalPoint), upstreamRoadSegment);
+                    } else {
+                        // call recursively
+                        addSignalPointsToUpstreamRoadSegments(upstreamRoadSegment, -posSignalPoint, visitedRoadSegments);
+                    }
+                }
+            }
         }
     }
 

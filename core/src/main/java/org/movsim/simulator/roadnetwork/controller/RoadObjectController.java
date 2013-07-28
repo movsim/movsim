@@ -28,6 +28,7 @@ package org.movsim.simulator.roadnetwork.controller;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
@@ -37,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 
 /**
  * TODO
@@ -118,40 +120,68 @@ public abstract class RoadObjectController implements RoadObject {
     @Override
     public abstract void timeStep(double dt, double simulationTime, long iterationCount);
 
-    // TODO write javadoc
-    public double distanceTo(Vehicle vehicle, RoadSegment vehicleRoadSegment) throws IllegalStateException {
+    /**
+     * returns distance from vehicle to trafficLight (positive if trafficlight is downstream, negative if trafficlight is upstream). The
+     * search radius is limited to {@code maxLookAheadDistance} while the road network links are searched recursively.
+     * 
+     * @param vehicle
+     * @param vehicleRoadSegment
+     * @param maxLookAheadDistance
+     * @return the distance from vehicle to trafficLight or 'NaN' if vehicle is not found within radius
+     */
+    public double distanceTo(Vehicle vehicle, RoadSegment vehicleRoadSegment, double maxLookAheadDistance) {
         if (roadSegment == vehicleRoadSegment) {
-            // on same roadSegment
+            // trivial case: vehicle and trafficlight on same roadSegment
             return position - vehicle.getFrontPosition();
         }
 
-        // look *one* roadsegment upstream to find vehicle's roadSegment
-        double distance = position; // vehicleRoadSegment.roadLength() - vehicle.getFrontPosition();
+        double accumDistance = vehicleRoadSegment.roadLength() - vehicle.getFrontPosition();
+        // look downstream from vehicle's roadsegment until found the trafficlight or maxLookAheadDistance reached
+        Set<RoadSegment> visitedRoadSegments = Sets.newHashSet();
+        accumDistance = checkDownstreamRoadSegments(vehicleRoadSegment, accumDistance, maxLookAheadDistance,
+                visitedRoadSegments);
+
+        if (!Double.isNaN(accumDistance)) {
+            return accumDistance;
+        }
+
+        // now checks *one* roadSegment downstream from trafficlight, results in negative distance.
+        double distanceFromTrafficLight = position - roadSegment.roadLength();
         Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
         while (laneSegmentIterator.hasNext()) {
             LaneSegment laneSegment = laneSegmentIterator.next();
-            if (laneSegment.hasSourceLaneSegment()
-                    && laneSegment.sourceLaneSegment().roadSegment() == vehicleRoadSegment) {
-                distance += vehicleRoadSegment.roadLength() - vehicle.getFrontPosition();
-                return distance;
-            }
-        }
-
-        // also checks *one* roadSegment downstream for consistency, results in negative distance
-        distance = roadSegment.roadLength() - position;
-        laneSegmentIterator = roadSegment.laneSegmentIterator();
-        while (laneSegmentIterator.hasNext()) {
-            LaneSegment laneSegment = laneSegmentIterator.next();
             if (laneSegment.hasSinkLaneSegment() && laneSegment.sinkLaneSegment().roadSegment() == vehicleRoadSegment) {
-                distance -= vehicle.getFrontPosition();
-                return distance;
+                distanceFromTrafficLight -= vehicle.getFrontPosition();
+                return distanceFromTrafficLight;
             }
         }
+        return Double.NaN;
+    }
 
-        // shouldn't happen if signal points are working correctly
-        // throw new IllegalStateException(
-        // "cannot calculate distance to vehicle within 1 RoadSegment up/downstream lookup!");
-        return -1;
+    private double checkDownstreamRoadSegments(RoadSegment startRoadSegment, double distance,
+            final double maxLookAheadDistance, Set<RoadSegment> visitedRoadSegments) {
+
+        for (LaneSegment laneSegment : startRoadSegment.laneSegments()) {
+            if (laneSegment.hasSinkLaneSegment()) {
+                RoadSegment sinkRoadSegment = laneSegment.sinkLaneSegment().roadSegment();
+
+                if (!visitedRoadSegments.contains(sinkRoadSegment)) {
+                    visitedRoadSegments.add(sinkRoadSegment);
+                    if (sinkRoadSegment == roadSegment) {
+                        return distance + position;
+                    } else if (distance + sinkRoadSegment.roadLength() > maxLookAheadDistance) {
+                        return Double.NaN;
+                    } else {
+                        double newDistance = checkDownstreamRoadSegments(sinkRoadSegment,
+                                distance + sinkRoadSegment.roadLength(), maxLookAheadDistance, visitedRoadSegments);
+                        if (!Double.isNaN(newDistance)) {
+                            return newDistance;
+                        }
+                    }
+                }
+            }
+        }
+        return Double.NaN;
     }
 
 }

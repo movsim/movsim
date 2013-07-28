@@ -96,7 +96,7 @@ public class TrafficLightApproaching {
         if (trafficLight == null) {
             return;
         }
-
+        // LOG.debug("relevant trafficlight={} for vehicle={}", trafficLight, vehicle);
         if (trafficLight.status() != TrafficLightStatus.GREEN) {
             final double maxRangeOfSight = MovsimConstants.GAP_INFINITY;
             if (distanceToTrafficlight < maxRangeOfSight) {
@@ -140,36 +140,62 @@ public class TrafficLightApproaching {
         // order of trafficlights not defined, loop over all
         for (Iterator<TrafficLight> iterator = trafficLights.iterator(); iterator.hasNext();) {
             TrafficLight trafficLight = iterator.next();
-            double distance = trafficLight.distanceTo(vehicle, roadSegment);
-            if (distance < 0) {
+            double distance = trafficLight.distanceTo(vehicle, roadSegment, TrafficLight.MAX_LOOK_AHEAD_DISTANCE);
+            if (!Double.isNaN(distance) && distance < 0) {
                 LOG.debug("vehicle at pos={} , remove trafficLight={}", vehicle.getFrontPosition(), trafficLight);
                 iterator.remove();
             }
         }
     }
 
+    // TODO rethink concept of lane-based trafficlights. not efficiently handled here.
     private TrafficLight getRelevantTrafficLight(Vehicle vehicle, RoadSegment roadSegment) {
-        for(TrafficLight trafficLight : trafficLights){
-            distanceToTrafficlight = trafficLight.distanceTo(vehicle, roadSegment);
+        TrafficLight relevantTrafficLight = null;
+        for (TrafficLight trafficLight : trafficLights) {
+            distanceToTrafficlight = trafficLight
+                    .distanceTo(vehicle, roadSegment, TrafficLight.MAX_LOOK_AHEAD_DISTANCE);
+            LOG.debug("distanceToTrafficlight={}, trafficLight={}", distanceToTrafficlight, toString());
             assert distanceToTrafficlight >= 0 : "trafficlight already passed, cleaning not working!";
-            int relevantLaneDownstream = determineRelevantLane(vehicle, roadSegment, trafficLight);
-            if (relevantLaneDownstream < 0) {
-                // no trafficlight in downstream roadsegment that is directly connected to vehicle's lane
-                continue;
-            }
-            // trafficlight's valid lane is relative to RoadSegment on which it is located.
-            if (trafficLight.isValidLane(relevantLaneDownstream)) {
-                return trafficLight;
+
+            if (trafficLightIsLaneRelevant(vehicle, roadSegment, trafficLight)) {
+                int relevantLaneDownstream = determineRelevantLane(vehicle, roadSegment, trafficLight);
+                if (relevantLaneDownstream < 0) {
+                    // no trafficlight in downstream roadsegment that is directly connected to vehicle's lane
+                    trafficLight = null; // continue;
+                } else if (trafficLight.isValidLane(relevantLaneDownstream)) {
+                    // trafficlight's valid lane is relative to RoadSegment on which it is located.
+                    return trafficLight;
+                }
+            } else if (relevantTrafficLight == null) {
+                // get first (ie most upstream) in list
+                relevantTrafficLight = trafficLight;
             }
         }
-        reset();
-        return null;
+        if (relevantTrafficLight == null) {
+            reset();
+        }
+        return relevantTrafficLight;
+    }
+
+    private static boolean trafficLightIsLaneRelevant(Vehicle vehicle, RoadSegment roadSegment,
+            TrafficLight trafficLight) {
+        if (roadSegment == trafficLight.roadSegment()) {
+            return true;
+        }
+        // just look to directly connected roadsegment, otherwise a per-lane assignment does not make sense
+        LaneSegment laneSegment = roadSegment.laneSegment(vehicle.lane());
+        if (laneSegment.hasSinkLaneSegment()
+                && laneSegment.sinkLaneSegment().roadSegment() == trafficLight.roadSegment()) {
+            return true;
+        }
+        return false;
     }
 
     private static int determineRelevantLane(Vehicle vehicle, RoadSegment roadSegment, TrafficLight trafficLight) {
         if (roadSegment == trafficLight.roadSegment()) {
             return vehicle.lane();
         }
+        // just look to directly connected roadsegment, otherwise a per-lane assignment does not make sense
         LaneSegment laneSegment = roadSegment.laneSegment(vehicle.lane());
         if (laneSegment.hasSinkLaneSegment()
                 && laneSegment.sinkLaneSegment().roadSegment() == trafficLight.roadSegment()) {
@@ -257,5 +283,12 @@ public class TrafficLightApproaching {
             }
         }
         return sumEffectiveLengths;
+    }
+
+    @Override
+    public String toString() {
+        return "TrafficLightApproaching [trafficLights.size=" + trafficLights.size() + ", considerTrafficLight="
+                + considerTrafficLight + ", accTrafficLight=" + accTrafficLight + ", distanceToTrafficlight="
+                + distanceToTrafficlight + "]";
     }
 }
