@@ -64,8 +64,10 @@ public class OvertakingViaPeer {
     }
 
     LaneChangeDecision finishOvertaking(Vehicle me, LaneSegment newLaneSegment) {
-        // evaluate situation on the right lane
-        if (lcModel.isSafeLaneChange(me, newLaneSegment)) {
+        // evaluate situation on the right lane when turning back
+        // and also check continously for safety/incentive of the overtaking decision to keep this decision
+        if (lcModel.isSafeLaneChange(me, newLaneSegment)
+                && makeDecision(me, newLaneSegment.roadSegment()) != LaneChangeDecision.OVERTAKE_VIA_PEER) {
             return LaneChangeDecision.MANDATORY_TO_RIGHT;
         }
         return LaneChangeDecision.NONE;
@@ -75,12 +77,18 @@ public class OvertakingViaPeer {
         assert roadSegment.hasPeer();
         LaneChangeDecision lcDecision = LaneChangeDecision.NONE;
 
-        double remainingDistanceOnRoadSegment = roadSegment.roadLength() - me.getFrontPosition();
-        if (roadIsSuitedForOvertaking(remainingDistanceOnRoadSegment, roadSegment)
-                && overtakingLaneIsFreeInDrivingDirection(me, roadSegment)
-                && noOvertakingManeuverFromPeer(me, roadSegment.getPeerRoadSegment())) {
-            lcDecision = makeDecision(me, roadSegment);
+        Vehicle frontVehicleOnLane = roadSegment.frontVehicleOnLane(me);
+        if (frontVehicleOnLane != null
+                && me.getBrutDistance(frontVehicleOnLane) < parameter.getMaxGapBehindLeaderForOvertaking()) {
+
+            double remainingDistanceOnRoadSegment = roadSegment.roadLength() - me.getFrontPosition();
+            if (roadIsSuitedForOvertaking(remainingDistanceOnRoadSegment, roadSegment)
+                    && overtakingLaneIsFreeInDrivingDirection(me, roadSegment)
+                    && noOvertakingManeuverFromPeer(me, roadSegment.getPeerRoadSegment())) {
+                lcDecision = makeDecision(me, roadSegment);
+            }
         }
+
         return lcDecision;
     }
 
@@ -177,14 +185,14 @@ public class OvertakingViaPeer {
     }
 
     private LaneChangeDecision makeDecision(Vehicle me, RoadSegment roadSegment) {
-        assert me.lane() == Lanes.MOST_INNER_LANE;
+        // also called for contiuously checking the safety and incentive of the overtaking decision
         RoadSegment peerRoadSegment = roadSegment.getPeerRoadSegment();
         double mePositionOnPeer = peerRoadSegment.roadLength() - me.getFrontPosition();
         Vehicle vehicleOnPeer = peerRoadSegment.rearVehicle(Lanes.MOST_INNER_LANE, mePositionOnPeer);
         LOG.debug("check for rear vehicle on peer at position={}, see vehicle={}", mePositionOnPeer,
                 (vehicleOnPeer != null ? vehicleOnPeer : "null"));
 
-        double distanceToVehicleOnPeer = (vehicleOnPeer == null) ? 10000 : calcDistance(me, peerRoadSegment,
+        double distanceToVehicleOnPeer = (vehicleOnPeer == null) ? INFINITE_GAP : calcDistance(me, peerRoadSegment,
                 vehicleOnPeer);
         LOG.debug("=== consider vehicle in other direction of travel: distance={}", distanceToVehicleOnPeer);
         if (LOG.isDebugEnabled() && vehicleOnPeer != null) {
@@ -196,7 +204,8 @@ public class OvertakingViaPeer {
 
         LaneChangeDecision decision = LaneChangeDecision.NONE;
         if (distanceToVehicleOnPeer > 0) {
-            Vehicle frontVehicleInLane = roadSegment.frontVehicleOnLane(me);
+            // vehicle can already be on the overtaking lane and re-checks the incentive/safety
+            Vehicle frontVehicleInLane = roadSegment.frontVehicle(Lanes.MOST_INNER_LANE, me.getRearPosition());
             if (frontVehicleInLane != null && !frontVehicleInLane.inProcessOfLaneChange()
                     && frontVehicleInLane.type() == Vehicle.Type.VEHICLE) {
                 double brutDistanceToFrontVehicleInLane = me.getBrutDistance(frontVehicleInLane);
@@ -231,6 +240,7 @@ public class OvertakingViaPeer {
                 }
             }
         }
+        LOG.debug("return decision={}", decision);
         return decision;
     }
 
