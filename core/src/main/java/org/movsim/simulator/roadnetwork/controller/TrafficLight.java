@@ -171,8 +171,10 @@ public class TrafficLight extends RoadObjectController {
     // trigger from viewer via mouse-click (direct communication from signal to controller)
     // shouldn't be called from external, use controller instead
     public void triggerNextPhase() {
-        LOG.debug("mouse click triggers next phase");
-        triggerCallback.nextPhase();
+        if (hasTriggerCallback()) {
+            LOG.debug("mouse click triggers next phase");
+            triggerCallback.nextPhase();
+        }
     }
 
     public void setTriggerCallback(TriggerCallback triggerCallback) {
