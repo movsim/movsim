@@ -755,6 +755,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public void updateSignalPointsAfterOutflowAndInflow(double simulationTime) {
         assert updateSignalPointsBeforeOutflowCalled; // hack for assuring right calling process
         for (SignalPoint signalPoint : signalPoints) {
+            // TODO vehicles on overtaking segment ignored here, iterate over those as well...test with iteratorAllVehicles()
             signalPoint.registerPassingVehicles(simulationTime, iterator());
         }
         updateSignalPointsBeforeOutflowCalled = false;
@@ -1097,6 +1098,11 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     public final Iterator<Vehicle> overtakingVehicles() {
         return overtakingSegment.iterator();
+    }
+
+    // not yet used
+    final Iterator<Vehicle> iteratorAllVehicles(){
+        return Iterators.concat(iterator(), overtakingVehicles());
     }
 
     /**
