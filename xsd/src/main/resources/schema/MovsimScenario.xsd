@@ -661,8 +661,6 @@
             <xs:attribute name="id" type="xs:string" use="required" />
             <!-- spatial range for checking conditions in meters -->
             <xs:attribute name="range" type="positiveDouble" default="100" />
-            <!-- external control of traffic lights, no change within movsim -->
-            <xs:attribute name="external" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
     <xs:element name="Phase">
