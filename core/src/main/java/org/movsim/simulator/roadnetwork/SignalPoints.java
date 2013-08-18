@@ -43,4 +43,12 @@ public class SignalPoints implements Iterable<SignalPoint> {
         return signalPoints.iterator();
     }
 
+    public int size() {
+        return signalPoints.size();
+    }
+
+    public boolean isEmpty() {
+        return signalPoints.isEmpty();
+    }
+
 }

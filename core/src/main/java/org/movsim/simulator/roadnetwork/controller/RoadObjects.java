@@ -84,6 +84,15 @@ public final class RoadObjects implements Iterable<RoadObject> {
         return !roadObjects.get(type).isEmpty();
     }
 
+    public boolean hasRoadObjects() {
+        for (SortedSet<RoadObject> set : roadObjects.values()) {
+            if (!set.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends RoadObject> Iterator<T> iterator(RoadObjectType type) {
         return Iterators.unmodifiableIterator((Iterator<T>) roadObjects.get(type).iterator());

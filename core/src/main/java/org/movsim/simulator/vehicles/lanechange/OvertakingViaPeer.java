@@ -29,6 +29,7 @@ package org.movsim.simulator.vehicles.lanechange;
 import java.util.Iterator;
 
 import org.movsim.autogen.OvertakingViaPeerType;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -47,10 +48,10 @@ public class OvertakingViaPeer {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(OvertakingViaPeer.class);
 
-    private static final int INFINITE_GAP = 10000;
+    private static final double INFINITE_GAP = MovsimConstants.GAP_INFINITY;
 
     private static final double ROAD_MAX_LOOK_AHEAD_DISTANCE = 1000;
-    private static final double MIN_DISTANCE_BETWEEN_VEHICLES_OVERTAKING_IN_SAME_DIRECTION = 300;
+    private static final double MIN_DISTANCE_BETWEEN_VEHICLES_OVERTAKING_IN_SAME_DIRECTION = 500;
 
     /** fall-back for those models that do not have an explicit time gap parameter */
     private double defaultSafetyTimeGapParameter = 2;
@@ -78,13 +79,22 @@ public class OvertakingViaPeer {
         LaneChangeDecision lcDecision = LaneChangeDecision.NONE;
 
         Vehicle frontVehicleOnLane = roadSegment.frontVehicleOnLane(me);
-        if (frontVehicleOnLane != null
-                && me.getBrutDistance(frontVehicleOnLane) < parameter.getMaxGapBehindLeaderForOvertaking()) {
+        if (frontVehicleOnLane == null) {
+            // without vehicle ahead nothing to decide
+            return lcDecision;
+        }
 
-            double remainingDistanceOnRoadSegment = roadSegment.roadLength() - me.getFrontPosition();
-            if (roadIsSuitedForOvertaking(remainingDistanceOnRoadSegment, roadSegment)
+        double distanceToVehicleOnLane = me.getBrutDistance(frontVehicleOnLane);
+        if (distanceToVehicleOnLane < parameter.getMaxGapBehindLeaderForOvertaking()) {
+
+            // estimation without approaching vehicle from opposite direction
+            double neededDistanceForManeuver = 1.2 * calcNeededDistance(me, distanceToVehicleOnLane, null);
+            LOG.debug("estimated distance={} including safety margin needed for overtaking maneuver of vehicle={}",
+                    neededDistanceForManeuver, me);
+
+            if (roadAheadIsSuitedForOvertaking(me, distanceToVehicleOnLane, roadSegment)
                     && overtakingLaneIsFreeInDrivingDirection(me, roadSegment)
-                    && noOvertakingManeuverFromPeer(me, roadSegment.getPeerRoadSegment())) {
+                    && noOvertakingManeuverFromPeer(me, roadSegment.getPeerRoadSegment(), neededDistanceForManeuver)) {
                 lcDecision = makeDecision(me, roadSegment);
             }
         }
@@ -92,46 +102,75 @@ public class OvertakingViaPeer {
         return lcDecision;
     }
 
-    /**
-     * Checks if the road is sufficiently homogeneous for considering an overtaking maneuver. The check is limited to
-     * {@code ROAD_MAX_LOOK_AHEAD_DISTANCE} and the next {@link RoadSegment}.
-     * 
-     * @param remainingDistanceOnRoadSegment
-     * @param roadSegment
-     * @return true if the road is sufficiently homogeneous for an overtaking maneuver
-     */
-    private static boolean roadIsSuitedForOvertaking(double remainingDistanceOnRoadSegment, RoadSegment roadSegment) {
-        if (Iterables.size(roadSegment.trafficLights()) > 0
-                || Iterables.size(roadSegment.getPeerRoadSegment().trafficLights()) > 0) {
+    private static boolean roadAheadIsSuitedForOvertaking(Vehicle me, double neededDistanceForManeuver,
+            RoadSegment roadSegment) {
+        assert me.roadSegmentId() == roadSegment.id();
+
+        if (!roadIsSuitedForOvertaking(roadSegment)) {
             return false;
         }
 
-        if (remainingDistanceOnRoadSegment < ROAD_MAX_LOOK_AHEAD_DISTANCE) {
-            if (roadSegment.sizeSinkRoadSegments() > 1 || roadSegment.getPeerRoadSegment().sizeSourceRoadSegments() > 1) {
+        RoadSegment nextSegment = roadSegment;
+        double accumulatedDistance = roadSegment.roadLength() - me.getFrontPosition();
+        while (accumulatedDistance < neededDistanceForManeuver) {
+            nextSegment = nextSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
+            if (nextSegment == null || !roadIsSuitedForOvertaking(nextSegment)) {
                 return false;
             }
-            RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
-            if (sinkRoadSegment == null) {
-                return false;
-            }
-            if (remainingDistanceOnRoadSegment + sinkRoadSegment.roadLength() < ROAD_MAX_LOOK_AHEAD_DISTANCE) {
-                return false;
-            }
-            if (roadSegment.laneCount() != sinkRoadSegment.laneCount()) {
-                return false;
-            }
-            if (Iterables.size(sinkRoadSegment.trafficLights()) > 0) {
-                return false;
-            }
+            accumulatedDistance += nextSegment.roadLength();
+        }
 
-            RoadSegment sourceRoadSegmentPeer = roadSegment.getPeerRoadSegment().sourceRoadSegment(
-                    Lanes.MOST_INNER_LANE);
-            if (roadSegment.getPeerRoadSegment().laneCount() != sourceRoadSegmentPeer.laneCount()) {
-                return false;
-            }
-            if (Iterables.size(sourceRoadSegmentPeer.trafficLights()) > 0) {
-                return false;
-            }
+        return true;
+    }
+
+    private static boolean roadIsSuitedForOvertaking(RoadSegment roadSegment) {
+        if (!segmentSuitedForOvertaking(roadSegment)) {
+            return false;
+        }
+        RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
+        if (roadSegment.laneCount() != sinkRoadSegment.laneCount()) {
+            return false;
+        }
+        if (!segmentSuitedForOvertaking(sinkRoadSegment)) {
+            return false;
+        }
+
+        // check peer only for network links and trafficlights
+        RoadSegment peer = roadSegment.getPeerRoadSegment();
+        if (!peerSegmentSuitedForOvertaking(peer)) {
+            return false;
+        }
+        RoadSegment sourceRoadSegmentPeer = peer.sourceRoadSegment(Lanes.MOST_INNER_LANE);
+        if (peer.laneCount() != sourceRoadSegmentPeer.laneCount()) {
+            return false;
+        }
+        if (!peerSegmentSuitedForOvertaking(sourceRoadSegmentPeer)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean segmentSuitedForOvertaking(RoadSegment roadSegment) {
+        if (roadSegment == null) {
+            return false;
+        }
+        if (roadSegment.roadObjects().hasRoadObjects() || !roadSegment.signalPoints().isEmpty()) {
+            return false;
+        }
+        if (roadSegment.getSizeSinkRoadSegments() > 1) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean peerSegmentSuitedForOvertaking(RoadSegment peer) {
+        if (Iterables.size(peer.trafficLights()) > 0) {
+            return false;
+        }
+        if (peer.getSizeSourceRoadSegments() > 1) {
+            return false;
         }
 
         return true;
@@ -162,7 +201,8 @@ public class OvertakingViaPeer {
         return true;
     }
 
-    private static boolean noOvertakingManeuverFromPeer(Vehicle me, RoadSegment peerRoadSegment) {
+    private static boolean noOvertakingManeuverFromPeer(Vehicle me, RoadSegment peerRoadSegment,
+            double neededDistanceForManeuver) {
         double mePositionOnPeer = peerRoadSegment.roadLength() - me.getRearPosition();
         Iterator<Vehicle> overtakingVehicleIterator = peerRoadSegment.overtakingVehicles();
         while (overtakingVehicleIterator.hasNext()) {
@@ -173,9 +213,9 @@ public class OvertakingViaPeer {
             }
         }
         // !! check for maneuvers on next roadSegment is a strong assumption in the evaluation of possible maneuvers
-        if (mePositionOnPeer < ROAD_MAX_LOOK_AHEAD_DISTANCE) {
+        if (mePositionOnPeer < Math.max(neededDistanceForManeuver, ROAD_MAX_LOOK_AHEAD_DISTANCE)) {
             // check also next peer roadSegment for overtaking vehicles
-            assert peerRoadSegment.sizeSourceRoadSegments() == 1;
+            assert peerRoadSegment.getSizeSourceRoadSegments() == 1;
             RoadSegment sourceRoadSegmentPeer = peerRoadSegment.sourceRoadSegment(Lanes.MOST_INNER_LANE);
             if (sourceRoadSegmentPeer.overtakingVehicles().hasNext()) {
                 return false;
@@ -221,19 +261,7 @@ public class OvertakingViaPeer {
                         .getDesiredSpeed()
                         && me.getBrutDistance(frontVehicleInLane) < parameter.getMaxGapBehindLeaderForOvertaking()
                         && spaceOnTargetLane > Math.max(parameter.getMinTargetGap(), 2 * me.getLength())) {
-
-                    double spaceToFrontVeh = brutDistanceToFrontVehicleInLane
-                            + me.getLongitudinalModel().getMinimumGap();
-                    // free model acceleration: large distance, dv=0
-                    double accConst = me.getLongitudinalModel().calcAccSimple(INFINITE_GAP, me.getSpeed(), 0);
-                    accConst *= parameter.getReductionFactorFreeAcceleration();
-
-                    // time needed when accelerating constantly
-                    double timeManeuver = Math.sqrt(2 * spaceToFrontVeh / accConst);
-                    double safetyMargin = calcSafetyMargin(me.getSpeed(), me.getLongitudinalModel());
-                    double speedVehicleOnPeer = vehicleOnPeer == null ? 0 : vehicleOnPeer.getSpeed();
-                    double neededDist = timeManeuver * (me.getSpeed() + speedVehicleOnPeer) + spaceToFrontVeh
-                            + safetyMargin;
+                    double neededDist = calcNeededDistance(me, brutDistanceToFrontVehicleInLane, vehicleOnPeer);
                     if (distanceToVehicleOnPeer > neededDist) {
                         decision = LaneChangeDecision.OVERTAKE_VIA_PEER;
                     }
@@ -242,6 +270,18 @@ public class OvertakingViaPeer {
         }
         LOG.debug("return decision={}", decision);
         return decision;
+    }
+
+    private double calcNeededDistance(Vehicle me, double brutDistanceToFrontVehicleInLane, Vehicle vehicleOnPeer) {
+        double spaceToFrontVeh = brutDistanceToFrontVehicleInLane + me.getLongitudinalModel().getMinimumGap();
+        // free model acceleration: large distance, dv=0
+        double accConst = me.getLongitudinalModel().calcAccSimple(INFINITE_GAP, me.getSpeed(), 0);
+        accConst *= parameter.getReductionFactorFreeAcceleration();
+        // time needed when accelerating constantly
+        double timeManeuver = Math.sqrt(2 * spaceToFrontVeh / accConst);
+        double safetyMargin = calcSafetyMargin(me.getSpeed(), me.getLongitudinalModel());
+        double speedVehicleOnPeer = vehicleOnPeer == null ? 0 : vehicleOnPeer.getSpeed();
+        return timeManeuver * (me.getSpeed() + speedVehicleOnPeer) + spaceToFrontVeh + safetyMargin;
     }
 
     private double calcSafetyMargin(double speed, LongitudinalModelBase longModel) {

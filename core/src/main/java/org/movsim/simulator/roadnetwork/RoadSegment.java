@@ -450,15 +450,16 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public final boolean hasUpstreamConnection() {
-        return sizeSourceRoadSegments() > 0;
+        return getSizeSourceRoadSegments() > 0;
     }
 
     public final boolean hasDownstreamConnection() {
-        return sizeSinkRoadSegments() > 0;
+        return getSizeSinkRoadSegments() > 0;
     }
 
-    public final int sizeSinkRoadSegments() {
+    public final int getSizeSinkRoadSegments() {
         if (sizeSinkRoadSegments < 0) {
+            // lazy init
             Set<RoadSegment> sinkRoadSegments = new HashSet<>();
             for (LaneSegment laneSegment : laneSegments) {
                 if (laneSegment.hasSinkLaneSegment()) {
@@ -470,8 +471,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return sizeSinkRoadSegments;
     }
 
-    public final int sizeSourceRoadSegments() {
+    public final int getSizeSourceRoadSegments() {
         if (sizeSourceRoadSegments < 0) {
+            // lazy init
             Set<RoadSegment> sourceRoadSegments = new HashSet<>();
             for (LaneSegment laneSegment : laneSegments) {
                 if (laneSegment.hasSourceLaneSegment()) {
