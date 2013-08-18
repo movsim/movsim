@@ -136,7 +136,8 @@ public class TrafficLightApproaching {
         Iterator<TrafficLight> iterator = trafficLights.iterator();
         while (iterator.hasNext()) {
             trafficLight = iterator.next();
-            if (trafficLight.status() != TrafficLightStatus.GREEN) {
+            if (trafficLight.status() != TrafficLightStatus.GREEN
+                    && trafficLight.status() != TrafficLightStatus.RED_GREEN) {
                 return trafficLight;
             }
         }
