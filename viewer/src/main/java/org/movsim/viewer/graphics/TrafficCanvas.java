@@ -764,11 +764,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final double radius = 0.8 * roadMapping.laneWidth();
 
         for (TrafficLight trafficLight : roadSegment.trafficLights()) {
-            for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
-                if (trafficLight.isValidLane(lane)) {
-                    drawTrafficLightBar(g, roadMapping, trafficLight, lane);
-                }
-            }
+            drawTrafficLightBar(g, roadMapping, trafficLight);
             // Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
             // TODO draw switch button instead ....
             // switch (trafficLight.lightCount()) {
@@ -785,14 +781,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    private static void drawTrafficLightBar(Graphics2D g, RoadMapping roadMapping, TrafficLight trafficLight, int lane) {
+    private static void drawTrafficLightBar(Graphics2D g, RoadMapping roadMapping, TrafficLight trafficLight) {
         final double height = 3;
-        final double width = roadMapping.laneWidth();
-        double offset = (lane - 1) * roadMapping.laneWidth();
+        final double width = trafficLight.roadSegment().laneCount() * roadMapping.laneWidth();
+        double offset = 0;
         if (trafficLight.roadSegment().directionType() == RoadSegmentDirection.BACKWARD) {
-            offset += roadMapping.laneWidth();
-            offset *= -1;
-
+            offset = -width;
         }
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.x, posTheta.y, height, width);

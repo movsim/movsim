@@ -24,7 +24,14 @@
                 <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
                 <VehicleType label="IDM2" fraction="0.3" relative_v0_randomization="0.2" />
             </TrafficComposition>
-            <Road id="1">
+            <Road id="4+">
+                <InitialConditions />
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+ <Road id="4-">
                 <InitialConditions />
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="500" />
@@ -64,22 +71,21 @@
                 </Phase>
             </ControllerGroup>
             
-            <ControllerGroup id="lanewise"  >
+            <ControllerGroup id="road4+"  >
                 <Phase duration="35">
-                    <TrafficLightState type="first" status="Green" />
-                    <TrafficLightState type="second" status="Red" />
-                </Phase>
-                <Phase duration="3">
-                    <TrafficLightState type="first" status="GreenRed" /> 
-                    <!-- <TrafficLightState type="second" status="RedGreen" /> -->
-                </Phase>
-                <Phase duration="40">
                     <TrafficLightState type="first" status="Red" />
                     <TrafficLightState type="second" status="Green" />
                 </Phase>
                 <Phase duration="2">
+                    <TrafficLightState type="second" status="GreenRed" /> 
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState type="first" status="Green" />
+                    <TrafficLightState type="second" status="Red" />
+                </Phase>
+                <Phase duration="2">
                     <!-- <TrafficLightState type="first" status="RedGreen" /> -->
-                    <TrafficLightState type="second" status="GreenRed" />
+                    <TrafficLightState type="second" status="RedGreen" />
                 </Phase>
             </ControllerGroup>
             

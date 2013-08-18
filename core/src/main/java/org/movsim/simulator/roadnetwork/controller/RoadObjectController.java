@@ -26,12 +26,10 @@
 
 package org.movsim.simulator.roadnetwork.controller;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.movsim.simulator.roadnetwork.LaneSegment;
-import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -41,7 +39,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 /**
- * TODO
+ * todo
  * 
  * <br>
  * created: May 18, 2013<br>
@@ -57,8 +55,6 @@ public abstract class RoadObjectController implements RoadObject {
 
     protected final RoadSegment roadSegment;
 
-    private boolean laneValidity[];
-
     public RoadObjectController(RoadObjectType type, double position, RoadSegment roadSegment) {
         this.type = type;
         this.roadSegment = Preconditions.checkNotNull(roadSegment);
@@ -66,16 +62,6 @@ public abstract class RoadObjectController implements RoadObject {
                 "inconsistent input data: roadObject " + type + " at position=" + position
                         + " does not fit onto roadId=" + roadSegment.userId());
         this.position = position;
-        // default: traffic sign applies to all lanes
-        laneValidity = new boolean[roadSegment.laneCount()];
-        Arrays.fill(laneValidity, true);
-    }
-
-    public RoadObjectController(RoadObjectType type, double position, int lane, RoadSegment roadSegment) {
-        this(type, position, roadSegment);
-        // set only one lane valid
-        Arrays.fill(laneValidity, false);
-        setLaneValidity(lane, true);
     }
 
     @Override
@@ -96,20 +82,6 @@ public abstract class RoadObjectController implements RoadObject {
     @Override
     public RoadSegment roadSegment() {
         return roadSegment;
-    }
-
-    @Override
-    public boolean isValidLane(int lane) {
-        Preconditions.checkArgument(lane >= Lanes.MOST_INNER_LANE && lane <= laneValidity.length, "invalid lane="
-                + lane);
-        return laneValidity[lane - 1];
-    }
-
-    protected void setLaneValidity(int lane, boolean value) {
-        Preconditions.checkArgument(lane >= Lanes.MOST_INNER_LANE && lane <= laneValidity.length, "invalid lane="
-                + lane);
-        laneValidity[lane - 1] = value;
-
     }
 
     @Override

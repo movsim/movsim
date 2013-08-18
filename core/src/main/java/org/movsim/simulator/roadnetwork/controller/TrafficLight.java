@@ -32,12 +32,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.movsim.autogen.TrafficLightStatus;
-import org.movsim.network.autogen.opendrive.LaneValidity;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.simulator.roadnetwork.LaneSegment;
-import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.roadnetwork.regulator.Regulator;
@@ -73,6 +71,9 @@ public class TrafficLight extends RoadObjectController {
 
     public TrafficLight(Signal signal, Controller controller, RoadSegment roadSegment) {
         super(RoadObjectType.TRAFFICLIGHT, signal.getS(), roadSegment);
+        if (signal.isSetValidity()) {
+            throw new IllegalArgumentException("cannot use xodr validity information from signal-id=" + signal.getId());
+        }
         this.controller = Preconditions.checkNotNull(controller);
         this.signal = Preconditions.checkNotNull(signal);
         Preconditions.checkArgument(signal.isSetId(), "id not set");
@@ -80,21 +81,7 @@ public class TrafficLight extends RoadObjectController {
         Preconditions.checkArgument(signal.isSetS(), "signal.s not set");
         this.signalType = Preconditions.checkNotNull(checkTypesAndExtractSignalType());
         this.groupId = controller.getId();
-        setLaneValidity();
         signalPointEnd = new SignalPoint(position, roadSegment);
-    }
-
-    private void setLaneValidity() {
-        if (signal.isSetValidity()) {
-            for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
-                setLaneValidity(lane, false);
-            }
-            for (LaneValidity laneValidity : signal.getValidity()) {
-                for (int lane = Math.abs(laneValidity.getFromLane()); lane <= Math.abs(laneValidity.getToLane()); lane++) {
-                    setLaneValidity(lane, true);
-                }
-            }
-        }
     }
 
     private String checkTypesAndExtractSignalType() {
