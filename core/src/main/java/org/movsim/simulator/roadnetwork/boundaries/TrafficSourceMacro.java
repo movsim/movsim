@@ -167,7 +167,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
         final double speedDefault = inflowTimeSeries.getSpeed(time);
 
-        final double sFree = leader.getMidPosition() - leader.getLength();
+        final double sFree = leader.getRearPosition();
         final double xLast = leader.getMidPosition();
         final double vLast = leader.getSpeed();
         final double aLast = leader.getAcc();
@@ -184,7 +184,9 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         final double bEff = Math.max(0.1, bMax + aLast);
         final double vMaxKin = vLast + Math.sqrt(2 * sFree * bEff);
         final double vEnter = Math.min(Math.min(vEnterTest, vMaxEq), vMaxKin);
-
+        if (Double.isNaN(vEnter)) {
+            System.out.println(vEnter);
+        }
         addVehicle(laneSegment, testVehicle, xEnter, vEnter);
     }
 
