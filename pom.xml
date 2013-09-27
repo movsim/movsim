@@ -47,7 +47,7 @@
         </developer>
     </developers>
     <modules>
-		<module>xsd</module>
+        <module>xsd</module>
         <module>common</module>
         <module>consumption</module>
         <module>core</module>
@@ -67,9 +67,9 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.5.1</version>
                     <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -107,8 +107,8 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.3.2</version>
                     <configuration>
-                      <goals>deploy</goals>
-                      <autoversionsubmodules>true</autoversionsubmodules>
+                        <goals>deploy</goals>
+                        <autoversionsubmodules>true</autoversionsubmodules>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -144,16 +144,16 @@
             <version>1.2.16</version>
             <type>jar</type>
         </dependency>
-          <dependency>
+        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.1</version>
         </dependency>
         <dependency>
-        <groupId>com.google.guava</groupId>
-	  <artifactId>guava</artifactId>
-	  <version>12.0-rc1</version>
-    </dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>12.0</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -168,6 +168,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <!-- Optional directory to put findbugs xdoc xml report -->
+                    <xmlOutputDirectory>target/site</xmlOutputDirectory>
+                </configuration>
             </plugin>
             <!-- Java Documentation -->
             <plugin>
