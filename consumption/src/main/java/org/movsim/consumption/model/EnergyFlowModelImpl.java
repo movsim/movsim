@@ -159,7 +159,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
      * @return fuelFlow and gear
      */
     @Override
-    public double[] getMinFuelFlow(double v, double acc, double grade, boolean withJante) {
+    public FuelAndGear getMinFuelFlow(double v, double acc, double grade, boolean withJante) {
         int gear = 1;
         double fuelFlow = FUELFLOW_ERROR;
         for (int testGearIndex = engineRotationModel.getMaxGearIndex(); testGearIndex >= 0; testGearIndex--) {
@@ -169,8 +169,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
                 fuelFlow = fuelFlowGear;
             }
         }
-        final double[] retValue = { fuelFlow, gear };
-        return retValue;
+        return new FuelAndGear(fuelFlow, gear);
     }
 
     /**
@@ -182,7 +181,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
      */
     @Override
     public double getFuelFlowInLiterPerS(double v, double acc) {
-        return 1000 * getMinFuelFlow(v, acc, 0, true)[0]; // convert from m^3/s --> liter/s
+        return getMinFuelFlow(v, acc, 0, true).getFuelFlowInLiterPerSecond();
     }
 
     /**
@@ -195,7 +194,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
      */
     @Override
     public double getFuelFlowInLiterPerS(double v, double acc, double grade) {
-        return 1000 * getMinFuelFlow(v, acc, grade, true)[0]; // convert from m^3/s --> liter/s
+        return getMinFuelFlow(v, acc, grade, true).getFuelFlowInLiterPerSecond();
     }
 
     // TODO draw out

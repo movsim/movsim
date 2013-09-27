@@ -2,6 +2,7 @@ package org.movsim.consumption.model;
 
 import java.util.Locale;
 
+import org.movsim.consumption.model.EnergyFlowModel.FuelAndGear;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
 
@@ -45,10 +46,10 @@ class FileFuelConsumptionModel extends FileOutputBase {
         while (v <= vMax) {
             final double accFreeWheeling = instPowerModel.getFreeWheelingDeceleration(v);
             final double acc = 0.0;
-            final double[] fuelFlow = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
-            final int optGear = (int) fuelFlow[1]; // !! not a gearIndex
-            final double c100 = fuelConsumption.getInstConsumption100km(v, 0, optGear, true);
-            writer.printf(outputFormatZeroAcceleration, v, accFreeWheeling, 3.6e6 * fuelFlow[0], optGear, c100);
+            final FuelAndGear result = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
+            final double c100 = fuelConsumption.getInstConsumption100km(v, 0, result.getGear(), true);
+            writer.printf(outputFormatZeroAcceleration, v, accFreeWheeling, 3.6e6 * result.getFuelFlow(),
+                    result.getGear(), c100);
             writer.flush();
             v += dv;
         }
@@ -81,9 +82,9 @@ class FileFuelConsumptionModel extends FileOutputBase {
                 int gear = gearTest;
                 if (determineOptimalGear) {
                     // v=const => min(consump)=min(fuelFlow)
-                    final double[] res = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
-                    fuelFlow = res[0];
-                    gear = (int) res[1];
+                    final FuelAndGear result = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
+                    fuelFlow = result.getFuelFlow();
+                    gear = result.getGear();
                 } else {
                     final int gearIndex = gear - 1;
                     fuelFlow = fuelConsumption.getFuelFlow(v, acc, 0, gearIndex, true);
