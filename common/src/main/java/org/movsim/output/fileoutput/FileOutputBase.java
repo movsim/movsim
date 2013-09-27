@@ -28,15 +28,25 @@ package org.movsim.output.fileoutput;
 import java.io.File;
 import java.io.PrintWriter;
 
+import org.movsim.shutdown.ShutdownHooks;
+import org.movsim.shutdown.SimulationShutDown;
 import org.movsim.utilities.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class FileOutputBase {
+import com.google.common.base.Preconditions;
+
+public class FileOutputBase implements SimulationShutDown {
+
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(FileOutputBase.class);
 
     public static final String COMMENT_CHAR = "#";
     public static final String SEPARATOR_CHAR = ",";
 
     protected final String path;
     protected final String baseFilename;
+    protected String filename;
     protected PrintWriter writer;
 
     /**
@@ -48,12 +58,26 @@ public class FileOutputBase {
     }
 
     public PrintWriter createWriter(String extension) {
-        final String filename = path + File.separator + baseFilename + extension;
+        filename = getFilename(extension);
+        Preconditions.checkArgument(filename.length() > 0);
+        ShutdownHooks.INSTANCE.addCallback(this);
         return FileUtils.getWriter(filename);
+    }
+
+    private String getFilename(String extension) {
+        return path + File.separator + baseFilename + extension;
     }
 
     public void write(String format, Object... args) {
         writer.printf(format, args);
         writer.flush();
+    }
+
+    @Override
+    public void onShutDown() {
+        if (writer != null) {
+            LOG.debug("closing writer for filename={}", filename);
+            writer.close();
+        }
     }
 }

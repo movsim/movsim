@@ -25,6 +25,8 @@
  */
 package org.movsim.simulator;
 
+import org.movsim.shutdown.ShutdownHooks;
+
 /**
  * <p>
  * Class to encapsulate a simulation thread. Includes the necessary synchronization and callbacks to coordinate with an application UI
@@ -275,6 +277,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
                 if (completionCallback != null) {
                     completionCallback.simulationComplete(simulationTime);
                 }
+                ShutdownHooks.INSTANCE.onShutDown();
                 break;
             }
             try {
@@ -290,11 +293,13 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
                 try {
                     simulation.timeStep(dt, simulationTime, iterationCount);
                 } catch (final Exception e) {
+                    ShutdownHooks.INSTANCE.onShutDown();
                     if (handleExceptionCallback != null) {
                         handleExceptionCallback.handleException(e);
                     }
                     e.printStackTrace();
                 }
+
                 for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
                     updateStatusCallback.updateStatus(simulationTime);
                 }

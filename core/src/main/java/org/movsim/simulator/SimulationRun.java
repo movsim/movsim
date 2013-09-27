@@ -25,10 +25,15 @@
  */
 package org.movsim.simulator;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.movsim.shutdown.ShutdownHooks;
+
+import com.google.common.base.Preconditions;
+
 public class SimulationRun {
+
     public interface CompletionCallback {
         /**
          * Callback to inform the application that the simulation has run to completion.
@@ -54,7 +59,7 @@ public class SimulationRun {
     protected double simulationTime; // Simulation time, seconds (reset to 0.0 in each run)
     protected long iterationCount;
     protected long totalSimulationTime;
-    protected List<UpdateStatusCallback> updateStatusCallbacks;
+    protected final List<UpdateStatusCallback> updateStatusCallbacks = new ArrayList<>();
     protected CompletionCallback completionCallback;
     // simulation is an object that implements the SimulationTimeStep interface.
     protected final SimulationTimeStep simulation;
@@ -68,7 +73,7 @@ public class SimulationRun {
     public SimulationRun(SimulationTimeStep simulation) {
         assert simulation != null;
         this.simulation = simulation;
-        updateStatusCallbacks = new LinkedList<>();
+        initShutdownHook();
     }
 
     /**
@@ -168,7 +173,7 @@ public class SimulationRun {
      * @param updateStatusCallback
      */
     public void addUpdateStatusCallback(UpdateStatusCallback updateStatusCallback) {
-        updateStatusCallbacks.add(updateStatusCallback);
+        updateStatusCallbacks.add(Preconditions.checkNotNull(updateStatusCallback));
     }
 
     /**
@@ -199,10 +204,27 @@ public class SimulationRun {
             }
             simulationTime += dt;
             ++iterationCount;
+
+            // TODO testwise
+            // if (iterationCount == 1000) {
+            // throw new RuntimeException("Dummy Exception to cause JVM to exit");
+            // }
+
         }
         totalSimulationTime = System.currentTimeMillis() - timeBeforeSim_ms;
         if (completionCallback != null) {
             completionCallback.simulationComplete(simulationTime);
         }
+        ShutdownHooks.INSTANCE.onShutDown();
+    }
+
+    private void initShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                System.out.println("Unexpected end of simulator: perform ShutdownHooks");
+                ShutdownHooks.INSTANCE.onShutDown();
+            }
+        });
     }
 }
