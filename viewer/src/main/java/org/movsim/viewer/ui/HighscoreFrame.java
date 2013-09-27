@@ -32,12 +32,12 @@ import org.slf4j.LoggerFactory;
 
 // TODO this class needs a throughout refactoring ...
 // FIXME: ramp_metering.xprj throws assertion error:
-//Exception in thread "main" java.lang.AssertionError
-//at org.movsim.simulator.SimulationRun.setCompletionCallback(SimulationRun.java:180)
-//at org.movsim.viewer.ui.HighscoreFrame.<init>(HighscoreFrame.java:65)
-//at org.movsim.viewer.ui.HighscoreFrame.initialize(HighscoreFrame.java:70)
-//at org.movsim.viewer.ui.AppFrame.<init>(AppFrame.java:103)
-//at org.movsim.viewer.App.main(App.java:88)
+// Exception in thread "main" java.lang.AssertionError
+// at org.movsim.simulator.SimulationRun.setCompletionCallback(SimulationRun.java:180)
+// at org.movsim.viewer.ui.HighscoreFrame.<init>(HighscoreFrame.java:65)
+// at org.movsim.viewer.ui.HighscoreFrame.initialize(HighscoreFrame.java:70)
+// at org.movsim.viewer.ui.AppFrame.<init>(AppFrame.java:103)
+// at org.movsim.viewer.App.main(App.java:88)
 public class HighscoreFrame implements SimulationRun.CompletionCallback, SimulationRunnable.UpdateStatusCallback {
 
     final static Logger logger = LoggerFactory.getLogger(HighscoreFrame.class);
@@ -83,12 +83,12 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
             @Override
             public void run() {
                 String highscoreFilename = ProjectMetaData.getInstance().getProjectName() + "_highscore.txt";
-                TreeSet<HighscoreEntry> sortedResults = new TreeSet<HighscoreEntry>(new Comparator<HighscoreEntry>() {
+                TreeSet<HighscoreEntry> sortedResults = new TreeSet<>(new Comparator<HighscoreEntry>() {
                     @Override
                     public int compare(HighscoreEntry o1, HighscoreEntry o2) {
                         Double d1 = new Double(o1.getQuantity(Quantity.totalSimulationTime));
                         Double d2 = new Double(o2.getQuantity(Quantity.totalSimulationTime));
-                        return d1.compareTo(d2); 
+                        return d1.compareTo(d2);
                     }
                 });
                 sortedResults.addAll(readHighscores(highscoreFilename));
@@ -145,11 +145,11 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
      * @return the high score table
      */
     private List<HighscoreEntry> readHighscores(String filename) {
-        List<HighscoreEntry> highscores = new LinkedList<HighscoreEntry>();
+        List<HighscoreEntry> highscores = new LinkedList<>();
         BufferedReader hsreader = FileUtils.getReader(filename);
-        if(hsreader==null){
+        if (hsreader == null) {
             // no file available
-            return new LinkedList<HighscoreEntry>(); 
+            return new LinkedList<>();
         }
         String line;
         try {
@@ -158,7 +158,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
             }
         } catch (IOException e) {
             logger.error("error reading file {} - starting new high score.", filename);
-            return new LinkedList<HighscoreEntry>();
+            return new LinkedList<>();
         }
         return highscores;
     }
@@ -168,7 +168,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
      */
     public void displayHighscores(Collection<HighscoreEntry> highscores) {
         // TODO combine with Quantity.values
-        
+
         String[] columnNames = getTableHeader();
         String[][] table = new String[MAX_RANK_FOR_HIGHSCORE][columnNames.length];
         int row = 0;
@@ -177,7 +177,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
                 break;
             }
             for (Quantity quantity : Quantity.values()) {
-                table[row][0] = String.format("%d", row+1);
+                table[row][0] = String.format("%d", row + 1);
                 table[row][1] = String.format("%s", entry.getPlayerName());
                 table[row][2 + quantity.ordinal()] = String.format("%.1f", entry.getQuantity(quantity));
             }
@@ -194,12 +194,12 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
         f.setVisible(true);
     }
 
-    private String[] getTableHeader() {
-        String[] columnsHeaders = new String[Quantity.values().length+2];
+    private static String[] getTableHeader() {
+        String[] columnsHeaders = new String[Quantity.values().length + 2];
         int col = 0;
         columnsHeaders[col++] = "Rank";
         columnsHeaders[col++] = "Name";
-        for(Quantity quantity : Quantity.values()){
+        for (Quantity quantity : Quantity.values()) {
             columnsHeaders[col++] = quantity.getLabel();
         }
         return columnsHeaders;
