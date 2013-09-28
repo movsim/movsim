@@ -48,9 +48,13 @@ import org.xml.sax.InputSource;
 /**
  * The Class FileUtils.
  */
-public class FileUtils {
+public final class FileUtils {
 
     private static Logger LOG = LoggerFactory.getLogger(FileUtils.class);
+
+    private FileUtils() {
+        throw new IllegalStateException("do not instanciate");
+    }
 
     /**
      * Searches a file first in given location {@code filename} and second in path of the inputfile.
