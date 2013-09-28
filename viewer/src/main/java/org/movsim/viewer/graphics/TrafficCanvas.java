@@ -96,8 +96,9 @@ import org.xml.sax.SAXException;
 public class TrafficCanvas extends SimulationCanvasBase implements SimulationRunnable.UpdateDrawingCallback,
         SimulationRunnable.HandleExceptionCallback {
 
+    private static final long serialVersionUID = 7637533802145001440L;
+
     private static final Logger LOG = LoggerFactory.getLogger(TrafficCanvas.class);
-    static final long serialVersionUID = 1L;
 
     protected final Simulator simulator;
     protected final RoadNetwork roadNetwork;
