@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -58,7 +58,7 @@ import org.movsim.simulator.SimulationRunnable;
  */
 public abstract class SimulationCanvasBase extends Canvas {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3351170249194920665L;
 
     private static final double FORCE_REPAINT_BACKGROUND_INTERVAL = 60.0; // seconds;
 
@@ -128,12 +128,16 @@ public abstract class SimulationCanvasBase extends Canvas {
         simulationRunnable.reset();
     }
 
-    public abstract void resetScaleAndOffset(); 
+    public abstract void resetScaleAndOffset();
+
+    private static final AffineTransform FLIP = new AffineTransform(1, 0, 0, -1, 0, 0);
 
     protected void setTransform() {
         transform.setToIdentity();
         transform.scale(scale, scale);
         transform.translate(xOffset, yOffset);
+        // HACK FOR MIRRORING ALONG Y_AXIS
+        // transform.preConcatenate(FLIP);
         // transform is applied as below (ie scale then offset):
         // xScreen = x * scale + xOffset;
     }
@@ -208,20 +212,20 @@ public abstract class SimulationCanvasBase extends Canvas {
             clearBackground(bufferGraphics);
         }
         bufferGraphics.setTransform(transform);
-        
+
         if (backgroundChanged) {
             // if the background has been changed, then its content needs to be repainted
             drawBackground(bufferGraphics);
             backgroundChanged = false;
         }
-        
+
         // update background (for outflow) every e.g. 60 seconds of simulation
         measuredTime += simulationRunnable.timeStep();
         if (measuredTime > FORCE_REPAINT_BACKGROUND_INTERVAL) {
             forceRepaintBackground();
             measuredTime = 0;
         }
-        
+
         drawForegroundAndBlit(g);
     }
 
