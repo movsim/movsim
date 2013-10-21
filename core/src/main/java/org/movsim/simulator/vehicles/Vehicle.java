@@ -38,6 +38,7 @@ import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
@@ -189,7 +190,11 @@ public class Vehicle {
     private EnergyFlowModel fuelModel;
     /** can be null */
     private Route route;
+
     private int routeIndex;
+
+    /** can be null */
+    private Routing routing;
 
     private boolean isBrakeLightOn;
 
@@ -902,11 +907,21 @@ public class Vehicle {
     }
 
     private void considerRouteAlternatives(RoadSegment roadSegment) {
+	if (routing == null) {
+	    return;
+	}
+
 	// quick hack: check for specific roadSegment
+	if (roadSegment.id() != 2) {
+	    return;
+	}
 	
 	// evaluate alternatives (A1 and A2), access routes
 	double beta=1;
+	// TODO quick hack:
 	List<Route> alternatives = new ArrayList<>();
+	alternatives.add(routing.get("A1"));
+	alternatives.add(routing.get("A2"));
 	exitRoadSegmentId = DecisionModel.calcProbability(beta, roadSegment, alternatives);
 	
     }
@@ -1231,6 +1246,10 @@ public class Vehicle {
 
     public String getRouteName() {
         return route != null ? route.getName() : "noRoute";
+    }
+
+    public void setRouting(Routing routing) {
+	this.routing = Preconditions.checkNotNull(routing);
     }
 
     public InhomogeneityAdaption inhomogeneityAdaptation() {

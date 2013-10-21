@@ -45,7 +45,7 @@ public final class VehicleFactory {
         }
     }
 
-    // set route explicitely, e.g. in microscopic initial or boundary conditions
+    // set route explicitly, e.g. in microscopic initial or boundary conditions
     public Vehicle create(VehicleType vehicleType, @Nullable Route route) {
         VehiclePrototype prototype = getPrototype(vehicleType.getVehiclePrototypeLabel());
         LongitudinalModelBase accelerationModel = prototype.createAccelerationModel();
@@ -57,6 +57,7 @@ public final class VehicleFactory {
                 laneChangeModel);
 
         vehicle.setRoute(route);
+	vehicle.setRouting(routing);
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());
         vehicle.setFuelModel(prototype.getEnergyFlowModel());
