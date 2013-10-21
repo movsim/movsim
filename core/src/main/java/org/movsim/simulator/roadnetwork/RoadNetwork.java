@@ -239,14 +239,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         this.isWithCrashExit = isWithCrashExit;
     }
 
-    public void setHasVariableMessageSign(boolean hasVariableMessageSign) {
-        this.hasVariableMessageSign = hasVariableMessageSign;
-    }
-
-    public boolean hasVariableMessageSign() {
-        return hasVariableMessageSign;
-    }
-
     /**
      * Returns the number of vehicles on this road network.
      * 
