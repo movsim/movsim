@@ -25,6 +25,9 @@
  */
 package org.movsim.simulator.vehicles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import org.movsim.autogen.VehiclePrototypeConfiguration;
@@ -869,6 +872,10 @@ public class Vehicle {
     }
 
     public boolean considerLaneChange(double dt, RoadSegment roadSegment) {
+
+	// TODO
+	considerRouteAlternatives(roadSegment);
+
         if (roadSegment.laneCount() <= 1) {
             // no lane-changing decision necessary for one-lane road. already checked before
             return false;
@@ -892,6 +899,16 @@ public class Vehicle {
             return true;
         }
         return false;
+    }
+
+    private void considerRouteAlternatives(RoadSegment roadSegment) {
+	// quick hack: check for specific roadSegment
+	
+	// evaluate alternatives (A1 and A2), access routes
+	double beta=1;
+	List<Route> alternatives = new ArrayList<>();
+	exitRoadSegmentId = DecisionModel.calcProbability(beta, roadSegment, alternatives);
+	
     }
 
     public int getTargetLane() {
