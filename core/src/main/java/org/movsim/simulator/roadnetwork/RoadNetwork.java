@@ -48,7 +48,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     private String name;
 
     private boolean isWithCrashExit;
-    private boolean hasVariableMessageSign;
 
     /**
      * Sets the name of the road network.
@@ -105,7 +104,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      */
     public void clear() {
         name = null;
-        hasVariableMessageSign = false;
         // LaneChangeModel.resetCount();
         // LongitudinalDriverModel.resetNextId();
         RoadSegment.resetNextId();
