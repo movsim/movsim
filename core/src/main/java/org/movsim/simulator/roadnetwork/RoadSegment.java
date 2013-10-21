@@ -605,7 +605,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         int vehCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             for (Vehicle veh : laneSegment) {
-                if (veh.type() == Vehicle.Type.OBSTACLE) {
+		if (veh.type() == Vehicle.Type.OBSTACLE) {
                     continue;
                 }
                 sumSpeed += veh.getSpeed();
@@ -616,13 +616,16 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     /**
-     * Returns the instantaneous travel time defined by the road element length and current mean speed of all vehicles.
-     * An adhoc free speed is assumed in case of an empty road.
+     * Returns the instantaneous travel time defined by the road element length
+     * and current mean speed of all vehicles. An adhoc free speed is assumed in
+     * case of an empty road. An adhoc minimum speed is assumed in case of a
+     * standstill to avoid a diverging traveltime.
      * 
-     * @return instantantaneous travel time with adhoc assumed travel time if road is empty
+     * @return instantantaneous travel time with assumed travel time if road is
+     *         empty and with assumed maximum travel time in standstill
      */
     public double instantaneousTravelTime() {
-        return roadLength / meanSpeed();
+	return roadLength / Math.max(meanSpeed(), MovsimConstants.MIN_POSITIVE_SPEED);
     }
 
     /**

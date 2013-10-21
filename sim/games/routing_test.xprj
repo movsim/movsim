@@ -35,7 +35,7 @@
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
     <Scenario network_filename="routing.xodr">
-        <Simulation timestep="0.2" seed="42" crash_exit="false">
+        <Simulation timestep="0.2" duration="900" seed="42" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
                 <VehicleType label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
@@ -75,8 +75,8 @@
             </Route>
         </Routes>
         <OutputConfiguration>
-            <TravelTimes route="A1" dt="0" tauEMA="40" />
-            <TravelTimes route="A2" dt="0" />
+            <TravelTimes route="A1" dt="5" tauEMA="40" />
+            <TravelTimes route="A2" dt="5" />
         </OutputConfiguration>
     </Scenario>
 </Movsim>
