@@ -2,24 +2,22 @@
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <Movsim>
     <VehiclePrototypes>
-        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="40" >
+        <VehiclePrototypeConfiguration label="Equipped" length="6" maximum_deceleration="40" >
             <AccelerationModelType>
                 <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="true" crit_speed_eur="20">
                 <ModelParameterMOBIL safe_deceleration="20.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
             </LaneChangeModelType>
-            <!--
             <DecisionModel>
 				<Alternatives roadSegment="3" uncertainty="0.5" >
 					<Alternative route="A1">
 					<Alternative route="A2">
 				</Alternatives>
             </DecisionModel>
-            -->
         </VehiclePrototypeConfiguration>
         <!-- trucks -->
-        <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="40" >
+        <VehiclePrototypeConfiguration label="NonEquipped" length="10" maximum_deceleration="40" >
             <AccelerationModelType>
                 <ModelParameterACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
             </AccelerationModelType>
@@ -37,14 +35,10 @@
     <Scenario network_filename="routing.xodr">
         <Simulation timestep="0.2" duration="900" seed="42" crash_exit="false">
             <TrafficComposition>
-                <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
-                <VehicleType label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
+                <VehicleType label="Equipped" fraction="0.7" relative_v0_randomization="0.2" />
+                <VehicleType label="NonEquipped" fraction="0.3" relative_v0_randomization="0.2" />
             </TrafficComposition>
             <Road id="1">
-                <TrafficComposition>
-                    <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
-                    <VehicleType label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
-                </TrafficComposition>
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="0" v="20" />
                     <Inflow t="60" q_per_hour="1800" v="20" />

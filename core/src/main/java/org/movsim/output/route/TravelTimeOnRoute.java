@@ -69,7 +69,10 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
 
         instantaneousTravelTime = RoadNetwork.instantaneousTravelTime(route);
 
-        totalTravelTime += numberOfVehicles * instantaneousTravelTime;
+        // TODO check quantity
+        // totalTravelTime += numberOfVehicles * instantaneousTravelTime;
+        // totalTravelTime += instantaneousTravelTime;
+        totalTravelTime += dt * numberOfVehicles;
 
         meanSpeed = route.getLength() / instantaneousTravelTime;
 

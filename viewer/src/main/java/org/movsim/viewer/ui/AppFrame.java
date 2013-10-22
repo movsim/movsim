@@ -39,11 +39,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.movsim.autogen.Movsim;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
 import org.movsim.viewer.App;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.SwingHelper;
+import org.movsim.xml.MovsimInputLoader;
 
 @SuppressWarnings("synthetic-access")
 public class AppFrame extends JFrame {
@@ -58,7 +60,8 @@ public class AppFrame extends JFrame {
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
 
-        final Simulator simulator = new Simulator();
+	Movsim inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
+	final Simulator simulator = new Simulator(inputData);
         initLookAndFeel();
 
         final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);

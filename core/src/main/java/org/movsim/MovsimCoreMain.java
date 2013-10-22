@@ -30,11 +30,13 @@ import java.util.Locale;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.movsim.autogen.Movsim;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.logging.LogFileAppender;
 import org.movsim.logging.Logger;
 import org.movsim.simulator.Simulator;
+import org.movsim.xml.MovsimInputLoader;
 import org.xml.sax.SAXException;
 
 /**
@@ -56,23 +58,38 @@ public class MovsimCoreMain {
      */
     public static void main(String[] args) throws JAXBException, SAXException {
 
-        Locale.setDefault(Locale.US);
+	Locale.setDefault(Locale.US);
 
-        // final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        // parse the command line, putting the results into projectMetaData
-        Logger.initializeLogger();
+	// final ProjectMetaData projectMetaData =
+	// ProjectMetaData.getInstance();
+	// parse the command line, putting the results into projectMetaData
+	Logger.initializeLogger();
 
-        MovsimCommandLine.parse(args);
+	MovsimCommandLine.parse(args);
 
-        if (!ProjectMetaData.getInstance().hasProjectName()) {
-            System.err.println("no xml simulation configuration file provided.");
-            System.exit(-1);
-        }
+	ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+	if (!projectMetaData.hasProjectName()) {
+	    System.err.println("no xml simulation configuration file provided.");
+	    System.exit(-1);
+	}
 
-        LogFileAppender.initialize(ProjectMetaData.getInstance());
+	LogFileAppender.initialize(projectMetaData);
 
-        final Simulator simulator = new Simulator();
-        simulator.initialize();
-        simulator.runToCompletion();
+	Movsim inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
+
+	if (projectMetaData.isScanMode()) {
+	    System.out.println("scanning mode");
+	    SimulationScan.invokeSimulationScan(inputData);
+	} else {
+	    invokeSingleSimulation(inputData);
+	}
     }
+
+    public static Simulator invokeSingleSimulation(Movsim inputData) throws JAXBException, SAXException {
+	Simulator simulator = new Simulator(inputData);
+	simulator.initialize();
+	simulator.runToCompletion();
+	return simulator;
+    }
+
 }

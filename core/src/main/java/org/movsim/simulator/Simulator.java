@@ -75,7 +75,6 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleFactory;
 import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Units;
-import org.movsim.xml.MovsimInputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -91,7 +90,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private final ProjectMetaData projectMetaData;
     private String projectName;
-    private Movsim inputData;
+
+    private final Movsim inputData;
 
     private VehicleFactory vehicleFactory;
     private TrafficCompositionGenerator defaultTrafficComposition;
@@ -108,11 +108,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * Constructor.
      * 
+     * @param inputData
+     * 
      * @throws SAXException
      * @throws JAXBException
      */
-    public Simulator() {
+    public Simulator(Movsim inputData) {
         this.projectMetaData = ProjectMetaData.getInstance();
+	this.inputData = Preconditions.checkNotNull(inputData);
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);
@@ -122,11 +125,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011-2013)");
 
         projectName = projectMetaData.getProjectName();
-        // TODO temporary handling of Variable Message Sign until added to XML
-        roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
-
-        inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
-
         timeOffsetMillis = 0;
         if (inputData.getScenario().getSimulation().isSetTimeOffset()) {
             DateTime dateTime = LocalDateTime.parse(inputData.getScenario().getSimulation().getTimeOffset(),

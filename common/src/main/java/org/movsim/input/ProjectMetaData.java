@@ -62,6 +62,8 @@ public final class ProjectMetaData {
     private boolean instantaneousFileOutput = true;
     private boolean writeDotFile = false;
 
+    private boolean scanMode = false;
+
     private long timeOffsetMillis = 0;
 
     /**
@@ -329,5 +331,13 @@ public final class ProjectMetaData {
 
     public boolean isWriteDotFile() {
         return writeDotFile;
+    }
+
+    public void setScanMode(boolean scanMode) {
+	this.scanMode = scanMode;
+    }
+
+    public boolean isScanMode() {
+	return scanMode;
     }
 }

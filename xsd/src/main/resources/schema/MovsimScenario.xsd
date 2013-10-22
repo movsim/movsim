@@ -164,6 +164,7 @@
                 <xs:element ref="LaneChangeModelType" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="MemoryParameter" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="NoiseParameter" minOccurs="0" maxOccurs="1" />
+                <xs:element name="DecisionModel" type="DecisionModelType" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="label" type="xs:string" use="required" />
             <xs:attribute name="length" type="nonNegativeDouble" use="required" />
@@ -442,6 +443,22 @@
             <xs:attribute name="fluct_strength" type="nonNegativeDouble" use="required" />
         </xs:complexType>
     </xs:element>
+    <!-- dynamic routing decision modeling -->
+    <xs:complexType name="DecisionModelType">
+        <xs:sequence>
+            <xs:element name="Alternatives" type="AlternativesType" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="roadSegment" type="xs:string" />
+        <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
+    </xs:complexType>
+    <xs:complexType name="AlternativesType">
+        <xs:sequence>
+            <xs:element name="Alternative" type="AlternativeType" minOccurs="2" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AlternativeType">
+        <xs:attribute name="route" type="xs:string" />
+    </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Scenario">
         <xs:annotation>
