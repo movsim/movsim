@@ -13,10 +13,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.movsim.autogen.Movsim;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.LocalizationStrings;
+import org.movsim.xml.MovsimInputLoader;
 
 public class Applet extends JApplet {
     private static final long serialVersionUID = 1L;
@@ -48,7 +50,8 @@ public class Applet extends JApplet {
         final String scenarioName = scenario.substring(scenario.lastIndexOf("/")+1);
         projectMetaData.setProjectName(scenarioName);
 
-        final Simulator simulator = new Simulator();
+	Movsim inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
+	final Simulator simulator = new Simulator(inputData);
         initLookAndFeel();
 
         final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);
