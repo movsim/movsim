@@ -349,17 +349,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleTravelTime;
     }
 
-    public static double totalVehicleTravelTime(Route route) {
-        double totalVehicleTravelTime = 0.0;
-        for (final RoadSegment roadSegment : route) {
-            totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
-            if (roadSegment.sink() != null) {
-                totalVehicleTravelTime += roadSegment.sink().totalVehicleTravelTime();
-            }
-        }
-        return totalVehicleTravelTime;
-    }
-
     public static double instantaneousTravelTime(Route route) {
         double instantaneousTravelTime = 0;
         for (final RoadSegment roadSegment : route) {

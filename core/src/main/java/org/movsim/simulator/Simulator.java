@@ -522,7 +522,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 simulationTime, simulationTime / 3600., projectName));
 
         regulators.simulationCompleted(simulationTime);
-
+        
+        LOG.info("total traveltime={} seconds", roadNetwork.totalVehicleTravelTime());
+        LOG.info("total distance traveled={} meters", roadNetwork.totalVehicleTravelDistance());
+        
         long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         if (LOG.isInfoEnabled()) {
             LOG.info(String.format(

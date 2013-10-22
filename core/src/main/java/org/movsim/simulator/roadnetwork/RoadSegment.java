@@ -136,6 +136,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     /** simple ramp (source) with dropping mechanism */
     private SimpleRamp simpleRamp;
 
+    /** dynamic ff speed, considering speed limits. */
+    private double meanFreeFlowSpeed = -1;
+
+    /** static ff speed assigned in xodr. */
+    private double freeFlowSpeed = -1;
+
     public static class TestCar {
         public double s = 0.0; // distance
         public double vdiff = 0.0; // approaching rate
@@ -605,14 +611,32 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         int vehCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             for (Vehicle veh : laneSegment) {
-		if (veh.type() == Vehicle.Type.OBSTACLE) {
+                if (veh.type() == Vehicle.Type.OBSTACLE) {
                     continue;
                 }
                 sumSpeed += veh.getSpeed();
                 ++vehCount;
             }
         }
-        return (vehCount > 0) ? sumSpeed / vehCount : MovsimConstants.FREE_SPEED;
+        return (vehCount > 0) ? sumSpeed / vehCount : getMeanFreeflowSpeed();
+    }
+
+    private double getMeanFreeflowSpeed() {
+        if (meanFreeFlowSpeed < 0) {
+            double sum = 0;
+            double currentPosition = 0;
+            double speedLimitPosition = 0;
+            double currentSpeedLimit = MovsimConstants.FREE_SPEED;
+            for (SpeedLimit speedLimit : speedLimits()) {
+                speedLimitPosition = speedLimit.position();
+                sum += currentSpeedLimit * (speedLimitPosition - currentPosition);
+                currentSpeedLimit = speedLimit.getSpeedLimitKmh() / 3.6;
+                currentPosition = speedLimitPosition;
+            }
+            sum += currentSpeedLimit * (roadLength - speedLimitPosition);
+            meanFreeFlowSpeed = sum / roadLength;
+        }
+        return meanFreeFlowSpeed;
     }
 
     /**
@@ -625,7 +649,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *         empty and with assumed maximum travel time in standstill
      */
     public double instantaneousTravelTime() {
-	return roadLength / Math.max(meanSpeed(), MovsimConstants.MIN_POSITIVE_SPEED);
+        return roadLength / Math.max(meanSpeed(), MovsimConstants.MIN_POSITIVE_SPEED);
     }
 
     /**
@@ -749,6 +773,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     // new concept needed here, perhaps temporary vehicle objects, could also be used for LaneChanges
     // Good test: check for identical numbers of vehicles passing x=xRoadLength and x=0 of successor RoadSegment.
     private boolean updateSignalPointsBeforeOutflowCalled;
+
     protected void updateSignalPointsBeforeOutflow(double simulationTime) {
         updateSignalPointsBeforeOutflowCalled = true;
         for (SignalPoint signalPoint : signalPoints) {
@@ -796,7 +821,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             // need at least 2 lanes or a peerRoad for lane changing
             return;
         }
-        
+
         if (!overtakingSegmentInitialized) {
             initOvertakingLane(); // lazy init.
         }
@@ -807,7 +832,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
                 Vehicle vehicle = vehIterator.next();
                 assert vehicle.roadSegmentId() == id;
-                if(vehicle.inProcessOfLaneChange()){
+                if (vehicle.inProcessOfLaneChange()) {
                     // !!! assure update in each simulation timestep
                     vehicle.updateLaneChangeDelay(dt);
                 } else if (vehicle.considerLaneChange(dt, this)) {
@@ -845,7 +870,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private void checkFinishingOvertaking(double dt) {
         for (Iterator<Vehicle> vehIterator = overtakingSegment.iterator(); vehIterator.hasNext();) {
-           Vehicle vehicle = vehIterator.next();
+            Vehicle vehicle = vehIterator.next();
             if (vehicle.inProcessOfLaneChange()) {
                 // assure update in each simulation timestep
                 vehicle.updateLaneChangeDelay(dt);
@@ -1106,7 +1131,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     // not yet used
-    final Iterator<Vehicle> iteratorAllVehicles(){
+    final Iterator<Vehicle> iteratorAllVehicles() {
         return Iterators.concat(iterator(), overtakingVehicles());
     }
 
