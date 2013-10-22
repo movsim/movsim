@@ -37,6 +37,5 @@ public final class SimulationScan {
 	// inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(0).setFraction(0.0);
 	Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
 	System.out.println("result = " + simRun.getRoadNetwork().totalVehicleTravelTime());
-
     }
 }

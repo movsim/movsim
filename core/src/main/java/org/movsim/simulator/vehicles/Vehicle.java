@@ -263,6 +263,7 @@ public class Vehicle {
         trafficLightApproaching = new TrafficLightApproaching();
         inhomogeneity = new InhomogeneityAdaption();
         userData = new VehicleUserData();
+
     }
 
     /**
