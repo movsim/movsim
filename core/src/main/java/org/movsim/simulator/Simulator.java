@@ -50,6 +50,7 @@ import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.FileTrafficSinkData;
 import org.movsim.output.FileTrafficSourceData;
 import org.movsim.output.SimulationOutput;
+import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
@@ -97,6 +98,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private TrafficCompositionGenerator defaultTrafficComposition;
     private TrafficLights trafficLights;
     private Regulators regulators;
+
+    private ServiceProviders serviceProviders;
 
     private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
@@ -164,6 +167,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         regulators = new Regulators(inputData.getScenario().getRegulators(), roadNetwork);
 
         checkTrafficLightseInitialized();
+
+	serviceProviders = new ServiceProviders(inputData.getServiceProviders(), routing, roadNetwork);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
@@ -565,6 +570,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         trafficLights.timeStep(dt, simulationTime, iterationCount);
         regulators.timeStep(dt, simulationTime, iterationCount);
         roadNetwork.timeStep(dt, simulationTime, iterationCount);
+
         if (simOutput != null) {
             simOutput.timeStep(dt, simulationTime, iterationCount);
         }

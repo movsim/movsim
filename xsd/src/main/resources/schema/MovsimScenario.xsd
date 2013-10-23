@@ -485,6 +485,8 @@
             <xs:element name="DecisionPoints" type="DecisionPointsType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute name="label" type="xs:string" />
+        <xs:attribute name="logging" type="xs:boolean" default="false" />
+        <xs:attribute name="uncertainty" type="xs:double" default="0"/> 
     </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Scenario">
