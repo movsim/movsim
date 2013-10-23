@@ -14,7 +14,7 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-	// write output for all decision points
+	// write output for all decision points in single file
 	// time, metric(A1), metric(A2), A3...., p1(beta), p2(beta), p3...
     }
 
