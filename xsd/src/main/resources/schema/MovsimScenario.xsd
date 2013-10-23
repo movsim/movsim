@@ -472,7 +472,7 @@
         <xs:sequence>
             <xs:element name="Alternative" type="AlternativeType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
-        <xs:attribute name="roadSegment" type="xs:string" />
+        <xs:attribute name="roadId" type="xs:string" />
     </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:complexType name="ServiceProvidersType">
@@ -484,7 +484,7 @@
 		<xs:sequence>
             <xs:element name="DecisionPoints" type="DecisionPointsType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
-        <xs:attribute name="label" type="xs:string" default="" />
+        <xs:attribute name="label" type="xs:string" />
     </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Scenario">

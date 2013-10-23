@@ -38,7 +38,7 @@
     <ServiceProviders>
 		<ServiceProvider label="wiseGuy">
 			<DecisionPoints>
-				<DecisionPoint roadSegment="3">
+				<DecisionPoint roadId="3">
 					<Alternative route="A1"/>
 					<Alternative route="A2"/>
 				</DecisionPoint>
