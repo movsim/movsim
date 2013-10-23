@@ -39,6 +39,7 @@
             <xs:sequence>
                 <xs:element ref="Consumption" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="VehiclePrototypes" minOccurs="0" maxOccurs="1" />
+                <xs:element name="ServiceProviders" type="ServiceProvidersType" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Scenario" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
         </xs:complexType>
@@ -165,6 +166,7 @@
                 <xs:element ref="MemoryParameter" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="NoiseParameter" minOccurs="0" maxOccurs="1" />
                 <xs:element name="DecisionModel" type="DecisionModelType" minOccurs="0" maxOccurs="1" />
+                <xs:element name="DecisionPoints" type="DecisionPointsType" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="label" type="xs:string" use="required" />
             <xs:attribute name="length" type="nonNegativeDouble" use="required" />
@@ -448,16 +450,41 @@
         <xs:sequence>
             <xs:element name="Alternatives" type="AlternativesType" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
-        <xs:attribute name="roadSegment" type="xs:string" />
-        <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
     </xs:complexType>
     <xs:complexType name="AlternativesType">
         <xs:sequence>
             <xs:element name="Alternative" type="AlternativeType" minOccurs="2" maxOccurs="unbounded" />
         </xs:sequence>
+        <xs:attribute name="roadSegment" type="xs:string" />
+        <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
     </xs:complexType>
     <xs:complexType name="AlternativeType">
         <xs:attribute name="route" type="xs:string" />
+    </xs:complexType>
+   <!-- --> 
+    <xs:complexType name="DecisionPointsType">
+        <xs:sequence>
+            <xs:element name="DecisionPoint" type="DecisionPointType" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
+    </xs:complexType>
+    <xs:complexType name="DecisionPointType">
+        <xs:sequence>
+            <xs:element name="Alternative" type="AlternativeType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="roadSegment" type="xs:string" />
+    </xs:complexType>
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <xs:complexType name="ServiceProvidersType">
+		<xs:sequence>
+            <xs:element name="ServiceProvider" type="ServiceProviderType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ServiceProviderType">
+		<xs:sequence>
+            <xs:element name="DecisionPoints" type="DecisionPointsType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="label" type="xs:string" default="" />
     </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Scenario">
