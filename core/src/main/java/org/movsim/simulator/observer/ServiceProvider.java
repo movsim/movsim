@@ -1,5 +1,8 @@
 package org.movsim.simulator.observer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.movsim.autogen.ServiceProviderType;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -16,6 +19,8 @@ public class ServiceProvider implements SimulationTimeStep {
 
     private final String label;
 
+    private final DecisionPoints decisionPoints;
+
     private final RoadNetwork roadNetwork;
 
     private final Routing routing;
@@ -23,23 +28,36 @@ public class ServiceProvider implements SimulationTimeStep {
     private final ServiceProviderLogging fileOutput;
 
     public ServiceProvider(ServiceProviderType configuration, Routing routing, RoadNetwork roadNetwork) {
-	Preconditions.checkNotNull(configuration);
-	this.routing = Preconditions.checkNotNull(routing);
-	this.label = configuration.getLabel();
-	this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
-	this.fileOutput = configuration.isLogging() ? new ServiceProviderLogging(this) : null;
-	// configuration ...
+        Preconditions.checkNotNull(configuration);
+        this.routing = Preconditions.checkNotNull(routing);
+        this.label = configuration.getLabel();
+        this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
+        this.decisionPoints = new DecisionPoints(configuration.getDecisionPoints());
+        this.fileOutput = configuration.isLogging() ? new ServiceProviderLogging(this) : null;
     }
 
     public String getLabel() {
-	return label;
+        return label;
+    }
+    
+    public DecisionPoints getDecisionPoints() {
+        return decisionPoints;
     }
 
+    public void valueAlternative(){
+        for (DecisionPoint decisionPoint : decisionPoints.getDecisionPoints().values()){    
+            for (Alternative alternative: decisionPoint.getAlternatives().values()){                
+                double value = roadNetwork.instantaneousTravelTime(routing.get(alternative.getRoute()));    
+                alternative.setValue(value);
+            }
+        }
+    }
+    
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-	if (fileOutput != null) {
-	    fileOutput.timeStep(dt, simulationTime, iterationCount);
-	}
-
+        valueAlternative();
+        if (fileOutput != null) {
+            fileOutput.timeStep(dt, simulationTime, iterationCount);
+        }
     }
 }
