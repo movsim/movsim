@@ -16,7 +16,7 @@
 				</Alternatives>
             </DecisionModel>-->
             <DecisionPoints uncertainty="1">
-				<DecisionPoint roadSegment="3"/>
+				<DecisionPoint roadId="3"/>
             </DecisionPoints>
         </VehiclePrototypeConfiguration>
         <!-- trucks -->
@@ -36,8 +36,8 @@
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
     <ServiceProviders>
-		<ServiceProvider label="wiseGuy">
-			<DecisionPoints>
+		<ServiceProvider label="wiseGuy" logging="true">
+			<DecisionPoints uncertainty="0.5">
 				<DecisionPoint roadId="3">
 					<Alternative route="A1"/>
 					<Alternative route="A2"/>

@@ -464,7 +464,7 @@
    <!-- --> 
     <xs:complexType name="DecisionPointsType">
         <xs:sequence>
-            <xs:element name="DecisionPoint" type="DecisionPointType" minOccurs="0" maxOccurs="1" />
+            <xs:element name="DecisionPoint" type="DecisionPointType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
     </xs:complexType>
@@ -482,11 +482,11 @@
     </xs:complexType>
     <xs:complexType name="ServiceProviderType">
 		<xs:sequence>
-            <xs:element name="DecisionPoints" type="DecisionPointsType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="DecisionPoints" type="DecisionPointsType" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
         <xs:attribute name="label" type="xs:string" />
         <xs:attribute name="logging" type="xs:boolean" default="false" />
-        <xs:attribute name="uncertainty" type="xs:double" default="0" /> 
+        <!--<xs:attribute name="uncertainty" type="xs:double" default="0" />--> 
     </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Scenario">
