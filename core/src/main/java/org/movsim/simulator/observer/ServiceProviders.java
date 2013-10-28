@@ -12,7 +12,7 @@ import org.movsim.simulator.roadnetwork.routing.Routing;
 
 import com.google.common.base.Preconditions;
 
-public class ServiceProviders implements Iterable<ServiceProvider>, SimulationTimeStep {
+public final class ServiceProviders implements Iterable<ServiceProvider>, SimulationTimeStep {
 
     private final Map<String, ServiceProvider> serviceProviders = new HashMap<>();
 

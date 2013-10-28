@@ -1,8 +1,6 @@
 package org.movsim.simulator.observer;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.Collection;
 import org.movsim.autogen.ServiceProviderType;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -39,20 +37,41 @@ public class ServiceProvider implements SimulationTimeStep {
     public String getLabel() {
         return label;
     }
-    
+
     public DecisionPoints getDecisionPoints() {
         return decisionPoints;
     }
 
-    public void valueAlternative(){
-        for (DecisionPoint decisionPoint : decisionPoints.getDecisionPoints().values()){    
-            for (Alternative alternative: decisionPoint.getAlternatives().values()){                
-                double value = roadNetwork.instantaneousTravelTime(routing.get(alternative.getRoute()));    
+    public void valueAlternative() {
+        double uncertainty = decisionPoints.getUncertainty();
+        for (DecisionPoint decisionPoint : decisionPoints.getDecisionPoints().values()) {
+            for (Alternative alternative : decisionPoint.getAlternatives().values()) {
+                double value = roadNetwork.instantaneousTravelTime(routing.get(alternative.getRoute()));
                 alternative.setValue(value);
+            }
+            calcProbability(decisionPoint.getAlternatives().values(), uncertainty);
+        }
+    }
+
+    public void calcProbability(Collection<Alternative> alternatives, double uncertainty) {
+
+        double sum = 0;
+        double num = 0;
+        double probability = 0;
+
+        for (Alternative alternative : alternatives) {
+            sum += Math.exp(uncertainty * alternative.getValue());
+        }
+
+        if (sum != 0) {
+            for (Alternative alternative : alternatives) {
+                num = Math.exp(uncertainty * alternative.getValue());
+                probability = num / sum;
+                alternative.setProbability(probability);
             }
         }
     }
-    
+
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         valueAlternative();

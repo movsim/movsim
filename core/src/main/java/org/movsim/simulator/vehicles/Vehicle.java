@@ -26,13 +26,19 @@
 package org.movsim.simulator.vehicles;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.movsim.autogen.AlternativesType;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.observer.Alternative;
+import org.movsim.simulator.observer.DecisionPoint;
+import org.movsim.simulator.observer.ServiceProvider;
+import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -974,6 +980,22 @@ public class Vehicle {
 			return;
 		}
 
+		//TODO take into account the attributes of the vehicles
+		//TODO connection to serviceProvider
+		
+		double probability=0.95;
+		
+		if (Math.random() > probability) {
+		    exitRoadSegmentId = roadSegment.id();
+
+            if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
+                throw new IllegalArgumentException(
+                        "end of VariableMessageSignDiversion lies on roadSegment "
+                                + roadSegment.userId() + " without exit lane!");
+            }
+        }
+		
+		/*
 		// evaluate alternatives (A1 and A2), access routes
 		double beta = 1;
 		// TODO quick hack:
@@ -988,7 +1010,7 @@ public class Vehicle {
 						"end of VariableMessageSignDiversion lies on roadSegment "
 								+ roadSegment.userId() + " without exit lane!");
 			}
-		}
+		}*/
 	}
 
 	public int getTargetLane() {

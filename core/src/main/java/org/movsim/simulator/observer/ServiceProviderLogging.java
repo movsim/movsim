@@ -12,7 +12,7 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
 
     // not yet expandable
     private static final String outputHeadingTime = String.format("%s%9s,", COMMENT_CHAR, "t[s]");
-    private static final String outputHeading = "%10s, %10s";
+    private static final String outputHeading = "%10s, %10s, ";
     private static final String outputInformation = "%s %10s %.2f %n";
 
     private static final String outputFormatTime = "%10.2f";

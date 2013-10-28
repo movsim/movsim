@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.routing.Route;
