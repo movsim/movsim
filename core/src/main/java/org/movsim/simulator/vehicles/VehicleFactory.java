@@ -11,6 +11,7 @@ import org.movsim.autogen.Consumption;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.autogen.VehiclePrototypes;
 import org.movsim.consumption.model.EnergyFlowModelFactory;
+import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
@@ -30,10 +31,13 @@ public final class VehicleFactory {
 
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
+    private ServiceProviders serviceProviders;
+
     public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes,
-            @Nullable Consumption consumption, Routing routing) {
+            @Nullable Consumption consumption, Routing routing, ServiceProviders serviceProviders) {
         Preconditions.checkNotNull(vehPrototypes);
         this.routing = Preconditions.checkNotNull(routing);
+        this.serviceProviders = Preconditions.checkNotNull(serviceProviders);
 
         if (consumption != null) {
             fuelModelFactory.add(consumption.getConsumptionModels());
@@ -57,10 +61,12 @@ public final class VehicleFactory {
                 laneChangeModel);
 
         vehicle.setRoute(route);
-	vehicle.setRouting(routing);
+        vehicle.setRouting(routing);
+        vehicle.setServiceProviders(serviceProviders);
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());
         vehicle.setFuelModel(prototype.getEnergyFlowModel());
+        vehicle.setDecisionPoints(prototype.createDecisionPoints());
         return vehicle;
     }
 
@@ -89,7 +95,9 @@ public final class VehicleFactory {
                 }
                 vehiclePrototype.setEnergyFlowModel(fuelModelFactory.get(consumptionModelName));
             }
+
             vehiclePrototypes.put(typeConfig.getLabel(), vehiclePrototype);
+
         }
     }
 

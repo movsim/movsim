@@ -15,29 +15,35 @@ public final class DecisionModel {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(DecisionModel.class);
 
-    public static boolean doDiverge(double beta, RoadSegment roadSegment, List<Route> alternatives) {
+    public static boolean doDiverge(double uncertainty, RoadSegment roadSegment, List<Route> alternatives) {
+
+        // TODO improve
 
         double sum = 0;
         double temp = 0;
         double probability = -1;
+        double beta = -10;
+        if (uncertainty > 0.05) {
+            beta = -1 / uncertainty;
+        }
         Map<String, Double> probabilities = new HashMap<>();
 
         for (Route route : alternatives) {
-            sum += Math.exp(beta * RoadNetwork.instantaneousTravelTime(route));
+            sum += Math.exp(-beta * RoadNetwork.instantaneousTravelTime(route));
         }
 
         if (sum != 0) {
             for (Route route : alternatives) {
-                temp = Math.exp(beta * RoadNetwork.instantaneousTravelTime(route));
+                temp = Math.exp(-beta * RoadNetwork.instantaneousTravelTime(route));
                 probability = temp / sum;
-                probabilities.put(route.getName(), probability);
-            }  
+                probabilities.put(route.getName(), (1 - probability));
+            }
         }
 
-        //LOG.debug("inst travel alternativ1={}, alternative2={}", probability, (1-probability));
+        // LOG.debug("inst travel alternativ1={}, alternative2={}", probability, (1-probability));
 
-        //TODO improve
-        if (Math.random() > probability) {
+        // TODO improve
+        if (Math.random() > (1 - probability)) {
             return true;
         }
 

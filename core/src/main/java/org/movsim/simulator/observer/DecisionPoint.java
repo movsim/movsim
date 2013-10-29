@@ -7,16 +7,18 @@ import org.movsim.autogen.DecisionPointType;
 public class DecisionPoint {
 
     private final String roadId;
-    
+
     private final HashMap<String, Alternative> alternatives = new HashMap<>();
-    
-    public DecisionPoint(DecisionPointType configuration){
-        
-        this.roadId=configuration.getRoadId();
-        for (AlternativeType alternativeType : configuration.getAlternative()) {
-            Alternative alternative = new Alternative(alternativeType.getRoute());
-            alternatives.put(alternative.getRoute(), alternative);
-        }       
+
+    public DecisionPoint(DecisionPointType configuration) {
+
+        this.roadId = configuration.getRoadId();
+        if (configuration.isSetAlternative()) {
+            for (AlternativeType alternativeType : configuration.getAlternative()) {
+                Alternative alternative = new Alternative(alternativeType.getRoute());
+                alternatives.put(alternative.getRoute(), alternative);
+            }
+        }
     }
 
     public String getRoadId() {
@@ -26,7 +28,5 @@ public class DecisionPoint {
     public HashMap<String, Alternative> getAlternatives() {
         return alternatives;
     }
-    
-    
-    
+
 }

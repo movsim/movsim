@@ -118,7 +118,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     public Simulator(Movsim inputData) {
         this.projectMetaData = ProjectMetaData.getInstance();
-	this.inputData = Preconditions.checkNotNull(inputData);
+        this.inputData = Preconditions.checkNotNull(inputData);
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);
@@ -143,8 +143,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         parseOpenDriveXml(roadNetwork, projectMetaData);
         routing = new Routing(inputData.getScenario().getRoutes(), roadNetwork);
 
+        serviceProviders = new ServiceProviders(inputData.getServiceProviders(), routing, roadNetwork);
+
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
-                inputData.getConsumption(), routing);
+                inputData.getConsumption(), routing, serviceProviders);
 
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
@@ -167,8 +169,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         regulators = new Regulators(inputData.getScenario().getRegulators(), roadNetwork);
 
         checkTrafficLightseInitialized();
-
-	serviceProviders = new ServiceProviders(inputData.getServiceProviders(), routing, roadNetwork);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
@@ -353,7 +353,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     private static void configureTrafficSink(TrafficSinkType trafficSinkType, RoadSegment roadSegment) {
-        if(!roadSegment.hasSink()){
+        if (!roadSegment.hasSink()) {
             throw new IllegalArgumentException("roadsegment=" + roadSegment.userId() + " does not have a TrafficSink.");
         }
         if (trafficSinkType.isLogging()) {
@@ -525,10 +525,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 simulationTime, simulationTime / 3600., projectName));
 
         regulators.simulationCompleted(simulationTime);
-        
+
         LOG.info("total traveltime={} seconds", roadNetwork.totalVehicleTravelTime());
         LOG.info("total distance traveled={} meters", roadNetwork.totalVehicleTravelDistance());
-        
+
         long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         if (LOG.isInfoEnabled()) {
             LOG.info(String.format(

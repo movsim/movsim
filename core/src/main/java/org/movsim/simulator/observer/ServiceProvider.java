@@ -58,16 +58,20 @@ public class ServiceProvider implements SimulationTimeStep {
         double sum = 0;
         double num = 0;
         double probability = 0;
+        double beta = -10;
+        if (uncertainty > 0.05) {
+            beta = -1 / uncertainty;
+        }
 
         for (Alternative alternative : alternatives) {
-            sum += Math.exp(uncertainty * alternative.getValue());
+            sum += Math.exp(-beta * alternative.getValue());
         }
 
         if (sum != 0) {
             for (Alternative alternative : alternatives) {
-                num = Math.exp(uncertainty * alternative.getValue());
+                num = Math.exp(-beta * alternative.getValue());
                 probability = num / sum;
-                alternative.setProbability(probability);
+                alternative.setProbability(1 - probability);
             }
         }
     }
