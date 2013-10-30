@@ -64,14 +64,14 @@ public class ServiceProvider implements SimulationTimeStep {
         }
 
         for (Alternative alternative : alternatives) {
-            sum += Math.exp(-beta * alternative.getValue());
+            sum += Math.exp(beta * alternative.getValue());
         }
 
         if (sum != 0) {
             for (Alternative alternative : alternatives) {
-                num = Math.exp(-beta * alternative.getValue());
+                num = Math.exp(beta * alternative.getValue());
                 probability = num / sum;
-                alternative.setProbability(1 - probability);
+                alternative.setProbability(probability);
             }
         }
     }

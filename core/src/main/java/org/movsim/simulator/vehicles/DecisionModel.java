@@ -29,21 +29,21 @@ public final class DecisionModel {
         Map<String, Double> probabilities = new HashMap<>();
 
         for (Route route : alternatives) {
-            sum += Math.exp(-beta * RoadNetwork.instantaneousTravelTime(route));
+            sum += Math.exp(beta * RoadNetwork.instantaneousTravelTime(route));
         }
 
         if (sum != 0) {
             for (Route route : alternatives) {
-                temp = Math.exp(-beta * RoadNetwork.instantaneousTravelTime(route));
+                temp = Math.exp(beta * RoadNetwork.instantaneousTravelTime(route));
                 probability = temp / sum;
-                probabilities.put(route.getName(), (1 - probability));
+                probabilities.put(route.getName(), (probability));
             }
         }
 
         // LOG.debug("inst travel alternativ1={}, alternative2={}", probability, (1-probability));
 
         // TODO improve
-        if (Math.random() > (1 - probability)) {
+        if (Math.random() > (probability)) {
             return true;
         }
 
