@@ -58,38 +58,37 @@ public class MovsimCoreMain {
      */
     public static void main(String[] args) throws JAXBException, SAXException {
 
-        Locale.setDefault(Locale.US);
+	Locale.setDefault(Locale.US);
 
-        // final ProjectMetaData projectMetaData =
-        // ProjectMetaData.getInstance();
-        // parse the command line, putting the results into projectMetaData
-        Logger.initializeLogger();
+	// final ProjectMetaData projectMetaData =
+	// ProjectMetaData.getInstance();
+	// parse the command line, putting the results into projectMetaData
+	Logger.initializeLogger();
 
-        MovsimCommandLine.parse(args);
+	MovsimCommandLine.parse(args);
 
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        if (!projectMetaData.hasProjectName()) {
-            System.err.println("no xml simulation configuration file provided.");
-            System.exit(-1);
-        }
+	ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+	if (!projectMetaData.hasProjectName()) {
+	    System.err.println("no xml simulation configuration file provided.");
+	    System.exit(-1);
+	}
 
-        LogFileAppender.initialize(projectMetaData);
+	LogFileAppender.initialize(projectMetaData);
 
-        Movsim inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
-
-        if (projectMetaData.isScanMode()) {
-            System.out.println("scanning mode");
-            SimulationScan.invokeSimulationScan(inputData);
-        } else {
-            invokeSingleSimulation(inputData);
-        }
+	if (projectMetaData.isScanMode()) {
+	    System.out.println("scanning mode");
+	    SimulationScan.invokeSimulationScan();
+	} else {
+	    Movsim inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
+	    invokeSingleSimulation(inputData);
+	}
     }
 
     public static Simulator invokeSingleSimulation(Movsim inputData) throws JAXBException, SAXException {
-        Simulator simulator = new Simulator(inputData);
-        simulator.initialize();
-        simulator.runToCompletion();
-        return simulator;
+	Simulator simulator = new Simulator(inputData);
+	simulator.initialize();
+	simulator.runToCompletion();
+	return simulator;
     }
 
 }
