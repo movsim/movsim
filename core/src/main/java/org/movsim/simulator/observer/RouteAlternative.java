@@ -1,15 +1,18 @@
 package org.movsim.simulator.observer;
 
-public class Alternative {
+import com.google.common.base.Preconditions;
+
+public class RouteAlternative {
 
     private final String route;
-    
-    private double value=0.0;
-    
-    private double probability=0.0;
-    
-    public Alternative(String route){
-        this.route=route;
+
+    private double value = 0.0;
+
+    private double probability = 0.0;
+
+    public RouteAlternative(String route) {
+        Preconditions.checkArgument(route != null && !route.isEmpty());
+        this.route = route;
     }
 
     public String getRoute() {
@@ -21,7 +24,7 @@ public class Alternative {
     }
 
     public void setValue(double value) {
-        this.value = value;   
+        this.value = value;
     }
 
     public double getProbability() {
@@ -31,7 +34,5 @@ public class Alternative {
     public void setProbability(double probability) {
         this.probability = probability;
     }
-    
-    
-    
+
 }

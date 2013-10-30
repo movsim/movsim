@@ -6,6 +6,10 @@ import org.movsim.simulator.SimulationTimeStep;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Writes output for all decision points in single file.
+ * 
+ */
 class ServiceProviderLogging extends FileOutputBase implements SimulationTimeStep {
 
     private static final String extensionFormat = ".serviceprov_%s.csv";
@@ -24,33 +28,35 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         this.serviceProvider = Preconditions.checkNotNull(serviceProvider);
         writer = createWriter(String.format(extensionFormat, serviceProvider.getLabel()));
+        writeHeader();
+    }
+
+    private void writeHeader() {
         writer.printf(outputInformation, COMMENT_CHAR, "DecisionPointsUncertainty", serviceProvider.getDecisionPoints()
                 .getUncertainty());
         writer.printf(outputHeadingTime);
 
         for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints().getDecisionPoints().values()) {
-
-            for (Alternative alternative : decisionPoint.getAlternatives().values()) {
+            for (RouteAlternative alternative : decisionPoint.getAlternatives().values()) {
                 writer.printf(outputHeading,
                         "valueRoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRoute(), "probRoadId"
                                 + decisionPoint.getRoadId() + "_Route" + alternative.getRoute());
             }
         }
         writer.printf("%n");
+        writer.flush();
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        // write output for all decision points in single file
         writer.printf(outputFormatTime, simulationTime);
         for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints().getDecisionPoints().values()) {
-            for (Alternative alternative : decisionPoint.getAlternatives().values()) {
+            for (RouteAlternative alternative : decisionPoint.getAlternatives().values()) {
                 writer.printf(outputFormat, alternative.getValue(), alternative.getProbability());
             }
         }
         writer.printf("%n");
         writer.flush();
-
     }
 
 }

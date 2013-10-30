@@ -17,27 +17,28 @@ public final class ServiceProviders implements Iterable<ServiceProvider>, Simula
     private final Map<String, ServiceProvider> serviceProviders = new HashMap<>();
 
     public ServiceProviders(ServiceProvidersType configuration, Routing routing, RoadNetwork roadNetwork) {
-	Preconditions.checkNotNull(routing);
-	Preconditions.checkNotNull(roadNetwork);
-	for (ServiceProviderType serviceProviderType : configuration.getServiceProvider()) {
-	    ServiceProvider provider = new ServiceProvider(serviceProviderType, routing, roadNetwork);
-	    if (serviceProviders.containsKey(provider.getLabel())) {
-		throw new IllegalArgumentException("label " + provider.getLabel() + " already exists.");
-	    }
-	    serviceProviders.put(provider.getLabel(), provider);
-	}
+        Preconditions.checkNotNull(routing);
+        Preconditions.checkNotNull(roadNetwork);
+        for (ServiceProviderType serviceProviderType : configuration.getServiceProvider()) {
+            ServiceProvider provider = new ServiceProvider(serviceProviderType, routing, roadNetwork);
+            String key = provider.getLabel();
+            if (serviceProviders.containsKey(key)) {
+                throw new IllegalArgumentException("service provider label " + key + " already exists.");
+            }
+            serviceProviders.put(key, provider);
+        }
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-	for(ServiceProvider provider : serviceProviders.values()){
-	    provider.timeStep(dt, simulationTime, iterationCount);
-	}
+        for (ServiceProvider provider : serviceProviders.values()) {
+            provider.timeStep(dt, simulationTime, iterationCount);
+        }
     }
 
     @Override
     public Iterator<ServiceProvider> iterator() {
-	return serviceProviders.values().iterator();
+        return serviceProviders.values().iterator();
     }
 
 }

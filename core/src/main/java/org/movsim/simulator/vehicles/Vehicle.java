@@ -26,20 +26,16 @@
 package org.movsim.simulator.vehicles;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import org.movsim.autogen.AlternativesType;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.observer.Alternative;
 import org.movsim.simulator.observer.DecisionPoint;
 import org.movsim.simulator.observer.DecisionPoints;
 import org.movsim.simulator.observer.ServiceProvider;
@@ -47,7 +43,6 @@ import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.Lanes.Type;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;

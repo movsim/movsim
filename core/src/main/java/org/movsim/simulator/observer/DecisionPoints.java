@@ -7,6 +7,8 @@ import java.util.Map;
 import org.movsim.autogen.DecisionPointType;
 import org.movsim.autogen.DecisionPointsType;
 
+import com.google.common.base.Preconditions;
+
 public class DecisionPoints implements Iterable<DecisionPoint> {
 
     private final Map<String, DecisionPoint> decisionPoints = new HashMap<>();
@@ -14,16 +16,16 @@ public class DecisionPoints implements Iterable<DecisionPoint> {
     private final double uncertainty;
 
     public DecisionPoints(DecisionPointsType configuration) {
-
+        Preconditions.checkNotNull(configuration);
         this.uncertainty = configuration.getUncertainty();
         if (configuration.isSetDecisionPoint()) {
             for (DecisionPointType decisionPointType : configuration.getDecisionPoint()) {
                 DecisionPoint decisionPoint = new DecisionPoint(decisionPointType);
-                if (decisionPoints.containsKey(decisionPoint.getRoadId())) {
-                    throw new IllegalArgumentException("decision point " + decisionPoint.getRoadId()
-                            + " already exists.");
+                String key = decisionPoint.getRoadId();
+                if (decisionPoints.containsKey(key)) {
+                    throw new IllegalArgumentException("decision point with roadId=" + key + " already exists.");
                 }
-                decisionPoints.put(decisionPoint.getRoadId(), decisionPoint);
+                decisionPoints.put(key, decisionPoint);
             }
         }
     }
