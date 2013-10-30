@@ -15,7 +15,7 @@ public class RouteAlternative {
         this.route = route;
     }
 
-    public String getRoute() {
+    public String getRouteLabel() {
         return route;
     }
 

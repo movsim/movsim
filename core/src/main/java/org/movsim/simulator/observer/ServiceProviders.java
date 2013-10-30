@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
+
 import org.movsim.autogen.ServiceProviderType;
 import org.movsim.autogen.ServiceProvidersType;
 import org.movsim.simulator.SimulationTimeStep;
@@ -39,6 +41,11 @@ public final class ServiceProviders implements Iterable<ServiceProvider>, Simula
     @Override
     public Iterator<ServiceProvider> iterator() {
         return serviceProviders.values().iterator();
+    }
+
+    @CheckForNull
+    public ServiceProvider get(String serviceProviderName) {
+        return serviceProviders.get(serviceProviderName);
     }
 
 }

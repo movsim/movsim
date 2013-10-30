@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
+
 import org.movsim.autogen.DecisionPointType;
 import org.movsim.autogen.DecisionPointsType;
+import org.movsim.simulator.roadnetwork.routing.Routing;
 
 import com.google.common.base.Preconditions;
 
@@ -15,7 +18,7 @@ public class DecisionPoints implements Iterable<DecisionPoint> {
 
     private final double uncertainty;
 
-    public DecisionPoints(DecisionPointsType configuration) {
+    public DecisionPoints(DecisionPointsType configuration, Routing routing) {
         Preconditions.checkNotNull(configuration);
         this.uncertainty = configuration.getUncertainty();
         if (configuration.isSetDecisionPoint()) {
@@ -34,8 +37,9 @@ public class DecisionPoints implements Iterable<DecisionPoint> {
         return uncertainty;
     }
 
-    public Map<String, DecisionPoint> getDecisionPoints() {
-        return decisionPoints;
+    @CheckForNull
+    public DecisionPoint get(String roadSegmentId) {
+        return decisionPoints.get(roadSegmentId);
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.movsim.simulator.vehicles;
 
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
-import org.movsim.simulator.observer.DecisionPoints;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.Noise;
@@ -85,7 +84,4 @@ class VehiclePrototype {
         this.energyFlowModel = energyFlowModel;
     }
 
-    DecisionPoints createDecisionPoints() {
-        return configuration.isSetDecisionPoints() ? new DecisionPoints(configuration.getDecisionPoints()) : null;
-    }
 }

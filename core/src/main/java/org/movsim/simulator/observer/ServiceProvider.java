@@ -1,11 +1,10 @@
 package org.movsim.simulator.observer;
 
-import java.util.Collection;
-
 import org.movsim.autogen.ServiceProviderType;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.routing.Routing;
+import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +30,7 @@ public class ServiceProvider implements SimulationTimeStep {
         this.routing = Preconditions.checkNotNull(routing);
         this.label = configuration.getLabel();
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
-        this.decisionPoints = new DecisionPoints(configuration.getDecisionPoints());
+        this.decisionPoints = new DecisionPoints(configuration.getDecisionPoints(), routing);
         this.fileOutput = configuration.isLogging() ? new ServiceProviderLogging(this) : null;
     }
 
@@ -43,18 +42,18 @@ public class ServiceProvider implements SimulationTimeStep {
         return decisionPoints;
     }
 
-    public void valueAlternative() {
+    private void valueAlternative() {
         double uncertainty = decisionPoints.getUncertainty();
-        for (DecisionPoint decisionPoint : decisionPoints.getDecisionPoints().values()) {
-            for (RouteAlternative alternative : decisionPoint.getAlternatives().values()) {
-                double value = RoadNetwork.instantaneousTravelTime(routing.get(alternative.getRoute()));
+        for (DecisionPoint decisionPoint : decisionPoints) {
+            for (RouteAlternative alternative : decisionPoint) {
+                double value = RoadNetwork.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
                 alternative.setValue(value);
             }
-            calcProbability(decisionPoint.getAlternatives().values(), uncertainty);
+            calcProbability(decisionPoint, uncertainty);
         }
     }
 
-    public static void calcProbability(Collection<RouteAlternative> alternatives, double uncertainty) {
+    public static void calcProbability(Iterable<RouteAlternative> alternatives, double uncertainty) {
         double sum = 0;
         double num = 0;
         double probability = 0;
@@ -76,11 +75,50 @@ public class ServiceProvider implements SimulationTimeStep {
         }
     }
 
+    // TODO use cached values from RouteAlternative, refactor methods
+    private boolean doDiverge(double uncertainty, DecisionPoint decisionPoint) {
+        double sum = 0;
+        double temp = 0;
+        double probability = -1;
+        double beta = -10;
+        if (uncertainty > 0.05) {
+            beta = -1 / uncertainty;
+        }
+
+        for (RouteAlternative route : decisionPoint) {
+            sum += Math.exp(beta * RoadNetwork.instantaneousTravelTime(routing.get(route.getRouteLabel())));
+        }
+
+        if (sum != 0) {
+            for (RouteAlternative route : decisionPoint) {
+                temp = Math.exp(beta * RoadNetwork.instantaneousTravelTime(routing.get(route.getRouteLabel())));
+                probability = temp / sum;
+            }
+        }
+
+        // LOG.debug("inst travel alternativ1={}, alternative2={}", probability, (1-probability));
+
+        if (MyRandom.nextDouble() > probability) {
+            return true;
+        }
+
+        return false;
+
+    }
+
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         valueAlternative();
         if (fileOutput != null) {
             fileOutput.timeStep(dt, simulationTime, iterationCount);
         }
+    }
+
+    public boolean doDiverge(double uncertainty, String roadSegmentUserId) {
+        DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
+        if (decisionPoint != null) {
+            return doDiverge(uncertainty, decisionPoint);
+        }
+        return false;
     }
 }

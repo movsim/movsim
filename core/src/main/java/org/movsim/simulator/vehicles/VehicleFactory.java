@@ -8,9 +8,11 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import org.movsim.autogen.Consumption;
+import org.movsim.autogen.PersonalNavigationDeviceType;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.autogen.VehiclePrototypes;
 import org.movsim.consumption.model.EnergyFlowModelFactory;
+import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
@@ -61,13 +63,26 @@ public final class VehicleFactory {
                 laneChangeModel);
 
         vehicle.setRoute(route);
-        vehicle.setRouting(routing);
-        vehicle.setServiceProviders(serviceProviders);
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());
         vehicle.setFuelModel(prototype.getEnergyFlowModel());
-        vehicle.setDecisionPoints(prototype.createDecisionPoints());
+
+        if (prototype.getConfiguration().isSetPersonalNavigationDevice()) {
+            // TODO potential conflicts between prescribed route and dynamic routing decisions...
+            setServiceProvider(prototype, vehicle);
+        }
         return vehicle;
+    }
+
+    private void setServiceProvider(VehiclePrototype prototype, Vehicle vehicle) {
+        PersonalNavigationDeviceType personalNavigationDevice = prototype.getConfiguration().getPersonalNavigationDevice();
+        String providerName = personalNavigationDevice.getServiceProvider();
+        ServiceProvider provider = serviceProviders.get(providerName);
+        if (provider == null) {
+            throw new IllegalArgumentException("service provider \"" + providerName + "\" for vehicle not configured.");
+        }
+        vehicle.setServiceProvider(provider);
+        vehicle.setDecisionUncertainty(personalNavigationDevice.getUncertainty());
     }
 
     // route is determined via the traffic composition

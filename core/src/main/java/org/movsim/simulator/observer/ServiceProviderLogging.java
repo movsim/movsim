@@ -36,11 +36,11 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
                 .getUncertainty());
         writer.printf(outputHeadingTime);
 
-        for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints().getDecisionPoints().values()) {
-            for (RouteAlternative alternative : decisionPoint.getAlternatives().values()) {
+        for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints()) {
+            for (RouteAlternative alternative : decisionPoint) {
                 writer.printf(outputHeading,
-                        "valueRoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRoute(), "probRoadId"
-                                + decisionPoint.getRoadId() + "_Route" + alternative.getRoute());
+                        "valueRoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel(), "probRoadId"
+                                + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel());
             }
         }
         writer.printf("%n");
@@ -50,8 +50,8 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         writer.printf(outputFormatTime, simulationTime);
-        for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints().getDecisionPoints().values()) {
-            for (RouteAlternative alternative : decisionPoint.getAlternatives().values()) {
+        for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints()) {
+            for (RouteAlternative alternative : decisionPoint) {
                 writer.printf(outputFormat, alternative.getValue(), alternative.getProbability());
             }
         }

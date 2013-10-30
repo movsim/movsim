@@ -25,27 +25,17 @@
  */
 package org.movsim.simulator.vehicles;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import javax.annotation.Nullable;
 
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.observer.DecisionPoint;
-import org.movsim.simulator.observer.DecisionPoints;
 import org.movsim.simulator.observer.ServiceProvider;
-import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.routing.Route;
-import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
@@ -194,8 +184,6 @@ public class Vehicle {
     private Memory memory = null;
     /** Acceleration noise model. Can be null */
     private Noise noise = null;
-    /** Decision points. Can be null */
-    private DecisionPoints decisionPoints = null;
 
     private final TrafficLightApproaching trafficLightApproaching;
     private final InhomogeneityAdaption inhomogeneity;
@@ -207,16 +195,14 @@ public class Vehicle {
 
     private int routeIndex;
 
-    /** can be null */
-    private Routing routing;
-
     private boolean isBrakeLightOn;
 
     private PhysicalQuantities physQuantities;
 
     private final VehicleUserData userData;
 
-    private ServiceProviders serviceProviders;
+    private ServiceProvider serviceProvider;
+    private double uncertainty;
 
     // Exit Handling
     private int roadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
@@ -938,37 +924,17 @@ public class Vehicle {
     }
 
     private void considerRouteAlternatives(RoadSegment roadSegment) {
-        if (routing == null) {
+        if (serviceProvider == null) {
             return;
         }
-        if (decisionPoints != null) {
-            for (DecisionPoint decisionPoint : decisionPoints.getDecisionPoints().values()) {
-                String roadId = decisionPoint.getRoadId();
-                if (roadSegment.id() != Integer.parseInt(roadId)) {
-                    continue;
-                }
-                double uncertainty = decisionPoints.getUncertainty();
-                Set<String> alternatives = new HashSet<String>();
-                for (Iterator<ServiceProvider> provIterator = serviceProviders.iterator(); provIterator.hasNext();) {
-                    ServiceProvider serviceProvider = provIterator.next();
-                    alternatives = serviceProvider.getDecisionPoints().getDecisionPoints().get(roadId)
-                            .getAlternatives().keySet();
-                    List<Route> alternativeRoutes = new ArrayList<>();
-                    for (String alternative : alternatives) {
-                        alternativeRoutes.add(routing.get(alternative));
-                    }
-                    if (DecisionModel.doDiverge(uncertainty, roadSegment, alternativeRoutes)) {
-                        exitRoadSegmentId = roadSegment.id();
-                        if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
-                            throw new IllegalArgumentException(
-                                    "end of VariableMessageSignDiversion lies on roadSegment " + roadSegment.userId()
-                                            + " without exit lane!");
-                        }
-                    }
-                }
+
+        if (serviceProvider.doDiverge(uncertainty, roadSegment.userId())) {
+            exitRoadSegmentId = roadSegment.id();
+            if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
+                throw new IllegalArgumentException("cannot do diverge on roadSegment " + roadSegment.userId()
+                        + " without exit lane!");
             }
         }
-
     }
 
     public int getTargetLane() {
@@ -1300,10 +1266,6 @@ public class Vehicle {
         return route != null ? route.getName() : "noRoute";
     }
 
-    public void setRouting(Routing routing) {
-        this.routing = Preconditions.checkNotNull(routing);
-    }
-
     public InhomogeneityAdaption inhomogeneityAdaptation() {
         return inhomogeneity;
     }
@@ -1328,12 +1290,12 @@ public class Vehicle {
         this.externalAcceleration = Double.NaN;
     }
 
-    public void setServiceProviders(ServiceProviders serviceProviders) {
-        this.serviceProviders = Preconditions.checkNotNull(serviceProviders);
+    public void setServiceProvider(ServiceProvider serviceProvider) {
+        this.serviceProvider = Preconditions.checkNotNull(serviceProvider);
     }
-
-    public void setDecisionPoints(DecisionPoints decisionPoints) {
-        this.decisionPoints = decisionPoints;
+    
+    public void setDecisionUncertainty(double uncertainty) {
+        this.uncertainty = uncertainty;
     }
 
 }

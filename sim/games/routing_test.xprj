@@ -10,9 +10,7 @@
             <LaneChangeModelType european_rules="true" crit_speed_eur="20">
                 <ModelParameterMOBIL safe_deceleration="20.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
             </LaneChangeModelType>
-            <DecisionPoints uncertainty="1">
-				<DecisionPoint roadId="2"/>
-            </DecisionPoints>
+            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="1" />
         </VehiclePrototypeConfiguration>
         <!-- car without traffic information -->
         <VehiclePrototypeConfiguration label="NonEquipped" length="10" maximum_deceleration="40" >
@@ -28,8 +26,8 @@
 		<ServiceProvider label="wiseGuy" logging="true">
 			<DecisionPoints uncertainty="0.5">
 				<DecisionPoint roadId="2">
-					<Alternative route="A1"/>
-					<Alternative route="A2"/>
+					<RouteAlternative route="A1"/>
+					<RouteAlternative route="A2"/>
 				</DecisionPoint>
 			</DecisionPoints>
 		</ServiceProvider>
