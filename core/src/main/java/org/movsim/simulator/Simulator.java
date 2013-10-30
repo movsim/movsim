@@ -50,6 +50,7 @@ import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.FileTrafficSinkData;
 import org.movsim.output.FileTrafficSourceData;
 import org.movsim.output.SimulationOutput;
+import org.movsim.shutdown.ShutdownHooks;
 import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -89,7 +90,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private long startTimeMillis;
 
-    private final ProjectMetaData projectMetaData;
+    // private final ProjectMetaData.getInstance() ProjectMetaData.getInstance();
     private String projectName;
 
     private final Movsim inputData;
@@ -117,7 +118,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @throws JAXBException
      */
     public Simulator(Movsim inputData) {
-        this.projectMetaData = ProjectMetaData.getInstance();
+	ShutdownHooks.INSTANCE.clear(); // TODO move to better place
         this.inputData = Preconditions.checkNotNull(inputData);
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
@@ -127,20 +128,20 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     public void initialize() throws JAXBException, SAXException {
         LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011-2013)");
 
-        projectName = projectMetaData.getProjectName();
+        projectName = ProjectMetaData.getInstance().getProjectName();
         timeOffsetMillis = 0;
         if (inputData.getScenario().getSimulation().isSetTimeOffset()) {
             DateTime dateTime = LocalDateTime.parse(inputData.getScenario().getSimulation().getTimeOffset(),
                     DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZ")).toDateTime(DateTimeZone.UTC);
             timeOffsetMillis = dateTime.getMillis();
             LOG.info("global time offset set={} --> {} milliseconds.", dateTime, timeOffsetMillis);
-            ProjectMetaData.getInstance().setTimeOffsetMillis(timeOffsetMillis);
+            ProjectMetaData.getInstance().getInstance().setTimeOffsetMillis(timeOffsetMillis);
         }
-        projectMetaData.setXodrNetworkFilename(inputData.getScenario().getNetworkFilename()); // TODO
+        ProjectMetaData.getInstance().setXodrNetworkFilename(inputData.getScenario().getNetworkFilename()); // TODO
 
         Simulation simulationInput = inputData.getScenario().getSimulation();
 
-        parseOpenDriveXml(roadNetwork, projectMetaData);
+        parseOpenDriveXml(roadNetwork, ProjectMetaData.getInstance());
         routing = new Routing(inputData.getScenario().getRoutes(), roadNetwork);
 
         serviceProviders = new ServiceProviders(inputData.getServiceProviders(), routing, roadNetwork);
@@ -187,7 +188,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     public ProjectMetaData getProjectMetaData() {
-        return projectMetaData;
+	return ProjectMetaData.getInstance();
     }
 
     public RoadNetwork getRoadNetwork() {
@@ -209,8 +210,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();
-        projectMetaData.setProjectName(scenario);
-        projectMetaData.setPathToProjectXmlFile(path);
+        ProjectMetaData.getInstance().setProjectName(scenario);
+        ProjectMetaData.getInstance().setPathToProjectXmlFile(path);
         initialize();
     }
 
@@ -247,7 +248,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * Parse the OpenDrive (.xodr) file to load the network topology and road layout.
      * 
-     * @param projectMetaData
+     * @param ProjectMetaData.getInstance()
      * @return
      * @throws SAXException
      * @throws JAXBException
@@ -255,8 +256,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData)
             throws JAXBException, SAXException {
-        final String xodrFileName = projectMetaData.getXodrNetworkFilename();
-        final String xodrPath = projectMetaData.getPathToProjectFile();
+        final String xodrFileName = ProjectMetaData.getInstance().getXodrNetworkFilename();
+        final String xodrPath = ProjectMetaData.getInstance().getPathToProjectFile();
         final String fullXodrFileName = xodrPath + xodrFileName;
         LOG.info("try to load {}", fullXodrFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);
@@ -491,7 +492,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.reset();
         if (inputData.getScenario().isSetOutputConfiguration()) {
             simOutput = new SimulationOutput(simulationRunnable.timeStep(),
-                    projectMetaData.isInstantaneousFileOutput(), inputData.getScenario().getOutputConfiguration(),
+                    ProjectMetaData.getInstance().isInstantaneousFileOutput(), inputData.getScenario().getOutputConfiguration(),
                     roadNetwork, routing, vehicleFactory, serviceProviders);
         }
         obstacleCount = roadNetwork.obstacleCount();
@@ -570,6 +571,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         trafficLights.timeStep(dt, simulationTime, iterationCount);
         regulators.timeStep(dt, simulationTime, iterationCount);
         roadNetwork.timeStep(dt, simulationTime, iterationCount);
+
+	System.out.println("totalTraveltime=" + getRoadNetwork().totalVehicleTravelTime());
 
         if (simOutput != null) {
             simOutput.timeStep(dt, simulationTime, iterationCount);

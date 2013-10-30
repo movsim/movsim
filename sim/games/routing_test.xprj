@@ -15,24 +15,18 @@
 					<Alternative route="A2"/>
 				</Alternatives>
             </DecisionModel>-->
-            <DecisionPoints uncertainty="0.5">
+            <DecisionPoints uncertainty="1">
 				<DecisionPoint roadId="2"/>
             </DecisionPoints>
         </VehiclePrototypeConfiguration>
         <!-- trucks -->
         <VehiclePrototypeConfiguration label="NonEquipped" length="10" maximum_deceleration="40" >
             <AccelerationModelType>
-                <ModelParameterACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+                <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="true" crit_speed_eur="20">
-                <ModelParameterMOBIL safe_deceleration="20.0" minimum_gap="2.0" threshold_acceleration="0.2" right_bias_acceleration="0.0" politeness="0.1" />
+                <ModelParameterMOBIL safe_deceleration="20.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
             </LaneChangeModelType>
-        </VehiclePrototypeConfiguration>
-        <VehiclePrototypeConfiguration label="Obstacle" length="0">
-            <AccelerationModelType>
-                <ModelParameterIDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-            </AccelerationModelType>
-            <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
     <ServiceProviders>
@@ -48,8 +42,8 @@
     <Scenario network_filename="routing.xodr">
         <Simulation timestep="0.2" duration="900" seed="42" crash_exit="false">
             <TrafficComposition>
-                <VehicleType label="Equipped" fraction="0.99" relative_v0_randomization="0.2" />
-                <VehicleType label="NonEquipped" fraction="0.01" relative_v0_randomization="0.2" />
+                <VehicleType label="Equipped" fraction="0.3" relative_v0_randomization="0.0" />
+                <VehicleType label="NonEquipped" fraction="0.7" relative_v0_randomization="0.0" />
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="false">
@@ -61,9 +55,10 @@
                 <FlowConservingInhomogeneities>
                     <Inhomogeneity position="0" valid_length="200" adaptation_length="200" start_alpha_T="0.8" target_alpha_T="1.0" />
                 </FlowConservingInhomogeneities>
-                <VariableMessageSignDiversions>
+                <!-- <VariableMessageSignDiversions>
                     <VariableMessageSignDiversion position="100" valid_length="300" />
                 </VariableMessageSignDiversions>
+                -->
             </Road>
             <Road id="10">
                 <FlowConservingInhomogeneities>
@@ -82,7 +77,7 @@
             </Route>
         </Routes>
         <OutputConfiguration>
-            <TravelTimes route="A1" dt="5" tauEMA="40" />
+            <TravelTimes route="A1" dt="5"  />
             <TravelTimes route="A2" dt="5" />
         </OutputConfiguration>
     </Scenario>

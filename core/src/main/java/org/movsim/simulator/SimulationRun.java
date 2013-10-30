@@ -35,32 +35,42 @@ import com.google.common.base.Preconditions;
 public class SimulationRun {
 
     public interface CompletionCallback {
-        /**
-         * Callback to inform the application that the simulation has run to completion.
-         * 
-         * @param simulationTime
-         */
-        public void simulationComplete(double simulationTime);
+	/**
+	 * Callback to inform the application that the simulation has run to
+	 * completion.
+	 * 
+	 * @param simulationTime
+	 */
+	public void simulationComplete(double simulationTime);
     }
 
     public interface UpdateStatusCallback {
-        /**
-         * Callback to allow the application to make updates to its state after the vehicle
-         * positions etc have been updated, but before the repaint is called.
-         * 
-         * @param simulationTime
-         *            the current logical time in the simulation
-         */
-        public void updateStatus(double simulationTime);
+	/**
+	 * Callback to allow the application to make updates to its state after
+	 * the vehicle positions etc have been updated, but before the repaint
+	 * is called.
+	 * 
+	 * @param simulationTime
+	 *            the current logical time in the simulation
+	 */
+	public void updateStatus(double simulationTime);
     }
 
     protected double dt; // timestep, seconds
+
     protected double duration; // duration, seconds
-    protected double simulationTime; // Simulation time, seconds (reset to 0.0 in each run)
+
+    protected double simulationTime; // Simulation time, seconds (reset to 0.0
+	                             // in each run)
+
     protected long iterationCount;
+
     protected long totalSimulationTime;
+
     protected final List<UpdateStatusCallback> updateStatusCallbacks = new ArrayList<>();
+
     protected CompletionCallback completionCallback;
+
     // simulation is an object that implements the SimulationTimeStep interface.
     protected final SimulationTimeStep simulation;
 
@@ -68,12 +78,13 @@ public class SimulationRun {
      * Constructor, sets the simulation object.
      * 
      * @param simulation
-     *            a simulation object that implements the SimulationTimeStep interface
+     *            a simulation object that implements the SimulationTimeStep
+     *            interface
      */
     public SimulationRun(SimulationTimeStep simulation) {
-        assert simulation != null;
-        this.simulation = simulation;
-        initShutdownHook();
+	assert simulation != null;
+	this.simulation = simulation;
+	initShutdownHook();
     }
 
     /**
@@ -82,7 +93,7 @@ public class SimulationRun {
      * @return the simulation timestep object
      */
     public final SimulationTimeStep simulation() {
-        return simulation;
+	return simulation;
     }
 
     /**
@@ -92,7 +103,7 @@ public class SimulationRun {
      *            simulation timestep in seconds
      */
     public final void setTimeStep(double dt) {
-        this.dt = dt;
+	this.dt = dt;
     }
 
     /**
@@ -101,7 +112,7 @@ public class SimulationRun {
      * @return simulation timestep in seconds
      */
     public final double timeStep() {
-        return dt;
+	return dt;
     }
 
     /**
@@ -111,7 +122,7 @@ public class SimulationRun {
      *            simulation duration in seconds
      */
     public final void setDuration(double duration) {
-        this.duration = duration;
+	this.duration = duration;
     }
 
     /**
@@ -120,7 +131,7 @@ public class SimulationRun {
      * @return simulation duration in seconds
      */
     public final double duration() {
-        return duration;
+	return duration;
     }
 
     /**
@@ -129,7 +140,7 @@ public class SimulationRun {
      * @return number of iterations
      */
     public final long iterationCount() {
-        return iterationCount;
+	return iterationCount;
     }
 
     /**
@@ -138,33 +149,34 @@ public class SimulationRun {
      * </p>
      * 
      * <p>
-     * This is the logical time in the simulation (that is the sum of the deltaTs), not the amount of real time that has been required to do
-     * the simulation calculations.
+     * This is the logical time in the simulation (that is the sum of the
+     * deltaTs), not the amount of real time that has been required to do the
+     * simulation calculations.
      * </p>
      * 
      * @return the simulation time
      */
     public final double simulationTime() {
-        return simulationTime;
+	return simulationTime;
     }
 
     /**
-     * Returns the total execution time of the simulation. Useful for order of magnitude
-     * benchmarking.
+     * Returns the total execution time of the simulation. Useful for order of
+     * magnitude benchmarking.
      * 
      * @return total execution time of the simulation
      */
     public final long totalSimulationTime() {
-        return totalSimulationTime;
+	return totalSimulationTime;
     }
 
     /**
      * Resets the simulation instrumentation data.
      */
     public void reset() {
-        simulationTime = 0.0;
-        iterationCount = 0;
-        totalSimulationTime = 0;
+	simulationTime = 0.0;
+	iterationCount = 0;
+	totalSimulationTime = 0;
     }
 
     /**
@@ -173,7 +185,7 @@ public class SimulationRun {
      * @param updateStatusCallback
      */
     public void addUpdateStatusCallback(UpdateStatusCallback updateStatusCallback) {
-        updateStatusCallbacks.add(Preconditions.checkNotNull(updateStatusCallback));
+	updateStatusCallbacks.add(Preconditions.checkNotNull(updateStatusCallback));
     }
 
     /**
@@ -182,49 +194,44 @@ public class SimulationRun {
      * @param completionCallback
      */
     public final void setCompletionCallback(CompletionCallback completionCallback) {
-        assert this.completionCallback == null; // it's a mistake if this is set twice
-        this.completionCallback = completionCallback;
+	Preconditions.checkState(this.completionCallback == null, "it's a mistake if this is set twice");
+	this.completionCallback = completionCallback;
     }
 
     /**
      * Runs the simulation to completion and then calls the completion callback.
      */
     public void runToCompletion() {
-        assert dt != 0.0;
-        assert duration != 0.0;
-        assert duration > 0.0;
-        reset();
-        final long timeBeforeSim_ms = System.currentTimeMillis();
-        final double timeLimit = duration + dt / 2.0; // allow for rounding errors
-        while (simulationTime <= timeLimit) {
-            // perform the timeStep for the road network
-            simulation.timeStep(dt, simulationTime, iterationCount);
-            for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
-                updateStatusCallback.updateStatus(simulationTime);
-            }
-            simulationTime += dt;
-            ++iterationCount;
-
-            // TODO testwise
-            // if (iterationCount == 1000) {
-            // throw new RuntimeException("Dummy Exception to cause JVM to exit");
-            // }
-
-        }
-        totalSimulationTime = System.currentTimeMillis() - timeBeforeSim_ms;
-        if (completionCallback != null) {
-            completionCallback.simulationComplete(simulationTime);
-        }
-        ShutdownHooks.INSTANCE.onShutDown();
+	assert dt != 0.0;
+	assert duration != 0.0;
+	assert duration > 0.0;
+	reset();
+	final long timeBeforeSim_ms = System.currentTimeMillis();
+	final double timeLimit = duration + dt / 2.0; // allow for rounding
+	                                              // errors
+	while (simulationTime <= timeLimit) {
+	    // perform the timeStep for the road network
+	    simulation.timeStep(dt, simulationTime, iterationCount);
+	    for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
+		updateStatusCallback.updateStatus(simulationTime);
+	    }
+	    simulationTime += dt;
+	    ++iterationCount;
+	}
+	totalSimulationTime = System.currentTimeMillis() - timeBeforeSim_ms;
+	if (completionCallback != null) {
+	    completionCallback.simulationComplete(simulationTime);
+	}
+	ShutdownHooks.INSTANCE.onShutDown();
     }
 
     private static void initShutdownHook() {
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                System.out.println("Unexpected end of simulator: perform ShutdownHooks");
-                ShutdownHooks.INSTANCE.onShutDown();
-            }
-        });
+	Runtime.getRuntime().addShutdownHook(new Thread() {
+	    @Override
+	    public void run() {
+		System.out.println("Unexpected end of simulator: perform ShutdownHooks");
+		ShutdownHooks.INSTANCE.onShutDown();
+	    }
+	});
     }
 }

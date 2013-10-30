@@ -31,14 +31,16 @@ import java.io.PrintWriter;
 import javax.xml.bind.JAXBException;
 
 import org.movsim.autogen.Movsim;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.xml.MovsimInputLoader;
 import org.xml.sax.SAXException;
-
-import com.google.common.base.Preconditions;
 
 public final class SimulationScan {
 
-    public static void invokeSimulationScan(Movsim inputData) throws JAXBException, SAXException {
+    public static void invokeSimulationScan() throws JAXBException, SAXException {
+
+	Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getInputFile());
 
         // TODO quick hack
         double uncertaintyMin = 0;
