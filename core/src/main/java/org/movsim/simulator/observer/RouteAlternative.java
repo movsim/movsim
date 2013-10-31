@@ -2,7 +2,7 @@ package org.movsim.simulator.observer;
 
 import com.google.common.base.Preconditions;
 
-public class RouteAlternative {
+class RouteAlternative {
 
     private final String route;
 

@@ -76,7 +76,7 @@ public class ServiceProvider implements SimulationTimeStep {
     }
 
     // TODO use cached values from RouteAlternative, refactor methods
-    private boolean doDiverge(double uncertainty, DecisionPoint decisionPoint) {
+    private boolean alternativeAvailableAndMoreAttractive(double uncertainty, DecisionPoint decisionPoint) {
         double sum = 0;
         double temp = 0;
         double probability = -1;
@@ -101,9 +101,7 @@ public class ServiceProvider implements SimulationTimeStep {
         if (MyRandom.nextDouble() > probability) {
             return true;
         }
-
         return false;
-
     }
 
     @Override
@@ -117,7 +115,7 @@ public class ServiceProvider implements SimulationTimeStep {
     public boolean doDiverge(double uncertainty, String roadSegmentUserId) {
         DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
         if (decisionPoint != null) {
-            return doDiverge(uncertainty, decisionPoint);
+            return alternativeAvailableAndMoreAttractive(uncertainty, decisionPoint);
         }
         return false;
     }
