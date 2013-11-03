@@ -32,7 +32,11 @@
 			</DecisionPoints>
 		</ServiceProvider>
     </ServiceProviders>
-    <Scenario network_filename="routing.xodr">
+    <RoadTypeSpeedMappings>
+		<RoadTypeSpeedMapping road_type="motorway" default_speed_kmh="130" />
+		<RoadTypeSpeedMapping road_type="unknown" default_speed_kmh="80" />
+    </RoadTypeSpeedMappings>
+    <Scenario network_filename="routing_test.xodr">
         <Simulation timestep="0.2" duration="900" seed="42" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="Equipped" fraction="0.3" relative_v0_randomization="0.0" />

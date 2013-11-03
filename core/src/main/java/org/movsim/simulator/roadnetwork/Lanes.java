@@ -146,14 +146,14 @@ public final class Lanes {
     public enum RoadLinkElementType {
         ROAD("road"), JUNCTION("junction");
 
-        private final String openDriveIdentifier;
+        private final String xodrIdentifier;
 
         RoadLinkElementType(String keyword) {
-            this.openDriveIdentifier = keyword;
+            this.xodrIdentifier = keyword;
         }
 
         public String xodrIdentifier() {
-            return openDriveIdentifier;
+            return xodrIdentifier;
         }
     }
 

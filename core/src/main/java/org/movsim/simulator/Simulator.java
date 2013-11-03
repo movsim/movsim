@@ -57,6 +57,7 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadTypeSpeeds;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.boundaries.MicroInflowFileReader;
@@ -120,6 +121,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     public Simulator(Movsim inputData) {
         ShutdownHooks.INSTANCE.clear(); // TODO move to better place
         this.inputData = Preconditions.checkNotNull(inputData);
+        RoadTypeSpeeds.INSTANCE.init(inputData.getRoadTypeSpeedMappings());
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);

@@ -33,13 +33,14 @@
         </xs:restriction>
     </xs:simpleType>
     <!--     <xs:include schemaLocation="./MovsimSimpleTypes.xsd"/>  -->
-    <!-- root element -->
+    <!-- root elements -->
     <xs:element name="Movsim">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="Consumption" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="VehiclePrototypes" minOccurs="0" maxOccurs="1" />
                 <xs:element name="ServiceProviders" type="ServiceProvidersType" minOccurs="0" maxOccurs="1" />
+                <xs:element name="RoadTypeSpeedMappings" type="RoadTypeSpeedMappingsType" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Scenario" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
         </xs:complexType>
@@ -444,27 +445,24 @@
             <xs:attribute name="fluct_strength" type="nonNegativeDouble" use="required" />
         </xs:complexType>
     </xs:element>
-    
     <xs:complexType name="PersonalNavigationDeviceType">
         <xs:attribute name="service_provider" type="xs:string" />
         <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
     </xs:complexType>
-    
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:complexType name="ServiceProvidersType">
-		<xs:sequence>
+        <xs:sequence>
             <xs:element name="ServiceProvider" type="ServiceProviderType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="ServiceProviderType">
-		<xs:sequence>
+        <xs:sequence>
             <xs:element name="DecisionPoints" type="DecisionPointsType" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
         <xs:attribute name="label" type="xs:string" />
         <xs:attribute name="logging" type="xs:boolean" default="false" />
-        <!--<xs:attribute name="uncertainty" type="xs:double" default="0" />--> 
+        <!--<xs:attribute name="uncertainty" type="xs:double" default="0" />-->
     </xs:complexType>
-    
     <xs:complexType name="RouteAlternativesType">
         <xs:sequence>
             <xs:element name="RouteAlternative" type="RouteAlternativeType" minOccurs="2" maxOccurs="unbounded" />
@@ -475,7 +473,7 @@
     <xs:complexType name="RouteAlternativeType">
         <xs:attribute name="route" type="xs:string" />
     </xs:complexType>
-   <!-- --> 
+    <!-- -->
     <xs:complexType name="DecisionPointsType">
         <xs:sequence>
             <xs:element name="DecisionPoint" type="DecisionPointType" minOccurs="0" maxOccurs="unbounded" />
@@ -868,6 +866,31 @@
             <xs:attribute name="end_time" type="nonNegativeDouble" />
         </xs:complexType>
     </xs:element>
-    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55 -->
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <xs:complexType name="RoadTypeSpeedMappingsType">
+        <xs:sequence>
+            <xs:element name="RoadTypeSpeedMapping" type="RoadTypeSpeedMappingType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RoadTypeSpeedMappingType">
+        <xs:annotation>
+            <xs:documentation>Mapping of road type to the maximum speed that is allowed for the road type.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="road_type" type="RoadTypeEnum" />
+        <xs:attribute name="default_speed_kmh" type="positiveDouble" />
+    </xs:complexType>
+    <xs:annotation>
+        <xs:documentation>Road types as proposed by the OpenDrive Specification Rev. 1.3. Could be extended for Movsim.</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType name="RoadTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="unknown" />
+            <xs:enumeration value="rural" />
+            <xs:enumeration value="motorway" />
+            <xs:enumeration value="town" />
+            <xs:enumeration value="lowSpeed" />
+            <xs:enumeration value="pedestrian" />
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
 
