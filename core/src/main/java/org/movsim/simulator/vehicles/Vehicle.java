@@ -1258,8 +1258,12 @@ public class Vehicle {
         this.length = length;
     }
 
-    public void setRoute(Route route) {
-        this.route = route;
+    public void setRoute(Route newRoute) {
+        LOG.debug("set route={} to vehicle {}", getRouteName(), id);
+        if (this.route != null && newRoute != null) {
+            LOG.info("vehicle changed route from={} to new route={}", this.route, newRoute);
+        }
+        this.route = newRoute;
     }
 
     public String getRouteName() {
