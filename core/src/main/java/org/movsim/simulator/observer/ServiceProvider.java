@@ -89,10 +89,13 @@ public class ServiceProvider implements SimulationTimeStep {
             sum += Math.exp(beta * RoadNetwork.instantaneousTravelTime(routing.get(route.getRouteLabel())));
         }
 
+        // specific solution TODO
         if (sum != 0) {
             for (RouteAlternative route : decisionPoint) {
-                temp = Math.exp(beta * RoadNetwork.instantaneousTravelTime(routing.get(route.getRouteLabel())));
-                probability = temp / sum;
+                if (route.getRouteLabel().equals("A1")) {
+                    temp = Math.exp(beta * RoadNetwork.instantaneousTravelTime(routing.get(route.getRouteLabel())));
+                    probability = temp / sum;
+                }
             }
         }
 

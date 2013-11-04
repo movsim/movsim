@@ -40,45 +40,41 @@ public final class SimulationScan {
 
     public static void invokeSimulationScan() throws JAXBException, SAXException {
 
-	Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getInputFile());
+        Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getInputFile());
 
         // TODO quick hack
-        double uncertaintyMin = 0;
-        double uncertaintyMax = 2;
-        double uncertaintyStep = 0.2;
+        int uncertaintyMin = 0;
+        int uncertaintyMax = 20;
+        int uncertaintyStep = 2;
 
-        double fractionMin = 0.0;
-        double fractionMax = 1.0;
-        double fractionStep = 0.1;
+        int fractionMin = 0;
+        int fractionMax = 100;
+        int fractionStep = 10;
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < 10; i++) {
-            Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
-            sb.append(i).append(" ").append(simRun.getRoadNetwork().totalVehicleTravelTime()).append("\n");
-        }
-
-        // for (double fraction = fractionMin; fraction <= fractionMax; fraction = fraction + fractionStep) {
-        // for (double uncertainty = uncertaintyMin; uncertainty <= uncertaintyMax; uncertainty = uncertainty
-        // + uncertaintyStep) {
-        // inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(0)
-        // .setFraction(fraction);
-        //
-        // Preconditions.checkArgument(Math.abs(inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(0).getFraction()
-        // -fraction)<0.0001);
-        //
-        //
-        //
-        // inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(1)
-        // .setFraction((1 - fraction));
-        // inputData.getVehiclePrototypes().getVehiclePrototypeConfiguration().get(0).getDecisionPoints()
-        // .setUncertainty(uncertainty);
-        //
+        // for (int i = 0; i < 10; i++) {
         // Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
-        //
-        // sb.append(fraction).append(" ").append(uncertainty).append(" ").append(simRun.getRoadNetwork().totalVehicleTravelTime()).append("\n");
+        // sb.append(i).append(" ").append(simRun.getRoadNetwork().totalVehicleTravelTime()).append("\n");
         // }
-        // }
+
+        for (int fraction = fractionMin; fraction <= fractionMax; fraction = fraction + fractionStep) {
+            for (int uncertainty = uncertaintyMin; uncertainty <= uncertaintyMax; uncertainty = uncertainty
+                    + uncertaintyStep) {
+                inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(0)
+                        .setFraction(fraction/100.0);
+
+                inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(1)
+                        .setFraction((1 - fraction/100.0));
+                inputData.getVehiclePrototypes().getVehiclePrototypeConfiguration().get(0)
+                        .getPersonalNavigationDevice().setUncertainty(uncertainty*6);
+
+                Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
+
+                sb.append(fraction/100.0).append(" ").append(uncertainty/10.0).append(" ")
+                        .append(simRun.getRoadNetwork().totalVehicleTravelTime()).append("\n");
+            }
+        }
 
         writeFile(sb.toString(), "totalVehicleTravelTime.dat");
 
@@ -87,7 +83,7 @@ public final class SimulationScan {
         // System.out.println("result = " + simRun.getRoadNetwork().totalVehicleTravelTime());
     }
 
-    private static void writeFile(String text, String outputFile) {
+    public static void writeFile(String text, String outputFile) {
 
         FileWriter outFile;
         try {
