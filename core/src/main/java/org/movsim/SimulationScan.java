@@ -31,18 +31,19 @@ import java.io.PrintWriter;
 import javax.xml.bind.JAXBException;
 
 import org.movsim.autogen.Movsim;
-import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
-import org.movsim.xml.MovsimInputLoader;
 import org.xml.sax.SAXException;
 
 public final class SimulationScan {
 
-    public static void invokeSimulationScan() throws JAXBException, SAXException {
+    private SimulationScan() {
+        throw new IllegalStateException("do not instanciate");
+    }
 
-        Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getInputFile());
 
-        // TODO quick hack
+    public static void invokeSimulationScan(final Movsim inputData) throws JAXBException, SAXException {
+
+        // TODO quick hack here
         int uncertaintyMin = 0;
         int uncertaintyMax = 20;
         int uncertaintyStep = 2;

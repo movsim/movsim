@@ -35,9 +35,7 @@ import java.util.Set;
 import javax.annotation.CheckForNull;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.movsim.SimulationScan;
 import org.movsim.roadmappings.RoadMapping;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
@@ -143,8 +141,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     /** dynamic ff speed, considering speed limits. */
     private double meanFreeFlowSpeed = -1;
 
-    /** static ff speed assigned in xodr. */
-    private double freeFlowSpeed = -1;
+    /** static freeflow speed as maximum speed that is allowed. */
+    private double freeFlowSpeed = RoadTypeSpeeds.INSTANCE.getDefaultFreeFlowSpeed();
 
     public static class TestCar {
         public double s = 0.0; // distance
@@ -625,12 +623,13 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return (vehCount > 0) ? sumSpeed / vehCount : getMeanFreeflowSpeed();
     }
 
+    // TODO to be defined properly
     private double getMeanFreeflowSpeed() {
         if (meanFreeFlowSpeed < 0) {
             double sum = 0;
             double currentPosition = 0;
             double speedLimitPosition = 0;
-            double currentSpeedLimit = MovsimConstants.FREE_SPEED;
+            double currentSpeedLimit = freeFlowSpeed;
             for (SpeedLimit speedLimit : speedLimits()) {
                 speedLimitPosition = speedLimit.position();
                 sum += currentSpeedLimit * (speedLimitPosition - currentPosition);
@@ -653,11 +652,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *         empty and with assumed maximum travel time in standstill
      */
     public double instantaneousTravelTime() {
-        //return calcInstantaneousTravelTime();
-        return roadLength / Math.max(meanSpeed(), MovsimConstants.MIN_POSITIVE_SPEED);
-    }
+        return calcInstantaneousTravelTime();
+        //return roadLength / meanSpeed();
 
-    int i = 0;
+    }
 
     public double calcInstantaneousTravelTime() {
 
@@ -1385,6 +1383,14 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         Preconditions.checkNotNull(peerRoadSegment);
         Preconditions.checkArgument(!peerRoadSegment.equals(this));
         this.peerRoadSegment = peerRoadSegment;
+    }
+
+    double getFreeFlowSpeed() {
+        return freeFlowSpeed;
+    }
+
+    void setFreeFlowSpeed(double freeFlowSpeed) {
+        this.freeFlowSpeed = freeFlowSpeed;
     }
 
 }
