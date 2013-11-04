@@ -29,11 +29,13 @@ package org.movsim.simulator.roadnetwork;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.CheckForNull;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.movsim.SimulationScan;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
@@ -48,6 +50,8 @@ import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.roadnetwork.predicates.VehicleWithinRange;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.ExponentialMovingAverage;
+import org.movsim.utilities.XYDataPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -649,7 +653,73 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *         empty and with assumed maximum travel time in standstill
      */
     public double instantaneousTravelTime() {
+        //return calcInstantaneousTravelTime();
         return roadLength / Math.max(meanSpeed(), MovsimConstants.MIN_POSITIVE_SPEED);
+    }
+
+    int i = 0;
+
+    public double calcInstantaneousTravelTime() {
+
+        List<XYDataPoint> dataPoints = new ArrayList<>();
+
+        int step = 10;
+        double minPos = roadLength;
+        double deltaMin = 0;
+        double maxPos = 0;
+        double deltaMax = 0;
+        double a = 1.5;
+
+        for (final LaneSegment laneSegment : laneSegments) {
+            for (Vehicle veh : laneSegment) {
+                if (veh.type() == Vehicle.Type.OBSTACLE) {
+                    continue;
+                }
+                double position = roadLength - veh.getDistanceToRoadSegmentEnd();
+                double speed = veh.getSpeed();
+                dataPoints.add(new XYDataPoint(position, speed));
+
+                if (minPos > position) {
+                    minPos = position;
+                    deltaMin = Math.abs((Math.pow(getSpeedLimit(position - step), 2) - Math.pow(speed, 2))
+                            / (2 * a));
+                }
+                if (maxPos < position) {
+                    maxPos = position;
+                    deltaMax = Math.abs((Math.pow(getSpeedLimit(position + step), 2) - Math.pow(speed, 2))
+                            / (2 * a));
+                }
+            }
+        }
+
+        for (int x = 0; x < minPos - deltaMin; x = x + step) {
+            dataPoints.add(new XYDataPoint(x, getSpeedLimit(x)));
+        }
+        for (int x = (int) (maxPos + deltaMax); x < roadLength; x = x + step) {
+            dataPoints.add(new XYDataPoint(x, getSpeedLimit(x)));
+        }
+
+        double time = 0;
+        double v = 35;
+        for (double x = 0; x < roadLength; x = x + step) {
+            double vNew = ExponentialMovingAverage.calcEMA(x, dataPoints, 20);
+            time += step / ((v + vNew) / 2);
+            v = vNew;
+        }
+
+        return time;
+    }
+
+    public double getSpeedLimit(double position) {
+
+        double speedLimit = 35;
+        for (SpeedLimit sl : speedLimits()) {
+            if (position < sl.position()) {
+                return speedLimit;
+            }
+            speedLimit = sl.getSpeedLimitKmh() / 3.6;
+        }
+        return speedLimit;
     }
 
     /**
