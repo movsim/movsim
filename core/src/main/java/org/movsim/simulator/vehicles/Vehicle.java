@@ -487,6 +487,7 @@ public class Vehicle {
     }
 
     public final double getEffectiveSpeedlimit() {
+        LOG.debug("speedlimit={}, maxAllowedSpeedOnRoad={}", speedlimit, getMaxAllowedSpeedOnRoad());
         return Math.min(speedlimit, getMaxAllowedSpeedOnRoad());
     }
     
