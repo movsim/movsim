@@ -653,7 +653,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      */
     public double instantaneousTravelTime() {
         return calcInstantaneousTravelTime();
-        //return roadLength / meanSpeed();
+        // return roadLength / meanSpeed();
 
     }
 
@@ -679,13 +679,11 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
                 if (minPos > position) {
                     minPos = position;
-                    deltaMin = Math.abs((Math.pow(getSpeedLimit(position - step), 2) - Math.pow(speed, 2))
-                            / (2 * a));
+                    deltaMin = Math.abs((Math.pow(getSpeedLimit(position - step), 2) - Math.pow(speed, 2)) / (2 * a));
                 }
                 if (maxPos < position) {
                     maxPos = position;
-                    deltaMax = Math.abs((Math.pow(getSpeedLimit(position + step), 2) - Math.pow(speed, 2))
-                            / (2 * a));
+                    deltaMax = Math.abs((Math.pow(getSpeedLimit(position + step), 2) - Math.pow(speed, 2)) / (2 * a));
                 }
             }
         }
@@ -1385,11 +1383,11 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.peerRoadSegment = peerRoadSegment;
     }
 
-    double getFreeFlowSpeed() {
+    public double getFreeFlowSpeed() {
         return freeFlowSpeed;
     }
 
-    void setFreeFlowSpeed(double freeFlowSpeed) {
+    public void setFreeFlowSpeed(double freeFlowSpeed) {
         this.freeFlowSpeed = freeFlowSpeed;
     }
 
