@@ -1106,7 +1106,7 @@ public class Vehicle {
         this.frontPositionOld -= offsetPosition;
 
         setRearPosition(newRearPosition);
-        setRoadSegment(newRoadSegment.id(), newRoadSegment.roadLength());
+        setRoadSegment(newRoadSegment);
     }
 
     /**
@@ -1118,11 +1118,12 @@ public class Vehicle {
      * 
      */
 
-    public final void setRoadSegment(int roadSegmentId, double roadSegmentLength) {
+    public final void setRoadSegment(RoadSegment roadSegment) {
+        this.roadSegment = Preconditions.checkNotNull(roadSegment);
         if (originRoadSegmentId == ROAD_SEGMENT_ID_NOT_SET) {
-            originRoadSegmentId = roadSegmentId;
+            originRoadSegmentId = roadSegment.id();
         }
-        this.roadSegmentId = roadSegmentId;
+        this.roadSegmentId = roadSegment.id();
 
         updateRoute();
     }

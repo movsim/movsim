@@ -652,8 +652,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *         empty and with assumed maximum travel time in standstill
      */
     public double instantaneousTravelTime() {
-        return calcInstantaneousTravelTime();
-        // return roadLength / meanSpeed();
+        // return calcInstantaneousTravelTime()/60; //in min
+        return roadLength / meanSpeed()/60; //in min
 
     }
 
@@ -661,7 +661,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
         List<XYDataPoint> dataPoints = new ArrayList<>();
 
-        int step = 10;
+        int step = 100;
         double minPos = roadLength;
         double deltaMin = 0;
         double maxPos = 0;
@@ -696,7 +696,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         }
 
         double time = 0;
-        double v = 35;
+        double v = getFreeFlowSpeed();
         for (double x = 0; x < roadLength; x = x + step) {
             double vNew = ExponentialMovingAverage.calcEMA(x, dataPoints, 20);
             time += step / ((v + vNew) / 2);
@@ -707,7 +707,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public double getSpeedLimit(double position) {
-        double speedLimit = 35;
+        double speedLimit = getFreeFlowSpeed();
         for (SpeedLimit sl : speedLimits()) {
             if (position < sl.position()) {
                 return speedLimit;
@@ -794,7 +794,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      */
     public void addObstacle(Vehicle obstacle) {
         assert obstacle.type() == Vehicle.Type.OBSTACLE;
-        obstacle.setRoadSegment(id, roadLength);
+        obstacle.setRoadSegment(this);
         addVehicle(obstacle);
     }
 
@@ -804,7 +804,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
-        vehicle.setRoadSegment(id, roadLength);
+        vehicle.setRoadSegment(this);
         laneSegments[vehicle.lane() - 1].addVehicle(vehicle);
     }
 
@@ -814,7 +814,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @param vehicle
      */
     public void appendVehicle(Vehicle vehicle) {
-        vehicle.setRoadSegment(id, roadLength);
+        vehicle.setRoadSegment(this);
         laneSegments[vehicle.lane() - 1].appendVehicle(vehicle);
     }
 
