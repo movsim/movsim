@@ -489,7 +489,7 @@ public class Vehicle {
     public final double getEffectiveSpeedlimit() {
         return Math.min(speedlimit, getMaxAllowedSpeedOnRoad());
     }
-    
+
     public final double getSpeedlimit() {
         return speedlimit;
     }
@@ -1306,7 +1306,7 @@ public class Vehicle {
     public void setServiceProvider(ServiceProvider serviceProvider) {
         this.serviceProvider = Preconditions.checkNotNull(serviceProvider);
     }
-    
+
     public void setDecisionUncertainty(double uncertainty) {
         this.uncertainty = uncertainty;
     }
