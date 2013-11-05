@@ -121,7 +121,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     public Simulator(Movsim inputData) {
         ShutdownHooks.INSTANCE.clear(); // TODO move to better place
         this.inputData = Preconditions.checkNotNull(inputData);
-        RoadTypeSpeeds.INSTANCE.init(inputData.getRoadTypeSpeedMappings());
+        if (inputData.isSetRoadTypeSpeedMappings()) {
+            RoadTypeSpeeds.INSTANCE.init(inputData.getRoadTypeSpeedMappings());
+        }
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);
@@ -147,7 +149,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         parseOpenDriveXml(roadNetwork, ProjectMetaData.getInstance());
         routing = new Routing(inputData.getScenario().getRoutes(), roadNetwork);
 
-        serviceProviders = new ServiceProviders(inputData.getServiceProviders(), routing, roadNetwork);
+        if (inputData.isSetServiceProviders()) {
+            serviceProviders = new ServiceProviders(inputData.getServiceProviders(), routing, roadNetwork);
+        }
 
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
                 inputData.getConsumption(), routing, serviceProviders);

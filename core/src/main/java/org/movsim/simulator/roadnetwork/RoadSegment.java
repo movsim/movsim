@@ -707,7 +707,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public double getSpeedLimit(double position) {
-
         double speedLimit = 35;
         for (SpeedLimit sl : speedLimits()) {
             if (position < sl.position()) {

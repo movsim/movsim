@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.movsim.autogen.ConsumptionCalculation;
 import org.movsim.autogen.FloatingCarOutput;
 import org.movsim.autogen.OutputConfiguration;
@@ -78,12 +80,13 @@ public class SimulationOutput implements SimulationTimeStep {
     private final Routing routing;
 
     public SimulationOutput(double simulationTimestep, boolean writeOutput, OutputConfiguration outputConfiguration,
-            RoadNetwork roadNetwork, Routing routing, VehicleFactory vehicleFactory, ServiceProviders serviceProviders) {
+            RoadNetwork roadNetwork, Routing routing, VehicleFactory vehicleFactory,
+            @Nullable ServiceProviders serviceProviders) {
 
         Preconditions.checkNotNull(outputConfiguration);
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
         this.routing = Preconditions.checkNotNull(routing);
-        this.serviceProviders=serviceProviders;
+        this.serviceProviders = serviceProviders;
 
         initFloatingCars(writeOutput, outputConfiguration);
         initConsumption(writeOutput, simulationTimestep, outputConfiguration);
@@ -170,8 +173,10 @@ public class SimulationOutput implements SimulationTimeStep {
             consumption.timeStep(dt, simulationTime, iterationCount);
         }
 
-        for (final ServiceProvider serviceProvider: serviceProviders){
-            serviceProvider.timeStep(dt, simulationTime, iterationCount);
+        if (serviceProviders != null) {
+            for (final ServiceProvider serviceProvider : serviceProviders) {
+                serviceProvider.timeStep(dt, simulationTime, iterationCount);
+            }
         }
         
     }

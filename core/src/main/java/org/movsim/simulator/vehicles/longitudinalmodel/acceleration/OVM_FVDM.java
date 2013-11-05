@@ -75,7 +75,7 @@ class OVM_FVDM extends LongitudinalModelBase {
         final double dv = me.getRelSpeed(frontVehicle); // only needed for VDIFF
 
         // speed limit: OVM causes accidents due to immediate braking reaction
-        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
         // System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
         return acc(s, v, dv, alphaT, v0Local);
     }

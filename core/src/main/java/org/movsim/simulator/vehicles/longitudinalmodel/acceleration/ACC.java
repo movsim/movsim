@@ -81,7 +81,7 @@ class ACC extends LongitudinalModelBase {
         // me.getPosition(), me.getSpeed(), alphaT, alphaV0, T, Tlocal);
         // }
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
         final double aLocal = alphaA * param.getA();
 
         return acc(s, v, dv, aLead, Tlocal, v0Local, aLocal);

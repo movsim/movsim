@@ -169,7 +169,7 @@ public class Vehicle {
     /** finite lane-changing duration */
     private double tLaneChangeDelay;
 
-    private double speedlimit;
+    private double speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;;
     private double slope;
 
     private int color;
@@ -206,7 +206,7 @@ public class Vehicle {
 
     // Exit Handling
     private int roadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
-    private double roadSegmentLength;
+    private RoadSegment roadSegment;
     private int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
     private int originRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
@@ -290,7 +290,6 @@ public class Vehicle {
         longitudinalModel = null;
         label = "";
         physQuantities = new PhysicalQuantities(this);
-        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = 0;
         route = null;
         trafficLightApproaching = new TrafficLightApproaching();
@@ -320,7 +319,6 @@ public class Vehicle {
         laneChangeModel = source.laneChangeModel;
         longitudinalModel = source.longitudinalModel;
         label = source.label;
-        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = source.slope;
         route = source.route;
         routeIndex = source.routeIndex;
@@ -488,8 +486,19 @@ public class Vehicle {
         this.speed = speed;
     }
 
+    public final double getEffectiveSpeedlimit() {
+        return Math.min(speedlimit, getMaxAllowedSpeedOnRoad());
+    }
+    
     public final double getSpeedlimit() {
         return speedlimit;
+    }
+
+    public final double getMaxAllowedSpeedOnRoad() {
+        if (roadSegment == null) {
+            return MovsimConstants.MAX_VEHICLE_SPEED;
+        }
+        return roadSegment.getFreeFlowSpeed();
     }
 
     /**
@@ -1114,7 +1123,6 @@ public class Vehicle {
             originRoadSegmentId = roadSegmentId;
         }
         this.roadSegmentId = roadSegmentId;
-        this.roadSegmentLength = roadSegmentLength;
 
         updateRoute();
     }
@@ -1224,10 +1232,10 @@ public class Vehicle {
     }
 
     public double getDistanceToRoadSegmentEnd() {
-        if (roadSegmentLength <= 0) {
+        if (roadSegment.roadLength() <= 0) {
             return -1;
         }
-        return roadSegmentLength - getFrontPosition();
+        return roadSegment.roadLength() - getFrontPosition();
     }
 
     @Override

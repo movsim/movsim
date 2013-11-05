@@ -76,7 +76,7 @@ class Gipps extends LongitudinalModelBase {
         // space dependencies modeled by speedlimits, alpha's
 
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
 
         // #############################################################
         // space dependencies modelled by alpha_T

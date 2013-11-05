@@ -33,13 +33,13 @@ public final class VehicleFactory {
 
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
-    private ServiceProviders serviceProviders;
+    private final ServiceProviders serviceProviders;
 
     public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes,
-            @Nullable Consumption consumption, Routing routing, ServiceProviders serviceProviders) {
+            @Nullable Consumption consumption, Routing routing, @Nullable ServiceProviders serviceProviders) {
         Preconditions.checkNotNull(vehPrototypes);
         this.routing = Preconditions.checkNotNull(routing);
-        this.serviceProviders = Preconditions.checkNotNull(serviceProviders);
+        this.serviceProviders = serviceProviders;
 
         if (consumption != null) {
             fuelModelFactory.add(consumption.getConsumptionModels());
