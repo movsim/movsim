@@ -37,25 +37,31 @@
 		<RoadTypeSpeedMapping road_type="unknown" default_speed_kmh="80" />
     </RoadTypeSpeedMappings>
     <Scenario network_filename="routing_scenario.xodr">
-        <Simulation timestep="0.2" duration="900" seed="42" crash_exit="false">
+        <Simulation timestep="0.2" duration="7200" seed="42" crash_exit="false">
             <TrafficComposition>
-                <VehicleType label="Equipped" fraction="0.3" relative_v0_randomization="0.0" />
-                <VehicleType label="NonEquipped" fraction="0.7" relative_v0_randomization="0.0" />
+                <VehicleType label="Equipped" fraction="1.0" relative_v0_randomization="0.0" />
+                <VehicleType label="NonEquipped" fraction="0.0" relative_v0_randomization="0.0" />
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="0" v="20" />
-                    <Inflow t="60" q_per_hour="1800" v="20" />
-                    <Inflow t="120" q_per_hour="1800" v="20" />
-                    <Inflow t="180" q_per_hour="0" v="20" />
+                    <Inflow t="600" q_per_hour="1800" v="20" />
+                    <Inflow t="3600" q_per_hour="1800" v="20" />
+                    <Inflow t="4800" q_per_hour="0" v="20" />
                 </TrafficSource>
+                <!-- increase inflow performance at source -->
                 <FlowConservingInhomogeneities>
                     <Inhomogeneity position="0" valid_length="200" adaptation_length="200" start_alpha_T="0.8" target_alpha_T="1.0" />
                 </FlowConservingInhomogeneities>
             </Road>
+            <Road id="3">
+                <FlowConservingInhomogeneities>
+                    <Inhomogeneity position="13000" valid_length="1000" adaptation_length="0" target_alpha_T="1.5" />
+                </FlowConservingInhomogeneities>
+            </Road>
             <Road id="10">
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="250" valid_length="120" adaptation_length="0" target_alpha_T="1.5" />
+                    <Inhomogeneity position="14000" valid_length="1000" adaptation_length="0" target_alpha_T="1.5" />
                 </FlowConservingInhomogeneities>
             </Road>
         </Simulation>
