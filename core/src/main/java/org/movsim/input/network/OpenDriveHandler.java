@@ -173,8 +173,10 @@ public class OpenDriveHandler {
         roadSegment.setUserId(getRoadSegmentId(road.getId(), laneType, hasPeer));
         roadSegment.setUserRoadname(road.getName());
         if (road.isSetType() && !road.getType().isEmpty()) {
-            // consider only first type defined for road, ignore further
-            // sections
+            if (road.getType().size() > 1) {
+                LOG.error("Movsim considers only first entry of the road.type and ignores the others defined for road="
+                        + road.getId());
+            }
             double freeFlowSpeed = RoadTypeSpeeds.INSTANCE.getFreeFlowSpeed(road.getType().iterator().next().getType());
             roadSegment.setFreeFlowSpeed((int) freeFlowSpeed);
         }
