@@ -443,7 +443,7 @@ public abstract class RoadMappingAbstract implements RoadMapping {
     @Override
     public PolygonFloat mapFloat(Vehicle vehicle, double time) {
         final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(), laneOffset(vehicle.lateralModel()
-                .getContinousLane()));
+                .continousLane()));
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 
