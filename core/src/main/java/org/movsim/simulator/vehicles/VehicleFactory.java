@@ -65,7 +65,7 @@ public final class VehicleFactory {
         vehicle.setRoute(route);
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());
-        vehicle.setFuelModel(prototype.getEnergyFlowModel());
+        vehicle.getEnergyModel().setModel(prototype.getEnergyFlowModel());
 
         if (prototype.getConfiguration().isSetPersonalNavigationDevice()) {
             // TODO potential conflicts between prescribed route and dynamic routing decisions...

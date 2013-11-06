@@ -28,7 +28,6 @@ package org.movsim.simulator.vehicles;
 import javax.annotation.Nullable;
 
 import org.movsim.autogen.VehiclePrototypeConfiguration;
-import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -128,7 +127,6 @@ public class Vehicle {
     /** The total distance traveled */
     private double totalTravelDistance;
     private double totalTravelTime = 0;
-    private double totalFuelUsedLiters;
 
     private double speed;
 
@@ -188,8 +186,8 @@ public class Vehicle {
     private final TrafficLightApproaching trafficLightApproaching;
     private final InhomogeneityAdaption inhomogeneity;
 
-    /** can be null */
-    private EnergyFlowModel fuelModel;
+    private final EnergyModel energyModel = new EnergyModel(this);
+
     /** can be null */
     private Route route;
 
@@ -284,7 +282,6 @@ public class Vehicle {
         this.laneOld = lane;
         this.width = width;
         this.color = 0;
-        fuelModel = null;
         maxDeceleration = 10.0;
         laneChangeModel = null;
         longitudinalModel = null;
@@ -832,9 +829,7 @@ public class Vehicle {
                 acc = 0;
             }
         }
-        if (fuelModel != null) {
-            totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) * dt;
-        }
+        energyModel.incrementConsumption(speed, acc, dt);
     }
 
     public final int lane() {
@@ -1025,13 +1020,6 @@ public class Vehicle {
         return physQuantities;
     }
 
-    public double getActualFuelFlowLiterPerS() {
-        if (fuelModel == null) {
-            return 0;
-        }
-        return fuelModel.getFuelFlowInLiterPerS(speed, acc);
-    }
-
     // Added as part of xodr merge
     /**
      * 'Not Set' road exit position value, guaranteed not to be used by any
@@ -1220,15 +1208,6 @@ public class Vehicle {
         return totalTravelTime;
     }
 
-    /**
-     * Returns the total fuel used by this vehicle.
-     * 
-     * @return total fuel used
-     */
-    public final double totalFuelUsedLiters() {
-        return totalFuelUsedLiters;
-    }
-
     public double getMaxDeceleration() {
         return maxDeceleration;
     }
@@ -1258,10 +1237,6 @@ public class Vehicle {
 
     public void setNoise(Noise noise) {
         this.noise = noise;
-    }
-
-    public void setFuelModel(EnergyFlowModel fuelModel) {
-        this.fuelModel = fuelModel;
     }
 
     public void setLength(double length) {
@@ -1310,6 +1285,10 @@ public class Vehicle {
 
     public void setDecisionUncertainty(double uncertainty) {
         this.uncertainty = uncertainty;
+    }
+
+    public EnergyModel getEnergyModel() {
+        return energyModel;
     }
 
 }

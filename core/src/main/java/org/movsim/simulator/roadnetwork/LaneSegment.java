@@ -252,7 +252,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public double totalVehicleFuelUsedLiters() {
         double totalVehicleFuelUsedLiters = 0;
         for (final Vehicle vehicle : vehicles) {
-            totalVehicleFuelUsedLiters += vehicle.totalFuelUsedLiters();
+            totalVehicleFuelUsedLiters += vehicle.getEnergyModel().totalFuelUsedLiters();
         }
         return totalVehicleFuelUsedLiters;
     }
@@ -260,7 +260,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public double instantaneousFuelUsedLitersPerS() {
         double instFuelUsedLiters = 0;
         for (final Vehicle vehicle : vehicles) {
-            instFuelUsedLiters += vehicle.getActualFuelFlowLiterPerS();
+            instFuelUsedLiters += vehicle.getEnergyModel().getActualFuelFlowLiterPerS();
         }
         return instFuelUsedLiters;
     }
