@@ -900,7 +900,9 @@ public class Vehicle {
      */
     public void moveToNewRoadSegment(RoadSegment newRoadSegment, int newLane, double newRearPosition, double exitPos) {
         // distanceTravelledToStartOfRoadSegment += rearPosition - newRearPos;
-        lateral.setLane(newLane);
+        if (lateral.lane() != newLane) {
+            lateral.setLane(newLane);
+        }
         int laneOld = newLane;
         laneOld = Math.max(Lanes.MOST_INNER_LANE, Math.min(laneOld, newRoadSegment.laneCount()));
         lateral.setOldLane(laneOld);
@@ -921,7 +923,6 @@ public class Vehicle {
      * @param roadSegmentLength
      * 
      */
-
     public final void setRoadSegment(RoadSegment roadSegment) {
         this.roadSegment = Preconditions.checkNotNull(roadSegment);
         if (originRoadSegmentId == ROAD_SEGMENT_ID_NOT_SET) {

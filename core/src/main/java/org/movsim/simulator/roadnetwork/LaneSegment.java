@@ -785,9 +785,6 @@ public class LaneSegment implements Iterable<Vehicle> {
     public boolean assertInvariant() {
         final int roadSegmentId = roadSegment.id();
         for (final Vehicle vehicle : vehicles) {
-            if (vehicle.roadSegmentId() != roadSegmentId) {
-                System.out.println("here");
-            }
             assert vehicle.roadSegmentId() == roadSegmentId;
             if (vehicle.lateralModel().lane() != lane) {
                 logger.info("vehicle lane={}, lane={}", vehicle.lateralModel().lane(), lane);
