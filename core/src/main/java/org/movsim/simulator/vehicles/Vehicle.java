@@ -153,6 +153,8 @@ public class Vehicle {
 
     /** constant random number between 0 and 1 used for random output selections */
     final double randomFix;
+    
+    final double randomAlternative;
 
     /** The vehicle number. */
     private int vehNumber = VEHICLE_NUMBER_NOT_SET;
@@ -248,6 +250,7 @@ public class Vehicle {
 
         id = nextId++;
         randomFix = MyRandom.nextDouble();
+        randomAlternative = MyRandom.nextDouble();
 
         initialize();
         this.longitudinalModel = longitudinalModel;
@@ -277,6 +280,7 @@ public class Vehicle {
         assert speed >= 0.0;
         id = nextId++;
         randomFix = MyRandom.nextDouble();
+        randomAlternative = MyRandom.nextDouble();
         this.length = length;
         setRearPosition(rearPosition);
         this.speed = speed;
@@ -305,6 +309,7 @@ public class Vehicle {
     public Vehicle(Vehicle source) {
         id = source.id;
         randomFix = source.randomFix;
+        randomAlternative = source.randomAlternative;
         type = source.type;
         frontPosition = source.frontPosition;
         speed = source.speed;
@@ -937,7 +942,7 @@ public class Vehicle {
             return;
         }
 
-        if (serviceProvider.doDiverge(uncertainty, roadSegment.userId())) {
+        if (serviceProvider.doDiverge(uncertainty, roadSegment.userId(), randomAlternative)) {
             exitRoadSegmentId = roadSegment.id();
             if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
                 throw new IllegalArgumentException("cannot do diverge on roadSegment " + roadSegment.userId()
