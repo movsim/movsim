@@ -1,23 +1,27 @@
-MovSim
-======
+# MovSim 
+-------------------------------------------------------------------------------
 
-MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
+Movsim == **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator
 
-http://www.movsim.org
+[Movsim's Homepage http://www.movsim.org](http://www.movsim.org)
 
-Demonstration:
+Current build status:
 
-(MovSim v1.0) www.verkehrsdynamik.de/simulation.shtml
+[![Build Status](https://travis-ci.org/movsim/movsim)](https://travis-ci.org/movsim/movsim)
 
-(MovSim v1.2) www.movsim.org/app.shtml
+Quick links to this file:
 
-(Routing game) www.movsim.org
+* [Description](#description)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Demos](#demos)
+* [Commercial Use](#commercial use)
+* [Copyright and License](#copyright and license)
+* [References](#references)
 
-(Android client) Android App
 
-
-Description
------------
+## Description
+--------------
 
 MovSim is a microscopic traffic simulator with xml-based configuration and csv text output.
 
@@ -44,8 +48,8 @@ MovSim has several main components:
 * The _consumption_ comprises a physics-based fuel consumption model which can also be fed by csv data.
 
 
-Installation
-------------
+## Installation
+---------------
 
 Install the [git](http://git-scm.com/download) version control system.
 
@@ -65,16 +69,16 @@ Install [Apache Maven] (http://maven.apache.org/download.html). Maven is the sof
 MovSim produces output that can be plotted using _gnuplot_. If you wish to use this output to produce graphs, install [gnuplot](http://www.gnuplot.info/).
 
 
-Usage
------
+## Usage
+--------
 
 To build MovSim, type `mvn install` from the main MovSim directory.
 
 To run the movsim _core_ or _viewer_ see their respective readme files: [core](https://github.com/movsim/movsim/blob/master/core/README.md) and [viewer](https://github.com/movsim/movsim/blob/master/viewer/README.md).
 
 
-Eclipse
--------
+## Eclipse
+----------
 
 MovSim can readily be built and run from within the Eclipse IDE. To use Eclipse:
 
@@ -84,30 +88,56 @@ From with the Eclipse IDE install the m2e(Maven Integration for Eclipse) plugin 
 
 Import the project into Eclipse from the _File >> Import_ menu item. In the resulting Select dialog, choose the _General >> Existing Projects into Workspace_ option. In the resulting dialog select the `movsim/core` directory and import. Repeat for the `movsim/viewer` directory.
 
-Alternatively, create an eclipse configuration from the commandline by typing `mvn eclipse:eclipse` and using the Eclipse _Import..._ dialog for `Existing Maven Project`. Attention: this method leads to bug in eclipse. See [maven.README](https://github.com/movsim/movsim/blob/master/maven.README).
-
 You can then build and run either the _core_ or _viewer_ Java applications.
 
 We use the source code formatter _movsim/codestyle/eclipse_movsim_profile.xml_.
  
-Demos
------
+## Demos
+--------
 
 There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim).
 
 Applet demos on the website www.movsim.org
 
+(MovSim v1.0) www.verkehrsdynamik.de/simulation.shtml
 
-Commercial use
---------------
+(MovSim v1.2) www.movsim.org/app.shtml
+
+(Routing game) www.movsim.org
+
+(Android client) Android App
+
+
+## Commercial use
+------------------
 
 For commercial use, please contact the copyright holders at movsim.org@gmail.com.
 
 
-Copyright
----------
+## Copyright and Licence
+------------------------
 
 MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
 MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
 
+## References 
+-------------
+
+[1] M. Treiber and A. Kesting. Traffic Flow Dynamics, Data, Models and Simulation. 
+    Springer 2013. [Link](http://www.springer.com/physics/complexity/book/978-3-642-32459-8)
+
+[2] A. Kesting, M. Treiber, and D. Helbing. General lane-changing model MOBIL for car-following models. 
+    Transportation Research Record, 86-94 (2007). [Paper](http://www.akesting.de/download/MOBIL_TRR_2007.pdf)
+    
+[3] A. Kesting, M. Treiber, and D. Helbing. Enhanced intelligent driver model to access the impact of driving 
+    strategies on traffic capacity. Philosophical Transactions of the Royal Society A, 4585-4605 (2010). [Preprint](http://arxiv.org/abs/0912.3613)
+    
+[4] A. Kesting, M. Treiber, and D. Helbing. Agents for Traffic Simulation. 
+    Chapter 11 in "Multi-Agent Systems: Simulation and Applications", 325-356 (2009). [Preprint](http://arxiv.org/abs/0805.0300)
+    
+[5] M. Treiber, A. Kesting, and D. Helbing. Delays, inaccuracies and anticipation in microscopic traffic models.
+    Physica A: Statistical Mechanics and its Applications 71-88 (2006). [Preprint](http://arxiv.org/abs/cond-mat/?0404736)
+
+[6] M. Treiber, and A. Kesting. An open-source microscopic traffic simulator.
+    IEEE Intelligent Transportation Systems Magazine, 6-13 (2010). [Preprint](http://arxiv.org/abs/1012.4913)
