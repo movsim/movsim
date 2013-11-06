@@ -265,7 +265,7 @@ public class TrafficLight extends RoadObjectController {
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         for (SignalPoint signalPoint : signalPointsBegin.values()) {
             for (Vehicle vehicle : signalPoint.passedVehicles()) {
-                vehicle.addTrafficLight(this);
+                vehicle.getTrafficLightApproaching().addTrafficLight(this);
                 LOG.debug("vehicle pos={} --> set trafficlight={}", vehicle.getFrontPosition(), this);
             }
         }

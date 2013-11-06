@@ -217,4 +217,19 @@ public class TrafficLightApproaching {
                 + considerTrafficLight + ", accTrafficLight=" + accTrafficLight + ", distanceToTrafficlight="
                 + distanceToTrafficlight + "]";
     }
+
+    /**
+     * Returns this vehicle's acceleration considering the traffic light.
+     * 
+     * @param roadSegment
+     * 
+     * @return acceleration considering traffic light or NaN if no traffic light is present
+     */
+    public double accelerationConsideringTrafficLight(Vehicle vehicle, RoadSegment roadSegment) {
+        update(vehicle, roadSegment);
+        if (considerTrafficLight()) {
+            return accApproaching();
+        }
+        return Double.NaN;
+    }
 }

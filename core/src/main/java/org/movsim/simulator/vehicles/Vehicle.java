@@ -33,7 +33,6 @@ import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
@@ -651,7 +650,7 @@ public class Vehicle {
             return moderatedAcc; // quick hack, better structure needed here
         }
 
-        double accTrafficLight = accelerationConsideringTrafficLight(roadSegment);
+        double accTrafficLight = trafficLightApproaching.accelerationConsideringTrafficLight(this, roadSegment);
         if (!Double.isNaN(accTrafficLight)) {
             moderatedAcc = Math.min(moderatedAcc, accTrafficLight);
         }
@@ -665,25 +664,6 @@ public class Vehicle {
             moderatedAcc = Math.min(moderatedAcc, externalAcceleration);
         }
         return moderatedAcc;
-    }
-
-    /**
-     * Returns this vehicle's acceleration considering the traffic light.
-     * 
-     * @param roadSegment
-     * 
-     * @return acceleration considering traffic light
-     */
-    private double accelerationConsideringTrafficLight(RoadSegment roadSegment) {
-        trafficLightApproaching.update(this, roadSegment);
-        if (trafficLightApproaching.considerTrafficLight()) {
-            return trafficLightApproaching.accApproaching();
-        }
-        return Double.NaN;
-    }
-
-    public void addTrafficLight(TrafficLight trafficLight) {
-        trafficLightApproaching.addTrafficLight(trafficLight);
     }
 
     /**
@@ -1275,6 +1255,10 @@ public class Vehicle {
 
     public VehicleDimensions getDimensions() {
         return dimensions;
+    }
+
+    public TrafficLightApproaching getTrafficLightApproaching() {
+        return trafficLightApproaching;
     }
 
 }
