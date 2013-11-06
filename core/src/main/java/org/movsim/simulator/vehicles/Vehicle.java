@@ -111,12 +111,9 @@ public class Vehicle {
     /** needs to be > 0 */
     private final static double FINITE_LANE_CHANGE_TIME_S = 7;
 
-    private final String label;
+    private final VehicleDimensions dimensions;
 
-    private double length; // can be set in micro-boundary conditions
-    private final double width;
-    private double weight; // used in a project, not in fuel consumption
-                           // calculation!
+    private final String label;
 
     /** The front position of the vehicle. The reference position. */
     private double frontPosition;
@@ -240,8 +237,7 @@ public class Vehicle {
         Preconditions.checkNotNull(longitudinalModel);
         Preconditions.checkNotNull(vehInput);
         this.label = label;
-        this.length = vehInput.getLength();
-        this.width = vehInput.getWidth();
+        dimensions = new VehicleDimensions(vehInput.getLength(), vehInput.getWidth());
         this.maxDeceleration = vehInput.getMaximumDeceleration();
 
         id = nextId++;
@@ -275,12 +271,11 @@ public class Vehicle {
         assert speed >= 0.0;
         id = nextId++;
         randomFix = MyRandom.nextDouble();
-        this.length = length;
+        dimensions = new VehicleDimensions(length, width);
         setRearPosition(rearPosition);
         this.speed = speed;
         this.lane = lane;
         this.laneOld = lane;
-        this.width = width;
         this.color = 0;
         maxDeceleration = 10.0;
         laneChangeModel = null;
@@ -307,8 +302,7 @@ public class Vehicle {
         speed = source.speed;
         lane = source.lane;
         laneOld = source.laneOld;
-        length = source.length;
-        width = source.width;
+        dimensions = new VehicleDimensions(source.getDimensions());
         color = source.color;
         trafficLightApproaching = source.trafficLightApproaching;
         inhomogeneity = source.inhomogeneity;
@@ -387,7 +381,7 @@ public class Vehicle {
      * @return vehicle's length, in meters
      */
     public final double getLength() {
-        return length;
+        return dimensions.getLength();
     }
 
     /**
@@ -398,15 +392,6 @@ public class Vehicle {
      */
     public double getEffectiveLength() {
         return getLength() + getLongitudinalModel().getMinimumGap();
-    }
-
-    /**
-     * Returns this vehicle's width.
-     * 
-     * @return vehicle's width, in meters
-     */
-    public final double getWidth() {
-        return width;
     }
 
     /**
@@ -434,7 +419,7 @@ public class Vehicle {
      * @return position of the mid-point of this vehicle
      */
     public final double getMidPosition() {
-        return frontPosition - (0.5 * length);
+        return frontPosition - (0.5 * getLength());
     }
 
     /**
@@ -444,7 +429,7 @@ public class Vehicle {
      *            new rear position
      */
     public final void setRearPosition(double rearPosition) {
-        this.frontPosition = rearPosition + length;
+        this.frontPosition = rearPosition + getLength();
     }
 
     /**
@@ -453,7 +438,7 @@ public class Vehicle {
      * @return position of the rear of this vehicle
      */
     public final double getRearPosition() {
-        return frontPosition - length;
+        return frontPosition - getLength();
     }
 
     public final double getFrontPositionOld() {
@@ -461,7 +446,7 @@ public class Vehicle {
     }
 
     public final double getRearPositionOld() {
-        return frontPositionOld - length;
+        return frontPositionOld - getLength();
     }
 
     /**
@@ -1090,8 +1075,8 @@ public class Vehicle {
         this.laneOld = newLane;
         laneOld = Math.max(Lanes.MOST_INNER_LANE, Math.min(laneOld, newRoadSegment.laneCount()));
         double offsetPosition = getRearPosition() - newRearPosition;
-        LOG.debug("move to new segment: rearPosOld={} --> new rearPosOld={}", frontPositionOld - length,
-                frontPositionOld - offsetPosition - length);
+        LOG.debug("move to new segment: rearPosOld={} --> new rearPosOld={}", frontPositionOld - getLength(),
+                frontPositionOld - offsetPosition - getLength());
         this.frontPositionOld -= offsetPosition;
 
         setRearPosition(newRearPosition);
@@ -1221,7 +1206,8 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "Vehicle [id=" + id + ", label=" + label + ", length=" + length + ", frontPosition=" + frontPosition
+        return "Vehicle [id=" + id + ", label=" + label + ", length=" + getLength() + ", frontPosition="
+                + frontPosition
                 + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel=" + accModel + ", acc="
                 + acc + ", accOld=" + accOld + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
     }
@@ -1237,10 +1223,6 @@ public class Vehicle {
 
     public void setNoise(Noise noise) {
         this.noise = noise;
-    }
-
-    public void setLength(double length) {
-        this.length = length;
     }
 
     public void setRoute(Route newRoute) {
@@ -1289,6 +1271,10 @@ public class Vehicle {
 
     public EnergyModel getEnergyModel() {
         return energyModel;
+    }
+
+    public VehicleDimensions getDimensions() {
+        return dimensions;
     }
 
 }

@@ -127,7 +127,7 @@ public final class MicroInflowFileReader {
             vehicle.setRoute(route);
         }
         if (record.hasLength()) {
-            vehicle.setLength(record.getLength());
+            vehicle.getDimensions().setLength(record.getLength());
         }
         if (record.hasComment()) {
             vehicle.getUserData().put("comment", record.getComment());
