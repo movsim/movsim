@@ -87,7 +87,7 @@ public class MOBIL {
 
         // set prospectiveBalance to large negative to indicate no lane change when not safe
         double prospectiveBalance = -Double.MAX_VALUE;
-        final int currentLane = me.lane();
+        final int currentLane = me.lateralModel().lane();
         final int newLane = currentLane + direction;
         assert newLane >= Lanes.MOST_INNER_LANE && newLane <= roadSegment.laneCount();
         final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
@@ -98,7 +98,7 @@ public class MOBIL {
 
         final Vehicle newFront = newLaneSegment.frontVehicle(me);
         if (newFront != null) {
-            if (newFront.inProcessOfLaneChange()) {
+            if (newFront.lateralModel().inProcessOfLaneChange()) {
                 return prospectiveBalance;
             }
             final double gapFront = me.getNetDistance(newFront);
@@ -108,7 +108,7 @@ public class MOBIL {
         }
         final Vehicle newBack = newLaneSegment.rearVehicle(me);
         if (newBack != null) {
-            if (newBack.inProcessOfLaneChange()) {
+            if (newBack.lateralModel().inProcessOfLaneChange()) {
                 return prospectiveBalance;
             }
             final double gapRear = newBack.getNetDistance(me);
@@ -119,7 +119,7 @@ public class MOBIL {
         final LaneSegment currentLaneSegment = roadSegment.laneSegment(currentLane);
         final Vehicle oldFront = currentLaneSegment.frontVehicle(me);
         if (oldFront != null) {
-            if (oldFront.inProcessOfLaneChange()) {
+            if (oldFront.lateralModel().inProcessOfLaneChange()) {
                 return prospectiveBalance;
             }
         }
@@ -128,12 +128,12 @@ public class MOBIL {
         // TO_LEFT --> just the actual situation
         // TO_RIGHT --> consideration of left-lane (with me's leader) has no effect
         // temporarily add the current vehicle to the new lane to calculate the new accelerations
-        me.setLane(newLane);
+        me.lateralModel().setLane(newLane);
         final int index = newLaneSegment.addVehicleTemp(me);
         final double newBackNewAcc = newBack == null ? 0 : newBack.calcAccModel(newLaneSegment, null);
         final double meNewAcc = me.calcAccModel(newLaneSegment, null);
         newLaneSegment.removeVehicle(index);
-        me.setLane(currentLane);
+        me.lateralModel().setLane(currentLane);
 
         if (safetyCheckAcceleration(newBackNewAcc)) {
             return prospectiveBalance;

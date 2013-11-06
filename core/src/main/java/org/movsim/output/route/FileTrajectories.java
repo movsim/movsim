@@ -152,7 +152,8 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
                 .getNetDistance(frontVehicle);
         final double dv = (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) ? 0 : me
                 .getRelSpeed(frontVehicle);
-        write(outputFormat, time, me.lane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(), me.getId(),
+        write(outputFormat, time, me.lateralModel().lane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(),
+                me.getId(),
                 me.roadSegmentId(), me.originRoadSegmentId(), formattedTime, pos + traj.getOffsetPosition(), me
                         .getUserData().getString(","));
     }

@@ -100,7 +100,7 @@ public class VariableMessageSignDiversion extends RoadObjectController {
         if (diversionActive) {
             for (Vehicle vehicle : begin.passedVehicles()) {
                 // apply only to vehicles not in most left lane!
-                if (vehicle.lane() != Lanes.MOST_INNER_LANE) {
+                if (vehicle.lateralModel().lane() != Lanes.MOST_INNER_LANE) {
                     vehicle.setExitRoadSegmentId(roadSegmentEnd.id());
                     controlledVehicles.add(vehicle);
                     LOG.debug("set exitRoadSegmentId to vehicle={}", vehicle);

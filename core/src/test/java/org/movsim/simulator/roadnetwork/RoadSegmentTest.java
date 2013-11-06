@@ -893,14 +893,14 @@ public class RoadSegmentTest {
         r0.addVehicle(obstacle);
         final Vehicle v0 = newVehicle(593.0, 5.0, Lanes.LANE1);
         final LaneChangeModel lcm = newLaneChangeModel(v0);
-        v0.setLaneChangeModel(lcm);
+        v0.lateralModel().setLaneChangeModel(lcm);
         r0.addVehicle(v0);
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
         r0.makeLaneChanges(dt, simulationTime, iterationCount);
-        assertEquals(Lanes.LANE1, obstacle.lane());
-        assertEquals(Lanes.LANE2, v0.lane());
+        assertEquals(Lanes.LANE1, obstacle.lateralModel().lane());
+        assertEquals(Lanes.LANE2, v0.lateralModel().lane());
         assertEquals(1, r0.laneSegment(Lanes.LANE1).vehicleCount());
         assertEquals(1, r0.laneSegment(Lanes.LANE2).vehicleCount());
     }

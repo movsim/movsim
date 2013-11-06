@@ -35,7 +35,6 @@ import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
-import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.Noise;
 import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
@@ -93,7 +92,6 @@ public class Vehicle {
      */
     public static final int ID_NOT_SET = -1;
     private static final int VEHICLE_NUMBER_NOT_SET = -1;
-    public static final int LANE_NOT_SET = -1;
 
     /**
      * 'Not Set' road segment id value, guaranteed not to be used by any
@@ -106,9 +104,6 @@ public class Vehicle {
 
     /** in m/s^2 */
     private final static double THRESHOLD_BRAKELIGHT_OFF = 0.1;
-
-    /** needs to be > 0 */
-    private final static double FINITE_LANE_CHANGE_TIME_S = 7;
 
     private final VehicleDimensions dimensions;
 
@@ -147,23 +142,11 @@ public class Vehicle {
 
     /** constant random number between 0 and 1 used for random output selections */
     final double randomFix;
-    
+
     final double randomAlternative;
 
     /** The vehicle number. */
     private int vehNumber = VEHICLE_NUMBER_NOT_SET;
-
-    private int lane = LANE_NOT_SET;
-    private int laneOld;
-
-    /**
-     * variable for remembering new target lane when assigning to new
-     * laneSegment
-     */
-    private int targetLane;
-
-    /** finite lane-changing duration */
-    private double tLaneChangeDelay;
 
     private double speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;;
     private double slope;
@@ -173,8 +156,6 @@ public class Vehicle {
     private Object colorObject;
 
     private LongitudinalModelBase longitudinalModel;
-    /** can be null */
-    private LaneChangeModel laneChangeModel;
 
     /** Memory model. Can be null */
     private Memory memory = null;
@@ -185,6 +166,8 @@ public class Vehicle {
     private final InhomogeneityAdaption inhomogeneity;
 
     private final EnergyModel energyModel = new EnergyModel(this);
+
+    private final LateralModel lateral = new LateralModel(this);
 
     /** can be null */
     private Route route;
@@ -249,14 +232,7 @@ public class Vehicle {
         this.longitudinalModel = longitudinalModel;
         physQuantities = new PhysicalQuantities(this);
 
-        this.laneChangeModel = lcModel;
-        if (laneChangeModel != null) {
-            laneChangeModel.initialize(this);
-        }
-
-        // needs to be > 0 to avoid lane-changing over 2 lanes in one update
-        // step
-        assert FINITE_LANE_CHANGE_TIME_S > 0;
+        lateral.setLaneChangeModel(lcModel);
 
         this.color = Colors.randomColor();
 
@@ -277,11 +253,10 @@ public class Vehicle {
         randomAlternative = MyRandom.nextDouble();
         setRearPosition(rearPosition);
         this.speed = speed;
-        this.lane = lane;
-        this.laneOld = lane;
+        lateral.setLane(lane);
+        lateral.setOldLane(lane);
         this.color = 0;
         maxDeceleration = 10.0;
-        laneChangeModel = null;
         longitudinalModel = null;
         label = "";
         physQuantities = new PhysicalQuantities(this);
@@ -304,14 +279,14 @@ public class Vehicle {
         type = source.type;
         frontPosition = source.frontPosition;
         speed = source.speed;
-        lane = source.lane;
-        laneOld = source.laneOld;
+        lateral.setLane(source.lateral.lane());
+        lateral.setOldLane(source.lateral.oldLane());
         dimensions = new VehicleDimensions(source.getDimensions());
         color = source.color;
         trafficLightApproaching = source.trafficLightApproaching;
         inhomogeneity = source.inhomogeneity;
         maxDeceleration = source.maxDeceleration;
-        laneChangeModel = source.laneChangeModel;
+        lateral.setLaneChangeModel(source.lateralModel().getLaneChangeModel());
         longitudinalModel = source.longitudinalModel;
         label = source.label;
         slope = source.slope;
@@ -628,7 +603,7 @@ public class Vehicle {
 
         acc = accModel = calcAccModel(laneSegment, leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
 
-        if (lane() != Lanes.OVERTAKING) {
+        if (lateral.lane() != Lanes.OVERTAKING) {
             // moderate acceleration by traffic lights or for preparing
             // mandatory lane changes to exit sliproads
             acc = moderateAcceleration(accModel, roadSegment);
@@ -745,9 +720,10 @@ public class Vehicle {
 
         double acc;
 
-        if (laneChangeModel != null && laneChangeModel.isInitialized() && laneChangeModel.withEuropeanRules()) {
-            acc = longitudinalModel.calcAccEur(laneChangeModel.vCritEurRules(), this, laneSegment, leftLaneSegment,
-                    alphaTLocal, alphaV0Local, alphaALocal);
+        if (lateral.hasLaneChangeModel() && lateral.getLaneChangeModel().isInitialized()
+                && lateral.getLaneChangeModel().withEuropeanRules()) {
+            acc = longitudinalModel.calcAccEur(lateral.getLaneChangeModel().vCritEurRules(), this, laneSegment,
+                    leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
         } else {
             acc = longitudinalModel.calcAcc(this, laneSegment, alphaTLocal, alphaV0Local, alphaALocal);
         }
@@ -802,26 +778,6 @@ public class Vehicle {
         energyModel.incrementConsumption(speed, acc, dt);
     }
 
-    public final int lane() {
-        return lane;
-    }
-
-    public final void setLane(int lane) {
-        assert lane >= Lanes.MOST_INNER_LANE || lane == Lanes.OVERTAKING;
-        assert this.lane != lane;
-        laneOld = this.lane;
-        this.lane = lane;
-        targetLane = Lanes.NONE;
-    }
-
-    public LaneChangeModel getLaneChangeModel() {
-        return laneChangeModel;
-    }
-
-    public void setLaneChangeModel(LaneChangeModel lcModel) {
-        this.laneChangeModel = lcModel;
-    }
-
     public LongitudinalModelBase getLongitudinalModel() {
         return longitudinalModel;
     }
@@ -831,74 +787,10 @@ public class Vehicle {
     }
 
     // ---------------------------------------------------------------------------------
-    // lane-changing related methods
+    // dynamic routing relevant methods
     // ---------------------------------------------------------------------------------
 
-    public boolean considerOvertakingViaPeer(double dt, RoadSegment roadSegment) {
-        LaneChangeDecision lcDecision = LaneChangeDecision.NONE;
-        if (!roadSegment.hasPeer() || roadSegment.laneCount() > 1 || lane() != Lanes.MOST_INNER_LANE
-                || laneChangeModel == null || !laneChangeModel.isInitialized() || inProcessOfLaneChange()) {
-            return false;
-        }
-        lcDecision = laneChangeModel.makeDecisionForOvertaking(roadSegment);
-        if (lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER) {
-            setTargetLane(Lanes.OVERTAKING);
-            resetDelay(dt);
-            LOG.debug("do overtaking lane change to={} into target lane={}", lcDecision, targetLane);
-        }
-        return lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER;
-    }
-
-    public boolean considerFinishOvertaking(double dt, LaneSegment laneSegment) {
-        assert lane() == Lanes.OVERTAKING;
-        assert !inProcessOfLaneChange();
-        if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
-            return false;
-        }
-        LaneChangeDecision lcDecision = laneChangeModel.finishOvertakingViaPeer(laneSegment);
-        if (lcDecision == LaneChangeDecision.MANDATORY_TO_RIGHT) {
-            setTargetLane(Lanes.MOST_INNER_LANE);
-            resetDelay(dt);
-            LOG.debug("finish overtaking, turn from lane={} into target lane={}", laneOld, targetLane);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean considerLaneChange(double dt, RoadSegment roadSegment) {
-
-        // TODO
-        considerRouteAlternatives(roadSegment);
-
-        if (roadSegment.laneCount() <= 1) {
-            // no lane-changing decision necessary for one-lane road. already
-            // checked before
-            return false;
-        }
-
-        // no lane changing when not configured in xml.
-        if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
-            return false;
-        }
-        assert !inProcessOfLaneChange();
-
-        // if not in lane-changing process do determine if new lane is more
-        // attractive and lane change is possible
-        LaneChangeDecision lcDecision = laneChangeModel.makeDecision(roadSegment);
-        final int laneChangeDirection = lcDecision.getDirection();
-
-        // initiates a lane change: set targetLane to new value the lane will be
-        // assigned by the vehicle container !!
-        if (laneChangeDirection != Lanes.NO_CHANGE) {
-            setTargetLane(lane + laneChangeDirection);
-            resetDelay(dt);
-            LOG.debug("do lane change to={} into target lane={}", laneChangeDirection, targetLane);
-            return true;
-        }
-        return false;
-    }
-
-    private void considerRouteAlternatives(RoadSegment roadSegment) {
+    public void considerRouteAlternatives(RoadSegment roadSegment) {
         if (serviceProvider == null) {
             return;
         }
@@ -910,54 +802,6 @@ public class Vehicle {
                         + " without exit lane!");
             }
         }
-    }
-
-    public int getTargetLane() {
-        return targetLane;
-    }
-
-    /**
-     * Sets the target lane.
-     * 
-     * @param targetLane
-     *            the new target lane
-     */
-    private void setTargetLane(int targetLane) {
-        assert targetLane >= Lanes.MOST_INNER_LANE || targetLane == Lanes.OVERTAKING;
-        assert targetLane != lane;
-        this.targetLane = targetLane;
-    }
-
-    public boolean inProcessOfLaneChange() {
-        return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_S);
-    }
-
-    /**
-     * Reset delay.
-     */
-    private void resetDelay(double dt) {
-        tLaneChangeDelay = 0;
-        updateLaneChangeDelay(dt); // TODO hack that updateLaneChangeDelay must
-                                   // be called for inProcessOfLaneChange being
-                                   // true
-    }
-
-    /**
-     * Update lane changing delay.
-     * 
-     * @param dt
-     *            the dt
-     */
-    public void updateLaneChangeDelay(double dt) {
-        tLaneChangeDelay += dt;
-    }
-
-    public double getContinousLane() {
-        if (inProcessOfLaneChange()) {
-            final double fractionTimeLaneChange = Math.min(1, tLaneChangeDelay / FINITE_LANE_CHANGE_TIME_S);
-            return fractionTimeLaneChange * lane + (1 - fractionTimeLaneChange) * laneOld;
-        }
-        return lane();
     }
 
     // ---------------------------------------------------------------------------------
@@ -1056,9 +900,10 @@ public class Vehicle {
      */
     public void moveToNewRoadSegment(RoadSegment newRoadSegment, int newLane, double newRearPosition, double exitPos) {
         // distanceTravelledToStartOfRoadSegment += rearPosition - newRearPos;
-        this.lane = newLane;
-        this.laneOld = newLane;
+        lateral.setLane(newLane);
+        int laneOld = newLane;
         laneOld = Math.max(Lanes.MOST_INNER_LANE, Math.min(laneOld, newRoadSegment.laneCount()));
+        lateral.setOldLane(laneOld);
         double offsetPosition = getRearPosition() - newRearPosition;
         LOG.debug("move to new segment: rearPosOld={} --> new rearPosOld={}", frontPositionOld - getLength(),
                 frontPositionOld - offsetPosition - getLength());
@@ -1192,9 +1037,9 @@ public class Vehicle {
     @Override
     public String toString() {
         return "Vehicle [id=" + id + ", label=" + label + ", length=" + getLength() + ", frontPosition="
-                + frontPosition
-                + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel=" + accModel + ", acc="
-                + acc + ", accOld=" + accOld + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
+                + frontPosition + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel="
+                + accModel + ", acc=" + acc + ", accOld=" + accOld + ", vehNumber=" + vehNumber + ", lane="
+                + lateral.lane() + "]";
     }
 
     /** returns a constant random number between 0 and 1 */
@@ -1265,5 +1110,10 @@ public class Vehicle {
     public TrafficLightApproaching getTrafficLightApproaching() {
         return trafficLightApproaching;
     }
+
+    public LateralModel lateralModel() {
+        return lateral;
+    }
+
 
 }

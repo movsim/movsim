@@ -198,11 +198,12 @@ public class TrafficLightApproaching {
     private static double calcEffectiveFrontVehicleLengths(Vehicle me, TrafficLight trafficLight,
             double distanceToSecondTrafficlight) {
         double sumEffectiveLengths = 0;
-        Vehicle frontVehicle = trafficLight.roadSegment().laneSegment(me.lane()).frontVehicle(me);
+        Vehicle frontVehicle = trafficLight.roadSegment().laneSegment(me.lateralModel().lane()).frontVehicle(me);
         while (frontVehicle != null && me.getBrutDistance(frontVehicle) < distanceToSecondTrafficlight) {
             sumEffectiveLengths += frontVehicle.getEffectiveLength();
             Vehicle prevFront = frontVehicle;
-            frontVehicle = trafficLight.roadSegment().laneSegment(frontVehicle.lane()).frontVehicle(frontVehicle);
+            frontVehicle = trafficLight.roadSegment().laneSegment(frontVehicle.lateralModel().lane())
+                    .frontVehicle(frontVehicle);
             if (frontVehicle != null && prevFront.getId() == frontVehicle.getId()) {
                 // FIXME seems to be a real bug: get back the *same* vehicle when its entered the downstream roadsegment
                 break;

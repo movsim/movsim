@@ -26,8 +26,8 @@ public class RoadMappingPeer extends RoadMappingAbstract {
 
     @Override
     public PolygonFloat mapFloat(Vehicle vehicle, double time) {
-        final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(),
-                -laneOffset(vehicle.getContinousLane()));
+        final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(), -laneOffset(vehicle.lateralModel()
+                .getContinousLane()));
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 

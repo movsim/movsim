@@ -453,7 +453,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 if (gapToLeader > 0) {
                     veh.setFrontPosition(position);
                     veh.setSpeed(speedInit);
-                    veh.setLane(laneSegment.lane());
+                    veh.lateralModel().setLane(laneSegment.lane());
                     LOG.debug("add vehicle from macroscopic initial conditions at pos={} with speed={}.", position,
                             speedInit);
                     roadSegment.addVehicle(veh);
@@ -485,10 +485,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                         + " given in initial condition does not exist for road=" + roadSegment.id()
                         + " which has a laneCount of " + roadSegment.laneCount());
             }
-            veh.setLane(lane);
+            veh.lateralModel().setLane(lane);
             roadSegment.addVehicle(veh);
             LOG.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
-                    veh.getLabel(), veh.lane(), veh.getFrontPosition(), veh.getSpeed()));
+                    veh.getLabel(), veh.lateralModel().lane(), veh.getFrontPosition(), veh.getSpeed()));
             if (veh.getLongitudinalModel().isCA()) {
                 LOG.info(String.format("and for the CA in physical quantities: front position at x=%.2f, speed=%.2f",
                         veh.physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));

@@ -361,7 +361,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public void addVehicle(Vehicle vehicle) {
         // TODO assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0 : "vehicleSpeed=" + vehicle.getSpeed();
-        assert vehicle.lane() == lane;
+        assert vehicle.lateralModel().lane() == lane;
         assert vehicle.roadSegmentId() == roadSegment.id();
         assert assertInvariant();
         final int index = positionBinarySearch(vehicle.getRearPosition());
@@ -380,7 +380,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public int addVehicleTemp(Vehicle vehicle) {
         // assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
-        assert vehicle.lane() == lane;
+        assert vehicle.lateralModel().lane() == lane;
         assert assertInvariant();
         final int index = positionBinarySearch(vehicle.getRearPosition());
         int pos = 0;
@@ -401,7 +401,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public void appendVehicle(Vehicle vehicle) {
         assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
-        assert vehicle.lane() == lane;
+        assert vehicle.lateralModel().lane() == lane;
         assert vehicle.roadSegmentId() == roadSegment.id();
         assert laneIsSorted();
         assert assertInvariant();
@@ -786,10 +786,10 @@ public class LaneSegment implements Iterable<Vehicle> {
         final int roadSegmentId = roadSegment.id();
         for (final Vehicle vehicle : vehicles) {
             assert vehicle.roadSegmentId() == roadSegmentId;
-            if (vehicle.lane() != lane) {
-                logger.info("vehicle lane={}, lane={}", vehicle.lane(), lane);
+            if (vehicle.lateralModel().lane() != lane) {
+                logger.info("vehicle lane={}, lane={}", vehicle.lateralModel().lane(), lane);
             }
-            assert vehicle.lane() == lane;
+            assert vehicle.lateralModel().lane() == lane;
         }
         return true;
     }

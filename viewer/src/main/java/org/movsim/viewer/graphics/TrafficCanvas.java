@@ -437,7 +437,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             break;
         case LANE_CHANGE:
             color = Color.BLACK;
-            if (vehicle.inProcessOfLaneChange()) {
+            if (vehicle.lateralModel().inProcessOfLaneChange()) {
                 color = Color.ORANGE;
             }
             break;

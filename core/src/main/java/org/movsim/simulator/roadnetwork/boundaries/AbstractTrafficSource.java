@@ -143,8 +143,8 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     protected void initVehicle(LaneSegment laneSegment, double frontPosition, double speed, final Vehicle vehicle) {
         vehicle.setFrontPosition(frontPosition);
         vehicle.setSpeed(speed);
-        if (vehicle.lane() != laneSegment.lane()) {
-            vehicle.setLane(laneSegment.lane());
+        if (vehicle.lateralModel().lane() != laneSegment.lane()) {
+            vehicle.lateralModel().setLane(laneSegment.lane());
         }
         vehicle.setRoadSegment(roadSegment);
         laneSegment.addVehicle(vehicle);

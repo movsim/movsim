@@ -31,6 +31,7 @@ import java.util.TreeMap;
 
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.vehicles.LateralModel;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -71,7 +72,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         Long entryTime = vehicleQueue.firstKey();
         if (simulationTime >= entryTime.longValue()) {
             Vehicle vehicle = vehicleQueue.get(entryTime);
-            int testLane = (vehicle.lane() != Vehicle.LANE_NOT_SET) ? vehicle.lane()
+            int testLane = (vehicle.lateralModel().lane() != LateralModel.LANE_NOT_SET) ? vehicle.lateralModel().lane()
                     : getNewCyclicLaneForEntering(laneEnterLast);
             LaneSegment laneSegment = roadSegment.laneSegment(testLane);
             final boolean isEntered = tryEnteringNewVehicle(vehicle, laneSegment);

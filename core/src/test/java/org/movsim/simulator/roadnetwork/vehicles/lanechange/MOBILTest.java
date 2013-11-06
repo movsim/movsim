@@ -125,7 +125,7 @@ public class MOBILTest {
         final MOBIL m1 = new MOBIL(v1, createModelParameterMOBIL(minimumGap, safeDeceleration, politeness,
                 thresholdAcceleration, rightBiasAcceleration));
         final LaneChangeModel lcm1 = new LaneChangeModel(v1, createLaneChangeModelType(m1.getParameter()));
-        v1.setLaneChangeModel(lcm1);
+        v1.lateralModel().setLaneChangeModel(lcm1);
         roadSegment.addVehicle(v1);
 
         // set up a vehicle in right lane
@@ -133,7 +133,7 @@ public class MOBILTest {
         final MOBIL m2 = new MOBIL(v2, createModelParameterMOBIL(minimumGap, safeDeceleration, politeness,
                 thresholdAcceleration, rightBiasAcceleration));
         final LaneChangeModel lcm2 = new LaneChangeModel(v2, createLaneChangeModelType(m2.getParameter()));
-        v2.setLaneChangeModel(lcm2);
+        v2.lateralModel().setLaneChangeModel(lcm2);
         roadSegment.addVehicle(v2);
 
         // vehicles too close together, so acceleration balance should be large negative
