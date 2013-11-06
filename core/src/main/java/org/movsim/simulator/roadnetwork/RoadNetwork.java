@@ -323,6 +323,16 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return vehicleCount;
     }
 
+    public int totalVehiclesRemoved() {
+        int totalVehiclesRemoved = 0;
+        for (RoadSegment roadSegment : roadSegments) {
+            if (roadSegment.sink() != null) {
+                totalVehiclesRemoved += roadSegment.sink().totalVehiclesRemoved();
+            }
+        }
+        return totalVehiclesRemoved;
+    }
+
     /**
      * Returns the total travel time of all vehicles on this road network, including those that have exited.
      * 
@@ -332,7 +342,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         double totalVehicleTravelTime = 0.0;
         for (RoadSegment roadSegment : roadSegments) {
             // TODO hidden vehicles are wrongly taken into account
-            //totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
+            // totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
             if (roadSegment.sink() != null) {
                 totalVehicleTravelTime += roadSegment.sink().totalVehicleTravelTime();
             }

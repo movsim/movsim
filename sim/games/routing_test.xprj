@@ -10,10 +10,10 @@
             <LaneChangeModelType european_rules="true" crit_speed_eur="20">
                 <ModelParameterMOBIL safe_deceleration="20.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
             </LaneChangeModelType>
-            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="1" />
+            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="2" />
         </VehiclePrototypeConfiguration>
         <!-- car without traffic information -->
-        <VehiclePrototypeConfiguration label="NonEquipped" length="10" maximum_deceleration="40" >
+        <VehiclePrototypeConfiguration label="NonEquipped" length="6" maximum_deceleration="40" >
             <AccelerationModelType>
                 <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </AccelerationModelType>
@@ -24,7 +24,7 @@
     </VehiclePrototypes>
     <ServiceProviders>
 		<ServiceProvider label="wiseGuy" logging="true">
-			<DecisionPoints uncertainty="0.5">
+			<DecisionPoints uncertainty="2">
 				<DecisionPoint roadId="2">
 					<RouteAlternative route="A1"/>
 					<RouteAlternative route="A2"/>
@@ -36,8 +36,8 @@
 		<RoadTypeSpeedMapping road_type="motorway" default_speed_kmh="130" />
 		<RoadTypeSpeedMapping road_type="unknown" default_speed_kmh="80" />
     </RoadTypeSpeedMappings>
-    <Scenario network_filename="routing_scenario.xodr">
-        <Simulation timestep="0.2" duration="7200" seed="42" crash_exit="false">
+    <Scenario network_filename="routing_scenario_singlelane.xodr">
+        <Simulation timestep="0.2" duration="7500" seed="42" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="Equipped" fraction="1.0" relative_v0_randomization="0.0" />
                 <VehicleType label="NonEquipped" fraction="0.0" relative_v0_randomization="0.0" />
@@ -56,12 +56,12 @@
             </Road>
             <Road id="3">
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="13000" valid_length="1000" adaptation_length="0" target_alpha_T="1.5" />
+                    <Inhomogeneity position="14000" valid_length="1000" adaptation_length="0" target_alpha_T="2.0" />
                 </FlowConservingInhomogeneities>
             </Road>
             <Road id="10">
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="14000" valid_length="1000" adaptation_length="0" target_alpha_T="1.5" />
+                    <Inhomogeneity position="14000" valid_length="1000" adaptation_length="0" target_alpha_T="2.0" />
                 </FlowConservingInhomogeneities>
             </Road>
         </Simulation>

@@ -57,8 +57,8 @@ public class ServiceProvider implements SimulationTimeStep {
         double sum = 0;
         double num = 0;
         double probability = 0;
-        double beta = -10;
-        if (uncertainty > 0.05) {
+        double beta = -100;
+        if (Math.abs(uncertainty) > 0.01) {
             beta = -1 / uncertainty;
         }
 
@@ -70,18 +70,21 @@ public class ServiceProvider implements SimulationTimeStep {
             for (RouteAlternative alternative : alternatives) {
                 num = Math.exp(beta * alternative.getValue());
                 probability = num / sum;
+                if (uncertainty == 0) {
+                    probability = Math.round(probability);
+                }
                 alternative.setProbability(probability);
             }
         }
     }
 
     // TODO use cached values from RouteAlternative, refactor methods
-    private boolean alternativeAvailableAndMoreAttractive(double uncertainty, DecisionPoint decisionPoint) {
+    private boolean alternativeAvailableAndMoreAttractive(double uncertainty, DecisionPoint decisionPoint, double random) {
         double sum = 0;
         double temp = 0;
         double probability = -1;
-        double beta = -10;
-        if (uncertainty > 0.05) {
+        double beta = -100;
+        if (uncertainty > 0.01) {
             beta = -1 / uncertainty;
         }
 
@@ -95,13 +98,16 @@ public class ServiceProvider implements SimulationTimeStep {
                 if (route.getRouteLabel().equals("A1")) {
                     temp = Math.exp(beta * RoadNetwork.instantaneousTravelTime(routing.get(route.getRouteLabel())));
                     probability = temp / sum;
+                    if (uncertainty == 0) {
+                        probability = Math.round(probability);
+                    }
                 }
             }
         }
 
         // LOG.debug("inst travel alternativ1={}, alternative2={}", probability, (1-probability));
 
-        if (MyRandom.nextDouble() > probability) {
+        if (random > probability) {
             return true;
         }
         return false;
@@ -115,10 +121,10 @@ public class ServiceProvider implements SimulationTimeStep {
         }
     }
 
-    public boolean doDiverge(double uncertainty, String roadSegmentUserId) {
+    public boolean doDiverge(double uncertainty, String roadSegmentUserId, double random) {
         DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
         if (decisionPoint != null) {
-            return alternativeAvailableAndMoreAttractive(uncertainty, decisionPoint);
+            return alternativeAvailableAndMoreAttractive(uncertainty, decisionPoint, random);
         }
         return false;
     }

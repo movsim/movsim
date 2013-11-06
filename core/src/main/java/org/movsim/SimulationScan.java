@@ -40,13 +40,12 @@ public final class SimulationScan {
         throw new IllegalStateException("do not instanciate");
     }
 
-
     public static void invokeSimulationScan(final Movsim inputData) throws JAXBException, SAXException {
 
         // TODO quick hack here
         int uncertaintyMin = 0;
         int uncertaintyMax = 20;
-        int uncertaintyStep = 2;
+        int uncertaintyStep = 5;
 
         int fractionMin = 0;
         int fractionMax = 100;
@@ -54,26 +53,28 @@ public final class SimulationScan {
 
         StringBuilder sb = new StringBuilder();
 
-        // for (int i = 0; i < 10; i++) {
-        // Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
-        // sb.append(i).append(" ").append(simRun.getRoadNetwork().totalVehicleTravelTime()).append("\n");
-        // }
-
         for (int fraction = fractionMin; fraction <= fractionMax; fraction = fraction + fractionStep) {
             for (int uncertainty = uncertaintyMin; uncertainty <= uncertaintyMax; uncertainty = uncertainty
                     + uncertaintyStep) {
                 inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(0)
-                        .setFraction(fraction/100.0);
+                        .setFraction(fraction / 100.0);
 
                 inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(1)
-                        .setFraction((1 - fraction/100.0));
+                        .setFraction((1 - fraction / 100.0));
                 inputData.getVehiclePrototypes().getVehiclePrototypeConfiguration().get(0)
-                        .getPersonalNavigationDevice().setUncertainty(uncertainty/10.0);
+                        .getPersonalNavigationDevice().setUncertainty(uncertainty / 10.0);
+
+                inputData.getServiceProviders().getServiceProvider().get(0).getDecisionPoints()
+                        .setUncertainty(uncertainty / 10.0);
 
                 Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
 
-                sb.append(fraction/100.0).append(" ").append(uncertainty/10.0).append(" ")
-                        .append(simRun.getRoadNetwork().totalVehicleTravelTime()).append("\n");
+                sb.append(fraction / 100.0)
+                        .append(" ")
+                        .append(uncertainty / 10.0)
+                        .append(" ")
+                        .append(simRun.getRoadNetwork().totalVehicleTravelTime()
+                                / simRun.getRoadNetwork().totalVehiclesRemoved()).append("\n");
             }
         }
 
