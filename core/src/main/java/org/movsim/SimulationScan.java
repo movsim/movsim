@@ -68,7 +68,7 @@ public final class SimulationScan {
                 inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(1)
                         .setFraction((1 - fraction/100.0));
                 inputData.getVehiclePrototypes().getVehiclePrototypeConfiguration().get(0)
-                        .getPersonalNavigationDevice().setUncertainty(uncertainty*6);
+                        .getPersonalNavigationDevice().setUncertainty(uncertainty/10.0);
 
                 Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
 

@@ -653,7 +653,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      */
     public double instantaneousTravelTime() {
         // return calcInstantaneousTravelTime()/60; //in min
-        return roadLength / meanSpeed()/60; //in min
+        return roadLength / meanSpeed() / 60; // in min
 
     }
 
