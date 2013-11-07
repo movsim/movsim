@@ -168,7 +168,7 @@ public class Regulator implements SimulationTimeStep {
             vehicle.unsetExternalAcceleration();
             // vehicle.getLaneChangeModel().setConsiderLaneChanges(true);
             // vehicle.getLaneChangeModel().setConsiderDiscretionaryLaneChanges(true);
-            vehicle.lateralModel().getLaneChangeModel().unsetMandatoryChangeToRestrictedLane();
+            vehicle.getLaneChangeModel().unsetMandatoryChangeToRestrictedLane();
         }
         influencedVehicles.clear();
     }
@@ -178,7 +178,7 @@ public class Regulator implements SimulationTimeStep {
             if (!notifyObject.getId().equals("suppressLaneChanges")) {
                 for (Vehicle vehicle : notifyObject.getPassedVehicles()) {
                     vehicle.setExternalAcceleration(-1.0);
-                    vehicle.lateralModel().getLaneChangeModel().setConsiderLaneChanges(false);
+                    vehicle.getLaneChangeModel().setConsiderLaneChanges(false);
                     influencedVehicles.add(vehicle);
                 }
             }

@@ -246,13 +246,12 @@ public class OvertakingViaPeer {
         if (distanceToVehicleOnPeer > 0) {
             // vehicle can already be on the overtaking lane and re-checks the incentive/safety
             Vehicle frontVehicleInLane = roadSegment.frontVehicle(Lanes.MOST_INNER_LANE, me.getRearPosition());
-            if (frontVehicleInLane != null && !frontVehicleInLane.lateralModel().inProcessOfLaneChange()
+            if (frontVehicleInLane != null && !frontVehicleInLane.inProcessOfLaneChange()
                     && frontVehicleInLane.type() == Vehicle.Type.VEHICLE) {
                 double brutDistanceToFrontVehicleInLane = me.getBrutDistance(frontVehicleInLane);
                 LOG.debug("brutDistance={}, frontVehicle={}", brutDistanceToFrontVehicleInLane, frontVehicleInLane);
 
-                Vehicle secondFrontVehicleInLane = roadSegment.laneSegment(frontVehicleInLane.lateralModel().lane())
-                        .roadSegment()
+                Vehicle secondFrontVehicleInLane = roadSegment.laneSegment(frontVehicleInLane.lane()).roadSegment()
                         .frontVehicleOnLane(frontVehicleInLane);
                 double spaceOnTargetLane = (secondFrontVehicleInLane != null) ? frontVehicleInLane
                         .getNetDistance(secondFrontVehicleInLane) : INFINITE_GAP;

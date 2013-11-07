@@ -240,7 +240,7 @@ public class LaneChangeModel {
 
     private LaneChangeDecision determineDiscretionaryLaneChangeDirection(RoadSegment roadSegment) {
 
-        final int currentLane = me.lateralModel().lane();
+        final int currentLane = me.lane();
         // initialize with largest possible deceleration
         double accToLeft = -Double.MAX_VALUE;
         double accToRight = -Double.MAX_VALUE;
@@ -278,7 +278,7 @@ public class LaneChangeModel {
     }
 
     private LaneChangeDecision checkForMandatoryLaneChangeAtEntrance(RoadSegment roadSegment) {
-        final int currentLane = me.lateralModel().lane();
+        final int currentLane = me.lane();
         final LaneSegment currentLaneSegment = roadSegment.laneSegment(currentLane);
 
         if (currentLaneSegment.type() == Lanes.Type.ENTRANCE) {
@@ -320,7 +320,7 @@ public class LaneChangeModel {
             return LaneChangeDecision.NONE;
         }
 
-        final int currentLane = me.lateralModel().lane();
+        final int currentLane = me.lane();
         final LaneSegment currentLaneSegment = roadSegment.laneSegment(currentLane);
         if (currentLane == mandatoryChangeToRestrictedLane && currentLaneSegment.type() == Lanes.Type.RESTRICTED) {
             LOG.debug("restricted lane={} already reached from veh={}", currentLane, me);
@@ -355,7 +355,7 @@ public class LaneChangeModel {
             return LaneChangeDecision.NONE;
         }
 
-        final int currentLane = me.lateralModel().lane();
+        final int currentLane = me.lane();
         if (currentLane == mandatoryChangeToLane) {
             LOG.debug("lane={} already reached from veh={}", currentLane, me);
             return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
@@ -385,7 +385,7 @@ public class LaneChangeModel {
     }
 
     private LaneChangeDecision checkForMandatoryLaneChangeToExit(RoadSegment roadSegment) {
-        final int currentLane = me.lateralModel().lane();
+        final int currentLane = me.lane();
 
         // consider mandatory lane-change to exit
         if (me.exitRoadSegmentId() == roadSegment.id()) {
@@ -428,7 +428,7 @@ public class LaneChangeModel {
     // TODO first version of cooperative lane-changing behavior
     private LaneChangeDecision checkForLaneChangeForEnteringVehicle(RoadSegment roadSegment) {
         LaneChangeDecision laneChangeDecision = LaneChangeDecision.NONE;
-        final int currentLane = me.lateralModel().lane();
+        final int currentLane = me.lane();
         if (roadSegment.laneCount() > 2
                 && roadSegment.laneSegment(roadSegment.laneCount()).type() == Lanes.Type.ENTRANCE
                 && currentLane == roadSegment.trafficLaneMax()) {
@@ -455,7 +455,7 @@ public class LaneChangeModel {
                 }
                 final Vehicle newFront = newLaneSegment.frontVehicle(me);
                 if (newFront != null) {
-                    if (newFront.lateralModel().inProcessOfLaneChange()) {
+                    if (newFront.inProcessOfLaneChange()) {
                         return LaneChangeDecision.NONE;
                     }
                     final double gapFront = me.getNetDistance(newFront);
@@ -465,7 +465,7 @@ public class LaneChangeModel {
                 }
                 final Vehicle newBack = newLaneSegment.rearVehicle(me);
                 if (newBack != null) {
-                    if (newBack.lateralModel().inProcessOfLaneChange()) {
+                    if (newBack.inProcessOfLaneChange()) {
                         return LaneChangeDecision.NONE;
                     }
                     final double gapRear = newBack.getNetDistance(me);
@@ -473,12 +473,12 @@ public class LaneChangeModel {
                         return LaneChangeDecision.NONE;
                     }
                 }
-                me.lateralModel().setLane(newLane);
+                me.setLane(newLane);
                 final int index = newLaneSegment.addVehicleTemp(me);
                 final double newBackNewAcc = newBack == null ? 0 : newBack.calcAccModel(newLaneSegment, null);
                 final double meNewAcc = me.calcAccModel(newLaneSegment, null);
                 newLaneSegment.removeVehicle(index);
-                me.lateralModel().setLane(currentLane);
+                me.setLane(currentLane);
 
                 if (lcModelMOBIL.safetyCheckAcceleration(newBackNewAcc)
                         || lcModelMOBIL.safetyCheckAcceleration(meNewAcc)) {

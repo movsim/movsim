@@ -805,7 +805,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      */
     public void addVehicle(Vehicle vehicle) {
         vehicle.setRoadSegment(this);
-        laneSegments[vehicle.lateralModel().lane() - 1].addVehicle(vehicle);
+        laneSegments[vehicle.lane() - 1].addVehicle(vehicle);
     }
 
     /**
@@ -815,7 +815,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      */
     public void appendVehicle(Vehicle vehicle) {
         vehicle.setRoadSegment(this);
-        laneSegments[vehicle.lateralModel().lane() - 1].appendVehicle(vehicle);
+        laneSegments[vehicle.lane() - 1].appendVehicle(vehicle);
     }
 
     /**
@@ -891,44 +891,33 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             initOvertakingLane(); // lazy init.
         }
 
-        
-        considerDynamicRoutingAlternatives();
-
         // TODO assure priority for lane changes from slow to fast lanes
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
             for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
                 Vehicle vehicle = vehIterator.next();
                 assert vehicle.roadSegmentId() == id;
-                if (vehicle.lateralModel().inProcessOfLaneChange()) {
+                if (vehicle.inProcessOfLaneChange()) {
                     // !!! assure update in each simulation timestep
-                    vehicle.lateralModel().updateLaneChangeDelay(dt);
-                } else if (vehicle.lateralModel().considerLaneChange(dt, this)) {
-                    final int targetLane = vehicle.lateralModel().targetLane();
+                    vehicle.updateLaneChangeDelay(dt);
+                } else if (vehicle.considerLaneChange(dt, this)) {
+                    final int targetLane = vehicle.getTargetLane();
                     assert targetLane != Lanes.NONE;
                     assert laneSegment(targetLane).type() != Lanes.Type.ENTRANCE;
                     vehIterator.remove();
-                    vehicle.lateralModel().setLane(targetLane);
+                    vehicle.setLane(targetLane);
                     laneSegment(targetLane).addVehicle(vehicle);
-                } else if (vehicle.lateralModel().considerOvertakingViaPeer(dt, this)) {
+                } else if (vehicle.considerOvertakingViaPeer(dt, this)) {
                     LOG.debug("### perform overtaking: vehicle={}", vehicle);
-                    int targetLane = vehicle.lateralModel().targetLane();
+                    int targetLane = vehicle.getTargetLane();
                     assert targetLane == Lanes.OVERTAKING;
                     vehIterator.remove();
-                    vehicle.lateralModel().setLane(targetLane);
+                    vehicle.setLane(targetLane);
                     overtakingSegment.addVehicle(vehicle);
                 }
             }
         }
         checkFinishingOvertaking(dt);
-    }
-
-    private void considerDynamicRoutingAlternatives() {
-        for (LaneSegment laneSegment : laneSegments) {
-            for (Vehicle vehicle : laneSegment) {
-                vehicle.considerRouteAlternatives(this);
-            }
-        }
     }
 
     private void initOvertakingLane() {
@@ -947,15 +936,15 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private void checkFinishingOvertaking(double dt) {
         for (Iterator<Vehicle> vehIterator = overtakingSegment.iterator(); vehIterator.hasNext();) {
             Vehicle vehicle = vehIterator.next();
-            if (vehicle.lateralModel().inProcessOfLaneChange()) {
+            if (vehicle.inProcessOfLaneChange()) {
                 // assure update in each simulation timestep
-                vehicle.lateralModel().updateLaneChangeDelay(dt);
-            } else if (vehicle.lateralModel().considerFinishOvertaking(dt, laneSegment(Lanes.MOST_INNER_LANE))) {
+                vehicle.updateLaneChangeDelay(dt);
+            } else if (vehicle.considerFinishOvertaking(dt, laneSegment(Lanes.MOST_INNER_LANE))) {
                 LOG.debug("vehicle turns back into lane after overtaking: vehicle={}", vehicle);
-                int targetLane = vehicle.lateralModel().targetLane();
+                int targetLane = vehicle.getTargetLane();
                 assert targetLane == Lanes.MOST_INNER_LANE;
                 vehIterator.remove();
-                vehicle.lateralModel().setLane(targetLane);
+                vehicle.setLane(targetLane);
                 laneSegment(Lanes.MOST_INNER_LANE).addVehicle(vehicle);
             }
         }
@@ -1103,7 +1092,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @return the next downstream vehicle in the lane
      */
     public Vehicle frontVehicleOnLane(Vehicle vehicle) {
-        return laneSegments[vehicle.lateralModel().lane() - 1].frontVehicle(vehicle);
+        return laneSegments[vehicle.lane() - 1].frontVehicle(vehicle);
     }
 
     /**
@@ -1238,7 +1227,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                             vehicle.getFrontPosition()));
                     if (vehFront != null) {
                         sb.append(String.format("with veh (vehId=%d) in front at x=%.4f on lane=%d\n",
-                                vehFront.getId(), vehFront.getFrontPosition(), vehicle.lateralModel().lane()));
+                                vehFront.getId(), vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("internal nodeId=").append(id);
                     sb.append(", roadId=").append(userId);
@@ -1254,7 +1243,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                         sb.append(String
                                 .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, lane=%d, nodeId=%d%n",
                                         j, veh.getFrontPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(),
-                                        veh.getLength(), veh.lateralModel().lane(), veh.getId()));
+                                        veh.getLength(), veh.lane(), veh.getId()));
                     }
                     LOG.error(sb.toString());
                     if (isWithCrashExit) {

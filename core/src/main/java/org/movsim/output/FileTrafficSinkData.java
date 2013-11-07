@@ -51,7 +51,7 @@ public class FileTrafficSinkData extends FileOutputBase implements
     @Override
     public void recordData(double simulationTime, int totalVehiclesRemoved, Vehicle vehicle) {
         String formattedTime = ProjectMetaData.getInstance().getFormatedTimeWithOffset(simulationTime);
-        writer.printf(outputFormat, simulationTime, formattedTime, totalVehiclesRemoved, vehicle.lateralModel().lane(),
+        writer.printf(outputFormat, simulationTime, formattedTime, totalVehiclesRemoved, vehicle.lane(),
                 vehicle.getRouteName(), vehicle.getId(), vehicle.getLabel(),
                 vehicle.getUserData().getString(SEPARATOR_CHAR));
         writer.flush();

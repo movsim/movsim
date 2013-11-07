@@ -136,7 +136,7 @@ public class LoopDetector extends RoadObjectController {
      * @param veh
      */
     private void countVehiclesAndDataForLane(Vehicle veh) {
-        int laneIndex = veh.lateralModel().lane() - Lanes.MOST_INNER_LANE;
+        int laneIndex = veh.lane() - Lanes.MOST_INNER_LANE;
         LaneQuantity laneQuantity = laneQuantities[laneIndex];
         laneQuantity.vehCount++;
         laneQuantity.vehCumulatedCountOutput++;
