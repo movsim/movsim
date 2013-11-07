@@ -867,9 +867,6 @@ public class Vehicle {
 
     public boolean considerLaneChange(double dt, RoadSegment roadSegment) {
 
-        // TODO
-        considerRouteAlternatives(roadSegment);
-
         if (roadSegment.laneCount() <= 1) {
             // no lane-changing decision necessary for one-lane road. already
             // checked before
@@ -898,7 +895,7 @@ public class Vehicle {
         return false;
     }
 
-    private void considerRouteAlternatives(RoadSegment roadSegment) {
+    public void considerRouteAlternatives(RoadSegment roadSegment) {
         if (serviceProvider == null) {
             return;
         }
