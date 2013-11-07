@@ -5,7 +5,7 @@ Movsim == **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator
 
 Movsim's Homepage: [http://www.movsim.org](http://www.movsim.org)
 
-Current build status:
+Current build status for branch Master and Bidirectional: 
 
 [![Build Status Master](https://api.travis-ci.org/movsim/movsim.png?branch=master)](https://travis-ci.org/movsim/movsim)
 [![Build Status Bidirectional](https://api.travis-ci.org/movsim/movsim.png?branch=bidirectional)](https://travis-ci.org/movsim/movsim)
@@ -16,8 +16,8 @@ Quick links to this file:
 * [Installation](#installation)
 * [Usage](#usage)
 * [Demos](#demos)
-* [Commercial Use](#commercial use)
-* [Copyright and License](#copyright and license)
+* [Commercial Use](#commercial-use)
+* [Copyright and License](#copyright-and-license)
 * [References](#references)
 
 
