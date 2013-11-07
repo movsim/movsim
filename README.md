@@ -115,7 +115,7 @@ There are a number of simulation scenarios defined in the [_sim_ directory](http
 For commercial use, please contact the copyright holders at movsim.org@gmail.com.
 
 
-## Copyright and Licence
+## Copyright and License
 ------------------------
 
 MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
