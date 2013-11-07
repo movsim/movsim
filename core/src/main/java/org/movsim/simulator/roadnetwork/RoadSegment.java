@@ -1259,7 +1259,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                     LOG.error(sb.toString());
                     if (isWithCrashExit) {
                         LOG.error(" !!! exit after crash !!! ");
-                        throw new IllegalStateException("!!! EXIT AFTER VEHICLE CRASH");
+                        System.exit(-99);
                     }
                 }
             }
