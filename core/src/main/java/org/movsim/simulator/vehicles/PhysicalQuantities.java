@@ -71,7 +71,7 @@ public class PhysicalQuantities {
      * @return vehicle's width, in meters
      */
     public double getWidth() {
-        return me.getDimensions().width();
+        return me.getDimensions().getWidth();
     }
 
     /**

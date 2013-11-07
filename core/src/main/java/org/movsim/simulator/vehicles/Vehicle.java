@@ -360,7 +360,7 @@ public class Vehicle {
      * @return vehicle's length, in meters
      */
     public final double getLength() {
-        return dimensions.length();
+        return dimensions.getLength();
     }
 
     /**

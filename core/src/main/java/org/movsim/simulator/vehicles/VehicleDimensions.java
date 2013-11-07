@@ -2,8 +2,8 @@ package org.movsim.simulator.vehicles;
 
 public class VehicleDimensions {
 
-    private double length; // not final, can be set in micro-boundary conditions
-    private final double width;
+    private double length;
+    private double width;
 
     public VehicleDimensions(double length, double width) {
         this.length = length;
@@ -14,15 +14,16 @@ public class VehicleDimensions {
         this(dimensions.length, dimensions.width);
     }
 
-    public double length() {
+    public double getLength() {
         return length;
     }
 
     public void setLength(double length) {
+        // can be set in micro-boundary conditions
         this.length = length;
     }
 
-    public double width() {
+    public double getWidth() {
         return width;
     }
 
