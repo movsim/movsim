@@ -882,11 +882,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *            the number of iterations that have been executed
      */
     public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
+        
         if (!hasPeer() && laneCount < 2) {
             // need at least 2 lanes or a peerRoad for lane changing
             return;
         }
-
+        
         if (!overtakingSegmentInitialized) {
             initOvertakingLane(); // lazy init.
         }
@@ -918,6 +919,14 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             }
         }
         checkFinishingOvertaking(dt);
+    }
+
+    public void makeDynamicRoutingDecisions() {
+        for (LaneSegment laneSegment : laneSegments) {
+            for (Vehicle vehicle : laneSegment) {
+                vehicle.routingDecisions().considerRouteAlternatives(this);
+            }
+        }
     }
 
     private void initOvertakingLane() {

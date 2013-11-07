@@ -81,8 +81,8 @@ public final class VehicleFactory {
         if (provider == null) {
             throw new IllegalArgumentException("service provider \"" + providerName + "\" for vehicle not configured.");
         }
-        vehicle.setServiceProvider(provider);
-        vehicle.setDecisionUncertainty(personalNavigationDevice.getUncertainty());
+        vehicle.routingDecisions().setServiceProvider(provider);
+        vehicle.routingDecisions().setUncertainty(personalNavigationDevice.getUncertainty());
     }
 
     // route is determined via the traffic composition

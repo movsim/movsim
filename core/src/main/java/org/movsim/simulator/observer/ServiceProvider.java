@@ -56,8 +56,8 @@ public class ServiceProvider implements SimulationTimeStep {
         double sum = 0;
         double num = 0;
         double probability = 0;
-        double beta = -100;
-        if (Math.abs(uncertainty) > 0.01) {
+        double beta = -50;
+        if (Math.abs(uncertainty) > 0.02) {
             beta = -1 / uncertainty;
         }
 
@@ -82,8 +82,8 @@ public class ServiceProvider implements SimulationTimeStep {
         double sum = 0;
         double temp = 0;
         double probability = -1;
-        double beta = -100;
-        if (uncertainty > 0.01) {
+        double beta = -50;
+        if (uncertainty > 0.02) {
             beta = -1 / uncertainty;
         }
 

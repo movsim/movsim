@@ -1,13 +1,14 @@
 # MovSim 
--------------------------------------------------------------------------------
+---------
 
 Movsim == **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator
 
-[Movsim's Homepage http://www.movsim.org](http://www.movsim.org)
+Movsim's Homepage: [http://www.movsim.org](http://www.movsim.org)
 
 Current build status:
 
-[![Build Status](https://travis-ci.org/movsim/movsim)](https://travis-ci.org/movsim/movsim)
+[![Build Status Master](https://api.travis-ci.org/movsim/movsim.png?branch=master)](https://travis-ci.org/movsim/movsim)
+[![Build Status Bidirectional](https://api.travis-ci.org/movsim/movsim.png?branch=bidirectional)](https://travis-ci.org/movsim/movsim)
 
 Quick links to this file:
 
@@ -95,17 +96,17 @@ We use the source code formatter _movsim/codestyle/eclipse_movsim_profile.xml_.
 ## Demos
 --------
 
-There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim).
+There are a number of simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim).
 
-Applet demos on the website www.movsim.org
+* Applet demos on the website www.movsim.org
 
-(MovSim v1.0) www.verkehrsdynamik.de/simulation.shtml
+* (MovSim v1.0) www.verkehrsdynamik.de/simulation.shtml
 
-(MovSim v1.2) www.movsim.org/app.shtml
+* (MovSim v1.2) www.movsim.org/app.shtml
 
-(Routing game) www.movsim.org
+* (Routing game) www.movsim.org
 
-(Android client) Android App
+* (Android client) Android App
 
 
 ## Commercial use
