@@ -141,19 +141,19 @@
             <geometry s="0.0" x="3500" y="110" hdg="0" length="78.5">
                 <arc curvature="-0.01" />
             </geometry>
-            <geometry s="78.5" x="3570.7" y="139" hdg="-0.785" length="100.0">
+            <geometry s="78.5" x="3570.7" y="139" hdg="-0.785" length="1600.0">
                 <line />
             </geometry>
-            <geometry s="179" x="3641.1" y="209.5" hdg="-0.785" length="78.5">
+            <geometry s="179" x="4701" y="1269" hdg="-0.785" length="78.5">
                 <arc curvature="0.01" />
             </geometry>
-            <geometry s="257" x="3711.7" y="239" hdg="0." length="15489">
+            <geometry s="257" x="4770" y="1298" hdg="0." length="12486">
                 <line />
             </geometry>
-            <geometry s="357" x="18297.7" y="239" hdg="0." length="78.5">
+            <geometry s="357" x="17240" y="1298" hdg="0." length="78.5">
                 <arc curvature="0.01" />
             </geometry>
-            <geometry s="436" x="18368.3" y="209.5" hdg="0.785" length="100.0">
+            <geometry s="436" x="17310" y="1268" hdg="0.785" length="1600.0">
                 <line />
             </geometry>
             <geometry s="536" x="18439" y="139" hdg="0.785" length="78.5">
