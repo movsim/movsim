@@ -49,4 +49,8 @@ public class RoutingDecisions {
         this.uncertainty = uncertainty;
     }
 
+    public boolean hasServiceProvider() {
+        return serviceProvider != null;
+    }
+
 }

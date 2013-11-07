@@ -311,8 +311,10 @@ public class Vehicle {
         route = source.route;
         routeIndex = source.routeIndex;
         userData = source.userData;
+        if(source.routingDecisions.hasServiceProvider()){
         routingDecisions.setServiceProvider(source.routingDecisions().getServiceProvider());
         routingDecisions.setUncertainty(source.routingDecisions().getUncertainty());
+        }
     }
 
     private void initialize() {
