@@ -146,7 +146,7 @@ public class Vehicle {
 
     /** constant random number between 0 and 1 used for random output selections */
     final double randomFix;
-    
+
     /** The vehicle number. */
     private int vehNumber = VEHICLE_NUMBER_NOT_SET;
 
@@ -311,9 +311,9 @@ public class Vehicle {
         route = source.route;
         routeIndex = source.routeIndex;
         userData = source.userData;
-        if(source.routingDecisions.hasServiceProvider()){
-        routingDecisions.setServiceProvider(source.routingDecisions().getServiceProvider());
-        routingDecisions.setUncertainty(source.routingDecisions().getUncertainty());
+        if (source.routingDecisions.hasServiceProvider()) {
+            routingDecisions.setServiceProvider(source.routingDecisions().getServiceProvider());
+            routingDecisions.setUncertainty(source.routingDecisions().getUncertainty());
         }
     }
 
@@ -1172,9 +1172,9 @@ public class Vehicle {
     @Override
     public String toString() {
         return "Vehicle [id=" + id + ", label=" + label + ", length=" + getLength() + ", frontPosition="
-                + frontPosition
-                + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel=" + accModel + ", acc="
-                + acc + ", accOld=" + accOld + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
+                + frontPosition + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel="
+                + accModel + ", acc=" + acc + ", accOld=" + accOld + ", vehNumber=" + vehNumber + ", lane=" + lane
+                + "]";
     }
 
     /** returns a constant random number between 0 and 1 */
