@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -148,8 +147,6 @@ public class Vehicle {
     /** constant random number between 0 and 1 used for random output selections */
     final double randomFix;
     
-    final double randomAlternative;
-
     /** The vehicle number. */
     private int vehNumber = VEHICLE_NUMBER_NOT_SET;
 
@@ -197,8 +194,7 @@ public class Vehicle {
 
     private final VehicleUserData userData;
 
-    private ServiceProvider serviceProvider;
-    private double uncertainty;
+    private final RoutingDecisions routingDecisions = new RoutingDecisions(this);
 
     // Exit Handling
     private int roadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
@@ -243,7 +239,6 @@ public class Vehicle {
 
         id = nextId++;
         randomFix = MyRandom.nextDouble();
-        randomAlternative = MyRandom.nextDouble();
 
         initialize();
         this.longitudinalModel = longitudinalModel;
@@ -274,7 +269,6 @@ public class Vehicle {
         id = nextId++;
         randomFix = MyRandom.nextDouble();
         dimensions = new VehicleDimensions(length, width);
-        randomAlternative = MyRandom.nextDouble();
         setRearPosition(rearPosition);
         this.speed = speed;
         this.lane = lane;
@@ -300,7 +294,6 @@ public class Vehicle {
     public Vehicle(Vehicle source) {
         id = source.id;
         randomFix = source.randomFix;
-        randomAlternative = source.randomAlternative;
         type = source.type;
         frontPosition = source.frontPosition;
         speed = source.speed;
@@ -318,6 +311,8 @@ public class Vehicle {
         route = source.route;
         routeIndex = source.routeIndex;
         userData = source.userData;
+        routingDecisions.setServiceProvider(source.routingDecisions().getServiceProvider());
+        routingDecisions.setUncertainty(source.routingDecisions().getUncertainty());
     }
 
     private void initialize() {
@@ -895,20 +890,6 @@ public class Vehicle {
         return false;
     }
 
-    public void considerRouteAlternatives(RoadSegment roadSegment) {
-        if (serviceProvider == null) {
-            return;
-        }
-
-        if (serviceProvider.doDiverge(uncertainty, roadSegment.userId(), randomAlternative)) {
-            exitRoadSegmentId = roadSegment.id();
-            if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
-                throw new IllegalArgumentException("cannot do diverge on roadSegment " + roadSegment.userId()
-                        + " without exit lane!");
-            }
-        }
-    }
-
     public int getTargetLane() {
         return targetLane;
     }
@@ -1243,14 +1224,6 @@ public class Vehicle {
         this.externalAcceleration = Double.NaN;
     }
 
-    public void setServiceProvider(ServiceProvider serviceProvider) {
-        this.serviceProvider = Preconditions.checkNotNull(serviceProvider);
-    }
-
-    public void setDecisionUncertainty(double uncertainty) {
-        this.uncertainty = uncertainty;
-    }
-
     public EnergyModel getEnergyModel() {
         return energyModel;
     }
@@ -1261,6 +1234,10 @@ public class Vehicle {
 
     public TrafficLightApproaching getTrafficLightApproaching() {
         return trafficLightApproaching;
+    }
+
+    public RoutingDecisions routingDecisions() {
+        return routingDecisions;
     }
 
 }

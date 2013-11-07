@@ -924,7 +924,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public void makeDynamicRoutingDecisions() {
         for (LaneSegment laneSegment : laneSegments) {
             for (Vehicle vehicle : laneSegment) {
-                vehicle.considerRouteAlternatives(this);
+                vehicle.routingDecisions().considerRouteAlternatives(this);
             }
         }
     }
