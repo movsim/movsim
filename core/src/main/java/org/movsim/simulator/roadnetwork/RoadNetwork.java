@@ -356,7 +356,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     public static double instantaneousTravelTime(Route route) {
         double instantaneousTravelTime = 0;
-        for (final RoadSegment roadSegment : route) {
+        for (RoadSegment roadSegment : route) {
             instantaneousTravelTime += roadSegment.instantaneousTravelTime();
         }
         return instantaneousTravelTime;
