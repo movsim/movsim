@@ -19,7 +19,7 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
     private static final String outputHeading = "%10s, %10s, ";
     private static final String outputInformation = "%s %10s %.2f %n";
 
-    private static final String outputFormatTime = "%10.2f";
+    private static final String outputFormatTime = "%10.2f,";
     private static final String outputFormat = "%10.2f, %10.4f,";
 
     private final ServiceProvider serviceProvider;
@@ -39,8 +39,8 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
         for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints()) {
             for (RouteAlternative alternative : decisionPoint) {
                 writer.printf(outputHeading,
-                        "valueRoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel(), "probRoadId"
-                                + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel());
+                        "disutility_RoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel(),
+                        "probRoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel());
             }
         }
         writer.printf("%n");
