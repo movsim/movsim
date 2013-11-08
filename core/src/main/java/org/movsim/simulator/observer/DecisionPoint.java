@@ -17,13 +17,15 @@ public class DecisionPoint implements Iterable<RouteAlternative> {
 
     public DecisionPoint(DecisionPointType configuration) {
         Preconditions.checkNotNull(configuration);
+        if (!configuration.isSetRouteAlternative() || configuration.getRouteAlternative().isEmpty()) {
+            throw new IllegalArgumentException("at least one alternative must be defined.");
+        }
+
         this.roadId = configuration.getRoadId();
-        if (configuration.isSetRouteAlternative()) {
-            for (RouteAlternativeType routeAlternative : configuration.getRouteAlternative()) {
-                String routeLabel = routeAlternative.getRoute();
-                RouteAlternative alternative = new RouteAlternative(routeLabel);
-                routeAlternatives.add(alternative);
-            }
+        for (RouteAlternativeType routeAlternative : configuration.getRouteAlternative()) {
+            String routeLabel = routeAlternative.getRoute();
+            RouteAlternative alternative = new RouteAlternative(routeLabel);
+            routeAlternatives.add(alternative);
         }
     }
 
@@ -34,6 +36,10 @@ public class DecisionPoint implements Iterable<RouteAlternative> {
     @Override
     public Iterator<RouteAlternative> iterator() {
         return routeAlternatives.iterator();
+    }
+
+    public Iterable<RouteAlternative> getAlternatives() {
+        return routeAlternatives;
     }
 
 }

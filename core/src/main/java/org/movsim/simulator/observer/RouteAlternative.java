@@ -19,11 +19,12 @@ class RouteAlternative {
         return route;
     }
 
-    public double getValue() {
+    public double getDisutility() {
         return value;
     }
 
-    public void setValue(double value) {
+    /** disutility corresponds to traveltime is seconds. */
+    public void setDisutility(double value) {
         this.value = value;
     }
 

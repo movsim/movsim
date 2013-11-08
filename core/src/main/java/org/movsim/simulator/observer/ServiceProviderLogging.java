@@ -52,7 +52,7 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
         writer.printf(outputFormatTime, simulationTime);
         for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints()) {
             for (RouteAlternative alternative : decisionPoint) {
-                writer.printf(outputFormat, alternative.getValue(), alternative.getProbability());
+                writer.printf(outputFormat, alternative.getDisutility(), alternative.getProbability());
             }
         }
         writer.printf("%n");
