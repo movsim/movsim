@@ -29,6 +29,7 @@ package org.movsim.simulator.roadnetwork;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 
 import javax.annotation.CheckForNull;
@@ -54,6 +55,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 /**
  * <p>
@@ -593,7 +595,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return vehicleFuelUsedLiters;
     }
 
-    public double meanSpeed() {
+    public double meanSpeedOfVehicles() {
         double sumSpeed = 0;
         int vehCount = 0;
         for (LaneSegment laneSegment : laneSegments) {
@@ -651,8 +653,31 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *         empty and with assumed maximum travel time in standstill
      */
     public double instantaneousTravelTime() {
-        return roadLength / meanSpeed();
+        final double dx = 100; // TODO refactor
+        double position = 0;
+        double totalTravelTime = 0;
+        // TODO hack here, depends on order of vehicles
+        LinkedList<Vehicle> vehicles = Lists.newLinkedList();
+        Iterators.addAll(vehicles, iterator());
+        while (position < roadLength) {
+            double end = Math.min(position + dx, roadLength);
+            double maxRoadSpeed = freeFlowSpeed; // FIXME consider speedlimits
+            totalTravelTime += travelTimeInRange(position, end, maxRoadSpeed, vehicles);
+            position += dx;
+        }
+        return totalTravelTime;
+    }
 
+    private static double travelTimeInRange(double begin, double end, double maxRoadSpeed, LinkedList<Vehicle> vehicles) {
+        int count = 0;
+        double sumSpeed = 0;
+        while (!vehicles.isEmpty() && vehicles.getLast().getFrontPosition() < end) {
+            Vehicle veh = vehicles.removeLast();
+            sumSpeed += veh.getSpeed();
+            count++;
+        }
+        double avgSpeed = (count == 0) ? maxRoadSpeed : sumSpeed / count;
+        return (end - begin) / avgSpeed;
     }
 
     /**
@@ -794,6 +819,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         updateSignalPointsBeforeOutflowCalled = false;
     }
 
+    // TOO SLOW FOR GENERAL PURPOSE
     public Iterator<Vehicle> vehiclesWithinRange(double begin, double end) {
         return Iterators.filter(iterator(), new VehicleWithinRange(begin, end));
     }
@@ -820,12 +846,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *            the number of iterations that have been executed
      */
     public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
-        
+
         if (!hasPeer() && laneCount < 2) {
             // need at least 2 lanes or a peerRoad for lane changing
             return;
         }
-        
+
         if (!overtakingSegmentInitialized) {
             initOvertakingLane(); // lazy init.
         }
