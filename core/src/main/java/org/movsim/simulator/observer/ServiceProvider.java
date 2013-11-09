@@ -12,7 +12,7 @@ import com.google.common.collect.Iterables;
 
 public class ServiceProvider implements SimulationTimeStep {
 
-    private static final double MIN_UNCERTAINTY = 20; // in SI units: here seconds
+    private static final int TOO_LARGE_EXPONENT = 100;
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(ServiceProvider.class);
@@ -46,76 +46,74 @@ public class ServiceProvider implements SimulationTimeStep {
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        evaluateAlternatives();
+        evaluateDecisionPoints();
         if (fileOutput != null) {
             fileOutput.timeStep(dt, simulationTime, iterationCount);
         }
     }
 
+    /**
+     * @param uncertainty
+     * @param roadSegmentUserId
+     * @param random
+     * @return
+     */
     public String selectRoute(double uncertainty, String roadSegmentUserId, double random) {
         DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
         if (decisionPoint != null) {
             return selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty, random);
         }
-        return "";
+        return ""; // TODO
     }
 
-    private void evaluateAlternatives() {
+    private void evaluateDecisionPoints() {
         double uncertainty = decisionPoints.getUncertainty();
+        // uncertainty as standard deviation must be >=0, already required by xsd
         for (DecisionPoint decisionPoint : decisionPoints) {
-            for (RouteAlternative alternative : decisionPoint) {
-                double value = RoadNetwork.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
-                alternative.setDisutility(value);
-            }
-            calcProbability(decisionPoint, uncertainty);
+            evaluateDecisionPoint(uncertainty, decisionPoint);
         }
     }
 
-    public static void calcProbability(Iterable<RouteAlternative> alternatives, double uncertainty) {
-        Preconditions.checkArgument(uncertainty >= 0, "uncertainty corresponding to standard deviation must be >=0");
-        if (uncertainty < MIN_UNCERTAINTY) {
-            calcProbabilityIfDeterministic(alternatives);
+    private void evaluateDecisionPoint(double uncertainty, DecisionPoint decisionPoint) {
+        for (RouteAlternative alternative : decisionPoint) {
+            double traveltime = RoadNetwork.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
+            alternative.setDisutility(traveltime);
         }
-        else {
+        calcProbabilities(decisionPoint, uncertainty);
+    }
+
+    private static void calcProbabilities(Iterable<RouteAlternative> alternatives, double uncertainty) {
+        if (uncertainty > 0) {
             calcProbabilityIfStochastic(alternatives, uncertainty);
+        } else {
+            calcProbabilityForDeterministic(alternatives);
         }
-    }
-
-    private static String selectAlternativeRoute(Iterable<RouteAlternative> alternatives, double uncertainty,
-            double random) {
-        Preconditions.checkArgument(random >= 0 && random < 1);
-        calcProbability(alternatives, uncertainty);
-        double sumProb = 0;
-        for (RouteAlternative alternative : alternatives) {
-            sumProb += alternative.getProbability();
-            if (random <= sumProb) {
-                return alternative.getRouteLabel();
-            }
-        }
-        Preconditions.checkState(false, "probabilities do not sumed correctly");
-        return null;
     }
 
     private static void calcProbabilityIfStochastic(Iterable<RouteAlternative> alternatives, double uncertainty) {
-        Preconditions.checkArgument(uncertainty >= MIN_UNCERTAINTY);
         final double beta = -1 / uncertainty;
-        double denom = 0;
-        double num = 0;
-        double probability = 0;
-
         for (RouteAlternative alternative : alternatives) {
-            // TODO handle diverging exponential
-            denom += Math.exp(beta * alternative.getDisutility());
-        }
-
-        for (RouteAlternative alternative : alternatives) {
-            num = Math.exp(beta * alternative.getDisutility());
-            probability = num / denom;
-            alternative.setProbability(probability);
+            // check first for large exponential
+            if (hasTooLargeExponent(beta, alternative, alternatives)) {
+                // probability of 0 as trivial result
+                alternative.setProbability(0);
+            } else {
+                double probAlternative = calcProbability(beta, alternative, alternatives);
+                alternative.setProbability(probAlternative);
+            }
         }
     }
 
-    private static void calcProbabilityIfDeterministic(Iterable<RouteAlternative> alternatives) {
+    private static double calcProbability(double beta, RouteAlternative alternative,
+            Iterable<RouteAlternative> alternatives) {
+        double denom = 0;
+        for (RouteAlternative otherAlternative : alternatives) {
+            denom += Math.exp(beta * (alternative.getDisutility() - otherAlternative.getDisutility()));
+        }
+        return 1. / denom;
+    }
+
+    private static void calcProbabilityForDeterministic(Iterable<RouteAlternative> alternatives) {
         RouteAlternative bestAlternative = Iterables.getLast(alternatives);
         for (RouteAlternative alternative : alternatives) {
             alternative.setProbability(0);
@@ -124,6 +122,33 @@ public class ServiceProvider implements SimulationTimeStep {
             }
         }
         bestAlternative.setProbability(1);
+    }
+
+    private static String selectAlternativeRoute(Iterable<RouteAlternative> alternatives, double uncertainty,
+            double random) {
+        Preconditions.checkArgument(random >= 0 && random < 1);
+        calcProbabilities(alternatives, uncertainty);
+        double sumProb = 0;
+        for (RouteAlternative alternative : alternatives) {
+            sumProb += alternative.getProbability();
+            LOG.debug("alternative={}, sumProb={}", alternative.getRouteLabel(), sumProb);
+            if (random <= sumProb) {
+                return alternative.getRouteLabel();
+            }
+        }
+        Preconditions.checkState(false, "probabilities do not sumed correctly");
+        return null;
+    }
+
+    private static boolean hasTooLargeExponent(double beta, RouteAlternative alternative,
+            Iterable<RouteAlternative> alternatives) {
+        for (RouteAlternative otherAlternative : alternatives) {
+            double delta = alternative.getDisutility() - otherAlternative.getDisutility();
+            if (beta * delta > TOO_LARGE_EXPONENT) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

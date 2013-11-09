@@ -25,8 +25,14 @@ public class RoutingDecisions {
         }
 
         String routeLabel = serviceProvider.selectRoute(uncertainty, roadSegment.userId(), randomAlternative);
+        if (routeLabel.isEmpty()) {
+            return;
+        }
 
         // FIXME fully-fleshed routing decision making, here quick hack
+        if (!routeLabel.equals("A1") && !routeLabel.equals("A2")) {
+            throw new IllegalArgumentException("cannot handle other alternatives="+routeLabel+"  then A1 and A2 yet!!!");
+        }
         if ("A2".equals(routeLabel)) {
             vehicle.setExitRoadSegmentId(roadSegment.id());
             if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {

@@ -447,7 +447,7 @@
     </xs:element>
     <xs:complexType name="PersonalNavigationDeviceType">
         <xs:attribute name="service_provider" type="xs:string" />
-        <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
+        <xs:attribute name="uncertainty" type="nonNegativeDouble" default="0.0" />
     </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:complexType name="ServiceProvidersType">
@@ -468,7 +468,6 @@
             <xs:element name="RouteAlternative" type="RouteAlternativeType" minOccurs="2" maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute name="roadSegment" type="xs:string" />
-        <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
     </xs:complexType>
     <xs:complexType name="RouteAlternativeType">
         <xs:attribute name="route" type="xs:string" />
@@ -478,7 +477,7 @@
         <xs:sequence>
             <xs:element name="DecisionPoint" type="DecisionPointType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
-        <xs:attribute name="uncertainty" type="xs:double" default="0.0" />
+        <xs:attribute name="uncertainty" type="nonNegativeDouble" default="0.0" />
     </xs:complexType>
     <xs:complexType name="DecisionPointType">
         <xs:sequence>
