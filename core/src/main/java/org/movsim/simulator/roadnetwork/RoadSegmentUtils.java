@@ -26,12 +26,19 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import org.movsim.simulator.vehicles.Vehicle;
+
 import com.google.common.base.Preconditions;
 
-public final class RoadSegments {
+public final class RoadSegmentUtils {
 
-    private RoadSegments() {
-
+    private RoadSegmentUtils() {
+        throw new IllegalStateException("do not instanciate");
     }
 
     /**
@@ -50,6 +57,13 @@ public final class RoadSegments {
             }
         }
         return false;
+    }
+
+    // first element is most downstream (reverse order along roadSegment
+    public Collection<Vehicle> sortVehicles(Iterator<Vehicle> vehicleIterator) {
+        SortedSet<Vehicle> sortedVehicles = new TreeSet<Vehicle>();
+        // FIXME implement this
+        return sortedVehicles;
     }
 
 }

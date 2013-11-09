@@ -99,7 +99,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
-     * Clear the road network so that it is empty and ready to accept new RoadSegments, Vehicles, sources, sinks and
+     * Clear the road network so that it is empty and ready to accept new RoadSegmentUtils, Vehicles, sources, sinks and
      * junctions.
      */
     public void clear() {
@@ -121,9 +121,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
-     * Returns the number of RoadSegments in the road network.
+     * Returns the number of RoadSegmentUtils in the road network.
      * 
-     * @return the number of RoadSegments in the road network
+     * @return the number of RoadSegmentUtils in the road network
      */
     public final int size() {
         return roadSegments.size();
