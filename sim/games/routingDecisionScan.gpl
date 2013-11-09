@@ -4,7 +4,7 @@
 # invoke using -e option to set parameters, eg:
 # gnuplot -e "lang='de'" routingDecisions.gpl
 
-set datafile separator ","
+#set datafile separator ","
 
 # parameters
 if (!exists("inputPath")) inputPath = "./"
@@ -17,7 +17,7 @@ vehicle = "Equipped"
 serviceprovider = "wiseGuy"
 
 # input files
-totalttFile = "totalVehicleTravelTime.dat"
+totalttFile = "totalVehicleTravelTime.csv"
 
 # output files
 totaltraveltimeOutput = outputPath.baseFile.".total_traveltime.eps"
@@ -44,21 +44,25 @@ set size 1,1
 set title ""
 set key box
 set nokey
+set ticslevel 0
+set nogrid
 
 ######### total travel times  ##########################
-set pm3d map
-set palette defined (0 "red", 20 "orange", 40 "yellow", 60 "green", 80 "blue",  100 "#dd00ff" )
+#set palette defined (0 "red", 20 "orange", 40 "yellow", 60 "green", 80 "blue",  100 "#dd00ff" )
+set pm3d; set pm3d map
+#set contour surface
+set cntrparam bspline
+set cntrparam levels 20
+unset clabel  
+unset surface
 #set xrange [0:100]
 
 set title "Average total traveltime (s)"
-#probLabel = "Probability (%)"
 set xlabel "Equipment Level (%)"
 set ylabel "Uncertainty (min)"
 
-set xlabel penetrationLabel
-set ylabel uncertaintyLabel
-
 set out totaltraveltimeOutput
-splot totalttFile using ($1*100):($/60):3 w pm3d
+print "file=".totalttFile
+splot totalttFile using ($1*100):($2/60.):($3) with lines linestyle 99
 
 #with points ps 2 pt 7 palette

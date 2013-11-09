@@ -56,11 +56,11 @@ public final class SimulationScan {
         // TODO quick hack here
         double uncertaintyMin = 0;
         double uncertaintyMax = 300;
-        double uncertaintyStep = 100;
+        double uncertaintyStep = 10;
 
         double fractionMin = 0;
         double fractionMax = 1;
-        double fractionStep = 0.2;
+        double fractionStep = 0.05;
 
         PrintWriter writer = FileUtils.getWriter(FILENAME);
         double fraction = fractionMin;
@@ -81,12 +81,10 @@ public final class SimulationScan {
 
     private static void writeOutput(PrintWriter writer, double fraction, double uncertainty, Simulator simRun) {
         StringBuilder sb = new StringBuilder();
-        sb.append(fraction)
-                .append(" ")
-                .append(uncertainty)
-                .append(" ")
-                .append(simRun.getRoadNetwork().totalVehicleTravelTime()
-                        / simRun.getRoadNetwork().totalVehiclesRemoved());
+        double avgTravelTime = simRun.getRoadNetwork().totalVehicleTravelTime()
+                / simRun.getRoadNetwork().totalVehiclesRemoved();
+        sb.append(String.format("%.3f", fraction)).append(", ").append(String.format("%.3f", uncertainty)).append(", ")
+                .append(String.format("%.3f", avgTravelTime));
         writer.println(sb.toString());
         writer.flush();
     }
@@ -94,16 +92,18 @@ public final class SimulationScan {
     private static void modifyInput(final Movsim inputData, double fraction, double uncertainty) {
         Preconditions.checkArgument(inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType()
                 .size() == 2);
-        VehicleType equippedVehicleType = inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(0);
+        VehicleType equippedVehicleType = inputData.getScenario().getSimulation().getTrafficComposition()
+                .getVehicleType().get(0);
         Preconditions.checkArgument(equippedVehicleType.getLabel().equals("Equipped"));
         equippedVehicleType.setFraction(fraction);
-        
+
         VehicleType nonEquippedVehicleType = inputData.getScenario().getSimulation().getTrafficComposition()
                 .getVehicleType().get(1);
         Preconditions.checkArgument(nonEquippedVehicleType.getLabel().equals("NonEquipped"));
         nonEquippedVehicleType.setFraction(1 - fraction);
 
-        VehiclePrototypeConfiguration equippedVehPrototypeConfig = inputData.getVehiclePrototypes().getVehiclePrototypeConfiguration().get(0);
+        VehiclePrototypeConfiguration equippedVehPrototypeConfig = inputData.getVehiclePrototypes()
+                .getVehiclePrototypeConfiguration().get(0);
         Preconditions.checkArgument(equippedVehPrototypeConfig.getLabel().equals("Equipped"));
         Preconditions.checkArgument(equippedVehPrototypeConfig.getPersonalNavigationDevice().isSetServiceProvider());
         equippedVehPrototypeConfig.getPersonalNavigationDevice().setUncertainty(uncertainty);
