@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Movsim>
-    <VehiclePrototypes write_fund_diagrams="true">
+	<!-- disable fd output  for scan -->
+    <VehiclePrototypes write_fund_diagrams="false">
         <!-- car with traffic information -->
         <VehiclePrototypeConfiguration label="Equipped" length="6" maximum_deceleration="10">
             <AccelerationModelType>
@@ -22,9 +23,10 @@
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
     <ServiceProviders>
-        <ServiceProvider label="wiseGuy" logging="true">
+		<!-- disable logging for scan -->
+        <ServiceProvider label="wiseGuy" logging="false">
             <DecisionPoints uncertainty="0">
-                <!-- in seconds -->
+                <!-- disutility in seconds -->
                 <DecisionPoint roadId="2">
                     <RouteAlternative route="A1" />
                     <RouteAlternative route="A2" />
@@ -34,7 +36,7 @@
     </ServiceProviders>
     <RoadTypeSpeedMappings>
         <RoadTypeSpeedMapping road_type="motorway" default_speed_kmh="108" />
-        <!-- corresponds to v0 of vehicles for consistency -->
+        <!-- 108 km/h corresponds to v0=30 of vehicles for consistent tt estimation -->
     </RoadTypeSpeedMappings>
     <Scenario network_filename="routing_scenario_singlelane.xodr">
         <Simulation timestep="0.2" duration="8000" seed="42" crash_exit="true">
@@ -58,18 +60,20 @@
                 <FlowConservingInhomogeneities>
                     <Inhomogeneity position="14000" valid_length="1000" adaptation_length="300" target_alpha_T="1.32" />
                 </FlowConservingInhomogeneities>
-                <Detectors sample_interval="60" logging="true">
+                <!-- <Detectors sample_interval="60" logging="true">
                     <CrossSection position="13000" />
                 </Detectors>
+                -->
             </Road>
             <!-- Alternative A2 -->
             <Road id="10">
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="14000" valid_length="1000" adaptation_length="300" target_alpha_T="10" />
+                    <Inhomogeneity position="14000" valid_length="1000" adaptation_length="300" target_alpha_T="9" />
                 </FlowConservingInhomogeneities>
-                <Detectors sample_interval="60" logging="true">
+               <!-- <Detectors sample_interval="60" logging="true">
                     <CrossSection position="13000" />
                 </Detectors>
+                -->
             </Road>
         </Simulation>
         <Routes>
@@ -81,12 +85,11 @@
             </Route>
         </Routes>
         <OutputConfiguration>
-            <!-- <SpatioTemporalConfiguration dx="100" dt="40" route="A1" /> -->
-            <!-- <SpatioTemporalConfiguration dx="100" dt="40" route="A2" /> -->
-            <Trajectories dt="20" route="A1" />
+            <!-- <Trajectories dt="20" route="A1" />
             <Trajectories dt="20" route="A2" />
             <TravelTimes route="A1" dt="5" />
             <TravelTimes route="A2" dt="5" />
+            -->
         </OutputConfiguration>
     </Scenario>
 </Movsim>
