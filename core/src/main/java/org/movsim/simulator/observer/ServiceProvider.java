@@ -3,6 +3,7 @@ package org.movsim.simulator.observer;
 import org.movsim.autogen.ServiceProviderType;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadNetworkUtils;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +77,8 @@ public class ServiceProvider implements SimulationTimeStep {
 
     private void evaluateDecisionPoint(double uncertainty, DecisionPoint decisionPoint) {
         for (RouteAlternative alternative : decisionPoint) {
-            double traveltime = RoadNetwork.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
+            // usage of metric for disutility
+            double traveltime = RoadNetworkUtils.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
             alternative.setDisutility(traveltime);
         }
         calcProbabilities(decisionPoint, uncertainty);
