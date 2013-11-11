@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 
 class RouteAlternative {
 
-    private final String route;
+    private final String routeLabel;
 
     private double value = 0.0;
 
@@ -12,11 +12,11 @@ class RouteAlternative {
 
     public RouteAlternative(String route) {
         Preconditions.checkArgument(route != null && !route.isEmpty());
-        this.route = route;
+        this.routeLabel = route;
     }
 
     public String getRouteLabel() {
-        return route;
+        return routeLabel;
     }
 
     public double getDisutility() {
@@ -34,6 +34,11 @@ class RouteAlternative {
 
     public void setProbability(double probability) {
         this.probability = probability;
+    }
+
+    @Override
+    public String toString() {
+        return "RouteAlternative [route=" + routeLabel + ", value=" + value + ", probability=" + probability + "]";
     }
 
 }
