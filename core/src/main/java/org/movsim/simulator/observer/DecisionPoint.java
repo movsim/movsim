@@ -1,8 +1,8 @@
 package org.movsim.simulator.observer;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.movsim.autogen.DecisionPointType;
 import org.movsim.autogen.RouteAlternativeType;
@@ -13,7 +13,8 @@ public class DecisionPoint implements Iterable<RouteAlternative> {
 
     private final String roadId;
 
-    private final Set<RouteAlternative> routeAlternatives = new HashSet<>();
+    /** sorted according to routeLabel for assuring a consistent */
+    private final SortedMap<String, RouteAlternative> routeAlternatives = new TreeMap<>();
 
     public DecisionPoint(DecisionPointType configuration) {
         Preconditions.checkNotNull(configuration);
@@ -25,7 +26,7 @@ public class DecisionPoint implements Iterable<RouteAlternative> {
         for (RouteAlternativeType routeAlternative : configuration.getRouteAlternative()) {
             String routeLabel = routeAlternative.getRoute();
             RouteAlternative alternative = new RouteAlternative(routeLabel);
-            routeAlternatives.add(alternative);
+            routeAlternatives.put(alternative.getRouteLabel(), alternative);
         }
     }
 
@@ -35,11 +36,11 @@ public class DecisionPoint implements Iterable<RouteAlternative> {
 
     @Override
     public Iterator<RouteAlternative> iterator() {
-        return routeAlternatives.iterator();
+        return routeAlternatives.values().iterator();
     }
 
     public Iterable<RouteAlternative> getAlternatives() {
-        return routeAlternatives;
+        return routeAlternatives.values();
     }
 
 }

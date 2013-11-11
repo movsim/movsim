@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Movsim>
 	<!-- disable fd output  for scan -->
-    <VehiclePrototypes write_fund_diagrams="true">
+    <VehiclePrototypes write_fund_diagrams="false">
         <!-- car with traffic information -->
         <VehiclePrototypeConfiguration label="Equipped" length="6" maximum_deceleration="10">
             <AccelerationModelType>
                 <ModelParameterACC v0="30" T="1.4" s0="2" s1="0" delta="4" a="2" b="2.0" coolness="1" />
             </AccelerationModelType>
-            <LaneChangeModelType european_rules="true" crit_speed_eur="200">
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
                 <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
             </LaneChangeModelType>
-            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="20" />
+            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="0" />
         </VehiclePrototypeConfiguration>
         <!-- car without traffic information -->
         <VehiclePrototypeConfiguration label="NonEquipped" length="6" maximum_deceleration="10">
@@ -24,9 +24,8 @@
     </VehiclePrototypes>
     <ServiceProviders>
 		<!-- disable logging for scan -->
-        <ServiceProvider label="wiseGuy" logging="true">
-			<!-- disutility just for logging, keep consistent with vehicle's disutility -->
-            <DecisionPoints uncertainty="200">
+        <ServiceProvider label="wiseGuy" logging="false">
+            <DecisionPoints uncertainty="0">
                 <!-- disutility in seconds -->
                 <DecisionPoint roadId="2">
                     <RouteAlternative route="A1" />
@@ -42,8 +41,8 @@
     <Scenario network_filename="routing_scenario_singlelane.xodr">
         <Simulation timestep="0.2" duration="8000" seed="42" crash_exit="true">
             <TrafficComposition>
-                <VehicleType label="Equipped" fraction="1" relative_v0_randomization="0.0" />
-                <VehicleType label="NonEquipped" fraction="0" relative_v0_randomization="0.0" />
+                <VehicleType label="Equipped" fraction="0.5" relative_v0_randomization="0.0" />
+                <VehicleType label="NonEquipped" fraction="0.5" relative_v0_randomization="0.0" />
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="false">
@@ -61,18 +60,20 @@
                 <FlowConservingInhomogeneities>
                     <Inhomogeneity position="14000" valid_length="1000" adaptation_length="300" target_alpha_T="1.32" />
                 </FlowConservingInhomogeneities>
-	 	<Detectors sample_interval="60" logging="true">
+                <!-- <Detectors sample_interval="60" logging="true">
                     <CrossSection position="13000" />
                 </Detectors>
+                -->
             </Road>
             <!-- Alternative A2 -->
             <Road id="10">
                 <FlowConservingInhomogeneities>
                     <Inhomogeneity position="14000" valid_length="1000" adaptation_length="300" target_alpha_T="9" />
                 </FlowConservingInhomogeneities>
-		<Detectors sample_interval="60" logging="true">
+               <!-- <Detectors sample_interval="60" logging="true">
                     <CrossSection position="13000" />
                 </Detectors>
+                -->
             </Road>
         </Simulation>
         <Routes>
@@ -84,10 +85,11 @@
             </Route>
         </Routes>
         <OutputConfiguration>
-             <Trajectories dt="20" route="A1" />
+            <!-- <Trajectories dt="20" route="A1" />
             <Trajectories dt="20" route="A2" />
             <TravelTimes route="A1" dt="5" />
             <TravelTimes route="A2" dt="5" />
+            -->
         </OutputConfiguration>
     </Scenario>
 </Movsim>
