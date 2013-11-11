@@ -273,7 +273,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public double vehiclesMeanSpeed() {
         double averageSpeed = 0;
         for (final RoadSegment roadSegment : roadSegments) {
-            averageSpeed += roadSegment.meanSpeed();
+            averageSpeed += roadSegment.meanSpeedOfVehicles();
         }
         return averageSpeed / roadSegments.size();
     }
@@ -314,19 +314,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return true;
     }
 
-    /**
-     * Returns the number of vehicles on route.
-     * 
-     * @return the number of vehicles on given route.
-     */
-    public static int vehicleCount(Route route) {
-        int vehicleCount = 0;
-        for (final RoadSegment roadSegment : route) {
-            vehicleCount += roadSegment.getVehicleCount();
-        }
-        return vehicleCount;
-    }
-
     public int totalVehiclesRemoved() {
         int totalVehiclesRemoved = 0;
         for (RoadSegment roadSegment : roadSegments) {
@@ -354,14 +341,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleTravelTime;
     }
 
-    public static double instantaneousTravelTime(Route route) {
-        double instantaneousTravelTime = 0;
-        for (final RoadSegment roadSegment : route) {
-            instantaneousTravelTime += roadSegment.instantaneousTravelTime();
-        }
-        return instantaneousTravelTime;
-    }
-
     /**
      * Returns the total travel distance of all vehicles on this road network, including those that have exited.
      * 
@@ -370,17 +349,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public double totalVehicleTravelDistance() {
         double totalVehicleTravelDistance = 0.0;
         for (RoadSegment roadSegment : roadSegments) {
-            totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
-            if (roadSegment.sink() != null) {
-                totalVehicleTravelDistance += roadSegment.sink().totalVehicleTravelDistance();
-            }
-        }
-        return totalVehicleTravelDistance;
-    }
-
-    public static double totalVehicleTravelDistance(Route route) {
-        double totalVehicleTravelDistance = 0.0;
-        for (final RoadSegment roadSegment : route) {
             totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
             if (roadSegment.sink() != null) {
                 totalVehicleTravelDistance += roadSegment.sink().totalVehicleTravelDistance();
@@ -403,14 +371,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
             }
         }
         return totalVehicleFuelUsedLiters;
-    }
-
-    public static double instantaneousFuelUsedLiters(Route route) {
-        double instantaneousConsumption = 0;
-        for (final RoadSegment roadSegment : route) {
-            instantaneousConsumption += roadSegment.instantaneousConsumptionLitersPerSecond();
-        }
-        return instantaneousConsumption;
     }
 
 }

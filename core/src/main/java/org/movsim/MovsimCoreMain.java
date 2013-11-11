@@ -33,7 +33,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.movsim.autogen.Movsim;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.logging.LogFileAppender;
 import org.movsim.logging.Logger;
 import org.movsim.simulator.Simulator;
 import org.movsim.xml.MovsimInputLoader;
@@ -69,7 +68,8 @@ public class MovsimCoreMain {
             throw new IllegalArgumentException("no xml simulation configuration file provided.");
         }
 
-        LogFileAppender.initialize(projectMetaData);
+        // FIXME not working
+        // LogFileAppender.initialize(projectMetaData);
 
         // unmarshall movsim configuration file
         final Movsim inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());

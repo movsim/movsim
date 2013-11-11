@@ -4,50 +4,23 @@
 # invoke using -e option to set parameters, eg:
 # gnuplot -e "lang='de'" routingDecisions.gpl
 
-set datafile separator ","
+#set datafile separator ","
 
 # parameters
 if (!exists("inputPath")) inputPath = "./"
 if (!exists("outputPath")) outputPath = "./"
-if (!exists("ldm")) ldm = ""
 if (!exists("baseFile")) baseFile = "routing_test"
-#print "LDM=".ldm
+print "basefile=".baseFile
 
 # variables
 vehicle = "Equipped"
 serviceprovider = "wiseGuy"
 
 # input files
-totalttFile = "totalVehicleTravelTime.dat"
+totalttFile = "totalVehicleTravelTime.csv"
 
 # output files
-totaltraveltimeOutput = outputPath.baseFile.".totaltraveltime.eps"
-
-########  Languages  #####################################
-
-# English
-fundTitle =  "Fundamental diagram Q({/Symbol r})"
-veqTitle = "Equilibrium velocity V_{eq}({/Symbol r})"
-vqTitle = "V-Q equilibrium relation V_{eq}(Q)"
-densityLabel = "Density {/Symbol r} (vehicles/km)"
-flowLabel = "Flow Q (vehicles/h)"
-veqLabel = "Velocity V_{eq} (km/h)"
-#timeLabel = "Time (s)"
-timeMinuteLabel = "Time (min)"
-distanceLabel = "Distance (m)"
-velocityLabel = "Velocity (km/h)"
-accelerationLabel = "Acceleration (m/s^2)"
-positionLabel = "Position (km)"
-entranceDistanceLabel = "Distance from entrance (km)"
-enteredVehicleLabel = "Number of entered vehicles"
-colorboxLabel = "V (km/h)"
-traveltimeLabel = "Inst. Link Traveltime (min)"
-consumptionLabel = "Inst. Consumption (liters/s)"
-cumTraveltimeLabel = "Cumulated Traveltime (h)"
-cumConsumptionLabel = "Cumulated Consumption (liters)"
-probLabel = "Probability (%)"
-penetrationLabel = "Penetration Rate (%)"
-uncertaintyLabel = "Uncertainty (min)"
+totaltraveltimeOutput = outputPath.baseFile.".total_traveltime.eps"
 
 ########  Line Styles  ###################################
 
@@ -70,18 +43,26 @@ set nogrid
 set size 1,1
 set title ""
 set key box
-
-########################################################
-
+set nokey
+set ticslevel 0
+set nogrid
 
 ######### total travel times  ##########################
+#set palette defined (0 "red", 20 "orange", 40 "yellow", 60 "green", 80 "blue",  100 "#dd00ff" )
+set pm3d; set pm3d map
+#set contour surface
+set cntrparam bspline
+set cntrparam levels 20
+unset clabel  
+unset surface
+#set xrange [0:100]
 
-reset
-set nokey
-set title "Average Travel Time (s)"
-set xlabel penetrationLabel
-set ylabel uncertaintyLabel
+set title "Average total traveltime (s)"
+set xlabel "Equipment Level (%)"
+set ylabel "Uncertainty (min)"
 
 set out totaltraveltimeOutput
+print "file=".totalttFile
+splot totalttFile using ($1*100):($2/60.):($3) with lines linestyle 99
 
-plot totalttFile using ($1*100):2:3 with points ps 2 pt 7 palette
+#with points ps 2 pt 7 palette

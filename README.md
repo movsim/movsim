@@ -1,22 +1,23 @@
-# MovSim
-========
+# MovSim 
+---------
 
-MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
+Movsim == **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator
 
-http://www.movsim.org
+Movsim's Homepage: [http://www.movsim.org](http://www.movsim.org)
 
------------
+Current build status for branch Master and Bidirectional: 
 
-Current build status:
+[![Build Status Master](https://api.travis-ci.org/movsim/movsim.png?branch=master)](https://travis-ci.org/movsim/movsim)
+[![Build Status Bidirectional](https://api.travis-ci.org/movsim/movsim.png?branch=bidirectional)](https://travis-ci.org/movsim/movsim)
 
-[![Build Status](https://travis-ci.org/movsim/movsim)](https://travis-ci.org/movsim/movsim)
+Quick links to this file:
 
 * [Description](#description)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Demos](#demos)
-* [Commercial Use](#commerical use)
-* [Copyright and License](#copyright)
+* [Commercial Use](#commercial-use)
+* [Copyright and License](#copyright-and-license)
 * [References](#references)
 
 
@@ -95,17 +96,17 @@ We use the source code formatter _movsim/codestyle/eclipse_movsim_profile.xml_.
 ## Demos
 --------
 
-There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim).
+There are a number of simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim).
 
-Applet demos on the website www.movsim.org
+* Applet demos on the website www.movsim.org
 
-(MovSim v1.0) www.verkehrsdynamik.de/simulation.shtml
+* (MovSim v1.0) www.verkehrsdynamik.de/simulation.shtml
 
-(MovSim v1.2) www.movsim.org/app.shtml
+* (MovSim v1.2) www.movsim.org/app.shtml
 
-(Routing game) www.movsim.org
+* (Routing game) www.movsim.org
 
-(Android client) Android App
+* (Android client) Android App
 
 
 ## Commercial use
@@ -114,7 +115,7 @@ Applet demos on the website www.movsim.org
 For commercial use, please contact the copyright holders at movsim.org@gmail.com.
 
 
-## Copyright and Licence
+## Copyright and License
 ------------------------
 
 MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
@@ -131,7 +132,7 @@ MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/m
     Transportation Research Record, 86-94 (2007). [Paper](http://www.akesting.de/download/MOBIL_TRR_2007.pdf)
     
 [3] A. Kesting, M. Treiber, and D. Helbing. Enhanced intelligent driver model to access the impact of driving 
-    strategies on traffic capacity. Philosophical Transactions of the Royal Society A, 4585-4605 (2010).
+    strategies on traffic capacity. Philosophical Transactions of the Royal Society A, 4585-4605 (2010). [Preprint](http://arxiv.org/abs/0912.3613)
     
 [4] A. Kesting, M. Treiber, and D. Helbing. Agents for Traffic Simulation. 
     Chapter 11 in "Multi-Agent Systems: Simulation and Applications", 325-356 (2009). [Preprint](http://arxiv.org/abs/0805.0300)

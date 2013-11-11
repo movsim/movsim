@@ -25,77 +25,91 @@
  */
 package org.movsim;
 
-import java.io.FileWriter;
 import java.io.PrintWriter;
 
 import javax.xml.bind.JAXBException;
 
 import org.movsim.autogen.Movsim;
+import org.movsim.autogen.VehiclePrototypeConfiguration;
+import org.movsim.autogen.VehicleType;
 import org.movsim.simulator.Simulator;
+import org.movsim.utilities.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Preconditions;
+
 public final class SimulationScan {
+
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(SimulationScan.class);
 
     private SimulationScan() {
         throw new IllegalStateException("do not instanciate");
     }
 
+    static final String FILENAME = "totalVehicleTravelTime.csv";
+
     public static void invokeSimulationScan(final Movsim inputData) throws JAXBException, SAXException {
 
         // TODO quick hack here
-        int uncertaintyMin = 0;
-        int uncertaintyMax = 20;
-        int uncertaintyStep = 5;
+        double uncertaintyMin = 0;
+        double uncertaintyMax = 300;
+        double uncertaintyStep = 10;
 
-        int fractionMin = 0;
-        int fractionMax = 100;
-        int fractionStep = 10;
+        double fractionMin = 0;
+        double fractionMax = 1;
+        double fractionStep = 0.05;
 
-        StringBuilder sb = new StringBuilder();
-
-        for (int fraction = fractionMin; fraction <= fractionMax; fraction = fraction + fractionStep) {
-            for (int uncertainty = uncertaintyMin; uncertainty <= uncertaintyMax; uncertainty = uncertainty
-                    + uncertaintyStep) {
-                inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(0)
-                        .setFraction(fraction / 100.0);
-
-                inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(1)
-                        .setFraction((1 - fraction / 100.0));
-                inputData.getVehiclePrototypes().getVehiclePrototypeConfiguration().get(0)
-                        .getPersonalNavigationDevice().setUncertainty(uncertainty / 10.0);
-
-                inputData.getServiceProviders().getServiceProvider().get(0).getDecisionPoints()
-                        .setUncertainty(uncertainty / 10.0);
-
+        PrintWriter writer = FileUtils.getWriter(FILENAME);
+        double fraction = fractionMin;
+        double uncertainty = uncertaintyMin;
+        while (fraction <= fractionMax) {
+            while (uncertainty <= uncertaintyMax) {
+                modifyInput(inputData, fraction, uncertainty);
                 Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
-
-                sb.append(fraction / 100.0)
-                        .append(" ")
-                        .append(uncertainty / 10.0)
-                        .append(" ")
-                        .append(simRun.getRoadNetwork().totalVehicleTravelTime()
-                                / simRun.getRoadNetwork().totalVehiclesRemoved()).append("\n");
+                writeOutput(writer, fraction, uncertainty, simRun);
+                uncertainty += uncertaintyStep;
             }
+            writer.println();
+            fraction += fractionStep;
+            uncertainty = uncertaintyMin;
         }
-
-        writeFile(sb.toString(), "totalVehicleTravelTime.dat");
-
-        // inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().get(0).setFraction(0.0);
-        // Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
-        // System.out.println("result = " + simRun.getRoadNetwork().totalVehicleTravelTime());
+        writer.close();
     }
 
-    public static void writeFile(String text, String outputFile) {
-
-        FileWriter outFile;
-        try {
-            outFile = new FileWriter(outputFile);
-            PrintWriter out = new PrintWriter(outFile);
-            out.println(text);
-            out.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private static void writeOutput(PrintWriter writer, double fraction, double uncertainty, Simulator simRun) {
+        StringBuilder sb = new StringBuilder();
+        double avgTravelTime = simRun.getRoadNetwork().totalVehicleTravelTime()
+                / simRun.getRoadNetwork().totalVehiclesRemoved();
+        sb.append(String.format("%.3f", fraction)).append(", ").append(String.format("%.3f", uncertainty)).append(", ")
+                .append(String.format("%.3f", avgTravelTime));
+        writer.println(sb.toString());
+        writer.flush();
     }
+
+    private static void modifyInput(final Movsim inputData, double fraction, double uncertainty) {
+        Preconditions.checkArgument(inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType()
+                .size() == 2);
+        VehicleType equippedVehicleType = inputData.getScenario().getSimulation().getTrafficComposition()
+                .getVehicleType().get(0);
+        Preconditions.checkArgument(equippedVehicleType.getLabel().equals("Equipped"));
+        equippedVehicleType.setFraction(fraction);
+
+        VehicleType nonEquippedVehicleType = inputData.getScenario().getSimulation().getTrafficComposition()
+                .getVehicleType().get(1);
+        Preconditions.checkArgument(nonEquippedVehicleType.getLabel().equals("NonEquipped"));
+        nonEquippedVehicleType.setFraction(1 - fraction);
+
+        VehiclePrototypeConfiguration equippedVehPrototypeConfig = inputData.getVehiclePrototypes()
+                .getVehiclePrototypeConfiguration().get(0);
+        Preconditions.checkArgument(equippedVehPrototypeConfig.getLabel().equals("Equipped"));
+        Preconditions.checkArgument(equippedVehPrototypeConfig.getPersonalNavigationDevice().isSetServiceProvider());
+        equippedVehPrototypeConfig.getPersonalNavigationDevice().setUncertainty(uncertainty);
+        Preconditions.checkArgument(inputData.getServiceProviders().getServiceProvider().size() == 1);
+        inputData.getServiceProviders().getServiceProvider().get(0).getDecisionPoints().setUncertainty(uncertainty);
+        LOG.info("### modified input: uncertainty={}, fraction={}", uncertainty, fraction);
+    }
+
 }

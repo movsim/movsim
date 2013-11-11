@@ -3,14 +3,17 @@ package org.movsim.simulator.observer;
 import org.movsim.autogen.ServiceProviderType;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadNetworkUtils;
 import org.movsim.simulator.roadnetwork.routing.Routing;
-import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 
 public class ServiceProvider implements SimulationTimeStep {
+
+    private static final int TOO_LARGE_EXPONENT = 100;
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(ServiceProvider.class);
@@ -42,90 +45,112 @@ public class ServiceProvider implements SimulationTimeStep {
         return decisionPoints;
     }
 
-    private void valueAlternative() {
-        double uncertainty = decisionPoints.getUncertainty();
-        for (DecisionPoint decisionPoint : decisionPoints) {
-            for (RouteAlternative alternative : decisionPoint) {
-                double value = RoadNetwork.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
-                alternative.setValue(value);
-            }
-            calcProbability(decisionPoint, uncertainty);
-        }
-    }
-
-    public static void calcProbability(Iterable<RouteAlternative> alternatives, double uncertainty) {
-        double sum = 0;
-        double num = 0;
-        double probability = 0;
-        double beta = -50;
-        if (Math.abs(uncertainty) > 0.02) {
-            beta = -1 / uncertainty;
-        }
-
-        for (RouteAlternative alternative : alternatives) {
-            sum += Math.exp(beta * alternative.getValue());
-        }
-
-        if (sum != 0) {
-            for (RouteAlternative alternative : alternatives) {
-                num = Math.exp(beta * alternative.getValue());
-                probability = num / sum;
-                if (uncertainty == 0) {
-                    probability = Math.round(probability);
-                }
-                alternative.setProbability(probability);
-            }
-        }
-    }
-
-    // TODO use cached values from RouteAlternative, refactor methods
-    private boolean alternativeAvailableAndMoreAttractive(double uncertainty, DecisionPoint decisionPoint, double random) {
-        double sum = 0;
-        double temp = 0;
-        double probability = -1;
-        double beta = -50;
-        if (uncertainty > 0.02) {
-            beta = -1 / uncertainty;
-        }
-
-        for (RouteAlternative route : decisionPoint) {
-            sum += Math.exp(beta * RoadNetwork.instantaneousTravelTime(routing.get(route.getRouteLabel())));
-        }
-
-        // specific solution TODO
-        if (sum != 0) {
-            for (RouteAlternative route : decisionPoint) {
-                if (route.getRouteLabel().equals("A1")) {
-                    temp = Math.exp(beta * RoadNetwork.instantaneousTravelTime(routing.get(route.getRouteLabel())));
-                    probability = temp / sum;
-                    if (uncertainty == 0) {
-                        probability = Math.round(probability);
-                    }
-                }
-            }
-        }
-
-        // LOG.debug("inst travel alternativ1={}, alternative2={}", probability, (1-probability));
-
-        if (random > probability) {
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        valueAlternative();
+        evaluateDecisionPoints();
         if (fileOutput != null) {
             fileOutput.timeStep(dt, simulationTime, iterationCount);
         }
     }
 
-    public boolean doDiverge(double uncertainty, String roadSegmentUserId, double random) {
+    /**
+     * @param uncertainty
+     * @param roadSegmentUserId
+     * @param random
+     * @return
+     */
+    public String selectRoute(double uncertainty, String roadSegmentUserId, double random) {
         DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
         if (decisionPoint != null) {
-            return alternativeAvailableAndMoreAttractive(uncertainty, decisionPoint, random);
+            return selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty, random);
+        }
+        return ""; // TODO
+    }
+
+    private void evaluateDecisionPoints() {
+        double uncertainty = decisionPoints.getUncertainty();
+        // uncertainty as standard deviation must be >=0, already required by xsd
+        for (DecisionPoint decisionPoint : decisionPoints) {
+            evaluateDecisionPoint(uncertainty, decisionPoint);
+        }
+    }
+
+    private void evaluateDecisionPoint(double uncertainty, DecisionPoint decisionPoint) {
+        for (RouteAlternative alternative : decisionPoint) {
+            // usage of metric for disutility
+            double traveltime = RoadNetworkUtils.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
+            alternative.setDisutility(traveltime);
+        }
+        calcProbabilities(decisionPoint, uncertainty);
+    }
+
+    private static void calcProbabilities(Iterable<RouteAlternative> alternatives, double uncertainty) {
+        if (uncertainty > 0) {
+            calcProbabilityIfStochastic(alternatives, uncertainty);
+        } else {
+            calcProbabilityForDeterministic(alternatives);
+        }
+    }
+
+    private static void calcProbabilityIfStochastic(Iterable<RouteAlternative> alternatives, double uncertainty) {
+        final double beta = -1 / uncertainty;
+        for (RouteAlternative alternative : alternatives) {
+            // check first for large exponential
+            if (hasTooLargeExponent(beta, alternative, alternatives)) {
+                // probability of 0 as trivial result
+                alternative.setProbability(0);
+            } else {
+                double probAlternative = calcProbability(beta, alternative, alternatives);
+                alternative.setProbability(probAlternative);
+            }
+        }
+    }
+
+    private static double calcProbability(double beta, RouteAlternative alternative,
+            Iterable<RouteAlternative> alternatives) {
+        double denom = 0;
+        for (RouteAlternative otherAlternative : alternatives) {
+            denom += Math.exp(beta * (alternative.getDisutility() - otherAlternative.getDisutility()));
+        }
+        return 1. / denom;
+    }
+
+    private static void calcProbabilityForDeterministic(Iterable<RouteAlternative> alternatives) {
+        RouteAlternative bestAlternative = Iterables.getLast(alternatives);
+        for (RouteAlternative alternative : alternatives) {
+            alternative.setProbability(0);
+            if (alternative.getDisutility() < bestAlternative.getDisutility()) {
+                bestAlternative = alternative;
+            }
+        }
+        bestAlternative.setProbability(1);
+    }
+
+    private static String selectAlternativeRoute(Iterable<RouteAlternative> alternatives, double uncertainty,
+            double random) {
+        Preconditions.checkArgument(random >= 0 && random < 1);
+        calcProbabilities(alternatives, uncertainty);
+        double sumProb = 0;
+        for (RouteAlternative alternative : alternatives) {
+            sumProb += alternative.getProbability();
+            LOG.debug("alternative={}, sumProb={}", alternative.getRouteLabel(), sumProb);
+            if (random <= sumProb) {
+                return alternative.getRouteLabel();
+            }
+        }
+        Preconditions.checkState(false, "probabilities do not sumed correctly");
+        return null;
+    }
+
+    private static boolean hasTooLargeExponent(double beta, RouteAlternative alternative,
+            Iterable<RouteAlternative> alternatives) {
+        for (RouteAlternative otherAlternative : alternatives) {
+            double delta = alternative.getDisutility() - otherAlternative.getDisutility();
+            if (beta * delta > TOO_LARGE_EXPONENT) {
+                return true;
+            }
         }
         return false;
     }
+
 }
