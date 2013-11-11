@@ -1,8 +1,8 @@
 package org.movsim.simulator.observer;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.annotation.CheckForNull;
 
@@ -14,7 +14,8 @@ import com.google.common.base.Preconditions;
 
 public class DecisionPoints implements Iterable<DecisionPoint> {
 
-    private final Map<String, DecisionPoint> decisionPoints = new HashMap<>();
+    /** Sorting assures consistent ordering of decision points in output */
+    private final SortedMap<String, DecisionPoint> decisionPoints = new TreeMap<>();
 
     private final double uncertainty;
 
@@ -24,11 +25,11 @@ public class DecisionPoints implements Iterable<DecisionPoint> {
         if (configuration.isSetDecisionPoint()) {
             for (DecisionPointType decisionPointType : configuration.getDecisionPoint()) {
                 DecisionPoint decisionPoint = new DecisionPoint(decisionPointType);
-                String key = decisionPoint.getRoadId();
-                if (decisionPoints.containsKey(key)) {
-                    throw new IllegalArgumentException("decision point with roadId=" + key + " already exists.");
+                String roadId = decisionPoint.getRoadId();
+                if (decisionPoints.containsKey(roadId)) {
+                    throw new IllegalArgumentException("decision point with roadId=" + roadId + " already exists.");
                 }
-                decisionPoints.put(key, decisionPoint);
+                decisionPoints.put(roadId, decisionPoint);
             }
         }
     }

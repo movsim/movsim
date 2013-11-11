@@ -99,10 +99,12 @@ public class ServiceProvider implements SimulationTimeStep {
             if (hasTooLargeExponent(beta, alternative, alternatives)) {
                 // probability of 0 as trivial result
                 alternative.setProbability(0);
+
             } else {
                 double probAlternative = calcProbability(beta, alternative, alternatives);
                 alternative.setProbability(probAlternative);
             }
+            LOG.debug("calculated prob for stochastic case: {}", alternative);
         }
     }
 
@@ -110,7 +112,7 @@ public class ServiceProvider implements SimulationTimeStep {
             Iterable<RouteAlternative> alternatives) {
         double denom = 0;
         for (RouteAlternative otherAlternative : alternatives) {
-            denom += Math.exp(beta * (alternative.getDisutility() - otherAlternative.getDisutility()));
+            denom += Math.exp(beta * (otherAlternative.getDisutility() - alternative.getDisutility()));
         }
         return 1. / denom;
     }
@@ -133,19 +135,19 @@ public class ServiceProvider implements SimulationTimeStep {
         double sumProb = 0;
         for (RouteAlternative alternative : alternatives) {
             sumProb += alternative.getProbability();
-            LOG.debug("alternative={}, sumProb={}", alternative.getRouteLabel(), sumProb);
+            LOG.debug("alternative={}, sumProb={}", alternative.toString(), sumProb);
             if (random <= sumProb) {
                 return alternative.getRouteLabel();
             }
         }
-        Preconditions.checkState(false, "probabilities do not sumed correctly");
+        Preconditions.checkState(false, "probabilities not sumed correctly: random=" + random + ", sumProb=" + sumProb);
         return null;
     }
 
     private static boolean hasTooLargeExponent(double beta, RouteAlternative alternative,
             Iterable<RouteAlternative> alternatives) {
         for (RouteAlternative otherAlternative : alternatives) {
-            double delta = alternative.getDisutility() - otherAlternative.getDisutility();
+            double delta = Math.abs(alternative.getDisutility() - otherAlternative.getDisutility());
             if (beta * delta > TOO_LARGE_EXPONENT) {
                 return true;
             }

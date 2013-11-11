@@ -101,8 +101,8 @@ set xlabel timeMinuteLabel
 set ylabel probLabel
 set out probabilityOutput
 plot\
- spFile using ($1/60.):($5) title "A1" with lines linestyle 1,\
- spFile using ($1/60.):($3) title "A2" with lines linestyle 3
+ spFile using ($1/60.):($3) title "A1" with lines linestyle 1,\
+ spFile using ($1/60.):($5) title "A2" with lines linestyle 3
 
 ######### disutilities  ################################
 

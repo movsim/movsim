@@ -70,11 +70,21 @@ public final class SimulationScan {
                 modifyInput(inputData, fraction, uncertainty);
                 Simulator simRun = MovsimCoreMain.invokeSingleSimulation(inputData);
                 writeOutput(writer, fraction, uncertainty, simRun);
-                uncertainty += uncertaintyStep;
+                if (uncertainty < uncertaintyMax && uncertainty + uncertaintyStep > uncertaintyMax) {
+                    // handle boundary explicitly, not elegant
+                    uncertainty = uncertaintyMax;
+                } else {
+                    uncertainty += uncertaintyStep;
+                }
             }
             writer.println();
-            fraction += fractionStep;
             uncertainty = uncertaintyMin;
+            if (fraction < fractionMax && fraction + fractionStep > fractionMax) {
+                // handle boundary explicitly
+                fraction = fractionMax;
+            } else {
+                fraction += fractionStep;
+            }
         }
         writer.close();
     }
