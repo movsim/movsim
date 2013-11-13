@@ -63,15 +63,15 @@ import com.google.common.collect.Lists;
  * by combining two road segments running in opposite directions.
  * </p>
  * <p>
- * RoadSegments may be combined to form a road network.
+ * RoadSegmentUtils may be combined to form a road network.
  * </p>
  * <p>
  * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road segment and a sink road
- * to which vehicles exit. RoadSegments at the edge of the network will normally be connected to only one other road segment: traffic inflow
+ * to which vehicles exit. RoadSegmentUtils at the edge of the network will normally be connected to only one other road segment: traffic inflow
  * and outflow will be controlled directly by source and sink objects.
  * </p>
  * <p>
- * RoadSegments are connected to each other on a lane-wise basis: each sink (outgoing) lane of a road segment may be connected to a source
+ * RoadSegmentUtils are connected to each other on a lane-wise basis: each sink (outgoing) lane of a road segment may be connected to a source
  * (incoming) lane of another road segment. This allows the forking and merging of road segments, the creation of on-ramps and off-ramps. By
  * connecting the lanes of a number of road segments in this way, complex junctions and interchanges may be created.
  * </p>

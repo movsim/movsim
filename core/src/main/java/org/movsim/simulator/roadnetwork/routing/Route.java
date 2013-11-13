@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.RoadSegments;
+import org.movsim.simulator.roadnetwork.RoadSegmentUtils;
 
 import com.google.common.base.Preconditions;
 
@@ -63,7 +63,7 @@ public class Route implements Iterable<RoadSegment> {
                 + " already added to route.");
 
         if (!roadSegments.isEmpty()) {
-            Preconditions.checkState(RoadSegments.isConnected(roadSegments.getLast(), roadSegment),
+            Preconditions.checkState(RoadSegmentUtils.isConnected(roadSegments.getLast(), roadSegment),
                     "Segments not connected: upstream=" + roadSegments.getLast() + ", downstream=" + roadSegment);
         }
 
@@ -91,9 +91,9 @@ public class Route implements Iterable<RoadSegment> {
     }
 
     /**
-     * Returns the number of RoadSegments in the route.
+     * Returns the number of RoadSegmentUtils in the route.
      * 
-     * @return the number of RoadSegments in route
+     * @return the number of RoadSegmentUtils in route
      */
     public final int size() {
         return roadSegments.size();
