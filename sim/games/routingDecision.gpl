@@ -48,7 +48,7 @@ fundTitle =  "Fundamental diagram Q({/Symbol r})"
 timeMinuteLabel = "Time (min)"
 distanceLabel = "Distance (m)"
 velocityLabel = "Velocity (km/h)"
-traveltimeLabel = "Inst. Link Traveltime (min)"
+traveltimeLabel = "Inst. Link Traveltime (s)"
 consumptionLabel = "Inst. Consumption (liters/s)"
 cumTraveltimeLabel = "Cumulated Traveltime (h)"
 cumConsumptionLabel = "Cumulated Consumption (liters)"
@@ -90,8 +90,8 @@ set xlabel timeMinuteLabel
 set ylabel traveltimeLabel
 set out traveltimeOutput
 plot\
- ttFileA1 using ($1/60.0):2 title "A1" with lines linestyle 1,\
- ttFileA2 using ($1/60.0):2 title "A2" with lines linestyle 3
+ spFile using ($1/60.0):2 title "A1" with lines linestyle 1,\
+ spFile using ($1/60.0):4 title "A2" with lines linestyle 3
 
 ######### probability  ################################
 
