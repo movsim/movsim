@@ -21,7 +21,7 @@ public class ServiceProvider implements SimulationTimeStep {
     private final String label;
 
     private final DecisionPoints decisionPoints;
-    
+
     private final Noise noise;
 
     private final RoadNetwork roadNetwork;
@@ -36,7 +36,7 @@ public class ServiceProvider implements SimulationTimeStep {
         this.label = configuration.getLabel();
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
         this.decisionPoints = new DecisionPoints(configuration.getDecisionPoints(), routing);
-        this.noise = configuration.isSetNoiseParameter() ? new Noise(configuration.getNoiseParameter()):null;
+        this.noise = configuration.isSetNoiseParameter() ? new Noise(configuration.getNoiseParameter()) : null;
         this.fileOutput = configuration.isLogging() ? new ServiceProviderLogging(this) : null;
     }
 
@@ -84,9 +84,10 @@ public class ServiceProvider implements SimulationTimeStep {
             if (noise != null) {
                 noise.update(dt);
                 traveltimeError = noise.getTimeError();
-            }            
+            }
             // usage of metric for disutility
-            double traveltime = traveltimeError + RoadNetworkUtils.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
+            double traveltime = traveltimeError
+                    + RoadNetworkUtils.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
             alternative.setDisutility(traveltime);
         }
         calcProbabilities(decisionPoint, uncertainty);
