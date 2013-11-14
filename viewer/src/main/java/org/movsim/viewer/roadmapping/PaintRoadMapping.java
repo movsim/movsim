@@ -50,7 +50,7 @@ import org.movsim.roadmappings.RoadMappingU;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 
 /**
- * Optimized drawing of RoadSegments based on the type of their RoadMapping
+ * Optimized drawing of RoadSegmentUtils based on the type of their RoadMapping
  */
 public class PaintRoadMapping {
     private static final boolean drawBezierPoints = false;
