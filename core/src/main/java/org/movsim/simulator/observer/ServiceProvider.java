@@ -82,13 +82,14 @@ public class ServiceProvider implements SimulationTimeStep {
         for (RouteAlternative alternative : decisionPoint) {
             double traveltimeError = 0;
             if (noise != null) {
-                noise.update(dt);
+                noise.update(dt, alternative.getTravelTimeError());
                 traveltimeError = noise.getTimeError();
             }
             // usage of metric for disutility
             double traveltime = traveltimeError
                     + RoadNetworkUtils.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
             alternative.setDisutility(traveltime);
+            alternative.setTravelTimeError(traveltimeError);
         }
         calcProbabilities(decisionPoint, uncertainty);
     }

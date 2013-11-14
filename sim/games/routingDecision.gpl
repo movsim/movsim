@@ -90,8 +90,8 @@ set xlabel timeMinuteLabel
 set ylabel traveltimeLabel
 set out traveltimeOutput
 plot\
- spFile using ($1/60.0):2 title "A1" with lines linestyle 1,\
- spFile using ($1/60.0):4 title "A2" with lines linestyle 3
+ spFile using ($1/60.0):2 every 25 title "A1" with lines linestyle 1,\
+ spFile using ($1/60.0):5 every 25 title "A2" with lines linestyle 3
 
 ######### probability  ################################
 

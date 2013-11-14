@@ -23,13 +23,13 @@ public class Noise {
         isWienerProcess = (tau != 0) ? true : false;
     }
 
-    public void update(double dt) {
+    public void update(double dt, double xiTime) {
 
         final double randomMu0Sigma1 = getUniformlyDistributedRealization();
 
         if (isWienerProcess) {
             final double betaTime = Math.exp(-dt / tau);
-            xiTime = betaTime * xiTime + fluctStrength * Math.sqrt(2 * dt / tau) * randomMu0Sigma1;
+            this.xiTime = betaTime * xiTime + fluctStrength * Math.sqrt(2 * dt / tau) * randomMu0Sigma1;
         }
     }
 

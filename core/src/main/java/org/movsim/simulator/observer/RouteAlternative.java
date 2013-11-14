@@ -10,6 +10,8 @@ class RouteAlternative {
 
     private double probability = 0.0;
 
+    private double travelTimeError = 0.0;
+
     public RouteAlternative(String route) {
         Preconditions.checkArgument(route != null && !route.isEmpty());
         this.routeLabel = route;
@@ -39,6 +41,14 @@ class RouteAlternative {
     @Override
     public String toString() {
         return "RouteAlternative [route=" + routeLabel + ", value=" + value + ", probability=" + probability + "]";
+    }
+
+    public void setTravelTimeError(double travelTimeError) {
+        this.travelTimeError = travelTimeError;
+    }
+
+    public double getTravelTimeError() {
+        return travelTimeError;
     }
 
 }
