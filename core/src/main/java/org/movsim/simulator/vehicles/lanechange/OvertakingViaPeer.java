@@ -128,10 +128,10 @@ public class OvertakingViaPeer {
             return false;
         }
         RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
-        if (roadSegment.laneCount() != sinkRoadSegment.laneCount()) {
+        if (!segmentSuitedForOvertaking(sinkRoadSegment)) {
             return false;
         }
-        if (!segmentSuitedForOvertaking(sinkRoadSegment)) {
+        if (roadSegment.laneCount() != sinkRoadSegment.laneCount()) {
             return false;
         }
 
