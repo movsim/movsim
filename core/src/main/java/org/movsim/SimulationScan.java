@@ -32,6 +32,7 @@ import javax.xml.bind.JAXBException;
 import org.movsim.autogen.Movsim;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.autogen.VehicleType;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
@@ -49,20 +50,21 @@ public final class SimulationScan {
         throw new IllegalStateException("do not instanciate");
     }
 
-    static final String FILENAME = "totalVehicleTravelTime.csv";
+    static final String OUTPUT_NAME = ".totalAvgTravelTime.csv";
 
     public static void invokeSimulationScan(final Movsim inputData) throws JAXBException, SAXException {
 
-        // TODO quick hack here
+        // 50x50 grid scan
         double uncertaintyMin = 0;
         double uncertaintyMax = 300;
-        double uncertaintyStep = 10;
+        double uncertaintyStep = 6;
 
         double fractionMin = 0;
         double fractionMax = 1;
-        double fractionStep = 0.05;
+        double fractionStep = 0.02;
 
-        PrintWriter writer = FileUtils.getWriter(FILENAME);
+        String filename = ProjectMetaData.getInstance().getProjectName() + OUTPUT_NAME;
+        PrintWriter writer = FileUtils.getWriter(filename);
         double fraction = fractionMin;
         double uncertainty = uncertaintyMin;
         while (fraction <= fractionMax) {
