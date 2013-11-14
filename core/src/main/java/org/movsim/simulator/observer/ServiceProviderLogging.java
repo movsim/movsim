@@ -16,11 +16,11 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
 
     // not yet expandable
     private static final String outputHeadingTime = String.format("%s%9s,", COMMENT_CHAR, "t[s]");
-    private static final String outputHeading = "%10s, %10s, ";
+    private static final String outputHeading = "%10s, %10s, %10s ";
     private static final String outputInformation = "%s %10s %.2f %n";
 
     private static final String outputFormatTime = "%10.2f,";
-    private static final String outputFormat = "%10.2f, %10.4f,";
+    private static final String outputFormat = "%10.2f, %10.4f, %10.4f,";
 
     private final ServiceProvider serviceProvider;
 
@@ -40,7 +40,8 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
             for (RouteAlternative alternative : decisionPoint) {
                 writer.printf(outputHeading,
                         "disutility_RoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel(),
-                        "probRoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel());
+                        "probRoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel(),
+                        "traveltimeError_RoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel());
             }
         }
         writer.printf("%n");
@@ -52,7 +53,8 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
         writer.printf(outputFormatTime, simulationTime);
         for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints()) {
             for (RouteAlternative alternative : decisionPoint) {
-                writer.printf(outputFormat, alternative.getDisutility(), alternative.getProbability());
+                writer.printf(outputFormat, alternative.getDisutility(), alternative.getProbability(),
+                        alternative.getTravelTimeError());
             }
         }
         writer.printf("%n");
