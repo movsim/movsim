@@ -26,16 +26,28 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.List;
 
 import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterators;
 
 public final class RoadSegmentUtils {
+
+    public enum VehiclesIncreasing implements Comparator<Vehicle> {
+        INSTANCE;
+
+        @Override
+        public int compare(Vehicle o1, Vehicle o2) {
+            return Double.compare(o1.getFrontPosition(), o2.getFrontPosition());
+        }
+    }
 
     private RoadSegmentUtils() {
         throw new IllegalStateException("do not instanciate");
@@ -59,11 +71,19 @@ public final class RoadSegmentUtils {
         return false;
     }
 
-    // first element is most downstream (reverse order along roadSegment
-    public Collection<Vehicle> sortVehicles(Iterator<Vehicle> vehicleIterator) {
-        SortedSet<Vehicle> sortedVehicles = new TreeSet<Vehicle>();
-        // FIXME implement this
-        return sortedVehicles;
+    private static Collection<Vehicle> sortVehicles(Iterator<Vehicle> vehicleIterator, Comparator<Vehicle> vehComparator) {
+        List<Vehicle> vehicles = new ArrayList<>(500);
+        Iterators.addAll(vehicles, vehicleIterator);
+        Collections.sort(vehicles, vehComparator);
+        return vehicles;
+    }
+
+    public static Collection<Vehicle> sortVehiclesIncreasingPosition(Iterator<Vehicle> vehicleIterator) {
+        return sortVehicles(vehicleIterator, VehiclesIncreasing.INSTANCE);
+    }
+
+    public static Collection<Vehicle> sortVehiclesDecreasingPosition(Iterator<Vehicle> vehicleIterator) {
+        return sortVehicles(vehicleIterator, Collections.reverseOrder(VehiclesIncreasing.INSTANCE));
     }
 
 }
