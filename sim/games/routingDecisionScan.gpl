@@ -9,7 +9,7 @@
 # parameters
 if (!exists("inputPath")) inputPath = "./"
 if (!exists("outputPath")) outputPath = "./"
-if (!exists("baseFile")) baseFile = "routing_test"
+if (!exists("baseFile")) baseFile = "routing_scan"
 print "basefile=".baseFile
 
 # variables
@@ -17,10 +17,10 @@ vehicle = "Equipped"
 serviceprovider = "wiseGuy"
 
 # input files
-totalttFile = "totalVehicleTravelTime.csv"
+totalttFile = baseFile.".totalAvgTravelTime.csv"
 
 # output files
-totaltraveltimeOutput = outputPath.baseFile.".total_traveltime.eps"
+totaltraveltimeOutput = outputPath.baseFile.".totalAvgTravelTime.eps"
 
 ########  Line Styles  ###################################
 
