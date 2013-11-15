@@ -7,10 +7,10 @@
             <AccelerationModelType>
                 <ModelParameterACC v0="30" T="1.4" s0="2" s1="0" delta="4" a="2" b="2.0" coolness="1" />
             </AccelerationModelType>
-            <LaneChangeModelType european_rules="true" crit_speed_eur="200">
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
                 <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
             </LaneChangeModelType>
-            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="0" />
+            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="30" />
         </VehiclePrototypeConfiguration>
         <!-- car without traffic information -->
         <VehiclePrototypeConfiguration label="NonEquipped" length="6" maximum_deceleration="10">
@@ -24,7 +24,7 @@
     </VehiclePrototypes>
     <ServiceProviders>
 		<!-- disable logging for scan -->
-        <ServiceProvider label="wiseGuy" logging="true" tau="300" fluct_strength="30" update_time = "30">
+        <ServiceProvider label="wiseGuy" logging="true" tau="300" fluct_strength="30" update_time="30">
 			<!-- disutility just for logging, keep consistent with vehicle's disutility -->
             <DecisionPoints uncertainty="0">
                 <!-- disutility in seconds -->

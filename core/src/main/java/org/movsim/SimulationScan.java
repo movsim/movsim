@@ -57,11 +57,11 @@ public final class SimulationScan {
         // 50x50 grid scan
         double uncertaintyMin = 0;
         double uncertaintyMax = 300;
-        double uncertaintyStep = 6;
+        double uncertaintyStep = 30; // 6;
 
         double fractionMin = 0;
         double fractionMax = 1;
-        double fractionStep = 0.02;
+        double fractionStep = 0.1; // 0.02;
 
         String filename = ProjectMetaData.getInstance().getProjectName() + OUTPUT_NAME;
         PrintWriter writer = FileUtils.getWriter(filename);

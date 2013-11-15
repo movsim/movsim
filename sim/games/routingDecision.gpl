@@ -34,6 +34,7 @@ fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
 traveltimeOutput = outputPath.baseFile.".traveltime.eps"
 probabilityOutput = outputPath.baseFile.".probability.eps"
 disutilityOutput= outputPath.baseFile.".disutility.eps"
+disutilityErrorOutput= outputPath.baseFile.".disutility_error.eps"
 v2dOutputA1 = outputPath.baseFile.".A1_v2d.eps"
 v2dOutputA2 = outputPath.baseFile.".A2_v2d.eps"
 trajOutputA1 = outputPath.baseFile.".A1_traj.eps"
@@ -43,7 +44,6 @@ detOutputTimeSeries = outputPath.baseFile.".det_timeseries.eps"
 
 ########  Languages  #####################################
 
-# English
 fundTitle =  "Fundamental diagram Q({/Symbol r})"
 timeMinuteLabel = "Time (min)"
 distanceLabel = "Distance (m)"
@@ -53,6 +53,8 @@ consumptionLabel = "Inst. Consumption (liters/s)"
 cumTraveltimeLabel = "Cumulated Traveltime (h)"
 cumConsumptionLabel = "Cumulated Consumption (liters)"
 probLabel = "Probability (%)"
+disutilityLabel  = "Disutility (s)"
+disutilityErrorLabel  = "Disutility Error (s)"
 densityLabel = "Density {/Symbol r} (vehicles/km)"
 flowLabel = "Flow Q (vehicles/h)"
 
@@ -82,7 +84,7 @@ set key box
 ########################################################
 
 
-######### travel times  ################################
+######### exact travel times  ###########################
 
 set auto x
 set auto y
@@ -90,9 +92,21 @@ set xlabel timeMinuteLabel
 set ylabel traveltimeLabel
 set out traveltimeOutput
 plot\
- spFile using ($1/60.0):2 every 25 title "A1" with lines linestyle 1,\
- spFile using ($1/60.0):5 every 25 title "A2" with lines linestyle 3
+ ttFileA1 using ($1/60.0):2 title "A1" with lines linestyle 1,\
+ ttFileA2 using ($1/60.0):2 title "A2" with lines linestyle 3
 
+
+######### disutilities  ################################
+
+set auto x
+set auto y
+set xlabel timeMinuteLabel
+set ylabel disutilityLabel
+set out disutilityOutput
+plot\
+ spFile using ($1/60.):2 title "A1" with lines linestyle 1,\
+ spFile using ($1/60.):5 title "A2" with lines linestyle 3
+ 
 ######### probability  ################################
 
 set auto x
@@ -101,19 +115,19 @@ set xlabel timeMinuteLabel
 set ylabel probLabel
 set out probabilityOutput
 plot\
- spFile using ($1/60.):($3) title "A1" with lines linestyle 1,\
- spFile using ($1/60.):($5) title "A2" with lines linestyle 3
+ spFile using ($1/60.):3 title "A1" with lines linestyle 1,\
+ spFile using ($1/60.):6 title "A2" with lines linestyle 3
 
-######### disutilities  ################################
+######### disutility errors  ################################
 
 set auto x
 set auto y
 set xlabel timeMinuteLabel
-set ylabel "Disutility"
-set out disutilityOutput
+set ylabel disutilityErrorLabel
+set out disutilityErrorOutput
 plot\
- spFile using ($1/60.):($2) title "A1" with lines linestyle 1,\
- spFile using ($1/60.):($4) title "A2" with lines linestyle 3
+ spFile using ($1/60.):4 title "A1" with lines linestyle 1,\
+ spFile using ($1/60.):7 title "A2" with lines linestyle 3
 
 
 ########  Plot Fundamental Diagrams  ###################
@@ -149,7 +163,7 @@ set xlabel timeMinuteLabel
 set ylabel "Position [km]"
 
 set palette defined (0 "red", 20 "orange", 40 "yellow", 60 "green", 80 "blue",  100 "#dd00ff" )
-set xrange [0:130]
+set xrange [0:130]  
 set cbrange [0:]
 
 #set out v2dOutputA1

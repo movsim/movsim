@@ -24,7 +24,7 @@
     </VehiclePrototypes>
     <ServiceProviders>
 		<!-- disable logging for scan -->
-        <ServiceProvider label="wiseGuy" logging="false">
+        <ServiceProvider label="wiseGuy" logging="false" tau="300" fluct_strength="30" update_time="30">
             <DecisionPoints uncertainty="0">
                 <!-- disutility in seconds -->
                 <DecisionPoint roadId="2">
