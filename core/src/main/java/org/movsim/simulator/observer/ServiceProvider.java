@@ -20,6 +20,9 @@ public class ServiceProvider implements SimulationTimeStep {
 
     private final String label;
 
+    private final double updateTime;
+    boolean update = true; 
+
     private final DecisionPoints decisionPoints;
 
     private final Noise noise;
@@ -34,9 +37,10 @@ public class ServiceProvider implements SimulationTimeStep {
         Preconditions.checkNotNull(configuration);
         this.routing = Preconditions.checkNotNull(routing);
         this.label = configuration.getLabel();
+        this.updateTime = configuration.getUpdateTime();
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
         this.decisionPoints = new DecisionPoints(configuration.getDecisionPoints(), routing);
-        this.noise = configuration.isSetNoiseParameter() ? new Noise(configuration.getNoiseParameter()) : null;
+        this.noise = new Noise(configuration.getTau(), configuration.getFluctStrength());
         this.fileOutput = configuration.isLogging() ? new ServiceProviderLogging(this) : null;
     }
 
@@ -49,7 +53,10 @@ public class ServiceProvider implements SimulationTimeStep {
     }
 
     @Override
-    public void timeStep(double dt, double simulationTime, long iterationCount) {
+    public void timeStep(double dt, double simulationTime, long iterationCount) {      
+        if(updateTime!=0){
+            update = (iterationCount%(updateTime / dt)==0) ? true: false;
+        }        
         evaluateDecisionPoints(dt);
         if (fileOutput != null) {
             fileOutput.timeStep(dt, simulationTime, iterationCount);
@@ -78,7 +85,7 @@ public class ServiceProvider implements SimulationTimeStep {
         }
     }
 
-    private void evaluateDecisionPoint(double dt, double uncertainty, DecisionPoint decisionPoint) {
+    private void evaluateDecisionPoint(double dt, double uncertainty, DecisionPoint decisionPoint) {        
         for (RouteAlternative alternative : decisionPoint) {
             double traveltimeError = 0;
             if (noise != null) {
@@ -88,8 +95,10 @@ public class ServiceProvider implements SimulationTimeStep {
             // usage of metric for disutility
             double traveltime = traveltimeError
                     + RoadNetworkUtils.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
-            alternative.setDisutility(traveltime);
             alternative.setTravelTimeError(traveltimeError);
+            if (update) {
+                alternative.setDisutility(traveltime);
+            }
         }
         calcProbabilities(decisionPoint, uncertainty);
     }

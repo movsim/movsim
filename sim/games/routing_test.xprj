@@ -10,7 +10,7 @@
             <LaneChangeModelType european_rules="true" crit_speed_eur="200">
                 <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
             </LaneChangeModelType>
-            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="60" />
+            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="0" />
         </VehiclePrototypeConfiguration>
         <!-- car without traffic information -->
         <VehiclePrototypeConfiguration label="NonEquipped" length="6" maximum_deceleration="10">
@@ -24,16 +24,15 @@
     </VehiclePrototypes>
     <ServiceProviders>
 		<!-- disable logging for scan -->
-        <ServiceProvider label="wiseGuy" logging="true">
+        <ServiceProvider label="wiseGuy" logging="true" tau="300" fluct_strength="30" update_time = "30">
 			<!-- disutility just for logging, keep consistent with vehicle's disutility -->
-            <DecisionPoints uncertainty="60">
+            <DecisionPoints uncertainty="0">
                 <!-- disutility in seconds -->
                 <DecisionPoint roadId="2">
                     <RouteAlternative route="A1" />
                     <RouteAlternative route="A2" />
                 </DecisionPoint>
             </DecisionPoints>
-            <NoiseParameter tau="300" fluct_strength="30" />
         </ServiceProvider>
     </ServiceProviders>
     <RoadTypeSpeedMappings>
@@ -43,8 +42,8 @@
     <Scenario network_filename="routing_scenario_singlelane.xodr">
         <Simulation timestep="0.2" duration="8000" seed="42" crash_exit="true">
             <TrafficComposition>
-                <VehicleType label="Equipped" fraction="0.25" relative_v0_randomization="0.0" />
-                <VehicleType label="NonEquipped" fraction="0.75" relative_v0_randomization="0.0" />
+                <VehicleType label="Equipped" fraction="1" relative_v0_randomization="0.0" />
+                <VehicleType label="NonEquipped" fraction="0" relative_v0_randomization="0.0" />
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="false">
