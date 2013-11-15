@@ -458,11 +458,12 @@
     <xs:complexType name="ServiceProviderType">      
         <xs:sequence>
             <xs:element name="DecisionPoints" type="DecisionPointsType" minOccurs="0" maxOccurs="1" />
-			<xs:element name="NoiseParameter" type="NoiseParameterType" minOccurs="0" maxOccurs="1" />
         </xs:sequence>  
         <xs:attribute name="label" type="xs:string" />
         <xs:attribute name="logging" type="xs:boolean" default="false" />
-        <!--<xs:attribute name="uncertainty" type="xs:double" default="0" />-->
+        <xs:attribute name="tau" type="nonNegativeDouble" default="0" />
+        <xs:attribute name="fluct_strength" type="nonNegativeDouble" default="1" />
+        <xs:attribute name="update_time" type="nonNegativeDouble" default="0" />
     </xs:complexType>
     <xs:complexType name="RouteAlternativesType">
         <xs:sequence>
@@ -479,11 +480,6 @@
             <xs:element name="DecisionPoint" type="DecisionPointType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute name="uncertainty" type="nonNegativeDouble" default="0.0" />
-    </xs:complexType>
-    <xs:complexType name="NoiseParameterType">
-        <!-- wiener process if tau>0  -->
-		<xs:attribute name="tau" type="nonNegativeDouble" default="0" />
-        <xs:attribute name="fluct_strength" type="nonNegativeDouble" use="required" />
     </xs:complexType>
     <xs:complexType name="DecisionPointType">
         <xs:sequence>

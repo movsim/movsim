@@ -1,6 +1,5 @@
 package org.movsim.simulator.observer;
 
-import org.movsim.autogen.NoiseParameterType;
 import org.movsim.utilities.MyRandom;
 
 public class Noise {
@@ -16,10 +15,10 @@ public class Noise {
 
     private double xiTime;
 
-    public Noise(NoiseParameterType parameters) {
+    public Noise(double tau, double fluctStrength) {
         xiTime = 0;
-        fluctStrength = parameters.getFluctStrength();
-        tau = parameters.getTau();
+        this.fluctStrength = fluctStrength;
+        this.tau = tau;
         isWienerProcess = (tau != 0) ? true : false;
     }
 
