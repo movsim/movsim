@@ -36,8 +36,8 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 
 import org.movsim.roadmappings.PosTheta;
-import org.movsim.roadmappings.RoadMappingAbstract;
-import org.movsim.roadmappings.RoadMappingAbstract.PolygonFloat;
+import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMapping.PolygonFloat;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingBezier;
 import org.movsim.roadmappings.RoadMappingCircle;
@@ -55,13 +55,13 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 public class PaintRoadMapping {
     private static final boolean drawBezierPoints = false;
 
-    public static void paintRoadMapping(Graphics2D g, RoadMappingAbstract roadMapping) {
+    public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
         double lateralOffset = 0; // roadMapping.isPeer() ? roadMapping.roadWidth() : 0; //0.5 * roadMapping.laneCount()
                                   // /*.trafficLaneMin()*/ * roadMapping.laneWidth();
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 
-    public static void paintRoadMapping(Graphics2D g, RoadMappingAbstract roadMapping, double lateralOffset) {
+    public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping, double lateralOffset) {
         assert roadMapping != null;
         if (roadMapping.isPeer()) {
             return;
@@ -74,7 +74,7 @@ public class PaintRoadMapping {
 
         final double roadLength = roadMapping.roadLength();
 
-        final Class<? extends RoadMappingAbstract> roadMappingClass = roadMapping.getClass();
+        final Class<? extends RoadMapping> roadMappingClass = roadMapping.getClass();
         if (roadMappingClass == RoadMappingU.class) {
             final RoadMappingU mappingU = (RoadMappingU) roadMapping;
             final double straightLength = mappingU.straightLength();
@@ -169,7 +169,7 @@ public class PaintRoadMapping {
             return;
         } else if (roadMappingClass == RoadMappingPoly.class) {
             final RoadMappingPoly poly = (RoadMappingPoly) roadMapping;
-            for (final RoadMappingAbstract map : poly) {
+            for (final RoadMapping map : poly) {
                 paintRoadMapping(g, map, lateralOffset);
             }
             return;
@@ -266,7 +266,7 @@ public class PaintRoadMapping {
         }
     }
 
-    static void paintInhomogeneities(Graphics2D g, RoadMappingAbstract roadMapping, RoadSegment roadSegment, Color color) {
+    static void paintInhomogeneities(Graphics2D g, RoadMapping roadMapping, RoadSegment roadSegment, Color color) {
         // this is an approximation, only works on a straight line segment
         // for (final Inhomogeneity inhomogeneity :
         // roadSection.inhomogeneities()) {
@@ -282,7 +282,7 @@ public class PaintRoadMapping {
         // }
     }
 
-    public static void setClipPath(Graphics2D g, RoadMappingAbstract roadMapping, GeneralPath clipPath) {
+    public static void setClipPath(Graphics2D g, RoadMapping roadMapping, GeneralPath clipPath) {
         if (roadMapping.clippingPolygons() == null) {
             g.setClip(null);
         } else {

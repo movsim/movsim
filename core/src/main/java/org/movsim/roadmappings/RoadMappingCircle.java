@@ -29,7 +29,7 @@ package org.movsim.roadmappings;
 /**
  * Maps a road segment onto a circle.
  */
-public class RoadMappingCircle extends RoadMappingAbstract {
+public class RoadMappingCircle extends RoadMapping {
 
     protected double centerX;
     protected double centerY;

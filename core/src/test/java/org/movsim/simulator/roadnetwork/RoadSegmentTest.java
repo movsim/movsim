@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.movsim.autogen.LaneChangeModelType;
 import org.movsim.autogen.ModelParameterMOBIL;
 import org.movsim.roadmappings.PosTheta;
-import org.movsim.roadmappings.RoadMappingAbstract;
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
@@ -63,7 +63,7 @@ public class RoadSegmentTest {
     // lane changing thresholds (m/s^2)
     static final double THRESHOLD_CAR = 0.3;
 
-    protected static class RoadMappingConcrete extends RoadMappingAbstract {
+    protected static class RoadMappingConcrete extends RoadMapping {
         public RoadMappingConcrete(int laneCount) {
             super(laneCount, 0, 0);
         }
@@ -154,7 +154,7 @@ public class RoadSegmentTest {
     public final void testRoadSegmentRoadMapping() {
         final int laneCount = 1;
         final double roadLength = 1000.0;
-        final RoadMappingAbstract m = new RoadMappingConcrete(laneCount, roadLength);
+        final RoadMapping m = new RoadMappingConcrete(laneCount, roadLength);
         final RoadSegment r = new RoadSegment(roadLength, laneCount, m, RoadSegmentDirection.FORWARD);
         assertEquals(roadLength, r.roadLength(), delta);
         assertEquals(laneCount, r.laneCount());

@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-public class RoadMappingPeer extends RoadMappingAbstract {
+public class RoadMappingPeer extends RoadMapping {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadMappingPeer.class);
 
-    private final RoadMappingAbstract roadMapping;
+    private final RoadMapping roadMapping;
 
-    public RoadMappingPeer(RoadMappingAbstract roadMapping) {
+    public RoadMappingPeer(RoadMapping roadMapping) {
         super(roadMapping.laneCount(), roadMapping.laneWidth(), roadMapping.startPos().x, roadMapping.startPos().y);
         this.roadMapping = Preconditions.checkNotNull(roadMapping);
         this.roadLength = roadMapping.roadLength();

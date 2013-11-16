@@ -35,12 +35,12 @@ import org.movsim.roadmappings.RoadGeometry.GeometryType;
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappingUtils.
  */
-public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<RoadMappingAbstract> {
+public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping> {
 
-    protected final ArrayList<RoadMappingAbstract> roadMappings = new ArrayList<>();
+    protected final ArrayList<RoadMapping> roadMappings = new ArrayList<>();
 
     @Override
-    public Iterator<RoadMappingAbstract> iterator() {
+    public Iterator<RoadMapping> iterator() {
         return roadMappings.iterator();
     }
 
@@ -64,7 +64,7 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
      */
     public RoadMappingPoly(int laneCount, double x0, double y0, double x1, double y1) {
         super(laneCount, x0, y0);
-        final RoadMappingAbstract roadMapping = new RoadMappingLine(laneCount, x0, y0, x1, y1);
+        final RoadMapping roadMapping = new RoadMappingLine(laneCount, x0, y0, x1, y1);
         roadLength = roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
@@ -102,7 +102,7 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
     public PosTheta map(double roadPos, double lateralOffset) {
 
         double pos = roadPos;
-        for (final RoadMappingAbstract roadMapping : roadMappings) {
+        for (final RoadMapping roadMapping : roadMappings) {
             if (pos <= roadMapping.roadLength()) {
                 return roadMapping.map(pos, lateralOffset);
             }
@@ -112,19 +112,19 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
         // this can happen by up to half a vehicle length - vehicle's rear position is
         // on road mapping, but vehicle's mid position (which is used for drawing) has
         // gone past the end, so fix this as a special case.
-        final RoadMappingAbstract roadMapping = roadMappings.get(roadMappings.size() - 1);
+        final RoadMapping roadMapping = roadMappings.get(roadMappings.size() - 1);
         return roadMapping.map(pos + roadMapping.roadLength(), lateralOffset);
     }
 
     public void addLinePoint(double x, double y) {
-        final RoadMappingAbstract lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
+        final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, x, y);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
 
     public void addLinePointRelative(double dx, double dy) {
-        final RoadMappingAbstract lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
+        final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final PosTheta posTheta = lastRoadMapping.endPos();
         final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
         roadLength += roadMapping.roadLength();

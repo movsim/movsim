@@ -32,7 +32,7 @@ import java.util.Iterator;
 /**
  * RoadMapping consisting of a number of consecutive straight sections of road.
  */
-public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable<RoadMappingLine> {
+public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMappingLine> {
 
     public static final int RELATIVE_POINTS = 0;
     public static final int ABSOLUTE_POINTS = 1;
@@ -135,7 +135,7 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
     public PosTheta map(double roadPos, double lateralOffset) {
 
         double pos = roadPos;
-        for (final RoadMappingAbstract roadMapping : roadMappings) {
+        for (final RoadMapping roadMapping : roadMappings) {
             if (pos <= roadMapping.roadLength()) {
                 return roadMapping.map(pos, lateralOffset);
             }
@@ -145,12 +145,12 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
         // this can happen by up to half a vehicle length - vehicle's rear position is
         // on road mapping, but vehicle's mid position (which is used for drawing) has
         // gone past the end, so fix this as a special case.
-        final RoadMappingAbstract roadMapping = roadMappings.get(roadMappings.size() - 1);
+        final RoadMapping roadMapping = roadMappings.get(roadMappings.size() - 1);
         return roadMapping.map(pos + roadMapping.roadLength(), lateralOffset);
     }
 
     public void addPoint(double x, double y) {
-        final RoadMappingAbstract lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
+        final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, x, y);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
@@ -163,7 +163,7 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
     }
 
     public void addPointRelative(double dx, double dy) {
-        final RoadMappingAbstract lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
+        final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final PosTheta posTheta = lastRoadMapping.endPos();
         final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
         roadLength += roadMapping.roadLength();
@@ -180,7 +180,7 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
         m1.moveStart(dx, dy);
         m1.init();
         roadLength = 0.0;
-        for (final RoadMappingAbstract roadMapping : roadMappings) {
+        for (final RoadMapping roadMapping : roadMappings) {
             roadLength += roadMapping.roadLength();
         }
     }

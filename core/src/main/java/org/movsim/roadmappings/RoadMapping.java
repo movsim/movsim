@@ -35,7 +35,7 @@ import org.movsim.simulator.vehicles.Vehicle;
  * A RoadMapping maps a logical road position (given by a lane and a position on a road segment) onto a physical
  * position, that is an x,y coordinate (given in meters).
  */
-public abstract class RoadMappingAbstract {
+public abstract class RoadMapping {
 
     /**
      * 
@@ -82,7 +82,7 @@ public abstract class RoadMappingAbstract {
      * @param x0
      * @param y0
      */
-    protected RoadMappingAbstract(int laneCountRight, int laneCountLeft, double laneWidth, double x0, double y0) {
+    protected RoadMapping(int laneCountRight, int laneCountLeft, double laneWidth, double x0, double y0) {
         this.laneCount = laneCountRight;
         this.x0 = x0;
         this.y0 = y0;
@@ -94,7 +94,7 @@ public abstract class RoadMappingAbstract {
         roadColor = defaultRoadColor;
     }
 
-    protected RoadMappingAbstract(int laneCount, double laneWidth, double x0, double y0) {
+    protected RoadMapping(int laneCount, double laneWidth, double x0, double y0) {
         this(laneCount, 1, laneWidth, x0, y0);
     }
 
@@ -105,7 +105,7 @@ public abstract class RoadMappingAbstract {
      * @param x0
      * @param y0
      */
-    protected RoadMappingAbstract(int laneCount, double x0, double y0) {
+    protected RoadMapping(int laneCount, double x0, double y0) {
         this(laneCount, DEFAULT_LANE_WIDTH, x0, y0);
     }
 
@@ -123,7 +123,7 @@ public abstract class RoadMappingAbstract {
      * @return the default road color
      */
     public static int defaultRoadColor() {
-        return RoadMappingAbstract.defaultRoadColor;
+        return RoadMapping.defaultRoadColor;
     }
 
     /**
@@ -132,7 +132,7 @@ public abstract class RoadMappingAbstract {
      * @param defaultRoadColor
      */
     public static void setDefaultRoadColor(int defaultRoadColor) {
-        RoadMappingAbstract.defaultRoadColor = defaultRoadColor;
+        RoadMapping.defaultRoadColor = defaultRoadColor;
     }
 
     /**

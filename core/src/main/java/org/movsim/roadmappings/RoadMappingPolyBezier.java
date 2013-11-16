@@ -32,7 +32,7 @@ import java.util.Iterator;
 /**
  * RoadMapping consisting of a number of consecutive Bezier curves.
  */
-public class RoadMappingPolyBezier extends RoadMappingAbstract implements Iterable<RoadMappingBezier> {
+public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadMappingBezier> {
 
     public static final int RELATIVE_POINTS = 0;
     public static final int ABSOLUTE_POINTS = 1;
@@ -221,7 +221,7 @@ public class RoadMappingPolyBezier extends RoadMappingAbstract implements Iterab
         m1.p0y += dy;
         m1.init();
         roadLength = 0.0;
-        for (final RoadMappingAbstract roadMapping : roadMappings) {
+        for (final RoadMapping roadMapping : roadMappings) {
             roadLength += roadMapping.roadLength();
         }
     }

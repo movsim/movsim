@@ -46,7 +46,7 @@ import java.util.Properties;
 import javax.xml.bind.JAXBException;
 
 import org.movsim.roadmappings.PosTheta;
-import org.movsim.roadmappings.RoadMappingAbstract;
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.Lanes;
@@ -502,7 +502,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final double simulationTime = this.simulationTime();
 
             for (final RoadSegment roadSegment : roadNetwork) {
-                final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
+                final RoadMapping roadMapping = roadSegment.roadMapping();
                 assert roadMapping != null;
                 PaintRoadMapping.setClipPath(g, roadMapping, clipPath);
                 for (final Vehicle vehicle : roadSegment) {
@@ -518,9 +518,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    private void drawVehicle(Graphics2D g, double simulationTime, RoadMappingAbstract roadMapping, Vehicle vehicle) {
+    private void drawVehicle(Graphics2D g, double simulationTime, RoadMapping roadMapping, Vehicle vehicle) {
         // draw vehicle polygon at new position
-        final RoadMappingAbstract.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
+        final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
         vehiclePath.reset();
         vehiclePath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
         vehiclePath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
@@ -581,14 +581,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     private void drawRoadSegments(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
-            final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
+            final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             drawRoadSegment(g, roadMapping);
             drawRoadSegmentLines(g, roadMapping); // in one step (parallel or sequential update)?!
         }
     }
 
-    private static void drawRoadSegment(Graphics2D g, RoadMappingAbstract roadMapping) {
+    private static void drawRoadSegment(Graphics2D g, RoadMapping roadMapping) {
         final BasicStroke roadStroke = new BasicStroke((float) roadMapping.roadWidth(), BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER);
         g.setStroke(roadStroke);
@@ -601,7 +601,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * 
      * @param g
      */
-    private void drawRoadSegmentLines(Graphics2D g, RoadMappingAbstract roadMapping) {
+    private void drawRoadSegmentLines(Graphics2D g, RoadMapping roadMapping) {
         final float dashPhase = (float) (roadMapping.roadLength() % (lineLength + gapLength));
 
         final Stroke lineStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
@@ -645,7 +645,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    public static Rectangle2D trafficLightRect(RoadMappingAbstract roadMapping, TrafficLight trafficLight) {
+    public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLight trafficLight) {
         final double offset = (roadMapping.laneCount() / 2.0 /* + 1.5 */) * roadMapping.laneWidth();
         final double size = 2 * roadMapping.laneWidth();
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
@@ -757,7 +757,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
         assert roadSegment.trafficLights() != null;
-        final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
+        final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
 
         // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
@@ -782,7 +782,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    private static void drawTrafficLightBar(Graphics2D g, RoadMappingAbstract roadMapping, TrafficLight trafficLight) {
+    private static void drawTrafficLightBar(Graphics2D g, RoadMapping roadMapping, TrafficLight trafficLight) {
         final double height = 3;
         final double width = trafficLight.roadSegment().laneCount() * roadMapping.laneWidth();
         double offset = 0;
@@ -829,7 +829,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     private void drawSpeedLimitsOnRoad(Graphics2D g, RoadSegment roadSegment) {
         assert roadSegment.speedLimits() != null;
-        final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
+        final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
         final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         final int redRadius2 = (int) (2.5 * roadMapping.laneWidth()) / 2;
@@ -881,7 +881,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private void drawSlopesOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
+        final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
         final double laneWidth = 10; // ;
         final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * (roadMapping.laneWidth() + 1);
@@ -911,7 +911,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     private void drawRoadSectionIds(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
-            final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
+            final RoadMapping roadMapping = roadSegment.roadMapping();
             // final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final PosTheta posTheta = roadMapping.map(0.0);
 
@@ -931,7 +931,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     private void drawSources(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
-            final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
+            final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final PosTheta posTheta;
@@ -965,7 +965,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     private void drawSinks(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
-            final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
+            final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final PosTheta posTheta;
@@ -985,7 +985,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private void drawNotifyObjects(Graphics2D g) {
         for (Regulator regulator : simulator.getRegulators()) {
             for (NotifyObject notifyObject : regulator.getNotifyObjects()) {
-                RoadMappingAbstract roadMapping = notifyObject.getRoadSegment().roadMapping();
+                RoadMapping roadMapping = notifyObject.getRoadSegment().roadMapping();
                 final Line2D.Double line = new Line2D.Double();
                 final Point2D from = new Point2D.Double();
                 final Point2D to = new Point2D.Double();

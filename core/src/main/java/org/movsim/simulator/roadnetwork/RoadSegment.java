@@ -34,7 +34,7 @@ import java.util.Set;
 import javax.annotation.CheckForNull;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.movsim.roadmappings.RoadMappingAbstract;
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
@@ -126,7 +126,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     // Sources and Sinks
     private AbstractTrafficSource trafficSource;
     private TrafficSink sink;
-    private RoadMappingAbstract roadMapping;
+    private RoadMapping roadMapping;
 
     private RoadSegment peerRoadSegment;
 
@@ -182,7 +182,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         overtakingSegment = new LaneSegment(this, Lanes.OVERTAKING);
     }
 
-    public RoadSegment(double roadLength, int laneCount, RoadMappingAbstract roadMapping,
+    public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping,
             RoadSegmentDirection roadSegmentDirection) {
         this(roadLength, laneCount);
         this.directionType = roadSegmentDirection;
@@ -248,7 +248,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * 
      * @return this road segment's road mapping
      */
-    public final RoadMappingAbstract roadMapping() {
+    public final RoadMapping roadMapping() {
         assert roadMapping != null;
         return roadMapping;
     }
@@ -258,7 +258,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * 
      * @param roadMapping
      */
-    public final void setRoadMapping(RoadMappingAbstract roadMapping) {
+    public final void setRoadMapping(RoadMapping roadMapping) {
         this.roadMapping = roadMapping;
     }
 
@@ -1231,7 +1231,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * Asserts the road segment's class invariant. Used for debugging.
      */
     public boolean assertInvariant() {
-        final RoadMappingAbstract roadMapping = roadMapping();
+        final RoadMapping roadMapping = roadMapping();
         if (roadMapping != null) {
             // assert roadMapping.laneCount() == laneCount();
             // assert roadMapping.trafficLaneMax() == trafficLaneMax();

@@ -31,7 +31,7 @@ import java.util.Arrays;
 /**
  * Road mapping defined by a quadratic Bezier curve.
  */
-public class RoadMappingBezier extends RoadMappingAbstract {
+public class RoadMappingBezier extends RoadMapping {
 
     // Bezier curve endpoints and control point
     protected double p0x;
@@ -124,7 +124,7 @@ public class RoadMappingBezier extends RoadMappingAbstract {
      * @param t
      *            single degree of freedom in setting the control point
      */
-    RoadMappingBezier(RoadMappingAbstract roadMapping, double x1, double y1, double t) {
+    RoadMappingBezier(RoadMapping roadMapping, double x1, double y1, double t) {
         super(roadMapping.laneCount(), 0, 0);
         final PosTheta posTheta = roadMapping.endPos();
         p0x = posTheta.x;

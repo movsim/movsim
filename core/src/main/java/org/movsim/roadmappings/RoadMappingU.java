@@ -34,7 +34,7 @@ package org.movsim.roadmappings;
  * NOT PART OF ROADXML SPECIFICATION, so do not use if you wish your simulation to be saved as a ROADXML file.
  * </p>
  */
-public class RoadMappingU extends RoadMappingAbstract {
+public class RoadMappingU extends RoadMapping {
 
     protected double radius;
     protected double straightLength; // length(m) of straight sections of U-shape

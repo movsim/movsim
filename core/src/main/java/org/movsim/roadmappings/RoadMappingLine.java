@@ -31,13 +31,13 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 /**
  * Maps a road segment onto straight line.
  */
-public class RoadMappingLine extends RoadMappingAbstract {
+public class RoadMappingLine extends RoadMapping {
 
-    public static RoadMappingAbstract create(RoadGeometry roadGeometry) {
+    public static RoadMapping create(RoadGeometry roadGeometry) {
         return create(roadGeometry.laneCount(), roadGeometry.geometry(), roadGeometry.laneWidth());
     }
 
-    private static RoadMappingAbstract create(int laneCount, Geometry geometry, double laneWidth) {
+    private static RoadMapping create(int laneCount, Geometry geometry, double laneWidth) {
         return new RoadMappingLine(laneCount, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
                 geometry.getLength(), laneWidth);
     }
@@ -111,7 +111,7 @@ public class RoadMappingLine extends RoadMappingAbstract {
      * @param y1
      *            new point, y coordinate
      */
-    RoadMappingLine(RoadMappingAbstract roadMapping, double x1, double y1) {
+    RoadMappingLine(RoadMapping roadMapping, double x1, double y1) {
         super(roadMapping.laneCount(), 0, 0);
         final PosTheta posTheta = roadMapping.endPos();
         x0 = posTheta.x;
