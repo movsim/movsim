@@ -24,7 +24,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Lanes.LaneSection;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.roadmappings.RoadGeometry;
-import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMappingAbstract;
 import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.roadmappings.RoadMappingUtils;
 import org.movsim.simulator.MovsimConstants;
@@ -103,7 +103,7 @@ public class OpenDriveHandler {
             if (hasPeer) {
                 LOG.info("road={} consists of peers", road.getId());
             }
-            final RoadMapping roadMapping = createRoadMappings(road);
+            final RoadMappingAbstract roadMapping = createRoadMappings(road);
             for (LaneSectionType laneType : Lanes.LaneSectionType.values()) {
                 if (hasLaneSectionType(road, laneType)) {
                     RoadSegment roadSegment = createRoadSegment(laneType, road, hasPeer, roadMapping);
@@ -150,7 +150,7 @@ public class OpenDriveHandler {
         return false; // xodr CENTER lane not supported
     }
 
-    private RoadSegment createRoadSegment(LaneSectionType laneType, Road road, boolean hasPeer, RoadMapping roadMapping) {
+    private RoadSegment createRoadSegment(LaneSectionType laneType, Road road, boolean hasPeer, RoadMappingAbstract roadMapping) {
 
         Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
                 "cannot handle more than one laneSection in roadId=" + road.getId());
@@ -295,7 +295,7 @@ public class OpenDriveHandler {
         return roadSegment;
     }
 
-    private static RoadMapping createRoadMappings(Road road) throws IllegalArgumentException {
+    private static RoadMappingAbstract createRoadMappings(Road road) throws IllegalArgumentException {
         Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
                 "cannot handle more than one laneSection in roadId=" + road.getId());
         int laneCount = 0;

@@ -124,7 +124,7 @@ public class RoadMappingBezier extends RoadMappingAbstract {
      * @param t
      *            single degree of freedom in setting the control point
      */
-    RoadMappingBezier(RoadMapping roadMapping, double x1, double y1, double t) {
+    RoadMappingBezier(RoadMappingAbstract roadMapping, double x1, double y1, double t) {
         super(roadMapping.laneCount(), 0, 0);
         final PosTheta posTheta = roadMapping.endPos();
         p0x = posTheta.x;

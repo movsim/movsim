@@ -29,7 +29,7 @@ package org.movsim.simulator.roadnetwork;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMappingAbstract;
 
 /**
@@ -62,7 +62,7 @@ public class LinkTest {
     public final void testAddLanePair() {
         final int laneCount = 1;
         final double roadLength = 1000.0;
-        final RoadMapping m = new RoadMappingConcrete(laneCount, roadLength);
+        final RoadMappingAbstract m = new RoadMappingConcrete(laneCount, roadLength);
         final RoadSegment r1 = new RoadSegment(roadLength, laneCount, m, RoadSegmentDirection.FORWARD);
         final RoadSegment r2 = new RoadSegment(roadLength, laneCount, m, RoadSegmentDirection.FORWARD);
 
@@ -104,12 +104,12 @@ public class LinkTest {
     public final void testAddOffsetJoin() {
         final int laneCount = 2;
         final int offset = 1;
-        final RoadMapping m1 = new RoadMappingConcrete(laneCount, 1000.0);
+        final RoadMappingAbstract m1 = new RoadMappingConcrete(laneCount, 1000.0);
         final RoadSegment r1 = new RoadSegment(m1.roadLength(), laneCount, m1, RoadSegmentDirection.FORWARD);
-        final RoadMapping m2 = new RoadMappingConcrete(laneCount + offset, 1000.0);
+        final RoadMappingAbstract m2 = new RoadMappingConcrete(laneCount + offset, 1000.0);
         final RoadSegment r2 = new RoadSegment(m2.roadLength(), laneCount + offset, m2, RoadSegmentDirection.FORWARD);
         r2.setLaneType(Lanes.LANE3, Lanes.Type.ENTRANCE);
-        final RoadMapping m3 = new RoadMappingConcrete(laneCount, 1000.0);
+        final RoadMappingAbstract m3 = new RoadMappingConcrete(laneCount, 1000.0);
         final RoadSegment r3 = new RoadSegment(m3.roadLength(), laneCount, m3, RoadSegmentDirection.FORWARD);
         Link.addJoin(r1, r2);
 

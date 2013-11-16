@@ -27,8 +27,8 @@ public final class RoadMappingUtils {
      * @param roadGeometry
      * @return
      */
-    private static final RoadMapping create(RoadGeometry roadGeometry) {
-        RoadMapping roadMapping;
+    private static final RoadMappingAbstract create(RoadGeometry roadGeometry) {
+        RoadMappingAbstract roadMapping;
         if (roadGeometry.geometry().isSetLine()) {
             roadMapping = RoadMappingLine.create(roadGeometry);
         } else if (roadGeometry.geometry().isSetArc()) {
@@ -43,7 +43,7 @@ public final class RoadMappingUtils {
         return roadMapping;
     }
 
-    public static final RoadMapping create(Iterable<RoadGeometry> roadGeometries) {
+    public static final RoadMappingAbstract create(Iterable<RoadGeometry> roadGeometries) {
         Preconditions.checkArgument(!Iterables.isEmpty(roadGeometries));
         if (Iterables.size(roadGeometries) == 1) {
             return create(Iterables.getOnlyElement(roadGeometries));

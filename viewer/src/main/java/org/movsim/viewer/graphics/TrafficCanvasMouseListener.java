@@ -36,8 +36,7 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.movsim.roadmappings.RoadMapping;
-import org.movsim.roadmappings.RoadMapping.PolygonFloat;
+import org.movsim.roadmappings.RoadMappingAbstract;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
@@ -99,7 +98,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 trafficCanvas.repaint();
             }
 
-            final RoadMapping roadMapping = roadSegment.roadMapping();
+            final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
             for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
                 final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
                 // check if the user has clicked on a traffic light, if they have then change the
@@ -218,10 +217,10 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             // mouse is over a vehicle
             final double simulationTime = trafficCanvas.simulationRunnable.simulationTime();
             for (final RoadSegment roadSegment : roadNetwork) {
-                final RoadMapping roadMapping = roadSegment.roadMapping();
+                final RoadMappingAbstract roadMapping = roadSegment.roadMapping();
                 for (final Vehicle vehicle : roadSegment) {
                     // TODO quick hack here,no correction for offsets
-                    final PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
+                    final RoadMappingAbstract.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
                     path.reset();
                     path.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
                     path.lineTo(polygon.xPoints[1], polygon.yPoints[1]);

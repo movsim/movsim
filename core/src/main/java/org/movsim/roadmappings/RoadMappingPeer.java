@@ -10,9 +10,9 @@ public class RoadMappingPeer extends RoadMappingAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadMappingPeer.class);
 
-    private final RoadMapping roadMapping;
+    private final RoadMappingAbstract roadMapping;
 
-    public RoadMappingPeer(RoadMapping roadMapping) {
+    public RoadMappingPeer(RoadMappingAbstract roadMapping) {
         super(roadMapping.laneCount(), roadMapping.laneWidth(), roadMapping.startPos().x, roadMapping.startPos().y);
         this.roadMapping = Preconditions.checkNotNull(roadMapping);
         this.roadLength = roadMapping.roadLength();

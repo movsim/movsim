@@ -221,7 +221,7 @@ public class RoadMappingPolyBezier extends RoadMappingAbstract implements Iterab
         m1.p0y += dy;
         m1.init();
         roadLength = 0.0;
-        for (final RoadMapping roadMapping : roadMappings) {
+        for (final RoadMappingAbstract roadMapping : roadMappings) {
             roadLength += roadMapping.roadLength();
         }
     }

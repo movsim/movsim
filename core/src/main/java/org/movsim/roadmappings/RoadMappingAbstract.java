@@ -35,7 +35,7 @@ import org.movsim.simulator.vehicles.Vehicle;
  * A RoadMapping maps a logical road position (given by a lane and a position on a road segment) onto a physical
  * position, that is an x,y coordinate (given in meters).
  */
-public abstract class RoadMappingAbstract implements RoadMapping {
+public abstract class RoadMappingAbstract {
 
     /**
      * 
@@ -44,7 +44,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      *            offset from center of road, used mainly for drawing roadlines and road edges
      * @return a PosTheta object giving position and direction
      */
-    @Override
     public abstract PosTheta map(double roadPos, double lateralOffset);
 
     // Immutable Properties
@@ -184,7 +183,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return start position of the road
      */
-    @Override
     public PosTheta startPos() {
         return startPos(0.0);
     }
@@ -196,7 +194,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return start position of the road for given lateral offset
      */
-    @Override
     public PosTheta startPos(double lateralOffset) {
         return map(0.0, lateralOffset);
     }
@@ -206,7 +203,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return end position of the road
      */
-    @Override
     public PosTheta endPos() {
         return endPos(0.0);
     }
@@ -218,7 +214,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return end position of the road for given lateral offset
      */
-    @Override
     public PosTheta endPos(double lateralOffset) {
         return map(roadLength, lateralOffset);
     }
@@ -239,7 +234,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * @param roadPos
      * @return posTheta giving position and direction in real space
      */
-    @Override
     public PosTheta map(double roadPos) {
         return map(roadPos, 0.0);
     }
@@ -249,7 +243,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return road length, in meters
      */
-    @Override
     public final double roadLength() {
         return roadLength;
     }
@@ -259,7 +252,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return road width, in meters
      */
-    @Override
     public final double roadWidth() {
         return roadWidth;
     }
@@ -269,7 +261,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @param color
      */
-    @Override
     public final void setRoadColor(int color) {
         this.roadColor = color;
     }
@@ -279,7 +270,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return road color
      */
-    @Override
     public final int roadColor() {
         return roadColor;
     }
@@ -289,7 +279,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return the width of the lanes, in meters
      */
-    @Override
     public final double laneWidth() {
         return laneWidth;
     }
@@ -299,7 +288,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return number of lanes
      */
-    @Override
     public int laneCount() {
         return laneCount;
     }
@@ -329,7 +317,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * @param lane
      * @return the offset of the center of the lane
      */
-    @Override
     public final double laneOffset(int lane) {
         return laneOffset((double) lane);
     }
@@ -340,7 +327,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * @param lane
      * @return the offset of the inside edge of the lane
      */
-    @Override
     public final double laneInsideEdgeOffset(int lane) {
         return (0.5 * (1 - laneCount + 1) + (lane - 1)) * laneWidth;
     }
@@ -354,7 +340,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * @param length
      *            length of the clipping region
      */
-    @Override
     public void addClippingRegion(double pos, double length) {
         if (clippingPolygons == null) {
             clippingPolygons = new ArrayList<>();
@@ -396,7 +381,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return arraylist of the clipping polygons, or null if no clipping set.
      */
-    @Override
     public ArrayList<PolygonFloat> clippingPolygons() {
         return clippingPolygons;
     }
@@ -406,12 +390,10 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @return the outside clipping polygon
      */
-    @Override
     public PolygonFloat outsideClippingPolygon() {
         return outsideClippingPolygon;
     }
 
-    @Override
     public PolygonFloat mapFloat(PosTheta posTheta, double length, double width) {
 
         final double lca = length * posTheta.cosTheta;
@@ -440,16 +422,77 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      *            current simulation time
      * @return polygon representing vehicle
      */
-    @Override
     public PolygonFloat mapFloat(Vehicle vehicle, double time) {
         final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(),
                 laneOffset(vehicle.getContinousLane()));
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 
-    @Override
     public boolean isPeer() {
         return false;
+    }
+
+    /**
+     * Polygon with integer coordinates.
+     */
+    class Polygon {
+        /**
+         * Number of points in the polygon.
+         */
+        public int pointCount;
+        /**
+         * Array of x-coordinates of the polygon.
+         */
+        public int xPoints[];
+        /**
+         * Array of y-coordinates of the polygon.
+         */
+        public int yPoints[];
+
+        /**
+         * Constructor, allocate arrays for polygon points.
+         * 
+         * @param pointCount
+         *            number of points in the polygon.
+         */
+        Polygon(int pointCount) {
+            this.pointCount = pointCount;
+            xPoints = new int[pointCount];
+            yPoints = new int[pointCount];
+        }
+    }
+
+    /**
+     * Polygon with floating point coordinates.
+     * 
+     */
+    public static class PolygonFloat {
+
+        /**
+         * Number of points in the polygon.
+         */
+        public int pointCount;
+        /**
+         * Array of x-coordinates of the polygon.
+         */
+        public float xPoints[];
+        /**
+         * Array of y-coordinates of the polygon.
+         */
+        public float yPoints[];
+
+        /**
+         * Constructor, allocate arrays for polygon points.
+         * 
+         * @param pointCount
+         *            number of points in the polygon.
+         */
+        PolygonFloat(int pointCount) {
+            this.pointCount = pointCount;
+            xPoints = new float[pointCount];
+            yPoints = new float[pointCount];
+        }
+
     }
 
 }

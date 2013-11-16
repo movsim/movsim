@@ -33,7 +33,7 @@ import java.util.Iterator;
 import org.junit.Test;
 import org.movsim.autogen.LaneChangeModelType;
 import org.movsim.autogen.ModelParameterMOBIL;
-import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMappingAbstract;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
@@ -154,7 +154,7 @@ public class RoadSegmentTest {
     public final void testRoadSegmentRoadMapping() {
         final int laneCount = 1;
         final double roadLength = 1000.0;
-        final RoadMapping m = new RoadMappingConcrete(laneCount, roadLength);
+        final RoadMappingAbstract m = new RoadMappingConcrete(laneCount, roadLength);
         final RoadSegment r = new RoadSegment(roadLength, laneCount, m, RoadSegmentDirection.FORWARD);
         assertEquals(roadLength, r.roadLength(), delta);
         assertEquals(laneCount, r.laneCount());

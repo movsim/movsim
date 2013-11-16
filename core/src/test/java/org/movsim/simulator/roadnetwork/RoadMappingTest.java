@@ -29,7 +29,7 @@ package org.movsim.simulator.roadnetwork;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMappingAbstract;
 
 /**
@@ -59,7 +59,7 @@ public class RoadMappingTest {
     @Test
     public void testRoadMappingBaseInt() {
         final int LANE_COUNT = 3;
-        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+        final RoadMappingAbstract roadMapping = new RoadMappingConcrete(LANE_COUNT);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
     }
 
@@ -67,7 +67,7 @@ public class RoadMappingTest {
     public void testRoadMappingBaseIntDouble() {
         final int LANE_COUNT = 3;
         final double roadLength = 56.4;
-        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
+        final RoadMappingAbstract roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
         assertEquals(roadLength, roadMapping.roadLength(), delta);
     }
@@ -89,14 +89,14 @@ public class RoadMappingTest {
     public void testRoadLength() {
         final int LANE_COUNT = 3;
         final double roadLength = 56.4;
-        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
+        final RoadMappingAbstract roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
         assertEquals(roadLength, roadMapping.roadLength(), delta);
     }
 
     @Test
     public void testRoadWidth() {
         final int LANE_COUNT = 3;
-        RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+        RoadMappingAbstract roadMapping = new RoadMappingConcrete(LANE_COUNT);
         assertEquals(roadMapping.laneWidth() * LANE_COUNT, roadMapping.roadWidth(), delta);
         roadMapping = new RoadMappingConcrete(LANE_COUNT + 1);
         assertEquals(roadMapping.laneWidth() * roadMapping.laneCount(), roadMapping.roadWidth(), delta);
@@ -118,7 +118,7 @@ public class RoadMappingTest {
     @Test
     public void testLaneCount() {
         final int LANE_COUNT = 3;
-        RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+        RoadMappingAbstract roadMapping = new RoadMappingConcrete(LANE_COUNT);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
         final double roadLength = 56.4;
         roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
