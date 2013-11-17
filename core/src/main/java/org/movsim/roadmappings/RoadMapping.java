@@ -27,6 +27,7 @@
 package org.movsim.roadmappings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -47,9 +48,10 @@ public abstract class RoadMapping {
     public abstract PosTheta map(double roadPos, double lateralOffset);
 
     // Immutable Properties
-    protected final int laneCount;
-    protected double laneWidth;
-    protected double roadWidth;
+    // protected final int laneCount;
+    // protected double laneWidth;
+    // protected double roadWidth;
+    protected LaneGeometries laneGeometries;
 
     // trafficLaneMin and trafficLaneMax set the range of lanes for normal traffic in the road
     // segment lanes less than trafficLaneMin or greater than trafficLaneMax are exit or entrance
@@ -73,7 +75,7 @@ public abstract class RoadMapping {
     protected ArrayList<PolygonFloat> clippingPolygons;
     protected PolygonFloat outsideClippingPolygon;
 
-    protected static final double DEFAULT_LANE_WIDTH = 2;
+    // protected static final double DEFAULT_LANE_WIDTH = 2;
 
     /**
      * Constructor.
@@ -82,21 +84,21 @@ public abstract class RoadMapping {
      * @param x0
      * @param y0
      */
-    protected RoadMapping(int laneCountRight, int laneCountLeft, double laneWidth, double x0, double y0) {
-        this.laneCount = laneCountRight;
+    protected RoadMapping(LaneGeometries laneGeometries, double x0, double y0) {
         this.x0 = x0;
         this.y0 = y0;
+        this.laneGeometries = laneGeometries;
         trafficLaneMin = Lanes.LANE1; // most inner lane
-        trafficLaneMax = laneCount;
+        trafficLaneMax = laneGeometries.getRight().getLaneCount(); // FIXME
 
-        this.laneWidth = laneWidth;
-        roadWidth = laneWidth * laneCount;
+        // this.laneWidth = laneGeometries.getLaneWidth();
+        // roadWidth = laneWidth * laneCount;
         roadColor = defaultRoadColor;
     }
 
-    protected RoadMapping(int laneCount, double laneWidth, double x0, double y0) {
-        this(laneCount, 1, laneWidth, x0, y0);
-    }
+    // protected RoadMapping(int laneCount, double laneWidth, double x0, double y0) {
+    // this(laneCount, 1, laneWidth, x0, y0);
+    // }
 
     /**
      * Constructor.
@@ -105,9 +107,9 @@ public abstract class RoadMapping {
      * @param x0
      * @param y0
      */
-    protected RoadMapping(int laneCount, double x0, double y0) {
-        this(laneCount, DEFAULT_LANE_WIDTH, x0, y0);
-    }
+    // protected RoadMapping(int laneCount, double x0, double y0) {
+    // this(laneCount, DEFAULT_LANE_WIDTH, x0, y0);
+    // }
 
     /**
      * Called when the system is running low on memory, and would like actively running process to try to tighten their
@@ -224,7 +226,7 @@ public abstract class RoadMapping {
      * @return end position of the ramp lane
      */
     public PosTheta endPosRamp() {
-        double lateralOffset = laneOffset(laneCount);
+        double lateralOffset = laneOffset(laneCount());
         return endPos(lateralOffset);
     }
 
@@ -253,7 +255,7 @@ public abstract class RoadMapping {
      * @return road width, in meters
      */
     public final double roadWidth() {
-        return roadWidth;
+        return laneGeometries.getTotalLaneCount() * laneWidth();
     }
 
     /**
@@ -280,7 +282,7 @@ public abstract class RoadMapping {
      * @return the width of the lanes, in meters
      */
     public final double laneWidth() {
-        return laneWidth;
+        return laneGeometries.getLaneWidth();
     }
 
     /**
@@ -289,7 +291,7 @@ public abstract class RoadMapping {
      * @return number of lanes
      */
     public int laneCount() {
-        return laneCount;
+        return laneGeometries.getTotalLaneCount();
     }
 
     /**
@@ -300,15 +302,18 @@ public abstract class RoadMapping {
      * @return the offset of the center of the lane
      */
     protected double laneOffset(double lane) {
-        if (laneCount == 1) {
-            // TODO hack here, should be not necessary if relative to centerline
-            return 0;
-        }
-        // TODO correct mapping from laneIndex to real lateral coordinate !!!
-        double offset = lane == Lanes.NONE ? 0.0 : (Math.abs(lane) - 0.5) * laneWidth;
-        return lane < 0 ? -offset : offset;
-        // (0.5 * (1 - laneCount) + (lane - 1)) *
-        // return (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
+        // FIXME clean code here
+        // if (laneCount == 1) {
+        // // TODO hack here, should be not necessary if relative to centerline
+        // return 0;
+        // }
+        // // TODO correct mapping from laneIndex to real lateral coordinate !!!
+        // double offset = lane == Lanes.NONE ? 0.0 : (Math.abs(lane) - 0.5) * laneWidth;
+        // return lane < 0 ? -offset : offset;
+        // // (0.5 * (1 - laneCount) + (lane - 1)) *
+        // // return (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
+
+        return lane == Lanes.NONE ? 0 : (lane - 1) * laneWidth();
     }
 
     /**
@@ -321,6 +326,10 @@ public abstract class RoadMapping {
         return laneOffset((double) lane);
     }
 
+    protected double laneCenterOffset(double lane) {
+        return laneOffset(lane) + 0.5 * laneWidth();
+    }
+
     /**
      * Returns the offset of the inside edge of the lane.
      * 
@@ -328,7 +337,7 @@ public abstract class RoadMapping {
      * @return the offset of the inside edge of the lane
      */
     public final double laneInsideEdgeOffset(int lane) {
-        return (0.5 * (1 - laneCount + 1) + (lane - 1)) * laneWidth;
+        return (0.5 * (1 - laneCount() + 1) + (lane - 1)) * laneWidth();
     }
 
     /**
@@ -359,7 +368,7 @@ public abstract class RoadMapping {
             outsideClippingPolygon.yPoints[3] = LARGE_NUMBER;
         }
         final PolygonFloat clippingPolygon = new PolygonFloat(POINT_COUNT);
-        final double offset = 1.5 * laneCount * laneWidth;
+        final double offset = 1.5 * laneCount() * laneWidth();
         PosTheta posTheta;
         posTheta = map(pos + length, -offset);
         clippingPolygon.xPoints[0] = (float) posTheta.x;
@@ -418,48 +427,16 @@ public abstract class RoadMapping {
      * Returns a polygon with its vertices at the corners of the subject vehicle.
      * 
      * @param vehicle
-     * @param time
-     *            current simulation time
      * @return polygon representing vehicle
      */
-    public PolygonFloat mapFloat(Vehicle vehicle, double time) {
+    public PolygonFloat mapFloat(Vehicle vehicle) {
         final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(),
-                laneOffset(vehicle.getContinousLane()));
+                laneCenterOffset(vehicle.getContinousLane()));
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 
     public boolean isPeer() {
         return false;
-    }
-
-    /**
-     * Polygon with integer coordinates.
-     */
-    class Polygon {
-        /**
-         * Number of points in the polygon.
-         */
-        public int pointCount;
-        /**
-         * Array of x-coordinates of the polygon.
-         */
-        public int xPoints[];
-        /**
-         * Array of y-coordinates of the polygon.
-         */
-        public int yPoints[];
-
-        /**
-         * Constructor, allocate arrays for polygon points.
-         * 
-         * @param pointCount
-         *            number of points in the polygon.
-         */
-        Polygon(int pointCount) {
-            this.pointCount = pointCount;
-            xPoints = new int[pointCount];
-            yPoints = new int[pointCount];
-        }
     }
 
     /**
@@ -493,6 +470,37 @@ public abstract class RoadMapping {
             yPoints = new float[pointCount];
         }
 
+        @Override
+        public String toString() {
+            return "PolygonFloat [pointCount=" + pointCount + ", xPoints=" + Arrays.toString(xPoints) + ", yPoints="
+                    + Arrays.toString(yPoints) + "]";
+        }
+
+    }
+
+    @Override
+    public String toString() {
+        return "RoadMapping [LaneGeometries=" + laneGeometries + ", trafficLaneMin=" + trafficLaneMin
+                + ", trafficLaneMax=" + trafficLaneMax + ", roadLength="
+                + roadLength + ", posTheta=" + posTheta + ", x0=" + x0 + ", y0=" + y0 + "]";
+    }
+
+    // comment this offset
+    public double calcOffset() {
+        int laneDiffToRight = laneGeometries.getRight().getLaneCount() - laneGeometries.getLeft().getLaneCount();
+        return 0.5*laneDiffToRight*laneGeometries.getLaneWidth();
+    }
+
+    public LaneGeometries getLaneGeometries() {
+        return laneGeometries;
+    }
+
+    public double getMaxOffsetLeft() {
+        return -laneGeometries.getLeft().getLaneCount() * laneGeometries.getLaneWidth();
+    }
+
+    public double getMaxOffsetRight() {
+        return laneGeometries.getRight().getLaneCount() * laneGeometries.getLaneWidth();
     }
 
 }

@@ -22,27 +22,26 @@ public class RoadGeometry {
     }
 
     protected final Geometry geometry;
-    protected final int laneCount;
-    protected final double laneWidth;
 
-    public RoadGeometry(Geometry geometry, int laneCount, double laneWidth) {
+    protected final LaneGeometries laneGeometries;
+
+    public RoadGeometry(Geometry geometry, LaneGeometries laneGeometries) {
         this.geometry = Preconditions.checkNotNull(geometry);
-        Preconditions.checkArgument(laneCount > 0);
-        Preconditions.checkArgument(laneWidth > 0);
-        this.laneCount = laneCount;
-        this.laneWidth = laneWidth;
+        this.laneGeometries = Preconditions.checkNotNull(laneGeometries);
+        Preconditions.checkArgument(laneGeometries.getRight().getLaneCount() > 0,
+                "forward link necessary (under development)");
     }
 
     public Geometry geometry() {
         return geometry;
     }
 
-    public int laneCount() {
-        return laneCount;
+    public int totalLaneCount() {
+        return laneGeometries.getTotalLaneCount();
     }
 
     public double laneWidth() {
-        return laneWidth; // ignore laneWidth from peer
+        return laneGeometries.getRight().getLaneWidth(); // ignore laneWidth from peer so far
     }
 
     public GeometryType geometryType() {
@@ -58,5 +57,10 @@ public class RoadGeometry {
             throw new IllegalArgumentException("Unknown geometry type: " + geometry);
         }
     }
+
+    public LaneGeometries getLaneGeometries() {
+        return laneGeometries;
+    }
+
 
 }

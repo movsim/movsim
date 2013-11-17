@@ -35,4 +35,10 @@ public class PosTheta {
     public double theta() {
         return Math.atan2(sinTheta, cosTheta);
     }
+
+    @Override
+    public String toString() {
+        return "PosTheta [x=" + x + ", y=" + y + ", cosTheta=" + cosTheta + ", sinTheta=" + sinTheta + "]";
+    }
+
 }

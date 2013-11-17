@@ -49,16 +49,16 @@ public class RoadMappingS extends RoadMappingU {
      * @param straight
      *            length of straight part of S
      */
-    RoadMappingS(int laneCount, double x0, double y0, double radius, double straight) {
-        super(laneCount, x0, y0, radius, straight);
+    RoadMappingS(LaneGeometries laneGeometries, double x0, double y0, double radius, double straight) {
+        super(laneGeometries, x0, y0, radius, straight);
         roadLength = 2 * (Math.PI * radius + straight);
     }
 
     /**
      * Constructor.
      */
-    RoadMappingS(int laneCount, double x0, double y0) {
-        super(laneCount, x0, y0);
+    RoadMappingS(LaneGeometries laneGeometries, double x0, double y0) {
+        super(laneGeometries, x0, y0);
     }
 
     @Override

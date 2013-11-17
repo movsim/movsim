@@ -49,7 +49,6 @@ import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.RoadSegmentDirection;
@@ -520,7 +519,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     private void drawVehicle(Graphics2D g, double simulationTime, RoadMapping roadMapping, Vehicle vehicle) {
         // draw vehicle polygon at new position
-        final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
+        final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle);
         vehiclePath.reset();
         vehiclePath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
         vehiclePath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
@@ -583,6 +582,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
+            if (roadMapping.isPeer()) {
+                LOG.debug("skip painting peer element={}", roadMapping);
+                continue; // skip painting of peer
+            }
             drawRoadSegment(g, roadMapping);
             drawRoadSegmentLines(g, roadMapping); // in one step (parallel or sequential update)?!
         }
@@ -610,9 +613,13 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         g.setColor(roadLineColor);
 
         // draw the road lines
-        final int laneCount = roadMapping.laneCount();
-        for (int lane = 1; lane < laneCount; ++lane) {
-            final double offset = roadMapping.laneInsideEdgeOffset(lane);
+        // final int laneCount = roadMapping.laneCount();
+        int fromLane = roadMapping.getLaneGeometries().getLeft().getLaneCount();
+        int toLane = roadMapping.getLaneGeometries().getRight().getLaneCount();
+        for (int lane = -fromLane + 1; lane < toLane; lane++) {
+            final double offset = lane * roadMapping.getLaneGeometries().getLaneWidth();// roadMapping.laneInsideEdgeOffset(lane);
+            LOG.debug("draw road lines: lane={}, offset={}", lane, offset);
+            LOG.debug("draw road lines: lanelaneInsideEdgeOffset={}", roadMapping.laneInsideEdgeOffset(lane));
 
             // FIXME after reimpl
             // if (lane == roadMapping.trafficLaneMin() || lane == roadMapping.trafficLaneMax()) {
@@ -631,10 +638,20 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         g.setColor(roadEdgeColor);
         // FIXME BUGGY HERE, offset not calculated correctly
         // edge of most inner lane: hack here, lane does not exist
-        double offset = roadMapping.laneInsideEdgeOffset(Lanes.MOST_INNER_LANE - 1);
+
+        double offset = roadMapping.getMaxOffsetLeft(); // roadMapping.laneInsideEdgeOffset(Lanes.MOST_INNER_LANE - 1);
+        // if (roadMapping.isPeer()) {
+        // offset = -(roadMapping.laneCount() / 2) * roadMapping.laneWidth();
+        // }
+        LOG.debug("draw road outer edge: offset={}", offset);
         PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
         // edge of most outer edge
-        offset = roadMapping.laneInsideEdgeOffset(roadMapping.laneCount());
+        offset = roadMapping.getMaxOffsetRight(); // roadMapping.laneCount() * roadMapping.laneWidth(); //
+                                                  // roadMapping.laneInsideEdgeOffset(roadMapping.laneCount());
+                                                  // if (roadMapping.isPeer()) {
+        // offset = (roadMapping.laneCount() / 2) * roadMapping.laneWidth();
+        // }
+        LOG.debug("draw road most outer edge: offset={}", offset);
         PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
 
     }

@@ -48,22 +48,47 @@ import org.movsim.roadmappings.RoadMappingPolyLine;
 import org.movsim.roadmappings.RoadMappingS;
 import org.movsim.roadmappings.RoadMappingU;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Optimized drawing of RoadSegments based on the type of their RoadMapping
  */
-public class PaintRoadMapping {
+public final class PaintRoadMapping {
+
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(PaintRoadMapping.class);
+
     private static final boolean drawBezierPoints = false;
 
+    private PaintRoadMapping() {
+        throw new IllegalStateException("do not instanciate");
+    }
+
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
-        double lateralOffset = 0; // roadMapping.isPeer() ? roadMapping.roadWidth() : 0; //0.5 * roadMapping.laneCount()
-                                  // /*.trafficLaneMin()*/ * roadMapping.laneWidth();
+        if (roadMapping.isPeer()) {
+
+            return;
+        }
+
+        double lateralOffset = roadMapping.calcOffset(); // 0;// roadMapping.isPeer() ? roadMapping.roadWidth() : 0; //0.5 *
+                                                         // roadMapping.laneCount()
+        // /*.trafficLaneMin()*/ * roadMapping.laneWidth();
+        // if (!roadMapping.isPeer()) {
+        // lateralOffset = 0.5 * roadMapping.roadWidth();
+        // if (roadMapping.isPeer()) {
+        // lateralOffset *= -1;
+        // }
+        LOG.debug("paint roads: roadMapping={}", roadMapping);
+        LOG.debug("paint roads: roadWidth={}, laneCount={}", roadMapping.roadWidth(), roadMapping.laneCount());
+        LOG.debug("paint roads: roadMapping.isPeer={}, lateralOffset={}", roadMapping.isPeer(), lateralOffset);
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping, double lateralOffset) {
         assert roadMapping != null;
         if (roadMapping.isPeer()) {
+            LOG.info("skip painting peer element={}", roadMapping);
             return;
         }
 
@@ -75,7 +100,15 @@ public class PaintRoadMapping {
         final double roadLength = roadMapping.roadLength();
 
         final Class<? extends RoadMapping> roadMappingClass = roadMapping.getClass();
-        if (roadMappingClass == RoadMappingU.class) {
+        if (roadMappingClass == RoadMappingLine.class) {
+            posTheta = roadMapping.startPos(lateralOffset);
+            from.setLocation(posTheta.x, posTheta.y);
+            posTheta = roadMapping.endPos(lateralOffset);
+            to.setLocation(posTheta.x, posTheta.y);
+            line.setLine(from, to);
+            g.draw(line);
+            return;
+        } else if (roadMappingClass == RoadMappingU.class) {
             final RoadMappingU mappingU = (RoadMappingU) roadMapping;
             final double straightLength = mappingU.straightLength();
 
@@ -159,14 +192,7 @@ public class PaintRoadMapping {
             arc2D.setArcByCenter(posTheta.x - radius, posTheta.y, radius + lateralOffset, 0.0, 360.0, Arc2D.OPEN);
             g.draw(arc2D);
             return;
-        } else if (roadMappingClass == RoadMappingLine.class) {
-            posTheta = roadMapping.startPos(lateralOffset);
-            from.setLocation(posTheta.x, posTheta.y);
-            posTheta = roadMapping.endPos(lateralOffset);
-            to.setLocation(posTheta.x, posTheta.y);
-            line.setLine(from, to);
-            g.draw(line);
-            return;
+
         } else if (roadMappingClass == RoadMappingPoly.class) {
             final RoadMappingPoly poly = (RoadMappingPoly) roadMapping;
             for (final RoadMapping map : poly) {

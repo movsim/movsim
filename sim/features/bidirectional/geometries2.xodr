@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep  2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
+    
+    <!-- unidirectional segments -->
+    <road name="R1" length="500.0" id="1" junction="-1">
+        <link>
+            <successor elementType="road" elementId="2" contactPoint="start" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="0.0" y="300.0" hdg="0.0" length="500.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R2" length="500.0" id="2" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end" />
+            <successor elementType="road" elementId="3" contactPoint="start" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="500.0" y="300.0" hdg="0.0" length="500.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="0">
+						 <link>
+                            <successor id="-2" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R3" length="500.0" id="3" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="2" contactPoint="end" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="1000.0" y="300.0" hdg="0.0" length="500.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="0">
+                        <link>
+                            <predecessor id="-2" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-3" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    <!-- Bidirectional roadsegments --> 
+    <road name="R100" length="500.0" id="100" junction="-1">
+        <link>
+            <successor elementType="road" elementId="200" contactPoint="start" /> 
+        </link>
+        <planView>
+            <geometry s="0.0" x="0.0" y="400.0" hdg="0.0" length="500.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+				<left>
+                    <lane id="1" type="driving" level="false">
+                        <link>
+                          <successor id="1" /> 
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                           <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R200" length="500.0" id="200" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="100" contactPoint="end" />
+            <successor elementType="road" elementId="300" contactPoint="start" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="500.0" y="400.0" hdg="0.0" length="500.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+				<left>
+                    <lane id="1" type="driving" level="false">
+                        <link>
+                            <predecessor id="1" />
+                            <successor id="1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                     <lane id="2" type="mwyEntry"  level="false">
+                        <link>
+                            <successor id="2" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="0">
+						 <link>
+                            <successor id="-2" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R300" length="500.0" id="300" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="200" contactPoint="end" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="1000.0" y="400.0" hdg="0.0" length="500.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+				<left>
+                    <lane id="1" type="driving" level="false">
+                        <link>
+                            <predecessor id="1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="2" type="driving" level="false">
+                        <link>
+                            <predecessor id="2" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="3" type="mwyEntry"  level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="0">
+                        <link>
+                            <predecessor id="-2" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-3" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+</OpenDRIVE>
+

@@ -54,8 +54,9 @@ public class RoadMappingPolyS extends RoadMappingS {
      * @param straightLength
      *            length of straight part of S
      */
-    public RoadMappingPolyS(int laneCount, int sCount, double x0, double y0, double radius, double straightLength) {
-        super(laneCount, x0, y0);
+    public RoadMappingPolyS(LaneGeometries laneGeometries, int sCount, double x0, double y0, double radius,
+            double straightLength) {
+        super(laneGeometries, x0, y0);
         this.sCount = sCount;
         this.radius = radius;
         this.straightLength = straightLength;
