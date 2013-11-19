@@ -27,8 +27,6 @@ public class ServiceProvider implements SimulationTimeStep {
 
     private final Noise noise;
 
-    private final RoadNetwork roadNetwork;
-
     private final Routing routing;
 
     private final ServiceProviderLogging fileOutput;
@@ -38,7 +36,6 @@ public class ServiceProvider implements SimulationTimeStep {
         this.routing = Preconditions.checkNotNull(routing);
         this.label = configuration.getLabel();
         this.updateTime = configuration.getUpdateTime();
-        this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
         this.decisionPoints = new DecisionPoints(configuration.getDecisionPoints(), routing);
         this.noise = new Noise(configuration.getTau(), configuration.getFluctStrength());
         this.fileOutput = configuration.isLogging() ? new ServiceProviderLogging(this) : null;
