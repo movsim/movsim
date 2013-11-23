@@ -503,4 +503,8 @@ public abstract class RoadMapping {
         return laneGeometries.getRight().getLaneCount() * laneGeometries.getLaneWidth();
     }
 
+    public double getOffsetLeft(int lane) {
+        return -Math.min(lane, laneGeometries.getLeft().getLaneCount()) * laneGeometries.getLaneWidth();
+    }
+
 }

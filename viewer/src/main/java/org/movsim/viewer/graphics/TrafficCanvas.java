@@ -929,15 +929,18 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private void drawRoadSectionIds(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
-            // final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            final PosTheta posTheta = roadMapping.map(0.0);
+
+            // FIXME improve convenience
+            final PosTheta posTheta = roadMapping.isPeer() ? roadMapping.map(roadMapping.roadLength(),
+                    roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1))
+                    : roadMapping.map(0.0, roadMapping.getMaxOffsetRight());
 
             // draw the road segment's id
             final int fontHeight = 12;
             final Font font = new Font("SansSerif", Font.PLAIN, fontHeight); //$NON-NLS-1$
             g.setFont(font);
             g.setColor(Color.BLACK);
-            g.drawString("R" + roadSegment.userId(), (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
+            g.drawString(roadSegment.userId(), (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
         }
     }
 
