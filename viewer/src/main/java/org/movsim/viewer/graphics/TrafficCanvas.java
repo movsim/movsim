@@ -35,7 +35,6 @@ import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,11 +46,11 @@ import javax.xml.bind.JAXBException;
 
 import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMapping.PolygonFloat;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.RoadSegmentDirection;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
 import org.movsim.simulator.roadnetwork.controller.GradientProfile;
@@ -61,7 +60,6 @@ import org.movsim.simulator.roadnetwork.regulator.NotifyObject;
 import org.movsim.simulator.roadnetwork.regulator.Regulator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
-import org.movsim.utilities.Units;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.SwingHelper;
@@ -548,13 +546,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     @Override
     protected void drawBackground(Graphics2D g) {
+
+        drawRoadSegmentsAndLines(g);
+
         if (drawSources) {
             drawSources(g);
         }
+
         if (drawSinks) {
             drawSinks(g);
         }
-        drawRoadSegments(g);
 
         if (drawSpeedLimits) {
             drawSpeedLimits(g);
@@ -578,7 +579,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * 
      * @param g
      */
-    private void drawRoadSegments(Graphics2D g) {
+    private void drawRoadSegmentsAndLines(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
@@ -587,7 +588,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 continue; // skip painting of peer
             }
             drawRoadSegment(g, roadMapping);
-            drawRoadSegmentLines(g, roadMapping); // in one step (parallel or sequential update)?!
+            drawRoadSegmentLines(g, roadMapping);
         }
     }
 
@@ -620,7 +621,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final double offset = lane * roadMapping.getLaneGeometries().getLaneWidth();// roadMapping.laneInsideEdgeOffset(lane);
             LOG.debug("draw road lines: lane={}, offset={}", lane, offset);
             LOG.debug("draw road lines: lanelaneInsideEdgeOffset={}", roadMapping.laneInsideEdgeOffset(lane));
-
             // FIXME after reimpl
             // if (lane == roadMapping.trafficLaneMin() || lane == roadMapping.trafficLaneMax()) {
             // // use exit stroke pattern for on-ramps, off-ramps etc
@@ -656,12 +656,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     }
 
-    private void drawTrafficLights(Graphics2D g) {
-        for (final RoadSegment roadSegment : roadNetwork) {
-            drawTrafficLightsOnRoad(g, roadSegment);
-        }
-    }
-
     public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLight trafficLight) {
         final double offset = (roadMapping.laneCount() / 2.0 /* + 1.5 */) * roadMapping.laneWidth();
         final double size = 2 * roadMapping.laneWidth();
@@ -671,171 +665,34 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         return rect;
     }
 
-    /**
-     * Draw a traffic light that has only one light
-     * 
-     * @param g
-     * @param trafficLight
-     */
-    // private static void drawTrafficLight1(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
-    // double radius) {
-    // g.setColor(Color.DARK_GRAY);
-    // g.fill(trafficLightRect);
-    // switch (trafficLight.status()) {
-    // case GREEN:
-    // g.setColor(Color.GREEN);
-    // break;
-    // case GREEN_RED:
-    // g.setColor(Color.YELLOW);
-    // break;
-    // case RED:
-    // g.setColor(Color.RED);
-    // break;
-    // case RED_GREEN:
-    // g.setColor(Color.ORANGE);
-    // break;
-    // }
-    // final double x = trafficLightRect.getCenterX();
-    // final double y = trafficLightRect.getCenterY();
-    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    // }
-
-    /**
-     * Draw a traffic light that has two lights
-     * 
-     * @param g
-     * @param trafficLight
-     */
-    // private static void drawTrafficLight2(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
-    // double radius) {
-    // g.setColor(Color.DARK_GRAY);
-    // g.fill(trafficLightRect);
-    // final Double width = trafficLightRect.getWidth();
-    // final Double height = trafficLightRect.getHeight();
-    //
-    // // draw the top light
-    // g.setColor(trafficLight.status() == TrafficLightStatus.RED ? Color.RED : Color.LIGHT_GRAY);
-    // Rectangle2D rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY(), width, height / 2.0);
-    // double x = rect.getCenterX();
-    // double y = rect.getCenterY();
-    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    //
-    // // draw the bottom light
-    // g.setColor(trafficLight.status() == TrafficLightStatus.GREEN ? Color.GREEN : Color.LIGHT_GRAY);
-    // rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 2.0, width,
-    // height / 2.0);
-    // x = rect.getCenterX();
-    // y = rect.getCenterY();
-    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    // }
-
-    /**
-     * Draw a traffic light that has three lights
-     * 
-     * @param g
-     * @param trafficLight
-     */
-    // private static void drawTrafficLight3(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
-    // double radius) {
-    // g.setColor(Color.DARK_GRAY);
-    // g.fill(trafficLightRect);
-    // final Double width = trafficLightRect.getWidth();
-    // final Double height = trafficLightRect.getHeight();
-    //
-    // // draw the top light
-    // g.setColor(trafficLight.status() == TrafficLightStatus.RED ? Color.RED : Color.LIGHT_GRAY);
-    // Rectangle2D rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY(), width, height / 3.0);
-    // double x = rect.getCenterX();
-    // double y = rect.getCenterY();
-    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    //
-    // // draw the middle light
-    // if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
-    // g.setColor(Color.YELLOW);
-    // } else if (trafficLight.status() == TrafficLightStatus.RED_GREEN) {
-    // g.setColor(Color.ORANGE);
-    // } else {
-    // g.setColor(Color.LIGHT_GRAY);
-    // }
-    // rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 3.0, width,
-    // height / 3.0);
-    // x = rect.getCenterX();
-    // y = rect.getCenterY();
-    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    //
-    // // draw the bottom light
-    // g.setColor(trafficLight.status() == TrafficLightStatus.GREEN ? Color.GREEN : Color.LIGHT_GRAY);
-    // rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + 2.0 * height / 3.0, width,
-    // height / 3.0);
-    // x = rect.getCenterX();
-    // y = rect.getCenterY();
-    // g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-    // }
-
-    private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        assert roadSegment.trafficLights() != null;
-        final RoadMapping roadMapping = roadSegment.roadMapping();
-        assert roadMapping != null;
-
-        // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
-        // final int size = (int) (2 * roadMapping.laneWidth());
-        final double radius = 0.8 * roadMapping.laneWidth();
-
-        for (TrafficLight trafficLight : roadSegment.trafficLights()) {
-            drawTrafficLightBar(g, roadMapping, trafficLight);
-            // Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
-            // TODO draw switch button instead ....
-            // switch (trafficLight.lightCount()) {
-            // case 1:
-            // drawTrafficLight1(g, trafficLight, trafficLightRect, radius);
-            // break;
-            // case 2:
-            // drawTrafficLight2(g, trafficLight, trafficLightRect, radius);
-            // break;
-            // default:
-            // drawTrafficLight3(g, trafficLight, trafficLightRect, radius);
-            // break;
-            // }
+    private void drawTrafficLights(Graphics2D g) {
+        int strokeWidth = 3;
+        for (final RoadSegment roadSegment : roadNetwork) {
+            assert roadSegment.trafficLights() != null;
+            for (TrafficLight trafficLight : roadSegment.trafficLights()) {
+                Color color = getTrafficLightColor(trafficLight);
+                drawLine(g, roadSegment.roadMapping(), trafficLight.position(), strokeWidth, color);
+            }
         }
     }
 
-    private static void drawTrafficLightBar(Graphics2D g, RoadMapping roadMapping, TrafficLight trafficLight) {
-        final double height = 3;
-        final double width = trafficLight.roadSegment().laneCount() * roadMapping.laneWidth();
-        double offset = 0;
-        if (trafficLight.roadSegment().directionType() == RoadSegmentDirection.BACKWARD) {
-            offset = -width;
-        }
-        final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
-        final Rectangle2D rect = new Rectangle2D.Double(posTheta.x, posTheta.y, height, width);
-
-        // final Point2D from = new Point2D.Double();
-        // final Point2D to = new Point2D.Double();
-        // PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
-        // from.setLocation(posTheta.x, posTheta.y);
-        // posTheta = roadMapping.map(trafficLight.position(), offset + width);
-        // to.setLocation(posTheta.x, posTheta.y);
-        // final Line2D.Double line = new Line2D.Double();
-        // line.setLine(from, to);
-        // g.setStroke(new BasicStroke(2));
-
+    private static Color getTrafficLightColor(TrafficLight trafficLight) {
+        Color color = null;
         switch (trafficLight.status()) {
         case GREEN:
-            g.setColor(Color.GREEN);
+            color = Color.GREEN;
             break;
         case GREEN_RED:
-            g.setColor(Color.YELLOW);
+            color = Color.YELLOW;
             break;
         case RED:
-            g.setColor(Color.RED);
+            color = Color.RED;
             break;
         case RED_GREEN:
-            g.setColor(Color.ORANGE);
+            color = Color.ORANGE;
             break;
         }
-        g.fill(rect);
-        // g.draw(line);
-        // g.setStroke(new BasicStroke());
+        return color;
     }
 
     private void drawSpeedLimits(Graphics2D g) {
@@ -929,12 +786,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private void drawRoadSectionIds(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
-
-            // FIXME improve convenience
-            final PosTheta posTheta = roadMapping.isPeer() ? roadMapping.map(roadMapping.roadLength(),
-                    roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1))
-                    : roadMapping.map(0.0, roadMapping.getMaxOffsetRight());
-
+            final double position = roadMapping.isPeer() ? roadMapping.roadLength() : 0.0;
+            final double offset = roadMapping.isPeer() ? roadMapping.getOffsetLeft(roadMapping.getLaneGeometries()
+                    .getLeft().getLaneCount() - 1) : roadMapping.getMaxOffsetRight();
+            final PosTheta posTheta = roadMapping.map(position, offset);
             // draw the road segment's id
             final int fontHeight = 12;
             final Font font = new Font("SansSerif", Font.PLAIN, fontHeight); //$NON-NLS-1$
@@ -950,31 +805,23 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @param g
      */
     private void drawSources(Graphics2D g) {
-        for (final RoadSegment roadSegment : roadNetwork) {
-            final RoadMapping roadMapping = roadSegment.roadMapping();
-            assert roadMapping != null;
-            final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            final PosTheta posTheta;
-
-            // draw the road segment source, if there is one
-            final AbstractTrafficSource trafficSource = roadSegment.trafficSource();
+        for (RoadSegment roadSegment : roadNetwork) {
+            AbstractTrafficSource trafficSource = roadSegment.trafficSource();
             if (trafficSource != null) {
-                g.setColor(sourceColor);
-                posTheta = roadMapping.startPos();
-                g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-                g.setColor(Color.BLACK);
-                StringBuilder inflowStringBuilder = new StringBuilder();
-                inflowStringBuilder.append("set/target inflow: ");
-                inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime())));
-                inflowStringBuilder.append("/");
-                inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.measuredInflow()));
-                inflowStringBuilder.append(" veh/h");
-                inflowStringBuilder.append(" (");
-                inflowStringBuilder.append(trafficSource.getQueueLength());
-                inflowStringBuilder.append(")");
-                g.drawString(inflowStringBuilder.toString(), (int) (posTheta.x) + radius / 2, (int) (posTheta.y)
-                        + radius / 2);
+                drawLine(g, roadSegment.roadMapping(), 0, 4, Color.WHITE);
             }
+            // FIXME add additional inflow string infos in mouse over hint
+            // StringBuilder inflowStringBuilder = new StringBuilder();
+            // inflowStringBuilder.append("set/target inflow: ");
+            // inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime())));
+            // inflowStringBuilder.append("/");
+            // inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.measuredInflow()));
+            // inflowStringBuilder.append(" veh/h");
+            // inflowStringBuilder.append(" (");
+            // inflowStringBuilder.append(trafficSource.getQueueLength());
+            // inflowStringBuilder.append(")");
+            // g.drawString(inflowStringBuilder.toString(), (int) (posTheta.x) + radius / 2, (int) (posTheta.y)
+            // + radius / 2);
         }
     }
 
@@ -984,21 +831,15 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @param g
      */
     private void drawSinks(Graphics2D g) {
-        for (final RoadSegment roadSegment : roadNetwork) {
-            final RoadMapping roadMapping = roadSegment.roadMapping();
-            assert roadMapping != null;
-            final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            final PosTheta posTheta;
-
-            // draw the road segment sink, if there is one
-            final TrafficSink sink = roadSegment.sink();
+        for (RoadSegment roadSegment : roadNetwork) {
+            TrafficSink sink = roadSegment.sink();
             if (sink != null) {
-                g.setColor(sinkColor);
-                posTheta = roadMapping.endPos();
-                g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-                String outflowString = "outflow: " + (int) (Units.INVS_TO_INVH * sink.measuredOutflow()) + " veh/h";
-                g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
+                final RoadMapping roadMapping = roadSegment.roadMapping();
+                drawLine(g, roadMapping, roadMapping.roadLength(), 4, Color.BLACK);
             }
+            // FIXME outflow as mouse over hint
+            // String outflowString = "outflow: " + (int) (Units.INVS_TO_INVH * sink.measuredOutflow()) + " veh/h";
+            // g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
         }
     }
 
@@ -1006,24 +847,19 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (Regulator regulator : simulator.getRegulators()) {
             for (NotifyObject notifyObject : regulator.getNotifyObjects()) {
                 RoadMapping roadMapping = notifyObject.getRoadSegment().roadMapping();
-                final Line2D.Double line = new Line2D.Double();
-                final Point2D from = new Point2D.Double();
-                final Point2D to = new Point2D.Double();
-                PosTheta posTheta = roadMapping.map(notifyObject.getPosition(), 0);
-                from.setLocation(posTheta.x, posTheta.y);
-                double lateralOffset = (roadMapping.laneCount() / 2) * roadMapping.laneWidth();
-                if (notifyObject.getRoadSegment().directionType() == RoadSegmentDirection.BACKWARD) {
-                    lateralOffset *= -1;
-                }
-                posTheta = roadMapping.map(notifyObject.getPosition(), lateralOffset);
-                to.setLocation(posTheta.x, posTheta.y);
-                line.setLine(from, to);
-                g.setStroke(new BasicStroke(2));
-                g.draw(line);
-                // g.drawString(notifyObject.getId() + "@" + Integer.toString((int) notifyObject.getPosition()),
-                // (int) posTheta.x, (int) posTheta.y);
+                drawLine(g, roadMapping, notifyObject.getPosition(), 2, Color.DARK_GRAY);
             }
         }
+    }
+
+    private static void drawLine(Graphics2D g, RoadMapping roadMapping, double position, int strokeWidth, Color color) {
+        final double lateralExtend = roadMapping.getLaneCountInDirection() * roadMapping.laneWidth();
+        final double offset = roadMapping.isPeer() ? -lateralExtend : 0;
+        final PosTheta posTheta = roadMapping.map(position, offset);
+        final PolygonFloat line = roadMapping.mapLine(posTheta, lateralExtend);
+        g.setColor(color);
+        g.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+        g.draw(new Line2D.Float(line.xPoints[0], line.yPoints[0], line.xPoints[1], line.yPoints[1]));
     }
 
     // ============================================================================================

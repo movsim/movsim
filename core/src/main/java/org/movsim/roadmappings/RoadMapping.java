@@ -53,6 +53,7 @@ public abstract class RoadMapping {
     // protected double roadWidth;
     protected LaneGeometries laneGeometries;
 
+
     // trafficLaneMin and trafficLaneMax set the range of lanes for normal traffic in the road
     // segment lanes less than trafficLaneMin or greater than trafficLaneMax are exit or entrance
     // ramps.
@@ -74,6 +75,8 @@ public abstract class RoadMapping {
     protected final PolygonFloat polygonFloat = new PolygonFloat(POINT_COUNT);
     protected ArrayList<PolygonFloat> clippingPolygons;
     protected PolygonFloat outsideClippingPolygon;
+
+    protected final PolygonFloat lineFloat = new PolygonFloat(2);
 
     // protected static final double DEFAULT_LANE_WIDTH = 2;
 
@@ -423,6 +426,17 @@ public abstract class RoadMapping {
         return polygonFloat;
     }
 
+    public PolygonFloat mapLine(PosTheta posTheta, double length) {
+        final double wsa = length * posTheta.sinTheta;
+        lineFloat.xPoints[0] = (float) (posTheta.x);
+        lineFloat.xPoints[1] = (float) (posTheta.x + wsa);
+
+        final double wca = length * posTheta.cosTheta;
+        lineFloat.yPoints[0] = (float) (posTheta.y);
+        lineFloat.yPoints[1] = (float) (posTheta.y + wca);
+        return lineFloat;
+    }
+
     /**
      * Returns a polygon with its vertices at the corners of the subject vehicle.
      * 
@@ -507,4 +521,8 @@ public abstract class RoadMapping {
         return -Math.min(lane, laneGeometries.getLeft().getLaneCount()) * laneGeometries.getLaneWidth();
     }
 
+    public int getLaneCountInDirection() {
+        return isPeer() ? laneGeometries.getLeft().getLaneCount() : laneGeometries.getRight().getLaneCount();
+
+    }
 }

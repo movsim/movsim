@@ -55,12 +55,8 @@
             </laneSection>
         </lanes>
         <signals>
-            <signal s="600" id="r4_1+" orientation="+" name="lane 1+2 signal on road in forward direction">
-                <validity fromLane="-1" toLane="-2" />
-            </signal>
-            <signal s="700" id="r4_2+" orientation="+" name="lane 3 signal on road in forward direction">
-                <validity fromLane="-3" toLane="-3" />
-            </signal>
+            <signal s="600" id="r4_1+" orientation="+" name="lane 1+2 signal on road in forward direction" />
+            <signal s="700" id="r4_2+" orientation="+" name="lane 3 signal on road in forward direction" />
             <signal s="800" id="r4_1-" orientation="-" name="first signal in peer direction (backward)" />
         </signals>
     </road>
