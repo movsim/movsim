@@ -25,6 +25,8 @@
  */
 package org.movsim.simulator.vehicles;
 
+import java.text.DecimalFormat;
+
 import javax.annotation.Nullable;
 
 import org.movsim.autogen.VehiclePrototypeConfiguration;
@@ -188,7 +190,7 @@ public class Vehicle {
     private Route route;
     private int routeIndex;
 
-    private boolean isBrakeLightOn;
+    private boolean brakeLightOn;
 
     private PhysicalQuantities physQuantities;
 
@@ -320,7 +322,7 @@ public class Vehicle {
         frontPosition = 0;
         speed = 0;
         acc = 0;
-        isBrakeLightOn = false;
+        brakeLightOn = false;
         slope = 0;
         unsetSpeedlimit();
         routeIndex = 0;
@@ -946,19 +948,19 @@ public class Vehicle {
 
     public boolean isBrakeLightOn() {
         updateBrakeLightStatus();
-        return isBrakeLightOn;
+        return brakeLightOn;
     }
 
     /**
      * Update brake light status.
      */
     private void updateBrakeLightStatus() {
-        if (isBrakeLightOn) {
-            if (acc > -THRESHOLD_BRAKELIGHT_OFF || speed <= 0.0001) {
-                isBrakeLightOn = false;
+        if (brakeLightOn) {
+            if (acc > -THRESHOLD_BRAKELIGHT_OFF || speed <= 0.01) {
+                brakeLightOn = false;
             }
-        } else if (accOld > -THRESHOLD_BRAKELIGHT_ON && acc < -THRESHOLD_BRAKELIGHT_ON) {
-            isBrakeLightOn = true;
+        } else if (accOld > -THRESHOLD_BRAKELIGHT_ON && acc < -THRESHOLD_BRAKELIGHT_ON && speed > 0.01) {
+            brakeLightOn = true;
         }
     }
 
@@ -1182,9 +1184,12 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "Vehicle [id=" + id + ", label=" + label + ", length=" + length + ", frontPosition=" + frontPosition
-                + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel=" + accModel + ", acc="
-                + acc + ", accOld=" + accOld + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
+        DecimalFormat df = new DecimalFormat("#.###");
+        return "Vehicle [id=" + id + ", label=" + label + ", length=" + df.format(length) + ", frontPosition="
+                + df.format(frontPosition) + ", frontPositionOld=" + df.format(frontPositionOld) + ", speed="
+                + df.format(speed) + ", accModel=" + df.format(accModel) + ", acc=" + df.format(acc) + ", accOld="
+                + df.format(accOld) + ", vehNumber=" + vehNumber + ", lane=" + lane + ", brakeLightOn="
+                + brakeLightOn + "]";
     }
 
     /** returns a constant random number between 0 and 1 */

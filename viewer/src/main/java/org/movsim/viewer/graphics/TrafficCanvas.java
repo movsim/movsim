@@ -530,8 +530,13 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             // if the vehicle is decelerating then display the
             vehiclePath.reset();
             // points 2 & 3 are at the rear of vehicle
-            vehiclePath.moveTo(polygon.xPoints[2], polygon.yPoints[2]);
-            vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
+            if (roadMapping.isPeer()) {
+                vehiclePath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
+                vehiclePath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
+            } else {
+                vehiclePath.moveTo(polygon.xPoints[2], polygon.yPoints[2]);
+                vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
+            }
             vehiclePath.closePath();
             g.setPaint(brakeLightColor);
             g.draw(vehiclePath);
