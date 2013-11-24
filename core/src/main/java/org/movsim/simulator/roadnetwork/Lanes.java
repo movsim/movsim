@@ -62,8 +62,8 @@ public final class Lanes {
 
     public static final int MOST_INNER_LANE = LANE1;
 
-    /** laneIndex=0 is the internal overtaking lane (xodr reserves this for middlelane) */
-    public static final int OVERTAKING = -1;
+    /** internal overtaking lane, works with mapping */
+    public static final int OVERTAKING = 0;
 
     /**
      * Lanes type.

@@ -67,21 +67,12 @@ public final class PaintRoadMapping {
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
         if (roadMapping.isPeer()) {
-
             return;
         }
-
-        double lateralOffset = roadMapping.calcOffset(); // 0;// roadMapping.isPeer() ? roadMapping.roadWidth() : 0; //0.5 *
-                                                         // roadMapping.laneCount()
-        // /*.trafficLaneMin()*/ * roadMapping.laneWidth();
-        // if (!roadMapping.isPeer()) {
-        // lateralOffset = 0.5 * roadMapping.roadWidth();
-        // if (roadMapping.isPeer()) {
-        // lateralOffset *= -1;
-        // }
-        LOG.debug("paint roads: roadMapping={}", roadMapping);
-        LOG.debug("paint roads: roadWidth={}, laneCount={}", roadMapping.roadWidth(), roadMapping.laneCount());
-        LOG.debug("paint roads: roadMapping.isPeer={}, lateralOffset={}", roadMapping.isPeer(), lateralOffset);
+        double lateralOffset = roadMapping.calcOffset();
+        // LOG.debug("paint roads: roadMapping={}", roadMapping);
+        // LOG.debug("paint roads: roadWidth={}, laneCount={}", roadMapping.roadWidth(), roadMapping.laneCount());
+        // LOG.debug("paint roads: roadMapping.isPeer={}, lateralOffset={}", roadMapping.isPeer(), lateralOffset);
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 

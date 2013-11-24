@@ -493,15 +493,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected void drawForeground(Graphics2D g) {
         // moveVehicles occurs in the UI thread, so must synchronize with the
         // update of the road network in the calculation thread.
-
         final long timeBeforePaint_ms = System.currentTimeMillis();
-
         synchronized (simulationRunnable.dataLock) {
-
             drawTrafficLights(g);
-
             final double simulationTime = this.simulationTime();
-
             for (final RoadSegment roadSegment : roadNetwork) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 assert roadMapping != null;

@@ -48,17 +48,8 @@ public abstract class RoadMapping {
     public abstract PosTheta map(double roadPos, double lateralOffset);
 
     // Immutable Properties
-    // protected final int laneCount;
-    // protected double laneWidth;
-    // protected double roadWidth;
     protected LaneGeometries laneGeometries;
 
-
-    // trafficLaneMin and trafficLaneMax set the range of lanes for normal traffic in the road
-    // segment lanes less than trafficLaneMin or greater than trafficLaneMax are exit or entrance
-    // ramps.
-    private int trafficLaneMin;
-    private int trafficLaneMax;
     // Road
     protected double roadLength;
     protected int roadColor;
@@ -78,8 +69,6 @@ public abstract class RoadMapping {
 
     protected final PolygonFloat lineFloat = new PolygonFloat(2);
 
-    // protected static final double DEFAULT_LANE_WIDTH = 2;
-
     /**
      * Constructor.
      * 
@@ -91,28 +80,8 @@ public abstract class RoadMapping {
         this.x0 = x0;
         this.y0 = y0;
         this.laneGeometries = laneGeometries;
-        trafficLaneMin = Lanes.LANE1; // most inner lane
-        trafficLaneMax = laneGeometries.getRight().getLaneCount(); // FIXME
-
-        // this.laneWidth = laneGeometries.getLaneWidth();
-        // roadWidth = laneWidth * laneCount;
         roadColor = defaultRoadColor;
     }
-
-    // protected RoadMapping(int laneCount, double laneWidth, double x0, double y0) {
-    // this(laneCount, 1, laneWidth, x0, y0);
-    // }
-
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     * @param x0
-     * @param y0
-     */
-    // protected RoadMapping(int laneCount, double x0, double y0) {
-    // this(laneCount, DEFAULT_LANE_WIDTH, x0, y0);
-    // }
 
     /**
      * Called when the system is running low on memory, and would like actively running process to try to tighten their
@@ -305,17 +274,6 @@ public abstract class RoadMapping {
      * @return the offset of the center of the lane
      */
     protected double laneOffset(double lane) {
-        // FIXME clean code here
-        // if (laneCount == 1) {
-        // // TODO hack here, should be not necessary if relative to centerline
-        // return 0;
-        // }
-        // // TODO correct mapping from laneIndex to real lateral coordinate !!!
-        // double offset = lane == Lanes.NONE ? 0.0 : (Math.abs(lane) - 0.5) * laneWidth;
-        // return lane < 0 ? -offset : offset;
-        // // (0.5 * (1 - laneCount) + (lane - 1)) *
-        // // return (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
-
         return lane == Lanes.NONE ? 0 : (lane - 1) * laneWidth();
     }
 
@@ -494,12 +452,10 @@ public abstract class RoadMapping {
 
     @Override
     public String toString() {
-        return "RoadMapping [LaneGeometries=" + laneGeometries + ", trafficLaneMin=" + trafficLaneMin
-                + ", trafficLaneMax=" + trafficLaneMax + ", roadLength="
+        return "RoadMapping [LaneGeometries=" + laneGeometries + ", roadLength="
                 + roadLength + ", posTheta=" + posTheta + ", x0=" + x0 + ", y0=" + y0 + "]";
     }
 
-    // comment this offset
     public double calcOffset() {
         int laneDiffToRight = laneGeometries.getRight().getLaneCount() - laneGeometries.getLeft().getLaneCount();
         return 0.5*laneDiffToRight*laneGeometries.getLaneWidth();
