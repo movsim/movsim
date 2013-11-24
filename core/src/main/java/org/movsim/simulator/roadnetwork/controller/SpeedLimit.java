@@ -70,6 +70,10 @@ public class SpeedLimit extends RoadObjectController {
         return Math.round(speedLimitValue * Units.MS_TO_KMH);
     }
 
+    public double getSpeedLimit() {
+        return speedLimitValue;
+    }
+
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         for (Vehicle vehicle : signalPoint.passedVehicles()) {
