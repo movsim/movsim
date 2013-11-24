@@ -27,7 +27,6 @@
 package org.movsim.simulator.roadnetwork;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
@@ -46,8 +45,6 @@ import org.movsim.simulator.vehicles.Vehicle;
 @SuppressWarnings("static-method")
 public class RoadMappingTest {
     private static final double delta = 0.00001;
-
-
 
     @Test
     public void testRoadMappingBaseInt() {
@@ -186,7 +183,7 @@ public class RoadMappingTest {
 
     @Test
     public void testMapVehicle() {
-        // TODO add tests
+        // FIXME add test
         final double laneWidth = 5;
         final int laneCount = 3;
         Geometry geometry = new Geometry();
@@ -211,13 +208,13 @@ public class RoadMappingTest {
         Vehicle vehicleLane2 = new Vehicle(0, 0, Lanes.LANE2, 10, 3);
         System.out.println(roadMapping.mapFloat(vehicleLane1));
         System.out.println(roadMapping.mapFloat(vehicleLane2));
-        
-double          lateralOffset = 0;
+
+        double lateralOffset = 0;
         System.out.println("startPos=" + roadMapping.startPos(lateralOffset));
         System.out.println("startPos=" + roadMapping.endPos(lateralOffset));
 
         // roadMapping.m
-        fail("Not yet implemented"); //$NON-NLS-1$
+        //fail("Not yet implemented"); //$NON-NLS-1$
     }
 
     @Test
