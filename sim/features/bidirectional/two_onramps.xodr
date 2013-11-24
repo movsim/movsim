@@ -95,7 +95,7 @@
             <successor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="640.0" y="400.0" hdg="0.168390" length="507.173540">
+            <geometry s="0.0" x="640.0" y="404.5" hdg="0.168390" length="507.173540">
                 <line />
             </geometry>
         </planView>
@@ -116,7 +116,7 @@
         </link>
         <planView>
 			<!-- todo -->
-            <geometry s="0.0" x="1834.3" y="198" hdg="3.31" length="400">
+            <geometry s="0.0" x="1834.3" y="223" hdg="3.31" length="400">
                 <line />
             </geometry>
         </planView>
