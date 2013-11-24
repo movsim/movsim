@@ -956,10 +956,10 @@ public class Vehicle {
      */
     private void updateBrakeLightStatus() {
         if (brakeLightOn) {
-            if (acc > -THRESHOLD_BRAKELIGHT_OFF || speed <= 0.01) {
+            if (acc > -THRESHOLD_BRAKELIGHT_OFF || speed <= 0.001) {
                 brakeLightOn = false;
             }
-        } else if (accOld > -THRESHOLD_BRAKELIGHT_ON && acc < -THRESHOLD_BRAKELIGHT_ON && speed > 0.01) {
+        } else if (accOld > -THRESHOLD_BRAKELIGHT_ON && acc < -THRESHOLD_BRAKELIGHT_ON && speed > 0.001) {
             brakeLightOn = true;
         }
     }

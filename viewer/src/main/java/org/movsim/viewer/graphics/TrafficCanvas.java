@@ -160,9 +160,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected VehicleColorMode vehicleColorMode = VehicleColorMode.VELOCITY_COLOR;
     protected VehicleColorMode vehicleColorModeSave;
 
-    double[] velocities;
+    protected double[] velocities;
 
-    Color[] accelerationColors;
+    protected Color[] accelerationColors;
     protected final Map<String, Color> labelColors = new HashMap<>();
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
@@ -422,7 +422,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 if (a < accelerations[i])
                     return accelerationColors[i];
             }
-            return accelerationColors[accelerationColors.length - 1];
+            color = accelerationColors[accelerationColors.length - 1];
+            break;
         case EXIT_COLOR:
             color = Color.BLACK;
             if (vehicle.exitRoadSegmentId() != Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
@@ -451,9 +452,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             String label = vehicle.getLabel();
             color = labelColors.containsKey(label) ? labelColors.get(label) : Color.WHITE;
             break;
-        default:
-            final double v = vehicle.physicalQuantities().getSpeed() * 3.6;
+        case VELOCITY_COLOR:
+            double v = vehicle.physicalQuantities().getSpeed() * 3.6;
             color = SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum(), v);
+            break;
+        default:
+            throw new IllegalStateException("unknown vehicleColorMode" + vehicleColorMode);
         }
         return color;
     }
