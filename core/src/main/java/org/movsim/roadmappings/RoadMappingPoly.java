@@ -35,7 +35,7 @@ import org.movsim.roadmappings.RoadGeometry.GeometryType;
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappingUtils.
  */
-public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<RoadMapping> {
+public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping> {
 
     protected final ArrayList<RoadMapping> roadMappings = new ArrayList<>();
 
@@ -49,8 +49,8 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
      * 
      * @param laneCount
      */
-    public RoadMappingPoly(int laneCount, double laneWidth) {
-        super(laneCount, laneWidth, 0, 0);
+    public RoadMappingPoly(LaneGeometries laneGeometries) {
+        super(laneGeometries, 0, 0);
     }
 
     /**
@@ -62,9 +62,9 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
      * @param x1
      * @param y1
      */
-    public RoadMappingPoly(int laneCount, double x0, double y0, double x1, double y1) {
-        super(laneCount, x0, y0);
-        final RoadMappingAbstract roadMapping = new RoadMappingLine(laneCount, x0, y0, x1, y1);
+    public RoadMappingPoly(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
+        super(laneGeometries, x0, y0);
+        final RoadMapping roadMapping = new RoadMappingLine(laneGeometries, x0, y0, x1, y1);
         roadLength = roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
@@ -118,7 +118,7 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
 
     public void addLinePoint(double x, double y) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, x, y);
+        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, this.laneGeometries, x, y);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
@@ -126,13 +126,14 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
     public void addLinePointRelative(double dx, double dy) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final PosTheta posTheta = lastRoadMapping.endPos();
-        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
+        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, this.laneGeometries, posTheta.x + dx,
+                posTheta.y + dy);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
 
     public void addLine(double s, double x0, double y0, double theta, double length) {
-        final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, s, x0, y0, theta, length);
+        final RoadMappingLine roadMapping = new RoadMappingLine(this.laneGeometries, s, x0, y0, theta, length);
         roadLength += length;
         roadMappings.add(roadMapping);
     }
@@ -148,7 +149,7 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
         // <arc curvature="-1.2698412698412698e-01"/>
         // </geometry>
         // RoadMappingArc(laneCount, s, x0, y0, theta, length, curvature) {
-        final RoadMappingArc roadMapping = new RoadMappingArc(laneCount, s, x0, y0, theta, length, curvature);
+        final RoadMappingArc roadMapping = new RoadMappingArc(this.laneGeometries, s, x0, y0, theta, length, curvature);
         roadLength += length;
         roadMappings.add(roadMapping);
     }
@@ -160,7 +161,7 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
 
     public void addSpiral(double s, double x0, double y0, double theta, double length, double startCurvature,
             double endCurvature) {
-        final RoadMappingSpiral roadMapping = new RoadMappingSpiral(laneCount, s, x0, y0, theta, length,
+        final RoadMappingSpiral roadMapping = new RoadMappingSpiral(this.laneGeometries, s, x0, y0, theta, length,
                 startCurvature, endCurvature);
         roadLength += length;
         roadMappings.add(roadMapping);
@@ -168,7 +169,8 @@ public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<Roa
 
     public void addPoly3(double s, double x0, double y0, double theta, double length, double a, double b, double c,
             double d) {
-        final RoadMappingBezier roadMapping = new RoadMappingBezier(laneCount, s, x0, y0, theta, length, a, b, c, d);
+        final RoadMappingBezier roadMapping = new RoadMappingBezier(this.laneGeometries, s, x0, y0, theta, length, a,
+                b, c, d);
         roadLength += length;
         roadMappings.add(roadMapping);
     }

@@ -10,11 +10,11 @@
         </planView>
         <lanes>
             <laneSection s="0.0">
-				<left>
+                <left>
                     <lane id="1" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
-                      <lane id="2" type="driving" level="0">
+                    <lane id="2" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                 </left>
@@ -35,7 +35,7 @@
         </planView>
         <lanes>
             <laneSection s="0.0">
-				<left>
+                <left>
                     <lane id="1" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
@@ -54,7 +54,6 @@
             </laneSection>
         </lanes>
     </road>
-    
     <!-- closed arc: ringroad-->
     <road id="3" name="ring" length="1000" junction="-1">
         <link>
@@ -70,7 +69,7 @@
         </planView>
         <lanes>
             <laneSection s="0.0">
-				<left>
+                <left>
                     <lane id="1" type="driving" level="false">
                         <link>
                             <predecessor id="1" />
@@ -91,8 +90,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road id="4" name="line with two geometry elements" length="1000.0" junction="-1">
+    <road id="4" name="line with two geometry elements" length="1000.0" junction="-1">
         <planView>
             <geometry s="0.0" x="0.0" y="100.0" hdg="0.0" length="500.0">
                 <line />
@@ -103,7 +101,7 @@
         </planView>
         <lanes>
             <laneSection s="0.0">
-				<left>
+                <left>
                     <lane id="1" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -35,9 +35,9 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 
+import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMapping.PolygonFloat;
-import org.movsim.roadmappings.RoadMapping.PosTheta;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingBezier;
 import org.movsim.roadmappings.RoadMappingCircle;
@@ -48,21 +48,38 @@ import org.movsim.roadmappings.RoadMappingPolyLine;
 import org.movsim.roadmappings.RoadMappingS;
 import org.movsim.roadmappings.RoadMappingU;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Optimized drawing of RoadSegmentUtils based on the type of their RoadMapping
  */
-public class PaintRoadMapping {
+public final class PaintRoadMapping {
+
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(PaintRoadMapping.class);
+
     private static final boolean drawBezierPoints = false;
 
+    private PaintRoadMapping() {
+        throw new IllegalStateException("do not instanciate");
+    }
+
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
-        double lateralOffset = 0; //roadMapping.isPeer() ? roadMapping.roadWidth() : 0;  //0.5 * roadMapping.laneCount() /*.trafficLaneMin()*/ * roadMapping.laneWidth();
+        if (roadMapping.isPeer()) {
+            return;
+        }
+        double lateralOffset = roadMapping.calcOffset();
+        // LOG.debug("paint roads: roadMapping={}", roadMapping);
+        // LOG.debug("paint roads: roadWidth={}, laneCount={}", roadMapping.roadWidth(), roadMapping.laneCount());
+        // LOG.debug("paint roads: roadMapping.isPeer={}, lateralOffset={}", roadMapping.isPeer(), lateralOffset);
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping, double lateralOffset) {
         assert roadMapping != null;
         if (roadMapping.isPeer()) {
+            LOG.info("skip painting peer element={}", roadMapping);
             return;
         }
 
@@ -73,7 +90,16 @@ public class PaintRoadMapping {
 
         final double roadLength = roadMapping.roadLength();
 
-        if (roadMapping instanceof RoadMappingU) {
+        final Class<? extends RoadMapping> roadMappingClass = roadMapping.getClass();
+        if (roadMappingClass == RoadMappingLine.class) {
+            posTheta = roadMapping.startPos(lateralOffset);
+            from.setLocation(posTheta.x, posTheta.y);
+            posTheta = roadMapping.endPos(lateralOffset);
+            to.setLocation(posTheta.x, posTheta.y);
+            line.setLine(from, to);
+            g.draw(line);
+            return;
+        } else if (roadMappingClass == RoadMappingU.class) {
             final RoadMappingU mappingU = (RoadMappingU) roadMapping;
             final double straightLength = mappingU.straightLength();
 
@@ -101,7 +127,7 @@ public class PaintRoadMapping {
                     Arc2D.OPEN);
             g.draw(arc2D);
             return;
-        } else if (roadMapping instanceof RoadMappingS) {
+        } else if (roadMappingClass == RoadMappingS.class) {
             // } else if (roadMappingClass == RoadMappingArcExtended.class) {
             // final double straightLength =
             // ((RoadMappingArcExtended)roadMapping).straightLength();
@@ -137,7 +163,7 @@ public class PaintRoadMapping {
             // offset, angSt, angExt, Arc2D.OPEN);
             // g.draw(arc2D);
             // return;
-        } else if (roadMapping instanceof RoadMappingArc) {
+        } else if (roadMappingClass == RoadMappingArc.class) {
             final RoadMappingArc arc = (RoadMappingArc) roadMapping;
             posTheta = roadMapping.startPos();
             final double angSt = arc.startAngle() + (arc.clockwise() ? 0.5 * Math.PI : -0.5 * Math.PI);
@@ -149,7 +175,7 @@ public class PaintRoadMapping {
                     Math.toDegrees(arc.arcAngle()), Arc2D.OPEN);
             g.draw(arc2D);
             return;
-        } else if (roadMapping instanceof RoadMappingCircle) {
+        } else if (roadMappingClass == RoadMappingCircle.class) {
             final RoadMappingCircle arc = (RoadMappingCircle) roadMapping;
             posTheta = roadMapping.startPos();
             final double radius = arc.radius();
@@ -157,21 +183,14 @@ public class PaintRoadMapping {
             arc2D.setArcByCenter(posTheta.x - radius, posTheta.y, radius + lateralOffset, 0.0, 360.0, Arc2D.OPEN);
             g.draw(arc2D);
             return;
-        } else if (roadMapping instanceof RoadMappingLine) {
-            posTheta = roadMapping.startPos(lateralOffset);
-            from.setLocation(posTheta.x, posTheta.y);
-            posTheta = roadMapping.endPos(lateralOffset);
-            to.setLocation(posTheta.x, posTheta.y);
-            line.setLine(from, to);
-            g.draw(line);
-            return;
-        } else if (roadMapping instanceof RoadMappingPoly) {
+
+        } else if (roadMappingClass == RoadMappingPoly.class) {
             final RoadMappingPoly poly = (RoadMappingPoly) roadMapping;
             for (final RoadMapping map : poly) {
                 paintRoadMapping(g, map, lateralOffset);
             }
             return;
-        } else if (roadMapping instanceof RoadMappingPolyLine) {
+        } else if (roadMappingClass == RoadMappingPolyLine.class) {
             // TODO need to properly handle joins of the lines in the polyline
             if (lateralOffset == 0.0) {
                 final RoadMappingPolyLine polyLine = (RoadMappingPolyLine) roadMapping;
@@ -192,7 +211,7 @@ public class PaintRoadMapping {
                 g.draw(path);
                 return;
             }
-        } else if (roadMapping instanceof RoadMappingBezier) {
+        } else if (roadMappingClass.equals(RoadMappingBezier.class)) {
             if (lateralOffset == 0.0) {
                 // TODO remove this zero condition when Bezier lateral offset
                 // for control points has been fixed
@@ -211,7 +230,7 @@ public class PaintRoadMapping {
                 g.draw(path);
                 return;
             }
-        } else if (roadMapping instanceof RoadMappingPolyBezier) {
+        } else if (roadMappingClass.equals(RoadMappingPolyBezier.class)) {
             if (lateralOffset == 0.0) {
                 final RoadMappingPolyBezier polyBezier = (RoadMappingPolyBezier) roadMapping;
                 final Iterator<RoadMappingBezier> iterator = polyBezier.iterator();
@@ -247,6 +266,7 @@ public class PaintRoadMapping {
                 return;
             }
         }
+
         // default drawing
         // draw the road in sections 5 meters long
         final double sectionLength = 5.0;

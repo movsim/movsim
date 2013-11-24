@@ -32,7 +32,7 @@ import java.util.Iterator;
 /**
  * RoadMapping consisting of a number of consecutive straight sections of road.
  */
-public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable<RoadMappingLine> {
+public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMappingLine> {
 
     public static final int RELATIVE_POINTS = 0;
     public static final int ABSOLUTE_POINTS = 1;
@@ -53,9 +53,9 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
      * @param x1
      * @param y1
      */
-    RoadMappingPolyLine(int laneCount, double x0, double y0, double x1, double y1) {
-        super(laneCount, x0, y0);
-        final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, x0, y0, x1, y1);
+    RoadMappingPolyLine(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
+        super(laneGeometries, x0, y0);
+        final RoadMappingLine roadMapping = new RoadMappingLine(laneGeometries, x0, y0, x1, y1);
         roadLength = roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
@@ -70,9 +70,9 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
      * @param theta
      * @param length
      */
-    RoadMappingPolyLine(int laneCount, double s, double x0, double y0, double theta, double length) {
-        super(laneCount, x0, y0);
-        final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, s, x0, y0, theta, length);
+    RoadMappingPolyLine(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length) {
+        super(laneGeometries, x0, y0);
+        final RoadMappingLine roadMapping = new RoadMappingLine(laneGeometries, s, x0, y0, theta, length);
         roadLength = length;
         roadMappings.add(roadMapping);
     }
@@ -84,11 +84,12 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
      * @param valuesType
      * @param values
      */
-    RoadMappingPolyLine(int laneCount, int valuesType, double[] values) {
-        super(laneCount, values[0], values[1]);
+    RoadMappingPolyLine(LaneGeometries laneGeometries, int valuesType, double[] values) {
+        super(laneGeometries, values[0], values[1]);
         assert values.length % 2 == 0;
 
-        final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, values[0], values[1], values[2], values[3]);
+        final RoadMappingLine roadMapping = new RoadMappingLine(laneGeometries, values[0], values[1], values[2],
+                values[3]);
         roadLength = roadMapping.roadLength();
         roadMappings.add(roadMapping);
         if (valuesType == RELATIVE_POINTS) {
@@ -151,13 +152,13 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
 
     public void addPoint(double x, double y) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, x, y);
+        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, this.laneGeometries, x, y);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
 
     public void addPoint(double s, double x0, double y0, double theta, double length) {
-        final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, s, x0, y0, theta, length);
+        final RoadMappingLine roadMapping = new RoadMappingLine(this.laneGeometries, s, x0, y0, theta, length);
         roadLength += length;
         roadMappings.add(roadMapping);
     }
@@ -165,7 +166,8 @@ public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable
     public void addPointRelative(double dx, double dy) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final PosTheta posTheta = lastRoadMapping.endPos();
-        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
+        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, this.laneGeometries, posTheta.x + dx,
+                posTheta.y + dy);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }

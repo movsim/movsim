@@ -138,7 +138,7 @@
     <controller id="single">
         <control signalId="r4_1-" type="first" />
     </controller>
-    <controller id="road4+">
+    <controller id="road4">
         <control signalId="r4_1+" type="first" />
         <control signalId="r4_2+" type="second" />
     </controller>

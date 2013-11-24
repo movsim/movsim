@@ -51,7 +51,7 @@ public final class RoadMappingUtils {
 
         LOG.warn("creating of RoadMappingPoly not well tested..."); // TODO
         RoadGeometry first = Iterables.get(roadGeometries, 0);
-        RoadMappingPoly roadMapping = new RoadMappingPoly(first.laneCount(), first.laneWidth());
+        RoadMappingPoly roadMapping = new RoadMappingPoly(first.getLaneGeometries());
         for (RoadGeometry roadGeometry : roadGeometries) {
             roadMapping.add(roadGeometry);
         }

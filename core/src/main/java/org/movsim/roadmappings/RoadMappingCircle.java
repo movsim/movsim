@@ -29,7 +29,7 @@ package org.movsim.roadmappings;
 /**
  * Maps a road segment onto a circle.
  */
-public class RoadMappingCircle extends RoadMappingAbstract {
+public class RoadMappingCircle extends RoadMapping {
 
     protected double centerX;
     protected double centerY;
@@ -47,12 +47,12 @@ public class RoadMappingCircle extends RoadMappingAbstract {
      * @param radius
      *            radius of circle
      */
-    RoadMappingCircle(int laneCount, double x0, double y0, double radius) {
-        this(laneCount, x0, y0, radius, false);
+    RoadMappingCircle(LaneGeometries laneGeometries, double x0, double y0, double radius) {
+        this(laneGeometries, x0, y0, radius, false);
     }
 
-    protected RoadMappingCircle(int laneCount, double x0, double y0, double radius, boolean clockwise) {
-        super(laneCount, x0, y0);
+    protected RoadMappingCircle(LaneGeometries laneGeometries, double x0, double y0, double radius, boolean clockwise) {
+        super(laneGeometries, x0, y0);
         this.radius = radius;
         this.clockwise = clockwise;
         roadLength = 2 * Math.PI * radius;

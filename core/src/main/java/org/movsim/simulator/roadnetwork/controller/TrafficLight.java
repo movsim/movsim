@@ -72,7 +72,9 @@ public class TrafficLight extends RoadObjectController {
     public TrafficLight(Signal signal, Controller controller, RoadSegment roadSegment) {
         super(RoadObjectType.TRAFFICLIGHT, signal.getS(), roadSegment);
         if (signal.isSetValidity()) {
-            throw new IllegalArgumentException("cannot use xodr validity information from signal-id=" + signal.getId());
+            throw new IllegalArgumentException(
+                    "trafficlights always apply to all lanes, cannot use xodr validity information from signal-id="
+                            + signal.getId());
         }
         this.controller = Preconditions.checkNotNull(controller);
         this.signal = Preconditions.checkNotNull(signal);

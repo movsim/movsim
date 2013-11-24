@@ -29,8 +29,14 @@ package org.movsim.simulator.roadnetwork;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry.Line;
+import org.movsim.roadmappings.LaneGeometries;
+import org.movsim.roadmappings.LaneGeometries.LaneGeometry;
+import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
-import org.movsim.roadmappings.RoadMappingAbstract;
+import org.movsim.roadmappings.RoadMappingLine;
+import org.movsim.simulator.vehicles.Vehicle;
 
 /**
  * Test module for the RoadMapping class.
@@ -40,26 +46,10 @@ import org.movsim.roadmappings.RoadMappingAbstract;
 public class RoadMappingTest {
     private static final double delta = 0.00001;
 
-    protected static class RoadMappingConcrete extends RoadMappingAbstract {
-        public RoadMappingConcrete(int laneCount) {
-            super(laneCount, 0, 0);
-        }
-
-        public RoadMappingConcrete(int laneCount, double roadLength) {
-            this(laneCount);
-            this.roadLength = roadLength;
-        }
-
-        @Override
-        public PosTheta map(double roadPos, double delta) {
-            return posTheta;
-        }
-    }
-
     @Test
     public void testRoadMappingBaseInt() {
         final int LANE_COUNT = 3;
-        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+        final RoadMapping roadMapping = RoadMappingConcrete.create(LANE_COUNT);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
     }
 
@@ -67,7 +57,7 @@ public class RoadMappingTest {
     public void testRoadMappingBaseIntDouble() {
         final int LANE_COUNT = 3;
         final double roadLength = 56.4;
-        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
+        final RoadMapping roadMapping = RoadMappingConcrete.create(LANE_COUNT, roadLength);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
         assertEquals(roadLength, roadMapping.roadLength(), delta);
     }
@@ -89,16 +79,16 @@ public class RoadMappingTest {
     public void testRoadLength() {
         final int LANE_COUNT = 3;
         final double roadLength = 56.4;
-        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
+        final RoadMapping roadMapping = RoadMappingConcrete.create(LANE_COUNT, roadLength);
         assertEquals(roadLength, roadMapping.roadLength(), delta);
     }
 
     @Test
     public void testRoadWidth() {
         final int LANE_COUNT = 3;
-        RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+        RoadMapping roadMapping = RoadMappingConcrete.create(LANE_COUNT);
         assertEquals(roadMapping.laneWidth() * LANE_COUNT, roadMapping.roadWidth(), delta);
-        roadMapping = new RoadMappingConcrete(LANE_COUNT + 1);
+        roadMapping = RoadMappingConcrete.create(LANE_COUNT + 1);
         assertEquals(roadMapping.laneWidth() * roadMapping.laneCount(), roadMapping.roadWidth(), delta);
     }
 
@@ -108,7 +98,7 @@ public class RoadMappingTest {
     // @Test
     // public void testLaneWidth() {
     // final int LANE_COUNT = 3;
-    // final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+    // final RoadMapping roadMapping = RoadMappingConcrete.create(LANE_COUNT);
     // assertEquals(RoadMapping.DEFAULT_LANE_WIDTH, roadMapping.laneWidth(), delta);
     // }
 
@@ -118,10 +108,10 @@ public class RoadMappingTest {
     @Test
     public void testLaneCount() {
         final int LANE_COUNT = 3;
-        RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+        RoadMapping roadMapping = RoadMappingConcrete.create(LANE_COUNT);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
         final double roadLength = 56.4;
-        roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
+        roadMapping = RoadMappingConcrete.create(LANE_COUNT, roadLength);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
     }
 
@@ -131,20 +121,20 @@ public class RoadMappingTest {
      */
     // @Test
     // public void testLaneOffset() {
-    // RoadMapping roadMapping = new RoadMappingConcrete(0);
+    // RoadMapping roadMapping = RoadMappingConcrete.create(0);
     // final double laneWidth = roadMapping.laneWidth();
     //
-    // roadMapping = new RoadMappingConcrete(1);
+    // roadMapping = RoadMappingConcrete.create(1);
     // assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
     // assertEquals(0.0, roadMapping.laneOffset(Lanes.LANE1), delta);
     //
-    // roadMapping = new RoadMappingConcrete(3);
+    // roadMapping = RoadMappingConcrete.create(3);
     // assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
     // assertEquals(-laneWidth, roadMapping.laneOffset(Lanes.LANE1), delta);
     // assertEquals(0.0, roadMapping.laneOffset(Lanes.LANE2), delta);
     // assertEquals(+laneWidth, roadMapping.laneOffset(Lanes.LANE3), delta);
     //
-    // roadMapping = new RoadMappingConcrete(5);
+    // roadMapping = RoadMappingConcrete.create(5);
     // assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
     // assertEquals(-2 * laneWidth, roadMapping.laneOffset(Lanes.LANE1), delta);
     // assertEquals(-laneWidth, roadMapping.laneOffset(Lanes.LANE2), delta);
@@ -152,12 +142,12 @@ public class RoadMappingTest {
     // assertEquals(laneWidth, roadMapping.laneOffset(Lanes.LANE4), delta);
     // assertEquals(2 * laneWidth, roadMapping.laneOffset(Lanes.LANE5), delta);
     //
-    // roadMapping = new RoadMappingConcrete(2);
+    // roadMapping = RoadMappingConcrete.create(2);
     // assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
     // assertEquals(-0.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE1), delta);
     // assertEquals(0.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE2), delta);
     //
-    // roadMapping = new RoadMappingConcrete(4);
+    // roadMapping = RoadMappingConcrete.create(4);
     // assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
     // assertEquals(-1.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE1), delta);
     // assertEquals(-0.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE2), delta);
@@ -166,12 +156,64 @@ public class RoadMappingTest {
     // }
 
     @Test
+    public void testLaneOffset() {
+        RoadMapping roadMapping = RoadMappingConcrete.create(1);
+        final double laneWidth = roadMapping.getLaneGeometries().getLaneWidth();
+
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.LANE1), delta);
+
+        roadMapping = RoadMappingConcrete.create(2);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.LANE1), delta);
+        assertEquals(laneWidth, roadMapping.laneOffset(Lanes.LANE2), delta);
+
+        roadMapping = RoadMappingConcrete.create(3);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.LANE1), delta);
+        assertEquals(laneWidth, roadMapping.laneOffset(Lanes.LANE2), delta);
+        assertEquals(2 * laneWidth, roadMapping.laneOffset(Lanes.LANE3), delta);
+
+    }
+
+    @Test
     public void testMapPosThetaDoubleDouble() {
         // fail("Not yet implemented");
     }
 
     @Test
     public void testMapVehicle() {
+        // FIXME add test
+        final double laneWidth = 5;
+        final int laneCount = 3;
+        Geometry geometry = new Geometry();
+        geometry.setS(0);
+        geometry.setX(0);
+        geometry.setY(0);
+        geometry.setHdg(0);
+        geometry.setLength(1000);
+        geometry.setLine(new Line());
+        LaneGeometries laneGeometries = new LaneGeometries();
+        laneGeometries.setRight(new LaneGeometry(laneCount, laneWidth));
+        RoadGeometry roadGeometry = new RoadGeometry(geometry, laneGeometries);
+        RoadMapping roadMapping = RoadMappingLine.create(roadGeometry);
+        System.out.println(roadMapping.map(0));
+        System.out.println(roadMapping.map(0, laneWidth));
+        System.out.println(roadMapping.map(0, 2 * laneWidth));
+        for (int lane = Lanes.LANE1; lane <= laneCount; lane++) {
+            System.out.println("lane=" + lane + " --> laneOffset=" + roadMapping.laneOffset(lane));
+            // System.out.println("lane=" + lane + " --> laneInsideEdgeOffset=" + roadMapping.laneInsideEdgeOffset(lane));
+        }
+        Vehicle vehicleLane1 = new Vehicle(0, 0, Lanes.LANE1, 10, 3);
+        Vehicle vehicleLane2 = new Vehicle(0, 0, Lanes.LANE2, 10, 3);
+        System.out.println(roadMapping.mapFloat(vehicleLane1));
+        System.out.println(roadMapping.mapFloat(vehicleLane2));
+
+        double lateralOffset = 0;
+        System.out.println("startPos=" + roadMapping.startPos(lateralOffset));
+        System.out.println("startPos=" + roadMapping.endPos(lateralOffset));
+
+        // roadMapping.m
         //fail("Not yet implemented"); //$NON-NLS-1$
     }
 

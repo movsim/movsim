@@ -6,14 +6,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-public class RoadMappingPeer extends RoadMappingAbstract {
+public class RoadMappingPeer extends RoadMapping {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadMappingPeer.class);
 
     private final RoadMapping roadMapping;
 
     public RoadMappingPeer(RoadMapping roadMapping) {
-        super(roadMapping.laneCount(), roadMapping.laneWidth(), roadMapping.startPos().x, roadMapping.startPos().y);
+        super(roadMapping.laneGeometries, roadMapping.startPos().x, roadMapping.startPos().y);
         this.roadMapping = Preconditions.checkNotNull(roadMapping);
         this.roadLength = roadMapping.roadLength();
     }
@@ -25,9 +25,9 @@ public class RoadMappingPeer extends RoadMappingAbstract {
     }
 
     @Override
-    public PolygonFloat mapFloat(Vehicle vehicle, double time) {
+    public PolygonFloat mapFloat(Vehicle vehicle) {
         final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(),
-                -laneOffset(vehicle.getContinousLane()));
+                -laneCenterOffset(vehicle.getContinousLane()));
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 

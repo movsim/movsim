@@ -48,8 +48,9 @@ public class RoadMappingCompressedStraight extends RoadMappingLine {
      *            y-position of end of line
      * @param compressionFactor
      */
-    RoadMappingCompressedStraight(int laneCount, double x0, double y0, double x1, double y1, double compressionFactor) {
-        super(laneCount, x0, y0, x1, y1);
+    RoadMappingCompressedStraight(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1,
+            double compressionFactor) {
+        super(laneGeometries, x0, y0, x1, y1);
         this.compressionFactor = compressionFactor;
     }
 

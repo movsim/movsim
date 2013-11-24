@@ -31,7 +31,7 @@ import java.util.Arrays;
 /**
  * Road mapping defined by a quadratic Bezier curve.
  */
-public class RoadMappingBezier extends RoadMappingAbstract {
+public class RoadMappingBezier extends RoadMapping {
 
     // Bezier curve endpoints and control point
     protected double p0x;
@@ -61,8 +61,8 @@ public class RoadMappingBezier extends RoadMappingAbstract {
      * @param cY
      *            y-position of control point
      */
-    RoadMappingBezier(int laneCount, double x0, double y0, double x1, double y1, double cX, double cY) {
-        super(laneCount, x0, y0);
+    RoadMappingBezier(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1, double cX, double cY) {
+        super(laneGeometries, x0, y0);
         p0x = x0;
         p0y = y0;
         p1x = cX;
@@ -96,9 +96,10 @@ public class RoadMappingBezier extends RoadMappingAbstract {
      * @param c
      * @param d
      */
-    RoadMappingBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a, double b,
+    RoadMappingBezier(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length,
+            double a, double b,
             double c, double d) {
-        super(laneCount, x0, y0);
+        super(laneGeometries, x0, y0);
         p0x = x0;
         p0y = y0;
         p2x = a;
@@ -124,8 +125,8 @@ public class RoadMappingBezier extends RoadMappingAbstract {
      * @param t
      *            single degree of freedom in setting the control point
      */
-    RoadMappingBezier(RoadMapping roadMapping, double x1, double y1, double t) {
-        super(roadMapping.laneCount(), 0, 0);
+    RoadMappingBezier(RoadMapping roadMapping, LaneGeometries laneGeometries, double x1, double y1, double t) {
+        super(laneGeometries, 0, 0);
         final PosTheta posTheta = roadMapping.endPos();
         p0x = posTheta.x;
         p0y = posTheta.y;
@@ -174,8 +175,8 @@ public class RoadMappingBezier extends RoadMappingAbstract {
         return p1y + lateralOffset * adj / h;
     }
 
-    protected RoadMappingBezier(int laneCount, double x0, double y0) {
-        super(laneCount, x0, y0);
+    protected RoadMappingBezier(LaneGeometries laneGeometries, double x0, double y0) {
+        super(laneGeometries, x0, y0);
         p0x = x0;
         p0y = y0;
     }

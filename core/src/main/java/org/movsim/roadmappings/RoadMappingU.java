@@ -34,7 +34,7 @@ package org.movsim.roadmappings;
  * NOT PART OF ROADXML SPECIFICATION, so do not use if you wish your simulation to be saved as a ROADXML file.
  * </p>
  */
-public class RoadMappingU extends RoadMappingAbstract {
+public class RoadMappingU extends RoadMapping {
 
     protected double radius;
     protected double straightLength; // length(m) of straight sections of U-shape
@@ -52,8 +52,8 @@ public class RoadMappingU extends RoadMappingAbstract {
      * @param straightLength
      *            length of straight part of U
      */
-    RoadMappingU(int laneCount, double x0, double y0, double radius, double straightLength) {
-        super(laneCount, x0, y0);
+    RoadMappingU(LaneGeometries laneGeometries, double x0, double y0, double radius, double straightLength) {
+        super(laneGeometries, x0, y0);
         this.radius = radius;
         this.straightLength = straightLength;
         roadLength = Math.PI * radius + 2 * straightLength;
@@ -66,8 +66,8 @@ public class RoadMappingU extends RoadMappingAbstract {
      * @param x0
      * @param y0
      */
-    RoadMappingU(int laneCount, double x0, double y0) {
-        super(laneCount, x0, y0);
+    RoadMappingU(LaneGeometries laneGeometries, double x0, double y0) {
+        super(laneGeometries, x0, y0);
     }
 
     /**
