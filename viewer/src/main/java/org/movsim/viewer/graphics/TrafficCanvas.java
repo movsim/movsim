@@ -29,7 +29,6 @@ package org.movsim.viewer.graphics;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
@@ -744,79 +743,25 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    // private void drawSpeedLimitsOnRoad(Graphics2D g, RoadSegment roadSegment) {
-    // assert roadSegment.speedLimits() != null;
-    // final RoadMapping roadMapping = roadSegment.roadMapping();
-    // assert roadMapping != null;
-    // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
-    // final int redRadius2 = (int) (2.5 * roadMapping.laneWidth()) / 2;
-    // final int whiteRadius2 = (int) (2.0 * roadMapping.laneWidth()) / 2;
-    // final int fontHeight = whiteRadius2;
-    // final int offsetY = (int) (0.4 * fontHeight);
-    //        final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
-    // final FontMetrics fontMetrics = getFontMetrics(font);
-    //
-    // for (SpeedLimit speedLimit : roadSegment.speedLimits()) {
-    // g.setFont(font);
-    // final PosTheta posTheta = roadMapping.map(speedLimit.position(), offset);
-    //
-    // final long speedLimitValueKmh = speedLimit.getSpeedLimitKmh();
-    // if (speedLimitValueKmh < 150) {
-    // g.setColor(Color.RED);
-    // g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
-    // g.setColor(Color.WHITE);
-    // g.fillOval((int) posTheta.x - whiteRadius2, (int) posTheta.y - whiteRadius2, 2 * whiteRadius2,
-    // 2 * whiteRadius2);
-    // g.setColor(Color.BLACK);
-    // final String text = String.valueOf((int) (speedLimit.getSpeedLimitKmh()));
-    // final int textWidth = fontMetrics.stringWidth(text);
-    // g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
-    // } else {
-    // // Draw a line between points (x1,y1) and (x2,y2)
-    // // draw speed limit clearing
-    // g.setColor(Color.BLACK);
-    // g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
-    // g.setColor(Color.WHITE);
-    // g.fillOval((int) posTheta.x - whiteRadius2, (int) posTheta.y - whiteRadius2, 2 * whiteRadius2,
-    // 2 * whiteRadius2);
-    // g.setColor(Color.BLACK);
-    // final int xOnCircle = (int) (whiteRadius2 * Math.cos(Math.toRadians(45.)));
-    // final int yOnCircle = (int) (whiteRadius2 * Math.sin(Math.toRadians(45.)));
-    // final Graphics2D g2 = g;
-    // final Line2D line = new Line2D.Double((int) posTheta.x - xOnCircle, (int) posTheta.y + yOnCircle,
-    // (int) posTheta.x + xOnCircle, (int) posTheta.y - yOnCircle);
-    // g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
-    // g2.draw(line);
-    // }
-    // }
-    // }
-
     private void drawSlopes(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             drawSlopesOnRoad(g, roadSegment);
         }
     }
 
-    private void drawSlopesOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        final RoadMapping roadMapping = roadSegment.roadMapping();
-        assert roadMapping != null;
-        final double laneWidth = 10; // ;
-        final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * (roadMapping.laneWidth() + 1);
-        final int redRadius2 = (int) (2.5 * laneWidth) / 2;
-        final int whiteRadius2 = (int) (2.0 * laneWidth) / 2;
-        final int fontHeight = whiteRadius2;
-        final int offsetY = (int) (0.4 * fontHeight);
+    // FIXME draw text for general positioning/geometries
+    private static void drawSlopesOnRoad(Graphics2D g, RoadSegment roadSegment) {
+        final int fontHeight = 12;
         final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
-        final FontMetrics fontMetrics = getFontMetrics(font);
-        g.setFont(font);
-        g.setColor(Color.BLACK);
+        final RoadMapping roadMapping = roadSegment.roadMapping();
+        final double offset = roadMapping.isPeer() ? roadMapping.getOffsetLeft(roadMapping.getLaneGeometries()
+                .getLeft().getLaneCount() - 1) : roadMapping.getMaxOffsetRight();
         for (GradientProfile gradientProfile : roadSegment.gradientProfiles()) {
             for (Entry<Double, Double> gradientEntry : gradientProfile.gradientEntries()) {
                 final PosTheta posTheta = roadMapping.map(gradientEntry.getKey(), offset);
                 final double gradient = gradientEntry.getValue() * 100;
                 final String text = String.valueOf((int) (gradient)) + "%";
-                final int textWidth = fontMetrics.stringWidth(text);
-                g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
+                g.drawString(text, (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
             }
         }
     }
