@@ -4,7 +4,7 @@
     <!-- straight line road -->
     <road id="1" name="line" length="500.0" junction="-1">
         <planView>
-            <geometry s="0.0" x="0.0" y="500.0" hdg="0.1" length="500.0">
+            <geometry s="0.0" x="0.0" y="500.0" hdg="0.3" length="500.0">
                 <line />
             </geometry>
         </planView>
