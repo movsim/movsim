@@ -654,7 +654,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLight trafficLight) {
-        final double offset = (roadMapping.laneCount() / 2.0 /* + 1.5 */) * roadMapping.laneWidth();
+        final double offset = (roadMapping.laneCount() / 2.0) * roadMapping.laneWidth();
         final double size = 2 * roadMapping.laneWidth();
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.x - size / 2, posTheta.y - size / 2, size, size
@@ -732,6 +732,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(color);
                 //g.drawString(text, (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
                 drawTextRotated(text, posTheta, font, g);
+                drawLine(g, roadMapping, position, 1, color);
             }
         }
     }
