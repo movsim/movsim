@@ -222,10 +222,10 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                     // TODO quick hack here,no correction for offsets
                     final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle);
                     path.reset();
-                    path.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
-                    path.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
-                    path.lineTo(polygon.xPoints[2], polygon.yPoints[2]);
-                    path.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
+                    path.moveTo(polygon.getXPoint(0), polygon.getYPoint(0));
+                    path.lineTo(polygon.getXPoint(1), polygon.getYPoint(1));
+                    path.lineTo(polygon.getXPoint(2), polygon.getYPoint(2));
+                    path.lineTo(polygon.getXPoint(3), polygon.getYPoint(3));
                     path.closePath();
                     if (path.contains(transformedPoint)) {
                         // the mouse is over a vehicle

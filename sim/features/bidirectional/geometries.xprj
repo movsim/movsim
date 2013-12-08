@@ -28,23 +28,23 @@
             <!-- straight line -->
             <Road id="1-">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
             <Road id="1+">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="200" v="15" />
+                    <Inflow t="0" q_per_hour="200" v="0" />
                 </TrafficSource>
             </Road>
             <!-- arc -->
             <Road id="2-">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
             <Road id="2+">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
             <!-- ringroad: special case of arc -->
@@ -60,12 +60,12 @@
             </Road>
             <Road id="4-">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
             <Road id="4+">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
         </Simulation>

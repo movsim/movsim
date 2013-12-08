@@ -364,30 +364,35 @@ public abstract class RoadMapping {
         return outsideClippingPolygon;
     }
 
+    // FIXME number of operations can be reduced for optimization
     public PolygonFloat mapFloat(PosTheta posTheta, double length, double width) {
+        final double lca = 0.5 * length * posTheta.cosTheta;
+        final double wsa = 0.5 * width * posTheta.sinTheta;
+        // final double xbr = posTheta.x - 0.5 * (lca - wsa); // back right position
+        // polygonFloat.xPoints[0] = (float) (xbr + lca); // front right
+        // polygonFloat.xPoints[1] = (float) (xbr + lca + wsa); // front left
+        // polygonFloat.xPoints[2] = (float) (xbr + wsa); // back left
+        // polygonFloat.xPoints[3] = (float) xbr; // back right
+        polygonFloat.xPoints[0] = (float) (posTheta.x + lca + wsa); // front right
+        polygonFloat.xPoints[1] = (float) (posTheta.x + lca - wsa); // front left
+        polygonFloat.xPoints[2] = (float) (posTheta.x - lca - wsa); // back left
+        polygonFloat.xPoints[3] = (float) (posTheta.x - lca + wsa); // back right
 
-        final double lca = length * posTheta.cosTheta;
-        final double wsa = width * posTheta.sinTheta;
-        final double xbr = posTheta.x - 0.5 * (lca - wsa);
-        polygonFloat.xPoints[0] = (float) (xbr + lca); // front right
-        polygonFloat.xPoints[1] = (float) (xbr + lca - wsa); // front left
-        polygonFloat.xPoints[2] = (float) (xbr - wsa); // back left
-        polygonFloat.xPoints[3] = (float) xbr; // back right
+        final double lsa = 0.5 * length * posTheta.sinTheta;
+        final double wca = 0.5 * width * posTheta.cosTheta;
+        // final double ybr = posTheta.y - 0.5 * (lsa + wca); // back right position
+        polygonFloat.yPoints[0] = (float) (posTheta.y + lsa - wca); // front right
+        polygonFloat.yPoints[1] = (float) (posTheta.y + lsa + wca); // front left
+        polygonFloat.yPoints[2] = (float) (posTheta.y - lsa + wca); // back left
+        polygonFloat.yPoints[3] = (float) (posTheta.y - lsa - wca); // back right
 
-        final double lsa = length * posTheta.sinTheta;
-        final double wca = width * posTheta.cosTheta;
-        final double ybr = posTheta.y + 0.5 * (lsa + wca);
-        polygonFloat.yPoints[0] = (float) (ybr - lsa); // front right
-        polygonFloat.yPoints[1] = (float) (ybr - wca - lsa); // front left
-        polygonFloat.yPoints[2] = (float) (ybr - wca); // back left
-        polygonFloat.yPoints[3] = (float) ybr; // back right
         return polygonFloat;
     }
 
     public PolygonFloat mapLine(PosTheta posTheta, double length) {
         final double wsa = length * posTheta.sinTheta;
         lineFloat.xPoints[0] = (float) (posTheta.x);
-        lineFloat.xPoints[1] = (float) (posTheta.x + wsa);
+        lineFloat.xPoints[1] = (float) (posTheta.x - wsa);
 
         final double wca = length * posTheta.cosTheta;
         lineFloat.yPoints[0] = (float) (posTheta.y);
@@ -403,7 +408,7 @@ public abstract class RoadMapping {
      */
     public PolygonFloat mapFloat(Vehicle vehicle) {
         final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(),
-                laneCenterOffset(vehicle.getContinousLane()));
+                -laneCenterOffset(vehicle.getContinousLane()));
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 
@@ -424,11 +429,11 @@ public abstract class RoadMapping {
         /**
          * Array of x-coordinates of the polygon.
          */
-        public float xPoints[];
+        float xPoints[];
         /**
          * Array of y-coordinates of the polygon.
          */
-        public float yPoints[];
+        float yPoints[];
 
         /**
          * Constructor, allocate arrays for polygon points.
@@ -448,6 +453,14 @@ public abstract class RoadMapping {
                     + Arrays.toString(yPoints) + "]";
         }
 
+        public float getXPoint(int i) {
+            return xPoints[i];
+        }
+
+        public float getYPoint(int i) {
+            return -yPoints[i]; // TRANSFORMED!!!
+        }
+
     }
 
     @Override
@@ -456,25 +469,27 @@ public abstract class RoadMapping {
                 + roadLength + ", posTheta=" + posTheta + ", x0=" + x0 + ", y0=" + y0 + "]";
     }
 
-    public double calcOffset() {
-        int laneDiffToRight = laneGeometries.getRight().getLaneCount() - laneGeometries.getLeft().getLaneCount();
-        return 0.5*laneDiffToRight*laneGeometries.getLaneWidth();
+    /**
+     * Returns the offset to the centerline of the road with different number of lanes in the two driving directions (RoadSegments). The
+     * centerline of a road is defined by the reference line given in the xodr network specification.
+     * 
+     * @return the offset to the centerline in case of different lane counts
+     */
+    public double calcOffsetToCenterline() {
+        int laneDiff = laneGeometries.getLeft().getLaneCount() - laneGeometries.getRight().getLaneCount();
+        return 0.5 * laneDiff * laneGeometries.getLaneWidth();
     }
 
     public LaneGeometries getLaneGeometries() {
         return laneGeometries;
     }
 
-    public double getMaxOffsetLeft() {
-        return -laneGeometries.getLeft().getLaneCount() * laneGeometries.getLaneWidth();
-    }
-
     public double getMaxOffsetRight() {
-        return laneGeometries.getRight().getLaneCount() * laneGeometries.getLaneWidth();
+        return -laneGeometries.getRight().getLaneCount() * laneGeometries.getLaneWidth();
     }
 
     public double getOffsetLeft(int lane) {
-        return -Math.min(lane, laneGeometries.getLeft().getLaneCount()) * laneGeometries.getLaneWidth();
+        return Math.min(lane, laneGeometries.getLeft().getLaneCount()) * laneGeometries.getLaneWidth();
     }
 
     public int getLaneCountInDirection() {

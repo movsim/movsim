@@ -66,22 +66,16 @@ public final class PaintRoadMapping {
     }
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
-        if (roadMapping.isPeer()) {
-            return;
-        }
-        double lateralOffset = roadMapping.calcOffset();
-        // LOG.debug("paint roads: roadMapping={}", roadMapping);
-        // LOG.debug("paint roads: roadWidth={}, laneCount={}", roadMapping.roadWidth(), roadMapping.laneCount());
-        // LOG.debug("paint roads: roadMapping.isPeer={}, lateralOffset={}", roadMapping.isPeer(), lateralOffset);
+        assert !roadMapping.isPeer() : "should not be painted twice";
+        double lateralOffset = roadMapping.calcOffsetToCenterline();
+        LOG.debug("paint roads: roadMapping={}", roadMapping);
+        LOG.debug("paint roads: roadWidth={}, laneCount={}", roadMapping.roadWidth(), roadMapping.laneCount());
+        LOG.debug("paint roads: roadMapping.isPeer={}, lateralOffset={}", roadMapping.isPeer(), lateralOffset);
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping, double lateralOffset) {
-        assert roadMapping != null;
-        if (roadMapping.isPeer()) {
-            LOG.info("skip painting peer element={}", roadMapping);
-            return;
-        }
+        assert !roadMapping.isPeer() : "should not be painted twice";
 
         final Line2D.Double line = new Line2D.Double();
         final Point2D from = new Point2D.Double();
@@ -93,9 +87,9 @@ public final class PaintRoadMapping {
         final Class<? extends RoadMapping> roadMappingClass = roadMapping.getClass();
         if (roadMappingClass == RoadMappingLine.class) {
             posTheta = roadMapping.startPos(lateralOffset);
-            from.setLocation(posTheta.x, posTheta.y);
+            from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             posTheta = roadMapping.endPos(lateralOffset);
-            to.setLocation(posTheta.x, posTheta.y);
+            to.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             line.setLine(from, to);
             g.draw(line);
             return;
@@ -105,17 +99,17 @@ public final class PaintRoadMapping {
 
             // draw the first straight
             posTheta = roadMapping.startPos(lateralOffset);
-            from.setLocation(posTheta.x, posTheta.y);
+            from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             posTheta = roadMapping.map(straightLength, lateralOffset);
-            to.setLocation(posTheta.x, posTheta.y);
+            to.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             line.setLine(from, to);
             g.draw(line);
 
             // draw the second straight
             posTheta = roadMapping.map(roadLength - straightLength, lateralOffset);
-            from.setLocation(posTheta.x, posTheta.y);
+            from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             posTheta = roadMapping.map(roadLength, lateralOffset);
-            to.setLocation(posTheta.x, posTheta.y);
+            to.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             line.setLine(from, to);
             g.draw(line);
 
@@ -123,8 +117,8 @@ public final class PaintRoadMapping {
             posTheta = mappingU.startPos();
             final double radius = mappingU.radius();
             final Arc2D.Double arc2D = new Arc2D.Double();
-            arc2D.setArcByCenter(posTheta.x - straightLength, posTheta.y + radius, radius + lateralOffset, 90.0, 180.0,
-                    Arc2D.OPEN);
+            arc2D.setArcByCenter(posTheta.getScreenX() - straightLength, posTheta.getScreenY() + radius, radius
+                    + lateralOffset, 90.0, 180.0, Arc2D.OPEN);
             g.draw(arc2D);
             return;
         } else if (roadMappingClass == RoadMappingS.class) {
@@ -134,18 +128,18 @@ public final class PaintRoadMapping {
             //
             // // draw the first straight
             // posTheta = roadMapping.map(0.0, lateralOffset);
-            // from.setLocation(posTheta.x, posTheta.y);
+            // from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             // posTheta = roadMapping.map(straightLength, lateralOffset);
-            // to.setLocation(posTheta.x, posTheta.y);
+            // to.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             // line.setLine(from, to);
             // g.draw(line);
             //
             // // draw the second straight
             // posTheta = roadMapping.map(roadLength - straightLength,
             // lateralOffset);
-            // from.setLocation(posTheta.x, posTheta.y);
+            // from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             // posTheta = roadMapping.map(roadLength, lateralOffset);
-            // to.setLocation(posTheta.x, posTheta.y);
+            // to.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             // line.setLine(from, to);
             // g.draw(line);
 
@@ -159,7 +153,7 @@ public final class PaintRoadMapping {
             // final double dx = radius * Math.cos(arc.startAngle());
             // final double dy = radius * Math.sin(arc.startAngle());
             // Arc2D.Double arc2D = new Arc2D.Double();
-            // arc2D.setArcByCenter(posTheta.x - dx, posTheta.y + dy, radius +
+            // arc2D.setArcByCenter(posTheta.getScreenX() - dx, posTheta.getScreenY() + dy, radius +
             // offset, angSt, angExt, Arc2D.OPEN);
             // g.draw(arc2D);
             // return;
@@ -171,8 +165,8 @@ public final class PaintRoadMapping {
             final double dx = radius * Math.cos(angSt);
             final double dy = radius * Math.sin(angSt);
             final Arc2D.Double arc2D = new Arc2D.Double();
-            arc2D.setArcByCenter(posTheta.x - dx, posTheta.y + dy, radius + lateralOffset, Math.toDegrees(angSt),
-                    Math.toDegrees(arc.arcAngle()), Arc2D.OPEN);
+            arc2D.setArcByCenter(posTheta.getScreenX() - dx, posTheta.getScreenY() + dy, radius + lateralOffset,
+                    Math.toDegrees(angSt), Math.toDegrees(arc.arcAngle()), Arc2D.OPEN);
             g.draw(arc2D);
             return;
         } else if (roadMappingClass == RoadMappingCircle.class) {
@@ -180,7 +174,8 @@ public final class PaintRoadMapping {
             posTheta = roadMapping.startPos();
             final double radius = arc.radius();
             final Arc2D.Double arc2D = new Arc2D.Double();
-            arc2D.setArcByCenter(posTheta.x - radius, posTheta.y, radius + lateralOffset, 0.0, 360.0, Arc2D.OPEN);
+            arc2D.setArcByCenter(posTheta.getScreenX() - radius, posTheta.getScreenY(), radius + lateralOffset, 0.0,
+                    360.0, Arc2D.OPEN);
             g.draw(arc2D);
             return;
 
@@ -200,13 +195,13 @@ public final class PaintRoadMapping {
                 final GeneralPath path = new GeneralPath();
                 RoadMappingLine line1 = iterator.next();
                 posTheta = line1.startPos(lateralOffset);
-                path.moveTo(posTheta.x, posTheta.y);
+                path.moveTo(posTheta.getScreenX(), posTheta.getScreenY());
                 posTheta = line1.endPos(lateralOffset);
-                path.lineTo(posTheta.x, posTheta.y);
+                path.lineTo(posTheta.getScreenX(), posTheta.getScreenY());
                 while (iterator.hasNext()) {
                     line1 = iterator.next();
                     posTheta = line1.endPos(lateralOffset);
-                    path.lineTo(posTheta.x, posTheta.y);
+                    path.lineTo(posTheta.getScreenX(), posTheta.getScreenY());
                 }
                 g.draw(path);
                 return;
@@ -222,11 +217,11 @@ public final class PaintRoadMapping {
                 final RoadMappingBezier bezier = (RoadMappingBezier) roadMapping;
                 final GeneralPath path = new GeneralPath();
                 posTheta = bezier.startPos(lateralOffset);
-                path.moveTo(posTheta.x, posTheta.y);
+                path.moveTo(posTheta.getScreenX(), posTheta.getScreenY());
                 posTheta = bezier.endPos(lateralOffset);
                 final double cx = bezier.controlX(lateralOffset);
                 final double cy = bezier.controlY(lateralOffset);
-                path.quadTo(cx, cy, posTheta.x, posTheta.y);
+                path.quadTo(cx, cy, posTheta.getScreenX(), posTheta.getScreenY());
                 g.draw(path);
                 return;
             }
@@ -242,22 +237,27 @@ public final class PaintRoadMapping {
                 final int radius = 10;
                 final int radiusC = 6;
                 if (drawBezierPoints) {
-                    g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
+                    g.fillOval((int) posTheta.getScreenX() - radius / 2, (int) posTheta.getScreenY() - radius / 2,
+                            radius, radius);
                 }
-                path.moveTo(posTheta.x, posTheta.y);
+                path.moveTo(posTheta.getScreenX(), posTheta.getScreenY());
                 posTheta = bezier.endPos(lateralOffset);
-                path.quadTo(bezier.controlX(lateralOffset), bezier.controlY(lateralOffset), posTheta.x, posTheta.y);
+                path.quadTo(bezier.controlX(lateralOffset), bezier.controlY(lateralOffset), posTheta.getScreenX(),
+                        posTheta.getScreenY());
                 if (drawBezierPoints) {
-                    g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
+                    g.fillOval((int) posTheta.getScreenX() - radius / 2, (int) posTheta.getScreenY() - radius / 2,
+                            radius, radius);
                     g.fillOval((int) bezier.controlX(lateralOffset) - radiusC / 2, (int) bezier.controlY(lateralOffset)
                             - radiusC / 2, radiusC, radiusC);
                 }
                 while (iterator.hasNext()) {
                     bezier = iterator.next();
                     posTheta = bezier.endPos(lateralOffset);
-                    path.quadTo(bezier.controlX(lateralOffset), bezier.controlY(lateralOffset), posTheta.x, posTheta.y);
+                    path.quadTo(bezier.controlX(lateralOffset), bezier.controlY(lateralOffset), posTheta.getScreenX(),
+                            posTheta.getScreenY());
                     if (drawBezierPoints) {
-                        g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
+                        g.fillOval((int) posTheta.getScreenX() - radius / 2, (int) posTheta.getScreenY() - radius / 2,
+                                radius, radius);
                         g.fillOval((int) bezier.controlX(lateralOffset) - radiusC / 2,
                                 (int) bezier.controlY(lateralOffset) - radiusC / 2, radiusC, radiusC);
                     }
@@ -272,11 +272,11 @@ public final class PaintRoadMapping {
         final double sectionLength = 5.0;
         double roadPos = 0.0;
         posTheta = roadMapping.startPos(lateralOffset);
-        from.setLocation(posTheta.x, posTheta.y);
+        from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
         while (roadPos < roadLength) {
             roadPos += sectionLength;
             posTheta = roadMapping.map(Math.min(roadPos, roadLength), lateralOffset);
-            to.setLocation(posTheta.x, posTheta.y);
+            to.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             line.setLine(from, to);
             g.draw(line);
             from.setLocation(to.getX(), to.getY());
@@ -290,10 +290,10 @@ public final class PaintRoadMapping {
         // final double pos = inhomogeneity.startPosition();
         // PosTheta posTheta = roadMapping.map(pos);
         // final Point2D from = new Point2D.Double();
-        // from.setLocation(posTheta.x, posTheta.y);
+        // from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
         // posTheta = roadMapping.map(inhomogeneity.endPosition());
         // final Point2D to = new Point2D.Double();
-        // to.setLocation(posTheta.x, posTheta.y);
+        // to.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
         // g.setColor(color);
         // g.draw(new Line2D.Double(from, to));
         // }
@@ -307,21 +307,21 @@ public final class PaintRoadMapping {
             assert clipPath.getWindingRule() == Path2D.WIND_EVEN_ODD;
             // add the clip regions
             for (final PolygonFloat polygon : roadMapping.clippingPolygons()) {
-                clipPath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
-                clipPath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
-                clipPath.lineTo(polygon.xPoints[2], polygon.yPoints[2]);
-                clipPath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
-                clipPath.lineTo(polygon.xPoints[0], polygon.yPoints[0]);
+                clipPath.moveTo(polygon.getXPoint(0), polygon.getYPoint(0));
+                clipPath.lineTo(polygon.getXPoint(1), polygon.getYPoint(1));
+                clipPath.lineTo(polygon.getXPoint(2), polygon.getYPoint(2));
+                clipPath.lineTo(polygon.getXPoint(3), polygon.getYPoint(3));
+                clipPath.lineTo(polygon.getXPoint(0), polygon.getYPoint(0));
             }
             // add the outer region (encloses whole road), so that everything
             // outside the clip
             // region is drawn
             final PolygonFloat polygon = roadMapping.outsideClippingPolygon();
-            clipPath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
-            clipPath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
-            clipPath.lineTo(polygon.xPoints[2], polygon.yPoints[2]);
-            clipPath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
-            clipPath.lineTo(polygon.xPoints[0], polygon.yPoints[0]);
+            clipPath.moveTo(polygon.getXPoint(0), polygon.getYPoint(0));
+            clipPath.lineTo(polygon.getXPoint(1), polygon.getYPoint(1));
+            clipPath.lineTo(polygon.getXPoint(2), polygon.getYPoint(2));
+            clipPath.lineTo(polygon.getXPoint(3), polygon.getYPoint(3));
+            clipPath.lineTo(polygon.getXPoint(0), polygon.getYPoint(0));
             clipPath.closePath();
             g.setClip(clipPath);
         }
