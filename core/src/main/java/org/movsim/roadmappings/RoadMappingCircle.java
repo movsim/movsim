@@ -60,23 +60,23 @@ public class RoadMappingCircle extends RoadMapping {
         centerY = y0;
     }
 
-    /**
-     * Returns the x coordinate of the center of the circle.
-     * 
-     * @return the x coordinate of the center of the circle
-     */
-    public double centerX() {
-        return centerX;
-    }
-
-    /**
-     * Returns the y coordinate of the center of the circle.
-     * 
-     * @return the y coordinate of the center of the circle
-     */
-    public double centerY() {
-        return centerY;
-    }
+    // /**
+    // * Returns the x coordinate of the center of the circle.
+    // *
+    // * @return the x coordinate of the center of the circle
+    // */
+    // public double centerX() {
+    // return centerX;
+    // }
+    //
+    // /**
+    // * Returns the y coordinate of the center of the circle.
+    // *
+    // * @return the y coordinate of the center of the circle
+    // */
+    // public double centerY() {
+    // return centerY;
+    // }
 
     /**
      * Returns the radius of the circle.
@@ -109,5 +109,11 @@ public class RoadMappingCircle extends RoadMapping {
         posTheta.x = centerX + r * Math.cos(arcTheta) * (clockwise ? -1 : 1);
         posTheta.y = centerY - r * Math.sin(arcTheta) * (clockwise ? -1 : 1);
         return posTheta;
+    }
+
+    @Override
+    public String toString() {
+        return "RoadMappingCircle [centerX=" + centerX + ", centerY=" + centerY + ", radius=" + radius + ", clockwise="
+                + clockwise + "]";
     }
 }

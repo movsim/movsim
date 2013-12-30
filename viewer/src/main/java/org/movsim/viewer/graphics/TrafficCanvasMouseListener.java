@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 
 public class TrafficCanvasMouseListener implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-    final static Logger logger = LoggerFactory.getLogger(TrafficCanvasMouseListener.class);
+    final static Logger LOG = LoggerFactory.getLogger(TrafficCanvasMouseListener.class);
     private final TrafficCanvas trafficCanvas;
     private final TrafficCanvasController controller;
     private final RoadNetwork roadNetwork;
@@ -82,12 +82,24 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        logger.debug("mouseClicked at " + e.getPoint()); //$NON-NLS-1$
+        LOG.debug("mouseClicked at screen={}", e.getPoint()); //$NON-NLS-1$
         if (trafficCanvas.lastVehicleViewed != -1) {
-            logger.debug("vehicle id set"); //$NON-NLS-1$
+            LOG.debug("vehicle id set"); //$NON-NLS-1$
             trafficCanvas.vehicleToHighlightId = trafficCanvas.lastVehicleViewed;
             trafficCanvas.vehicleColorMode = VehicleColorMode.HIGHLIGHT_VEHICLE;
             trafficCanvas.repaint();
+        }
+
+        if (LOG.isDebugEnabled()) {
+            final Point point = e.getPoint();
+            final Point2D transformedPoint = new Point2D.Float();
+            // convert from mouse coordinates to canvas coordinates
+            try {
+                trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
+                LOG.debug("mouse clicked at={}", transformedPoint);
+            } catch (NoninvertibleTransformException e1) {
+                e1.printStackTrace();
+            }
         }
 
         // TODO for the moment clicking anywhere sets vehicles in lane1 of roadsegment1 to exit in next road segment
@@ -158,7 +170,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseEntered(MouseEvent e) {
-        logger.debug("SimCanvas mouseEntered"); //$NON-NLS-1$
+        LOG.debug("SimCanvas mouseEntered"); //$NON-NLS-1$
     }
 
     /*
@@ -251,10 +263,10 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     public void mouseWheelMoved(MouseWheelEvent e) {
         final int notches = e.getWheelRotation();
         if (notches < 0) {
-            logger.info("Mouse wheel moved UP " + -notches + " notch(es)");
+            LOG.info("Mouse wheel moved UP {} notch(es)", -notches);
             controller.commandZoomIn();
         } else {
-            logger.info("Mouse wheel moved DOWN " + notches + " notch(es)");
+            LOG.info("Mouse wheel moved DOWN {} notch(es)", notches);
             controller.commandZoomOut();
         }
     }
