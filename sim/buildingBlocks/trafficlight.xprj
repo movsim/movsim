@@ -42,8 +42,8 @@
                 <Detectors />
             </Road>
         </Simulation>
-         <TrafficLights>
-            <ControllerGroup id="plan1"  >
+        <TrafficLights>
+            <ControllerGroup id="plan1">
                 <Phase duration="35">
                     <TrafficLightState type="firstLight" status="Green" />
                 </Phase>

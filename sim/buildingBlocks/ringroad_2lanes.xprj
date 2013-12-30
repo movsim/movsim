@@ -28,7 +28,7 @@
                 <VehicleType label="FAST_TYPE" fraction="0.8" />
                 <VehicleType label="SLOW_TYPE" fraction="0.2" />
             </TrafficComposition>
-            <Road id="43">
+            <Road id="1">
                 <InitialConditions>
                     <MacroIC position="1" density_per_km="30" />
                 </InitialConditions>
