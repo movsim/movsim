@@ -60,40 +60,6 @@ public class RoadMappingArc extends RoadMapping {
      * 
      * @param laneCount
      *            number of lanes
-     * @param x0
-     *            start of arc, x coordinate
-     * @param y0
-     *            start of arc, y coordinate
-     * @param radius
-     *            radius of arc
-     * @param startAngle
-     *            start direction of arc, ie angle subtended at center + PI/2
-     * @param arcAngle
-     */
-    // RoadMappingArc(LaneGeometries laneGeometries, double x0, double y0, double radius, double startAngle,
-    // double arcAngle) {
-    // //super(laneGeometries, x0, y0, radius, arcAngle < 0.0);
-    //
-    // this.radius = radius;
-    // this.clockwise = clockwise;
-    // roadLength = 2 * Math.PI * radius;
-    // centerX = clockwise ? x0 + radius : x0 - radius;
-    // centerY = y0;
-    //
-    // this.startAngle = startAngle;
-    // this.arcAngle = arcAngle;
-    // // direction of travel on ramps when vehicles drive on the right
-    // roadLength = Math.abs(arcAngle) * radius;
-    // centerX = x0 + radius * Math.cos(startAngle - 0.5 * Math.PI) * (clockwise ? 1 : -1);
-    // centerY = y0 + radius * Math.sin(startAngle - 0.5 * Math.PI) * (clockwise ? 1 : -1);
-    // toString();
-    // }
-
-    /**
-     * The arc begins at startAngle and extends for arcAngle radians.
-     * 
-     * @param laneCount
-     *            number of lanes
      * @param s
      * @param x0
      *            start of arc, x coordinate
@@ -109,7 +75,6 @@ public class RoadMappingArc extends RoadMapping {
     RoadMappingArc(LaneGeometries laneGeometries, double s, double x0, double y0, double startAngle, double length,
             double curvature) {
         super(laneGeometries, x0, y0);
-        // super(laneGeometries, x0, y0, 1.0 / Math.abs(curvature), curvature < 0.0);
         this.startAngle = startAngle;
         this.roadLength = length;
         this.radius = 1.0 / Math.abs(curvature);
@@ -119,22 +84,10 @@ public class RoadMappingArc extends RoadMapping {
         centerY = y0 + radius * Math.sin(startAngle - HALF_PI) * (clockwise ? -1 : 1);
     }
 
-    // RoadMappingArc(LaneGeometries laneGeometries, double x0, double y0, double radius, boolean clockwise) {
-    // super(laneGeometries, x0, y0, radius, clockwise);
-    // }
-
-    // RoadMappingArc(LaneGeometries laneGeometries, double s, double x, double y, double hdg, double length,
-    // double curvature,
-    // double laneWidth) {
-    // this(laneGeometries, s, x, y, hdg, length, curvature);
-    // }
-
     @Override
     public PosTheta map(double roadPos, double lateralOffset) {
         // tangent to arc (road direction)
-
         final double theta = clockwise ? startAngle - roadPos / radius : startAngle + roadPos / radius;
-        // final double theta = clockwise ? startAngle + roadPos * curvature : startAngle - roadPos * curvature;
         // angle arc subtends at center
         final double arcTheta = theta - HALF_PI;
         posTheta.cosTheta = Math.cos(theta);

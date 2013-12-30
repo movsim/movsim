@@ -42,8 +42,6 @@ public class PosTheta {
                 + String.format("%.1f", cosTheta) + ", sinTheta=" + String.format("%.1f", sinTheta) + "]";
     }
 
-    // TODO transformed for screen
-
     public double getScreenX() {
         return x;
     }

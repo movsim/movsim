@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -86,8 +86,8 @@ class VehicleTipWindow extends Window {
         }
         final PhysicalQuantities vehiclePhysical = vehicle.physicalQuantities();
         final String string = String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(),
-                    vehicle.lane(), vehiclePhysical.getFrontPosition(), vehiclePhysical.getSpeed()
-                            * Units.MS_TO_KMH, vehiclePhysical.getAcc(), vehicle.totalTravelDistance(), exitString);
+                vehicle.lane(), vehiclePhysical.getFrontPosition(), vehiclePhysical.getSpeed() * Units.MS_TO_KMH,
+                vehiclePhysical.getAcc(), vehicle.totalTravelDistance(), exitString);
         final Label label = new Label(string, Label.LEFT);
         label.setBackground(new Color(200, 220, 240));
         removeAll();

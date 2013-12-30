@@ -54,12 +54,14 @@ public abstract class RoadMapping {
     protected double roadLength;
     protected int roadColor;
     protected static int defaultRoadColor = 8421505; // gray
+
     // Positioning
     // pre-allocate single posTheta for the road mapping. This is shared and reused, so must be used
     // carefully.
     protected final PosTheta posTheta = new PosTheta();
     protected double x0;
     protected double y0;
+
     // Clipping Region
     protected static final int POINT_COUNT = 4;
 
@@ -108,49 +110,6 @@ public abstract class RoadMapping {
     public static void setDefaultRoadColor(int defaultRoadColor) {
         RoadMapping.defaultRoadColor = defaultRoadColor;
     }
-
-    /**
-     * Sets the minimum traffic lane. Lanes with <code>lane &lt; trafficLaneMin</code> are not traffic lanes and may be
-     * treated differently, especially for lane changes.
-     * 
-     * @param trafficLaneMin
-     */
-    // @Override
-    // public final void setTrafficLaneMin(int trafficLaneMin) {
-    // assert trafficLaneMin >= Lanes.MOST_INNER_LANE;
-    // this.trafficLaneMin = trafficLaneMin;
-    // }
-
-    /**
-     * Returns the minimum traffic lane.
-     * 
-     * @return the minimum traffic lane
-     */
-    // @Override
-    // public final int trafficLaneMin() {
-    // return trafficLaneMin;
-    // }
-
-    /**
-     * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not traffic lanes and may be
-     * treated differently, especially for lane changes.
-     * 
-     * @param trafficLaneMax
-     */
-    // @Override
-    // public final void setTrafficLaneMax(int trafficLaneMax) {
-    // this.trafficLaneMax = trafficLaneMax;
-    // }
-
-    /**
-     * Returns the maximum traffic lane.
-     * 
-     * @return the maximum traffic lane
-     */
-    // @Override
-    // public final int trafficLaneMax() {
-    // return trafficLaneMax;
-    // }
 
     /**
      * Convenience function, returns the start position of the road.
@@ -289,16 +248,6 @@ public abstract class RoadMapping {
 
     protected double laneCenterOffset(double lane) {
         return laneOffset(lane) + 0.5 * laneWidth();
-    }
-
-    /**
-     * Returns the offset of the inside edge of the lane.
-     * 
-     * @param lane
-     * @return the offset of the inside edge of the lane
-     */
-    public final double laneInsideEdgeOffset(int lane) {
-        return (0.5 * (1 - laneCount() + 1) + (lane - 1)) * laneWidth();
     }
 
     /**
@@ -458,15 +407,15 @@ public abstract class RoadMapping {
         }
 
         public float getYPoint(int i) {
-            return -yPoints[i]; // TRANSFORMED!!!
+            return -yPoints[i]; // transformed coordinates!
         }
 
     }
 
     @Override
     public String toString() {
-        return "RoadMapping [LaneGeometries=" + laneGeometries + ", roadLength="
-                + roadLength + ", posTheta=" + posTheta + ", x0=" + x0 + ", y0=" + y0 + "]";
+        return "RoadMapping [LaneGeometries=" + laneGeometries + ", roadLength=" + roadLength + ", posTheta="
+                + posTheta + ", x0=" + x0 + ", y0=" + y0 + "]";
     }
 
     /**

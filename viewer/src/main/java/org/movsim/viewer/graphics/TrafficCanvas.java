@@ -624,10 +624,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         int maxRightLane = -roadMapping.getLaneGeometries().getRight().getLaneCount();
         int maxLeftLane = roadMapping.getLaneGeometries().getLeft().getLaneCount();
         for (int lane = maxRightLane + 1; lane < maxLeftLane; lane++) {
-            // FIXME mixture of phys and screen coordinates: left lanes positive, right lanes negative in phys space
-            final double offset = lane * roadMapping.getLaneGeometries().getLaneWidth();// roadMapping.laneInsideEdgeOffset(lane);
+            final double offset = lane * roadMapping.getLaneGeometries().getLaneWidth();
             LOG.debug("draw road lines: lane={}, offset={}", lane, offset);
-            LOG.debug("draw road lines: lanelaneInsideEdgeOffset={}", roadMapping.laneInsideEdgeOffset(lane));
             // FIXME after reimpl
             // if (lane == roadMapping.trafficLaneMin() || lane == roadMapping.trafficLaneMax()) {
             // // use exit stroke pattern for on-ramps, off-ramps etc
@@ -708,7 +706,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final Font font = new Font("SansSerif", Font.PLAIN, fontHeight);
             g.setFont(font);
             g.setColor(Color.BLACK);
-            //g.drawString(roadSegment.userId(), (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
             drawTextRotated(roadSegment.userId(), posTheta, font, g);
         }
     }
@@ -717,7 +714,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             assert roadSegment.speedLimits() != null;
             final int fontHeight = 12;
-            final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
+            final Font font = new Font("SansSerif", Font.BOLD, fontHeight);
             final RoadMapping roadMapping = roadSegment.roadMapping();
             for (SpeedLimit speedLimit : roadSegment.speedLimits()) {
                 g.setFont(font);
@@ -730,7 +727,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 Color color = speedLimit.getSpeedLimit() < MovsimConstants.MAX_VEHICLE_SPEED ? Color.RED
                         : Color.DARK_GRAY;
                 g.setColor(color);
-                //g.drawString(text, (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
                 drawTextRotated(text, posTheta, font, g);
                 drawLine(g, roadMapping, position, 1, color);
             }
@@ -749,7 +745,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                     final PosTheta posTheta = roadMapping.map(gradientEntry.getKey(), offset);
                     final double gradient = gradientEntry.getValue() * 100;
                     final String text = String.valueOf((int) (gradient)) + "%";
-                    //g.drawString(text, (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
                     drawTextRotated(text, posTheta, font, g);
                 }
             }
