@@ -361,6 +361,7 @@ public abstract class RoadMapping {
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 
+    @SuppressWarnings("static-method")
     public boolean isPeer() {
         return false;
     }

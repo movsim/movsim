@@ -218,7 +218,7 @@ public class SimulationRun {
         ShutdownHooks.INSTANCE.onShutDown();
     }
 
-    private void initShutdownHook() {
+    private static void initShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {

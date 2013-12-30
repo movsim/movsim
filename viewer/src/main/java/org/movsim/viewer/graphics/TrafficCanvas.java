@@ -656,7 +656,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final double size = 2 * roadMapping.laneWidth();
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.getScreenX() - size / 2, posTheta.getScreenY() - size
-                / 2, size, size * trafficLight.lightCount());
+                / 2, size, size * TrafficLight.lightCount());
         return rect;
     }
 

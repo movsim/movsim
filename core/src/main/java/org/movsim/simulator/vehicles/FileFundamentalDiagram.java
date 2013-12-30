@@ -40,6 +40,7 @@ public class FileFundamentalDiagram extends FileOutputBase {
             "rho[1/km]", "s[m]", "vEq[km/h]", "Q[veh/h]");
     private static final String outputFormat = "%8.2f, %8.2f, %8.2f, %8.2f%n";
 
+    @SuppressWarnings("unused")
     public static void writeToFile(double simulationTimestep, VehiclePrototype vehiclePrototype) {
         new FileFundamentalDiagram(simulationTimestep, vehiclePrototype);
     }
