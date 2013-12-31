@@ -188,4 +188,9 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
             throw new IllegalArgumentException("Unknown geometry");
         }
     }
+
+    @Override
+    public String toString() {
+        return "RoadMappingPoly [roadMappings.size()=" + roadMappings.size() + "]";
+    }
 }

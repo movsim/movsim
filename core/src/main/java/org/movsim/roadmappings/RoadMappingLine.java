@@ -146,4 +146,9 @@ public class RoadMappingLine extends RoadMapping {
         return posTheta;
     }
 
+    @Override
+    public String toString() {
+        return "RoadMappingLine [x1=" + x1 + ", y1=" + y1 + "]";
+    }
+
 }

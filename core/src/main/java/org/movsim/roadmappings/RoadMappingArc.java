@@ -81,7 +81,7 @@ public class RoadMappingArc extends RoadMapping {
         this.clockwise = curvature < 0;
         arcAngle = roadLength * curvature;
         centerX = x0 - radius * Math.cos(startAngle - HALF_PI) * (clockwise ? -1 : 1);
-        centerY = y0 + radius * Math.sin(startAngle - HALF_PI) * (clockwise ? -1 : 1);
+        centerY = y0 - radius * Math.sin(startAngle - HALF_PI) * (clockwise ? -1 : 1);
     }
 
     @Override
@@ -137,7 +137,8 @@ public class RoadMappingArc extends RoadMapping {
 
     @Override
     public String toString() {
-        return "RoadMappingArc [centerX=" + centerX + ", centerY=" + centerY + ", radius=" + radius + ", clockwise="
-                + clockwise + ", startAngle=" + startAngle + ", arcAngle=" + arcAngle + "]";
+        return "RoadMappingArc [x0=" + x0 + ", y0=" + y0 + ", centerX=" + centerX + ", centerY=" + centerY
+                + ", radius=" + radius + ", clockwise=" + clockwise + ", startAngle=" + startAngle + ", arcAngle="
+                + arcAngle + "]";
     }
 }

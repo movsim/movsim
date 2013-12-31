@@ -186,4 +186,9 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
             roadLength += roadMapping.roadLength();
         }
     }
+
+    @Override
+    public String toString() {
+        return "RoadMappingPolyLine [roadMappings.size()=" + roadMappings.size() + "]";
+    }
 }
