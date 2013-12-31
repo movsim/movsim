@@ -57,6 +57,7 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
+import org.movsim.simulator.roadnetwork.controller.FlowConservingBottleneck;
 import org.movsim.simulator.roadnetwork.controller.GradientProfile;
 import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
@@ -143,6 +144,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected boolean drawSinks;
     protected boolean drawSpeedLimits;
     protected boolean drawSlopes;
+    protected boolean drawFlowConservingBottlenecks;
     protected boolean drawNotifyObjects;
 
     // brake light handling
@@ -218,6 +220,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         setDrawSinks(Boolean.parseBoolean(properties.getProperty("drawSinks")));
         setDrawSources(Boolean.parseBoolean(properties.getProperty("drawSources")));
         setDrawSlopes(Boolean.parseBoolean(properties.getProperty("drawSlopes")));
+        setDrawFlowConservingBottlenecks(Boolean.parseBoolean(properties.getProperty("drawFlowConservingBottlenecks")));
         setDrawSpeedLimits(Boolean.parseBoolean(properties.getProperty("drawSpeedLimits")));
         setDrawNotifyObjects(Boolean.parseBoolean(properties.getProperty("drawNotifyObjects")));
 
@@ -380,6 +383,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         return drawSlopes;
     }
 
+    public boolean isDrawFlowConservingBottlenecks() {
+        return drawFlowConservingBottlenecks;
+    }
+
     public void setDrawSources(boolean b) {
         this.drawSources = b;
         repaint();
@@ -397,6 +404,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     public void setDrawSlopes(boolean b) {
         this.drawSlopes = b;
+        repaint();
+    }
+
+    public void setDrawFlowConservingBottlenecks(boolean b) {
+        this.drawFlowConservingBottlenecks = b;
         repaint();
     }
 
@@ -573,6 +585,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             drawSlopes(g);
         }
 
+        if (drawFlowConservingBottlenecks) {
+            drawFlowConservingBottlenecks(g);
+        }
+
         if (drawRoadId) {
             drawRoadSectionIds(g);
         }
@@ -742,13 +758,41 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                     .getLeft().getLaneCount() - 1) : roadMapping.getMaxOffsetRight();
             for (GradientProfile gradientProfile : roadSegment.gradientProfiles()) {
                 for (Entry<Double, Double> gradientEntry : gradientProfile.gradientEntries()) {
-                    final PosTheta posTheta = roadMapping.map(gradientEntry.getKey(), offset);
+                    final double position = gradientEntry.getKey();
+                    final PosTheta posTheta = roadMapping.map(position, offset);
                     final double gradient = gradientEntry.getValue() * 100;
                     final String text = String.valueOf((int) (gradient)) + "%";
                     drawTextRotated(text, posTheta, font, g);
+                    drawLine(g, roadMapping, position, 1, Color.DARK_GRAY);
                 }
             }
         }
+    }
+
+    private void drawFlowConservingBottlenecks(Graphics2D g) {
+        final int fontHeight = 12;
+        final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
+        final Color color = Color.ORANGE;
+        final Color prevColor = g.getColor();
+        g.setColor(color);
+        for (final RoadSegment roadSegment : roadNetwork) {
+            final RoadMapping roadMapping = roadSegment.roadMapping();
+            final double offset = roadMapping.isPeer() ? roadMapping.getOffsetLeft(roadMapping.getLaneGeometries()
+                    .getLeft().getLaneCount() - 1) : roadMapping.getMaxOffsetRight();
+            for (FlowConservingBottleneck bottleneck : roadSegment.flowConservingBottlenecks()) {
+                final double posStart = bottleneck.position();
+                PosTheta posTheta = roadMapping.map(posStart, offset);
+                drawTextRotated(" bneck start", posTheta, font, g);
+                drawLine(g, roadMapping, posStart, 2, color);
+
+                final double posEnd = bottleneck.endPosition();
+                posTheta = roadMapping.map(posEnd, offset);
+                drawTextRotated(" bneck end", posTheta, font, g);
+                drawLine(g, roadMapping, bottleneck.endPosition(), 2, color);
+            }
+
+        }
+        g.setColor(prevColor);
     }
 
     private static void drawTextRotated(String text, PosTheta posTheta, Font font, Graphics2D g) {
@@ -816,12 +860,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private static void drawLine(Graphics2D g, RoadMapping roadMapping, double position, int strokeWidth, Color color) {
+        Color prevColor = g.getColor();
         final double lateralExtend = roadMapping.getLaneCountInDirection() * roadMapping.laneWidth();
         final PosTheta posTheta = roadMapping.map(position, 0/* offset */);
         final PolygonFloat line = roadMapping.mapLine(posTheta, roadMapping.isPeer() ? +lateralExtend : -lateralExtend);
         g.setColor(color);
         g.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
         g.draw(new Line2D.Float(line.getXPoint(0), line.getYPoint(0), line.getXPoint(1), line.getYPoint(1)));
+        g.setColor(prevColor);
     }
 
     // ============================================================================================

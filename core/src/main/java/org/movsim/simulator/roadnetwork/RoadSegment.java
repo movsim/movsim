@@ -39,6 +39,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
+import org.movsim.simulator.roadnetwork.controller.FlowConservingBottleneck;
 import org.movsim.simulator.roadnetwork.controller.GradientProfile;
 import org.movsim.simulator.roadnetwork.controller.RoadObject;
 import org.movsim.simulator.roadnetwork.controller.RoadObject.RoadObjectType;
@@ -1227,6 +1228,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return roadObjects.values(RoadObjectType.GRADIENT_PROFILE);
     }
 
+    public Iterable<FlowConservingBottleneck> flowConservingBottlenecks() {
+        return roadObjects.values(RoadObjectType.FLOW_CONSERVING_BOTTLENECK);
+    }
     /**
      * Asserts the road segment's class invariant. Used for debugging.
      */

@@ -26,7 +26,6 @@
 
 package org.movsim.viewer.roadmapping;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Arc2D;
 import java.awt.geom.GeneralPath;
@@ -44,7 +43,6 @@ import org.movsim.roadmappings.RoadMappingLine;
 import org.movsim.roadmappings.RoadMappingPoly;
 import org.movsim.roadmappings.RoadMappingPolyBezier;
 import org.movsim.roadmappings.RoadMappingPolyLine;
-import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,22 +210,6 @@ public final class PaintRoadMapping {
             g.draw(line);
             from.setLocation(to.getX(), to.getY());
         }
-    }
-
-    static void paintInhomogeneities(Graphics2D g, RoadMapping roadMapping, RoadSegment roadSegment, Color color) {
-        // this is an approximation, only works on a straight line segment
-        // for (final Inhomogeneity inhomogeneity :
-        // roadSection.inhomogeneities()) {
-        // final double pos = inhomogeneity.startPosition();
-        // PosTheta posTheta = roadMapping.map(pos);
-        // final Point2D from = new Point2D.Double();
-        // from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
-        // posTheta = roadMapping.map(inhomogeneity.endPosition());
-        // final Point2D to = new Point2D.Double();
-        // to.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
-        // g.setColor(color);
-        // g.draw(new Line2D.Double(from, to));
-        // }
     }
 
     public static void setClipPath(Graphics2D g, RoadMapping roadMapping, GeneralPath clipPath) {
