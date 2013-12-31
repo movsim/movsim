@@ -26,7 +26,6 @@
                     <Inflow t="0" q_per_hour="100" v="11" />
                     <Inflow t="600" q_per_hour="2050" v="9" />
                 </TrafficSource>
-                <TrafficSink />
                 <Detectors sample_interval="60" logging="true">
                     <CrossSection position="1200" />
                     <CrossSection position="1400" />

@@ -83,7 +83,7 @@ public final class PaintRoadMapping {
 
         final Class<? extends RoadMapping> roadMappingClass = roadMapping.getClass();
         if (roadMappingClass == RoadMappingLine.class) {
-            LOG.debug("paint RoadMappingLine");
+            LOG.debug("paint RoadMappingLine={}", roadMapping.toString());
             posTheta = roadMapping.startPos(lateralOffset);
             from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             posTheta = roadMapping.endPos(lateralOffset);
@@ -93,7 +93,7 @@ public final class PaintRoadMapping {
             return;
         } else if (roadMappingClass == RoadMappingArc.class) {
             final RoadMappingArc arc = (RoadMappingArc) roadMapping;
-            LOG.debug("lateralOffset=" + lateralOffset + ", paint RoadMappingArc: " + arc.toString());
+            LOG.debug("lateralOffset={},  paint RoadMappingArc={}", lateralOffset, arc.toString());
             posTheta = roadMapping.startPos();
             final double angSt = arc.startAngle() + (arc.clockwise() ? 0.5 * Math.PI : -0.5 * Math.PI);
             final double radius = arc.radius();
@@ -107,14 +107,14 @@ public final class PaintRoadMapping {
             g.draw(arc2D);
             return;
         } else if (roadMappingClass == RoadMappingPoly.class) {
-            LOG.debug("paint RoadMappingPoly");
+            LOG.debug("paint RoadMappingPoly={}", roadMapping.toString());
             final RoadMappingPoly poly = (RoadMappingPoly) roadMapping;
             for (final RoadMapping map : poly) {
                 paintRoadMapping(g, map, lateralOffset);
             }
             return;
         } else if (roadMappingClass == RoadMappingPolyLine.class) {
-            LOG.debug("paint RoadMappingPolyLine");
+            LOG.debug("paint RoadMappingPolyLine={}", roadMapping.toString());
             // TODO need to properly handle joins of the lines in the polyline
             if (lateralOffset == 0.0) {
                 final RoadMappingPolyLine polyLine = (RoadMappingPolyLine) roadMapping;
@@ -135,7 +135,7 @@ public final class PaintRoadMapping {
                 g.draw(path);
                 return;
             }
-        } else if (roadMappingClass.equals(RoadMappingBezier.class)) {
+        } else if (roadMappingClass == RoadMappingBezier.class) {
             LOG.debug("paint RoadMappingBezier");
             if (lateralOffset == 0.0) {
                 // TODO remove this zero condition when Bezier lateral offset
@@ -155,7 +155,7 @@ public final class PaintRoadMapping {
                 g.draw(path);
                 return;
             }
-        } else if (roadMappingClass.equals(RoadMappingPolyBezier.class)) {
+        } else if (roadMappingClass == RoadMappingPolyBezier.class) {
             LOG.debug("paint RoadMappingPolyBezier");
             if (lateralOffset == 0.0) {
                 final RoadMappingPolyBezier polyBezier = (RoadMappingPolyBezier) roadMapping;
