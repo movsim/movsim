@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class SpatioTemporal extends OutputOnRouteBase {
 
     /** The Constant LOG. */
-    final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
+    final static Logger LOG = LoggerFactory.getLogger(SpatioTemporal.class);
 
     private final double dxOutput;
     private final double dtOutput;

@@ -50,7 +50,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %10.4f, %s%n";
 
     /** The Constant LOG. */
-    private final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
+    private final static Logger LOG = LoggerFactory.getLogger(FileTrajectories.class);
 
     private final double positionIntervalStart;
     private final double positionIntervalEnd;
@@ -73,7 +73,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         positionIntervalStart = 0;
         positionIntervalEnd = route.getLength();
 
-        logger.info("interval for output: timeStart=" + (traj.isSetStartTime() ? traj.getStartTime() : "--")
+        LOG.info("interval for output: timeStart=" + (traj.isSetStartTime() ? traj.getStartTime() : "--")
                 + ", timeEnd=" + (traj.isSetEndTime() ? traj.getEndTime() : "--"));
         writer = createWriter(String.format(extensionFormat, route.getName()));
         writeHeader(route);
@@ -90,7 +90,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         this.time = simulationTime;
         if (isLargerThanStartTimeInterval() && isSmallerThanEndTimeInterval()) {
             if (iterationCount % 1000 == 0) {
-                logger.info("time = {}, timestep= {}", time, dt);
+                LOG.info("time = {}, timestep= {}", time, dt);
             }
             if ((time - lastUpdateTime + MovsimConstants.SMALL_VALUE) >= traj.getDt()) {
                 lastUpdateTime = time;
