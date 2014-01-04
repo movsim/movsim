@@ -2,16 +2,12 @@
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <OpenDRIVE>
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep 2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-    <road id="1" name="R1" length="300" junction="-1">
+    <road id="1" name="R1" length="150" junction="-1">
         <link>
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="390" y="-400" hdg="1.570796" length="150">
-                <!-- hdgDegrees="90.0"-->
-                <line />
-            </geometry>
-            <geometry s="150.0" x="390" y="550" hdg="1.570796" length="150">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
