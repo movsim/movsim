@@ -252,7 +252,10 @@ public class TrafficLight extends RoadObjectController {
                 if (!visitedRoadSegments.contains(upstreamRoadSegment)) {
                     visitedRoadSegments.add(upstreamRoadSegment);
                     double posSignalPoint = upstreamRoadSegment.roadLength() - dxToGo;
-                    if (posSignalPoint >= 0 || !upstreamRoadSegment.hasUpstreamConnection()) {
+                    if (upstreamRoadSegment.getSizeSinkRoadSegments() > 1) {
+                        // stop also if upstream roadsegment has two outgoing segments
+                        addSignalPointBegin(Math.max(0, posSignalPoint), startRoadSegment);
+                    } else if (posSignalPoint >= 0 || !upstreamRoadSegment.hasUpstreamConnection()) {
                         addSignalPointBegin(Math.max(0, posSignalPoint), upstreamRoadSegment);
                     } else {
                         // call recursively
