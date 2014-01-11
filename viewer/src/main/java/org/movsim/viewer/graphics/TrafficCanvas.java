@@ -608,7 +608,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping roadMapping = roadSegment.roadMapping();
             if (roadMapping.isPeer()) {
                 LOG.debug("skip painting peer element={}", roadMapping);
-                continue; // skip painting of peer
+                continue;
             }
             drawRoadSegment(g, roadMapping);
             drawRoadSegmentLines(g, roadMapping);
