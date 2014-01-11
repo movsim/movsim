@@ -28,25 +28,68 @@
             <!-- straight line -->
             <Road id="1-">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
             <Road id="1+">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="200" v="15" />
+                    <Inflow t="0" q_per_hour="200" v="0" />
+                </TrafficSource>
+            </Road>
+            <!-- poly line -->
+               <Road id="10-">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="0" />
+                </TrafficSource>
+            </Road>
+            <Road id="10+">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="200" v="0" />
                 </TrafficSource>
             </Road>
             <!-- arc -->
-            <Road id="2-">
+            <Road id="north">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
-            <Road id="2+">
+            <!-- arc north_not_clockwise -->
+             <!-- <Road id="north_not_clockwise-">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
+            -->
+            
+            <Road id="north_not_clockwise">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="0" />
+                </TrafficSource>
+            </Road>
+            
+			<!-- arc -->
+             <Road id="east-">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="0" />
+                </TrafficSource>
+            </Road>
+            <Road id="east+">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="0" />
+                </TrafficSource>
+            </Road>
+            <!-- arc -->
+            <Road id="south-">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="0" />
+                </TrafficSource>
+            </Road>
+            <Road id="south+">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="0" />
+                </TrafficSource>
+            </Road>
+            
             <!-- ringroad: special case of arc -->
             <Road id="3-">
                 <InitialConditions>
@@ -58,14 +101,15 @@
                     <MacroIC position="1" density_per_km="8" speed="20" />
                 </InitialConditions>
             </Road>
+            
             <Road id="4-">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
             <Road id="4+">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
         </Simulation>

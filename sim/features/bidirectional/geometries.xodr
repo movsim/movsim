@@ -4,7 +4,7 @@
     <!-- straight line road -->
     <road id="1" name="line" length="500.0" junction="-1">
         <planView>
-            <geometry s="0.0" x="0.0" y="500.0" hdg="0.1" length="500.0">
+            <geometry s="0.0" x="0.0" y="500.0" hdg="1.57" length="500.0">
                 <line />
             </geometry>
         </planView>
@@ -26,10 +26,132 @@
             </laneSection>
         </lanes>
     </road>
-    <!-- arc road -->
-    <road id="2" name="arc" length="1400" junction="-1">
+     <!-- poly line road -->
+    <road id="10" name="line" length="500.0" junction="-1">
         <planView>
-            <geometry s="0.0" x="542.5" y="1417.0" hdg="1.570796" length="1400">
+            <geometry s="0.0" x="0.0" y="0.0" hdg="0.0" length="200.0">
+                <line />
+                </geometry>
+            <geometry s="200.0" x="200.0" y="0" hdg="0.05" length="200.0">
+                <line />
+                </geometry>
+            <geometry s="400.0" x="400.0" y="10.0" hdg="0.1" length="200.0">
+                <line />
+                </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <left>
+                    <lane id="1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="2" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    <!-- arc road -->
+    <road id="north" name="arc" length="1400" junction="-1">
+        <planView>
+            <geometry s="0.0" x="550" y="1500" hdg="1.570796" length="1400">
+                <arc curvature="-0.001143" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+               <!-- <left>
+                    <lane id="1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="2" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                -->
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    <!-- arc road -->
+    <road id="north_not_clockwise" name="arc" length="1400" junction="-1">
+        <planView>
+            <geometry s="0.0" x="450" y="1500" hdg="1.570796" length="1400">
+                <arc curvature="0.001143" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <!-- <left>
+                    <lane id="1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="2" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                -->
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    <road id="east" name="arc" length="1400" junction="-1">
+        <planView>
+            <geometry s="0.0" x="600" y="1450" hdg="0" length="1400">
+                <arc curvature="-0.001143" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <left>
+                    <lane id="1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="2" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                     <lane id="3" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    <road id="south" name="arc" length="1400" junction="-1">
+        <planView>
+            <geometry s="0.0" x="550" y="1400.0" hdg="4.7123" length="1400">
                 <arc curvature="-0.001143" />
             </geometry>
         </planView>
@@ -61,9 +183,8 @@
             <successor elementType="road" elementId="3" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1500" y="100" hdg="-0.0" length="1000">
-                <!-- hdgDegrees="-0.0"-->
-                <arc curvature="-0.00629" />
+            <geometry s="0.0" x="1500" y="100" hdg="0.0" length="1000">
+                <arc curvature="0.00629" />
                 <!-- radius="140.0"-->
             </geometry>
         </planView>

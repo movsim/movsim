@@ -67,7 +67,7 @@ public class TrafficLightApproaching {
 
     public void addTrafficLight(TrafficLight trafficLight) {
         Preconditions.checkNotNull(trafficLight);
-        assert !alreadyAdded(trafficLight); // not necessarily needed
+        assert !alreadyAdded(trafficLight); // check not necessarily needed
         trafficLights.add(trafficLight);
         LOG.debug("vehicle: trafficLightSize={}, added trafficlight={}", trafficLights.size(), trafficLight);
     }
@@ -97,7 +97,8 @@ public class TrafficLightApproaching {
         distanceToTrafficlight = trafficLight.distanceTo(vehicle, roadSegment, TrafficLight.MAX_LOOK_AHEAD_DISTANCE);
         LOG.debug("approaching non-green trafficlight: distanceToTrafficlight={}, trafficLight={}",
                 distanceToTrafficlight, toString());
-        assert distanceToTrafficlight >= 0 : "trafficlight already passed, removal of passed lights not working!";
+        Preconditions.checkArgument(distanceToTrafficlight >= 0,
+                        "trafficlight already passed, removal of passed lights not working! [check if vehicle has passed start-signal]");
         assert trafficLight.status() != TrafficLightStatus.GREEN;
 
         accTrafficLight = calcAccelerationToTrafficlight(vehicle, distanceToTrafficlight);
@@ -136,6 +137,7 @@ public class TrafficLightApproaching {
         Iterator<TrafficLight> iterator = trafficLights.iterator();
         while (iterator.hasNext()) {
             trafficLight = iterator.next();
+            LOG.debug("trafficlight={}", trafficLight);
             if (trafficLight.status() != TrafficLightStatus.GREEN
                     && trafficLight.status() != TrafficLightStatus.RED_GREEN) {
                 return trafficLight;
@@ -149,7 +151,7 @@ public class TrafficLightApproaching {
             TrafficLight trafficLight = iterator.next();
             double distance = trafficLight.distanceTo(vehicle, roadSegment, TrafficLight.MAX_LOOK_AHEAD_DISTANCE);
             if (!Double.isNaN(distance) && distance < 0) {
-                LOG.debug("vehicle at pos={} , remove trafficLight={}", vehicle.getFrontPosition(), trafficLight);
+                LOG.debug("vehicle at pos={}, remove trafficLight={}", vehicle.getFrontPosition(), trafficLight);
                 iterator.remove();
             } else {
                 return; // skip loop since trafficlights are ordered

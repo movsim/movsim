@@ -71,7 +71,7 @@
                 </Phase>
             </ControllerGroup>
             
-            <ControllerGroup id="road4+"  >
+            <ControllerGroup id="road4"  >
                 <Phase duration="35">
                     <TrafficLightState type="first" status="Red" />
                     <TrafficLightState type="second" status="Green" />

@@ -202,36 +202,41 @@ public class SimulationRun {
      * Runs the simulation to completion and then calls the completion callback.
      */
     public void runToCompletion() {
-	assert dt != 0.0;
-	assert duration != 0.0;
-	assert duration > 0.0;
-	reset();
-	final long timeBeforeSim_ms = System.currentTimeMillis();
-	final double timeLimit = duration + dt / 2.0; // allow for rounding
-	                                              // errors
-	while (simulationTime <= timeLimit) {
-	    // perform the timeStep for the road network
-	    simulation.timeStep(dt, simulationTime, iterationCount);
-	    for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
-		updateStatusCallback.updateStatus(simulationTime);
-	    }
-	    simulationTime += dt;
-	    ++iterationCount;
-	}
-	totalSimulationTime = System.currentTimeMillis() - timeBeforeSim_ms;
-	if (completionCallback != null) {
-	    completionCallback.simulationComplete(simulationTime);
-	}
-	ShutdownHooks.INSTANCE.onShutDown();
+        assert dt != 0.0;
+        assert duration != 0.0;
+        assert duration > 0.0;
+        reset();
+        final long timeBeforeSim_ms = System.currentTimeMillis();
+        final double timeLimit = duration + dt / 2.0; // allow for rounding errors
+        while (simulationTime <= timeLimit) {
+            // perform the timeStep for the road network
+            simulation.timeStep(dt, simulationTime, iterationCount);
+            for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
+                updateStatusCallback.updateStatus(simulationTime);
+            }
+            simulationTime += dt;
+            ++iterationCount;
+
+            // TODO testwise
+            // if (iterationCount == 1000) {
+            // throw new RuntimeException("Dummy Exception to cause JVM to exit");
+            // }
+
+        }
+        totalSimulationTime = System.currentTimeMillis() - timeBeforeSim_ms;
+        if (completionCallback != null) {
+            completionCallback.simulationComplete(simulationTime);
+        }
+        ShutdownHooks.INSTANCE.onShutDown();
     }
 
     private static void initShutdownHook() {
-	Runtime.getRuntime().addShutdownHook(new Thread() {
-	    @Override
-	    public void run() {
-		System.out.println("Unexpected end of simulator: perform ShutdownHooks");
-		ShutdownHooks.INSTANCE.onShutDown();
-	    }
-	});
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                System.out.println("Unexpected end of simulator: perform ShutdownHooks");
+                ShutdownHooks.INSTANCE.onShutDown();
+            }
+        });
     }
 }

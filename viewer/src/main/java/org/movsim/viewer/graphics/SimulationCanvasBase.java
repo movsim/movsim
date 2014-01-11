@@ -130,21 +130,14 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     public abstract void resetScaleAndOffset();
 
-    private static final AffineTransform FLIP = new AffineTransform(1, 0, 0, -1, 0, 0);
-
     protected void setTransform() {
         transform.setToIdentity();
         transform.scale(scale, scale);
         transform.translate(xOffset, yOffset);
-        // HACK FOR MIRRORING ALONG Y_AXIS
-        // transform.preConcatenate(FLIP);
-        // transform is applied as below (ie scale then offset):
-        // xScreen = x * scale + xOffset;
     }
 
     @Override
     public void setSize(int newWidth, int newHeight) {
-        // TODO assert isDisplayable();
         if (!isDisplayable()) {
             return;
         }

@@ -23,7 +23,6 @@
                     <Inflow t="1500" q_per_hour="2200" v="22" />
                     <Inflow t="10800" q_per_hour="1000" v="30" />
                 </TrafficSource>
-                <TrafficSink />
                 <!-- improve vehicle performance at inflow -->
                 <FlowConservingInhomogeneities>
                     <Inhomogeneity position="0" alpha_T="0.8" />

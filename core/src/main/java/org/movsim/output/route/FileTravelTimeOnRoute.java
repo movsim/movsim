@@ -7,6 +7,7 @@ import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.utilities.Units;
 
 public class FileTravelTimeOnRoute extends FileOutputBase {
+
     private static final String extensionFormat = ".tt.route_%s.csv";
 
     private static final String outputHeading = String.format("%s%9s, %10s, %10s, %10s, %10s, %10s %n", COMMENT_CHAR,

@@ -1,7 +1,6 @@
 package org.movsim.viewer.ui;
 
 import java.awt.event.ActionEvent;
-import java.util.EventObject;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
@@ -19,7 +18,8 @@ public class AppletMenu extends MovSimMenuBase {
 
     private StatusPanel statusPanel;
 
-    public AppletMenu(CanvasPanel canvasPanel, TrafficCanvas trafficCanvas, StatusPanel statusPanel, ResourceBundle resourceBundle) {
+    public AppletMenu(CanvasPanel canvasPanel, TrafficCanvas trafficCanvas, StatusPanel statusPanel,
+            ResourceBundle resourceBundle) {
         super(canvasPanel, trafficCanvas, resourceBundle);
         this.statusPanel = statusPanel;
     }
@@ -198,12 +198,6 @@ public class AppletMenu extends MovSimMenuBase {
                 })).setEnabled(false);
 
         return viewMenu;
-    }
-
-    private void handleQuit(EventObject event) {
-        // canvasPanel.quit();
-        // frame.dispose();
-        // System.exit(0); // also kills all existing threads
     }
 
     private void uiDefaultReset() {

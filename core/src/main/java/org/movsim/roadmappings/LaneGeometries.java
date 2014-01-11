@@ -7,8 +7,7 @@ public class LaneGeometries {
     private LaneGeometry left;
     private LaneGeometry right;
 
-
-    public LaneGeometries(){
+    public LaneGeometries() {
         left = new LaneGeometry();
         right = new LaneGeometry();
     }
@@ -34,12 +33,13 @@ public class LaneGeometries {
     }
 
     public double getLaneWidth() {
-        return right.getLaneWidth(); // consider only right lane's width at the moment
+        return right.getLaneWidth(); // !!! considers only right lane's width from input config
     }
 
     public static class LaneGeometry {
 
         private static final double DEFAULT_LANE_WIDTH = 5; // TODO
+
         private final int laneCount;
         private final double laneWidth;
 
@@ -50,14 +50,14 @@ public class LaneGeometries {
 
         // // convenience constructor
         public LaneGeometry(int laneCount) {
-            Preconditions.checkArgument(laneCount > 0, "must be > 0: laneCount =" + laneCount);
+            Preconditions.checkArgument(laneCount > 0, "must be larger than 0: laneCount=" + laneCount);
             this.laneCount = laneCount;
             this.laneWidth = DEFAULT_LANE_WIDTH;
         }
 
         public LaneGeometry(int laneCount, double laneWidth) {
-            Preconditions.checkArgument(laneCount > 0, "must be > 0: laneCount =" + laneCount);
-            Preconditions.checkArgument(laneWidth > 0, "must be > 0: laneWidth =" + laneWidth);
+            Preconditions.checkArgument(laneCount > 0, "must be larger than 0: laneCount=" + laneCount);
+            Preconditions.checkArgument(laneWidth > 0, "must be larger than 0: laneWidth=" + laneWidth);
             this.laneCount = laneCount;
             this.laneWidth = laneWidth;
         }

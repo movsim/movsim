@@ -7,7 +7,7 @@
             <successor elementType="road" elementId="1" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="500" y="200" hdg="-0.0" length="1000">
+            <geometry s="0.0" x="500" y="0" hdg="-0.0" length="1000">
                 <!-- hdgDegrees="-0.0"-->
                 <arc curvature="-0.00629" />
                 <!-- radius="140.0"-->

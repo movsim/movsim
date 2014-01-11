@@ -140,10 +140,15 @@ public class RoadMappingLine extends RoadMapping {
 
     @Override
     public PosTheta map(double roadPos, double lateralOffset) {
-        // lateralOffset offset is perpendicular to road
-        posTheta.x = x0 + roadPos * posTheta.cosTheta + lateralOffset * posTheta.sinTheta;
-        posTheta.y = y0 - roadPos * posTheta.sinTheta + lateralOffset * posTheta.cosTheta;
+        // lateralOffset offset is perpendicular to road, offset to right < 0!
+        posTheta.x = x0 + roadPos * posTheta.cosTheta - lateralOffset * posTheta.sinTheta;
+        posTheta.y = y0 + roadPos * posTheta.sinTheta + lateralOffset * posTheta.cosTheta;
         return posTheta;
+    }
+
+    @Override
+    public String toString() {
+        return "RoadMappingLine [x1=" + x1 + ", y1=" + y1 + "]";
     }
 
 }

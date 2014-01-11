@@ -97,8 +97,7 @@ public class RoadMappingBezier extends RoadMapping {
      * @param d
      */
     RoadMappingBezier(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length,
-            double a, double b,
-            double c, double d) {
+            double a, double b, double c, double d) {
         super(laneGeometries, x0, y0);
         p0x = x0;
         p0y = y0;

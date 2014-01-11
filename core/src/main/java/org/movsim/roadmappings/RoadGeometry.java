@@ -62,5 +62,4 @@ public class RoadGeometry {
         return laneGeometries;
     }
 
-
 }
