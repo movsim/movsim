@@ -70,6 +70,10 @@ public class FlowConservingBottleneck extends RoadObjectController {
         endSignalPoint = new SignalPoint(endPosition, roadSegment);
     }
 
+    public double endPosition() {
+        return endPosition;
+    }
+
     @Override
     public void createSignalPositions() {
         // needs only one signal at the end to reset all vehicles that have been influenced before.

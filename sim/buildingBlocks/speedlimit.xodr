@@ -4,6 +4,7 @@
     <road name="R1" length="1500.0" id="1" junction="-1">
         <planView>
             <geometry s="0.0" x="0.0" y="300.0" hdg="0.0" length="1500.0">
+                <!-- <geometry s="0.0" x="0.0" y="300.0" hdg="-0.3" length="1500.0"> -->
                 <line />
             </geometry>
         </planView>
@@ -27,10 +28,10 @@
             </laneSection>
         </lanes>
         <!-- speedlimit -->
-        <objects> 
-          <object type="speedlimit" orientation="+" s="500" validLength="700" name="speedlimit demo" >
-			  <userData code="valueKMH" value="60" />
-		    </object>
+        <objects>
+            <object type="speedlimit" orientation="+" s="500" validLength="700" name="speedlimit demo">
+                <userData code="valueKMH" value="60" />
+            </object>
         </objects>
     </road>
 </OpenDRIVE>

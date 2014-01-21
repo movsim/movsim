@@ -39,7 +39,7 @@
             <successor elementType="road" elementId="3" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1000.0" y="305.0" hdg="0.0" length="200.0">
+            <geometry s="0.0" x="1000.0" y="290" hdg="0.0" length="200.0">
                 <line />
             </geometry>
         </planView>

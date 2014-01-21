@@ -33,43 +33,26 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
  * o'clock position. A positive angle indicates a counter-clockwise rotation while a negative angle indicates a
  * clockwise rotation.
  */
-public class RoadMappingArc extends RoadMappingCircle {
+public class RoadMappingArc extends RoadMapping {
 
+    private static final double HALF_PI = 0.5 * Math.PI;
+
+    protected double centerX;
+    protected double centerY;
+
+    protected final double radius;
+
+    protected final boolean clockwise;
     protected double startAngle;
     protected double arcAngle;
 
     public static RoadMappingArc create(RoadGeometry roadGeometry) {
-        return create(roadGeometry.laneCount(), roadGeometry.geometry(), roadGeometry.laneWidth());
+        return create(roadGeometry.getLaneGeometries(), roadGeometry.geometry());
     }
 
-    private static RoadMappingArc create(int laneCount, Geometry geometry, double laneWidth) {
-        return new RoadMappingArc(laneCount, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
-                geometry.getLength(), geometry.getArc().getCurvature(), laneWidth);
-    }
-
-    /**
-     * The arc begins at startAngle and extends for arcAngle radians.
-     * 
-     * @param laneCount
-     *            number of lanes
-     * @param x0
-     *            start of arc, x coordinate
-     * @param y0
-     *            start of arc, y coordinate
-     * @param radius
-     *            radius of arc
-     * @param startAngle
-     *            start direction of arc, ie angle subtended at center + PI/2
-     * @param arcAngle
-     */
-    RoadMappingArc(int laneCount, double x0, double y0, double radius, double startAngle, double arcAngle) {
-        super(laneCount, x0, y0, radius, arcAngle < 0.0);
-        this.startAngle = startAngle;
-        this.arcAngle = arcAngle;
-        // direction of travel on ramps when vehicles drive on the right
-        roadLength = Math.abs(arcAngle) * radius;
-        centerX = x0 - radius * Math.cos(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);
-        centerY = y0 + radius * Math.sin(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);
+    private static RoadMappingArc create(LaneGeometries laneGeometries, Geometry geometry) {
+        return new RoadMappingArc(laneGeometries, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
+                geometry.getLength(), geometry.getArc().getCurvature());
     }
 
     /**
@@ -89,39 +72,30 @@ public class RoadMappingArc extends RoadMappingCircle {
      * @param curvature
      *            curvature of arc
      */
-    RoadMappingArc(int laneCount, double s, double x0, double y0, double startAngle, double length, double curvature) {
-        super(laneCount, x0, y0, 1.0 / Math.abs(curvature), curvature < 0.0);
-        roadLength = length;
+    RoadMappingArc(LaneGeometries laneGeometries, double s, double x0, double y0, double startAngle, double length,
+            double curvature) {
+        super(laneGeometries, x0, y0);
         this.startAngle = startAngle;
+        this.roadLength = length;
+        this.radius = 1.0 / Math.abs(curvature);
+        this.clockwise = curvature < 0;
         arcAngle = roadLength * curvature;
-        centerX = x0 - radius * Math.cos(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);
-        centerY = y0 + radius * Math.sin(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);
-    }
-
-    RoadMappingArc(int laneCount, double x0, double y0, double radius, boolean clockwise) {
-        super(laneCount, x0, y0, radius, clockwise);
-    }
-
-    RoadMappingArc(int laneCount, double s, double x, double y, double hdg, double length, double curvature,
-            double laneWidth) {
-        this(laneCount, s, x, y, hdg, length, curvature);
-        this.laneWidth = laneWidth;
-        this.roadWidth = laneWidth * laneCount;
+        centerX = x0 - radius * Math.cos(startAngle - HALF_PI) * (clockwise ? -1 : 1);
+        centerY = y0 - radius * Math.sin(startAngle - HALF_PI) * (clockwise ? -1 : 1);
     }
 
     @Override
     public PosTheta map(double roadPos, double lateralOffset) {
         // tangent to arc (road direction)
         final double theta = clockwise ? startAngle - roadPos / radius : startAngle + roadPos / radius;
-        // final double theta = clockwise ? startAngle + roadPos * curvature : startAngle - roadPos * curvature;
         // angle arc subtends at center
-        final double arcTheta = theta - 0.5 * Math.PI;
+        final double arcTheta = theta - HALF_PI;
         posTheta.cosTheta = Math.cos(theta);
         posTheta.sinTheta = Math.sin(theta);
         // lateralOffset is perpendicular to road
-        final double r = radius + lateralOffset * (clockwise ? -1 : 1);
+        final double r = radius - lateralOffset * (clockwise ? -1 : 1);
         posTheta.x = centerX + r * Math.cos(arcTheta) * (clockwise ? -1 : 1);
-        posTheta.y = centerY - r * Math.sin(arcTheta) * (clockwise ? -1 : 1);
+        posTheta.y = centerY + r * Math.sin(arcTheta) * (clockwise ? -1 : 1);
         return posTheta;
     }
 
@@ -143,4 +117,28 @@ public class RoadMappingArc extends RoadMappingCircle {
         return arcAngle;
     }
 
+    /**
+     * Returns true if the circle mapping is in a clockwise direction.
+     * 
+     * @return true if the circle mapping is in a clockwise direction
+     */
+    public boolean clockwise() {
+        return clockwise;
+    }
+
+    /**
+     * Returns the radius of the circle.
+     * 
+     * @return the radius of the circle
+     */
+    public double radius() {
+        return radius;
+    }
+
+    @Override
+    public String toString() {
+        return "RoadMappingArc [x0=" + x0 + ", y0=" + y0 + ", centerX=" + centerX + ", centerY=" + centerY
+                + ", radius=" + radius + ", clockwise=" + clockwise + ", startAngle=" + startAngle + ", arcAngle="
+                + arcAngle + "]";
+    }
 }

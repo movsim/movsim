@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public class TravelTimeOnRoute extends OutputOnRouteBase {
 
     /** The Constant LOG. */
-    final static Logger logger = LoggerFactory.getLogger(TravelTimeOnRoute.class);
+    final static Logger LOG = LoggerFactory.getLogger(TravelTimeOnRoute.class);
 
     private final double tauEMA;
 

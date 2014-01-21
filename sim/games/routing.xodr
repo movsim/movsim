@@ -92,7 +92,7 @@
             <successor elementType="road" elementId="8" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="750.0" y="105" hdg="0.0" length="100">
+            <geometry s="0.0" x="750.0" y="90" hdg="0.0" length="100">
                 <line />
             </geometry>
         </planView>
@@ -204,25 +204,25 @@
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="400" y="115" hdg="0" length="78.5">
+            <geometry s="0.0" x="400" y="80" hdg="0" length="78.5">
                 <arc curvature="-0.01" />
             </geometry>
-            <geometry s="78.5" x="470.7" y="144.3" hdg="-0.785" length="100.0">
+            <geometry s="78.5" x="470.7" y="50.6" hdg="-0.785" length="100.0">
                 <line />
             </geometry>
-            <geometry s="179" x="541" y="215" hdg="-0.785" length="78.5">
+            <geometry s="179" x="541" y="-20" hdg="-0.785" length="78.5">
                 <arc curvature="0.01" />
             </geometry>
-            <geometry s="257" x="612" y="244.3" hdg="0." length="100.0">
+            <geometry s="257" x="612" y="-49.3" hdg="0.0" length="100.0">
                 <line />
             </geometry>
-            <geometry s="357" x="712" y="244.3" hdg="0." length="78.5">
+            <geometry s="357" x="712" y="-49.3" hdg="0.0" length="78.8">
                 <arc curvature="0.01" />
             </geometry>
-            <geometry s="436" x="783" y="215" hdg="0.785" length="100.0">
+            <geometry s="436" x="783" y="-19.5" hdg="0.785" length="100.0">
                 <line />
             </geometry>
-            <geometry s="536" x="854" y="144.3" hdg="0.785" length="78.5">
+            <geometry s="536" x="854" y="51" hdg="0.785" length="78.5">
                 <arc curvature="-0.01" />
             </geometry>
         </planView>

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -142,7 +142,7 @@ public class SwingHelper {
      * blue, h=0.65: violet, then a long magenta region
      **/
     public static Color getColorAccordingToSpectrum(double vmin, double vmax, double v) {
-
+        assert vmax > vmin;
         // tune following values if not satisfied
         // (the floor function of any hue value >=1 will be subtracted by HSBtoRGB)
 
@@ -164,13 +164,13 @@ public class SwingHelper {
         final float b = (float) 0.92;
 
         final int rgb = Color.HSBtoRGB(h, s, b);
-        return v > 0 ? new Color(rgb) : Color.BLACK;
+        return v > 0.1 ? new Color(rgb) : Color.BLACK;
     }
 
     public static void notImplemented(Component c) {
         JOptionPane.showMessageDialog(getFrame(c), "Not implemented yet"); //$NON-NLS-1$
     }
-    
+
     public static void showMessage(final String message) {
         EventQueue.invokeLater(new Runnable() {
             @Override

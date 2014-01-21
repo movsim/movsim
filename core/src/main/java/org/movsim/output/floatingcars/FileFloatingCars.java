@@ -43,8 +43,9 @@ import org.slf4j.LoggerFactory;
 
 // TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
 class FileFloatingCars extends FileOutputBase {
+
     /** The Constant LOG. */
-    final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
+    final static Logger LOG = LoggerFactory.getLogger(FileFloatingCars.class);
 
     private static final String extensionFormat = ".car.route_%s.%06d.csv";
     private static final String extensionRegex = "[.]car[.]route_.*[.]\\d+[.]csv";

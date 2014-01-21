@@ -25,12 +25,6 @@
                     <Inflow t="0" q_per_hour="100" v="110" />
                     <Inflow t="600" q_per_hour="2000" v="90" />
                 </TrafficSource>
-                <TrafficSink />
-                <!--             <SimpleRampS>
-                <SimpleRamp position="30000" merge_length="1000" logging="true">
-                    <Inflow t="0" q_per_hour="550" />
-                </SimpleRamp>
-            </SimpleRampS> -->
                 <Detectors sample_interval="60" logging="true">
                     <CrossSection position="16000" />
                     <CrossSection position="18000" />

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class ConsumptionOnRoute extends OutputOnRouteBase {
 
     /** The Constant LOG. */
-    final static Logger logger = LoggerFactory.getLogger(ConsumptionOnRoute.class);
+    final static Logger LOG = LoggerFactory.getLogger(ConsumptionOnRoute.class);
 
     private final double tauEMA;
 

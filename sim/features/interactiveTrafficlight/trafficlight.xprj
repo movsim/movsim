@@ -85,7 +85,6 @@
                     <TrafficLightState type="second" status="GreenRed" />
                 </Phase>
             </ControllerGroup>
-            
                 <ControllerGroup id="single"  >
                 <Phase duration="35">
                     <TrafficLightState type="first" status="Green" />
@@ -98,7 +97,7 @@
                 </Phase>
             </ControllerGroup>
             
-            <ControllerGroup id="lanewise"  >
+            <ControllerGroup id="road4"  >
                 <Phase duration="35">
                     <TrafficLightState type="first" status="Green" />
                     <TrafficLightState type="second" status="Red" />

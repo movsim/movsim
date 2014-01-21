@@ -69,7 +69,7 @@
                 </right>
             </laneSection>
         </lanes>
-          <signals>
+        <signals>
             <signal s="20" id="tl1" />
         </signals>
     </road>
@@ -78,7 +78,7 @@
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="1040.0" y="315.0" hdg="-0.3" length="200">
+            <geometry s="0.0" x="1040.0" y="290" hdg="-0.3" length="200">
                 <line />
             </geometry>
         </planView>
@@ -98,8 +98,7 @@
             <signal s="20" id="tl2" />
         </signals>
     </road>
-    
-     <road name="R5" length="400.0" id="5" junction="-1">
+    <road name="R5" length="400.0" id="5" junction="-1">
         <link>
             <predecessor elementType="junction" elementId="15" contactPoint="end" />
             <successor elementType="road" elementId="6" contactPoint="start" />
@@ -121,11 +120,10 @@
                 </right>
             </laneSection>
         </lanes>
-       <signals>
+        <signals>
             <signal s="20" id="tl3" />
         </signals>
     </road>
-    
     <road name="R6" length="600.0" id="6" junction="-1">
         <link>
             <predecessor elementType="road" elementId="5" contactPoint="end" />
@@ -148,13 +146,12 @@
             </laneSection>
         </lanes>
     </road>
-    
     <road name="R7" length="200" id="7" junction="-1">
         <link>
             <predecessor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1448.93" y="369.1" hdg="0.3" length="200">
+            <geometry s="0.0" x="1448.93" y="230.1" hdg="0.3" length="200">
                 <line />
             </geometry>
         </planView>
@@ -168,16 +165,15 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <!-- the controller.id references to a 'logical' trafficlight control scheme in movsim, the type links the physical signal to a 'logical' one. -->
+    <!-- the controller.id references to a 'logical' trafficlight control scheme in movsim, the type links the physical signal to a 'logical' one. -->
     <controller id="offramp">
-		<control signalId="tl1" type="main"/>
-		<control signalId="tl2" type="ramp"/>
+        <control signalId="tl1" type="main" />
+        <control signalId="tl2" type="ramp" />
     </controller>
     <controller id="onramp">
-		<control signalId="tl3" type="main"/>
+        <control signalId="tl3" type="main" />
     </controller>
-    <junction id="15" name="onramp" >
+    <junction id="15" name="onramp">
         <connection id="0" incomingRoad="3" connectingRoad="5" contactPoint="start">
             <laneLink from="-1" to="-1" />
         </connection>
@@ -185,7 +181,6 @@
             <laneLink from="-1" to="-2" />
         </connection>
     </junction>
-    
     <junction id="1009" name="offramp">
         <connection id="0" incomingRoad="4" connectingRoad="2" contactPoint="start">
             <laneLink from="-2" to="-1" />
@@ -194,6 +189,5 @@
             <laneLink from="-1" to="-1" />
         </connection>
     </junction>
-    
 </OpenDRIVE>
 

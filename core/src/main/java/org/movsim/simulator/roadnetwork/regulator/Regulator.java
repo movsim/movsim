@@ -194,6 +194,7 @@ public class Regulator implements SimulationTimeStep {
         }
     }
 
+    @SuppressWarnings("static-method")
     public void simulationCompleted(double simulationTime) {
         LOG.info("simulation completed at={}", simulationTime);
     }

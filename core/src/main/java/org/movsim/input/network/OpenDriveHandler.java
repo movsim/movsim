@@ -23,6 +23,8 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Lanes.LaneSection;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
+import org.movsim.roadmappings.LaneGeometries;
+import org.movsim.roadmappings.LaneGeometries.LaneGeometry;
 import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingPeer;
@@ -306,18 +308,22 @@ public class OpenDriveHandler {
     private static RoadMapping createRoadMappings(Road road) throws IllegalArgumentException {
         Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
                 "cannot handle more than one laneSection in roadId=" + road.getId());
-        int laneCount = 0;
-        double laneWidth = 0;
         LaneSection firstLaneSection = road.getLanes().getLaneSection().get(0);
         Preconditions.checkState(firstLaneSection.isSetRight(),
                 "expect always at least a <right> lanesection (development stage)");
-        if (firstLaneSection.isSetLeft()) {
-            laneCount += firstLaneSection.getLeft().getLane().size();
-            laneWidth = firstLaneSection.getLeft().getLane().get(0).getWidth().get(0).getA();
+
+        LaneGeometries laneGeometries = new LaneGeometries();
+        if(firstLaneSection.isSetLeft()){
+            int laneCount = firstLaneSection.getLeft().getLane().size();
+            double laneWidth = firstLaneSection.getLeft().getLane().get(0).getWidth().get(0).getA();
+            laneGeometries.setLeft(new LaneGeometry(laneCount, laneWidth));
         }
-        laneCount += firstLaneSection.getRight().getLane().size();
-        laneWidth = firstLaneSection.getRight().getLane().get(0).getWidth().get(0).getA();
-        List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneCount, laneWidth);
+
+        int laneCount = firstLaneSection.getRight().getLane().size();
+        double laneWidth = firstLaneSection.getRight().getLane().get(0).getWidth().get(0).getA();
+        laneGeometries.setRight(new LaneGeometry(laneCount, laneWidth));
+
+        List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneGeometries);
         return RoadMappingUtils.create(roadGeometries);
         // if (road.getLanes().getLaneSection().get(0).isSetLeft()) {
         // laneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
@@ -333,11 +339,11 @@ public class OpenDriveHandler {
         // List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), firstLaneSection);
         // return RoadMappingUtils.create(roadGeometries);
     }
-
-    private static List<RoadGeometry> createRoadGeometries(List<Geometry> geometries, int laneCount, double laneWidth) {
+    
+    private static List<RoadGeometry> createRoadGeometries(List<Geometry> geometries, LaneGeometries laneGeometries) {
         List<RoadGeometry> roadGeometries = new ArrayList<>(geometries.size());
         for (Geometry geometry : geometries) {
-            RoadGeometry roadGeometry = new RoadGeometry(geometry, laneCount, laneWidth);
+            RoadGeometry roadGeometry = new RoadGeometry(geometry, laneGeometries);
             roadGeometries.add(roadGeometry);
         }
         // if (isPeer) {

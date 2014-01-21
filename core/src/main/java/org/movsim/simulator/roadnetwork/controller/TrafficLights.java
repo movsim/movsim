@@ -113,8 +113,8 @@ public class TrafficLights implements SimulationTimeStep {
                 LOG.debug("trafficLight={}, roadSegment={}", trafficLight, roadSegment);
                 ControllerGroup controllerGroup = controllerGroupInput.get(trafficLight.controllerId());
                 if (controllerGroup == null) {
-                    throw new IllegalStateException("no controllerGroup for id=" + trafficLight.controllerId()
-                            + " defined in input");
+                    throw new IllegalStateException("no controllerGroup for xodr-id=" + trafficLight.controllerId()
+                            + " defined in xprj input");
                 }
                 TrafficLightController trafficLightController = signalIdToController.get(trafficLight.signalId());
                 if (trafficLightController == null) {

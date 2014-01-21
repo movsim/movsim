@@ -1,6 +1,17 @@
+git-flow
+========
+[package for ubuntu: sudo apt-get install git-flow] 
+git flow init -d
 
+# do not push to master but to develop branch:
+git branch --set-upstream develop origin/develop  
+
+git flow feature help ... 
+
+
+Useful commands:
+================
 Push local branch to remote repo:
-
 git push origin mybranch
 git push origin HEAD:mybranch
 
@@ -8,7 +19,11 @@ Checkout branch:
 git checkout -b test origin/test
 
 #delete branch:
-#from HEAD
 git branch -d delete_branch
+# force delete branch:
 git branch -D delete_branch
+
+git config
+===========
+git config color.ui true
 

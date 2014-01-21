@@ -61,7 +61,7 @@ import com.google.common.base.Preconditions;
 public class SimulationOutput implements SimulationTimeStep {
 
     /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SimulationOutput.class);
 
     private List<FloatingCars> floatingCarOutputs = new ArrayList<>();
 
@@ -125,7 +125,7 @@ public class SimulationOutput implements SimulationTimeStep {
             for (final Trajectories traj : outputConfiguration.getTrajectories()) {
                 final Route route = getCheckedRoute(traj.getRoute());
                 if (filesTrajectories.containsKey(route)) {
-                    logger.warn("trajectory output for route \"{}\" already defined!", route.getName());
+                    LOG.warn("trajectory output for route \"{}\" already defined!", route.getName());
                     continue;
                 }
                 filesTrajectories.put(route, new FileTrajectories(traj, route));

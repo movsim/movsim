@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,13 +25,10 @@
  */
 package org.movsim.viewer.graphics;
 
-import javax.xml.bind.JAXBException;
-
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 public class TrafficCanvasController {
     final static Logger logger = LoggerFactory.getLogger(TrafficCanvasController.class);
@@ -42,6 +39,7 @@ public class TrafficCanvasController {
         this.trafficCanvas = trafficCanvas;
         this.roadNetwork = roadNetwork;
     }
+
     /**
      * Toggles the pause state.
      */
@@ -96,7 +94,7 @@ public class TrafficCanvasController {
         logger.debug("sleeptime: {}", trafficCanvas.sleepTime());
     }
 
-    public void commandReset() throws JAXBException, SAXException {
+    public void commandReset() {
         trafficCanvas.stop();
         trafficCanvas.roadNetwork.clear();
         trafficCanvas.reset();

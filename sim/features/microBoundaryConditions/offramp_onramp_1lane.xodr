@@ -46,13 +46,13 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R3" length="600.0" id="3" junction="-1">
+    <road name="R3" length="560.0" id="3" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
             <successor elementType="road" elementId="5" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1040.0" y="300.0" hdg="0.0" length="600.0">
+            <geometry s="0.0" x="1040.0" y="300.0" hdg="0.0" length="560.0">
                 <line />
             </geometry>
         </planView>
@@ -75,7 +75,7 @@
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="1040.0" y="315.0" hdg="-0.3" length="200">
+            <geometry s="0.0" x="1040.0" y="290.0" hdg="-0.3" length="200">
                 <line />
             </geometry>
         </planView>
@@ -122,7 +122,7 @@
             <predecessor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1408.93" y="369.1" hdg="0.3" length="200">
+            <geometry s="0.0" x="1408.93" y="230" hdg="0.3" length="200">
                 <line />
             </geometry>
         </planView>
@@ -215,7 +215,7 @@
             <predecessor elementType="junction" elementId="1008" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="2500.0" y="315.0" hdg="-0.3" length="200">
+            <geometry s="0.0" x="2500.0" y="290.0" hdg="-0.3" length="200">
                 <line />
             </geometry>
         </planView>

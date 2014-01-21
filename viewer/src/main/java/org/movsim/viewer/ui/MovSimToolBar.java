@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
-import javax.xml.bind.JAXBException;
 
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvas.StatusControlCallbacks;
@@ -41,7 +40,6 @@ import org.movsim.viewer.graphics.TrafficCanvasController;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 public class MovSimToolBar extends JToolBar implements ActionListener {
 
@@ -113,10 +111,12 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         toolBar.add(createButton(resourceBundle, "zoom_in", ZOOM_IN, "ZoomInTip", "ZoomIn"));
         toolBar.add(createButton(resourceBundle, "zoom_out", ZOOM_OUT, "ZoomOutTip", "ZoomOut"));
 
-        toolBar.add(createButton(resourceBundle, "button_vehicle_colors", VEHICLE_COLORS, "VehicleColorsTip", "VehicleColors"));
+        toolBar.add(createButton(resourceBundle, "button_vehicle_colors", VEHICLE_COLORS, "VehicleColorsTip",
+                "VehicleColors"));
     }
 
-    protected JButton createButton(ResourceBundle resourceBundle ,String imageName, String actionCommand, String toolTipResource, String textResource) {
+    protected JButton createButton(ResourceBundle resourceBundle, String imageName, String actionCommand,
+            String toolTipResource, String textResource) {
         // Look for the image.
         final String imgLocation = "/images/" + imageName + ".png";
         final URL imageURL = MovSimToolBar.class.getResource(imgLocation);
@@ -160,15 +160,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
             controller.commandCycleVehicleColors();
         } else if (e.getActionCommand().equals(RESET)) {
             statusPanel.reset();
-            try {
-                controller.commandReset();
-            } catch (JAXBException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (SAXException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+            controller.commandReset();
             statusCallbacks.stateChanged();
         }
     }
