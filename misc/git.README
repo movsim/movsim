@@ -1,3 +1,5 @@
+#use colorful git output:
+git config color.ui true
 
 Push local branch to remote repo:
 
