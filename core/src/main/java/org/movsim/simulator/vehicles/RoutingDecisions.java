@@ -25,7 +25,7 @@ public class RoutingDecisions {
         }
 
         String routeLabel = serviceProvider.selectRoute(uncertainty, roadSegment.userId(), randomAlternative);
-        if (routeLabel.isEmpty()) {
+        if (routeLabel == null || routeLabel.isEmpty()) {
             return;
         }
 
@@ -33,12 +33,17 @@ public class RoutingDecisions {
         if (!routeLabel.equals("A1") && !routeLabel.equals("A2")) {
             throw new IllegalArgumentException("cannot handle other alternatives="+routeLabel+"  then A1 and A2 yet!!!");
         }
+
         if ("A2".equals(routeLabel)) {
+            // activate decision to diverge at exit
             vehicle.setExitRoadSegmentId(roadSegment.id());
             if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
                 throw new IllegalArgumentException("cannot do diverge on roadSegment " + roadSegment.userId()
                         + " without exit lane!");
             }
+        } else if ("A1".equals(routeLabel)) {
+            // reset if A2 has been chosen in previous update
+            vehicle.setExitRoadSegmentId(Vehicle.ROAD_SEGMENT_ID_NOT_SET);
         }
     }
 
