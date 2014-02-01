@@ -21,7 +21,8 @@ public class ServiceProvider implements SimulationTimeStep {
     private final String label;
 
     private final double updateTime;
-    boolean update = true; 
+
+    private boolean update = true;
 
     private final DecisionPoints decisionPoints;
 
@@ -50,10 +51,10 @@ public class ServiceProvider implements SimulationTimeStep {
     }
 
     @Override
-    public void timeStep(double dt, double simulationTime, long iterationCount) {      
-        if(updateTime!=0){
-            update = (iterationCount%(updateTime / dt)==0) ? true: false;
-        }        
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
+        if (updateTime != 0) {
+            update = (iterationCount % (updateTime / dt) == 0) ? true : false;
+        }
         evaluateDecisionPoints(dt);
         if (fileOutput != null) {
             fileOutput.timeStep(dt, simulationTime, iterationCount);
@@ -82,7 +83,7 @@ public class ServiceProvider implements SimulationTimeStep {
         }
     }
 
-    private void evaluateDecisionPoint(double dt, double uncertainty, DecisionPoint decisionPoint) {        
+    private void evaluateDecisionPoint(double dt, double uncertainty, DecisionPoint decisionPoint) {
         for (RouteAlternative alternative : decisionPoint) {
             double traveltimeError = 0;
             if (noise != null) {
