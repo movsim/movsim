@@ -1,6 +1,9 @@
-/.settings
+/.settings/
 **/.settings/
-/.classpath
+**/.classpath
+.classpath
+**/.project
+.project
 target/
 bin/
 figs/
@@ -19,5 +22,4 @@ Thumbs.db
 *.log.*
 *.eps
 *~
-/.project
 *.dot
