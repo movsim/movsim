@@ -1,4 +1,12 @@
+git flow
 
+# Ubuntu/linux user:
+sudo apt-get install git-flow:
+# initializes git flow in your local repo
+git flow init -d
+#  tracks remote develop branch:
+git branch --set-upstream develop origin/develop
+==================================
 Push local branch to remote repo:
 
 git push origin mybranch
