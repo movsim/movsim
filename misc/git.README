@@ -1,5 +1,8 @@
-git flow
+#use colorful git output:
+git config color.ui true
 
+git flow
+=======
 # Ubuntu/linux user:
 sudo apt-get install git-flow:
 # initializes git flow in your local repo
