@@ -1,0 +1,19 @@
+# Vincent Driessen's original post for 'git flow':
+http://nvie.com/posts/a-successful-git-branching-model/
+
+# git-flow commands on the command line:
+git flow help
+# for example working on feature branches:
+git flow feature start
+git flow feature stop
+
+# Great summary of the git-flow life cycle with the maven-jgitflow-plugin:
+http://george-stathis.com/2013/11/09/painless-maven-project-releases-with-maven-gitflow-plugin/
+
+The main plugin commands are:
+mvn jgitflow:feature-start: creates a new feature branch; prompts for the branch name which will take the format feature/<branch name>; pushes the branch to origin automatically so that we can do two things: 1) collaborate with others and 2) get Jenkins to build it
+mvn jgitflow:feature-finish: merges a feature branch back into the dvlp branch and pushes to origin
+mvn jgitflow:release-start: creates a release branch (e.g. release/rev-5.1) and pushes it to origin
+mvn jgitflow:release-finish: builds, tags and merges the release branch back into master and dvlp; updates versions in master and dvlp branches
+mvn jgitflow:hotfix-start: works like mvn jgitflow:release-start but branches off of master
+mvn jgitflow:hotfix-finish: works like mvn jgitflow:release-finish
