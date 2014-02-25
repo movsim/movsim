@@ -110,12 +110,12 @@
         </lanes>
     </road>
     <!-- merging road element -->
-    <road name="R5" length="1011.2" id="5" junction="-1">
+    <road name="R5" length="1013" id="5" junction="-1">
         <link>
             <successor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="9000" y="476.5" hdg="0.16" length="1011.2">
+           <geometry s="0.0" x="9000" y="118.5" hdg="0.16" length="1013">
                 <line />
             </geometry>
         </planView>
