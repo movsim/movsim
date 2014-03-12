@@ -30,3 +30,10 @@ git branch -d delete_branch
 # force delete branch:
 git branch -D delete_branch
 
+====================================
+
+# http://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-appears-in-branch-a
+# Deletes all stale remote-tracking branches under <name>. These stale branches have already been removed from the remote repository referenced by <name>, but are still locally available in "remotes/<name>". 
+
+git remote prune origin # --dry-run # 
+git fetch -p # fetches and prunes all origins.
