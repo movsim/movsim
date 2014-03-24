@@ -206,7 +206,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
 
         for (RoadSegment roadSegment : roadSegments) {
-            roadSegment.makeDynamicRoutingDecisions();
+            roadSegment.makeDynamicRoutingDecisions(dt, simulationTime, iterationCount);
         }
 
         // Note: must do lane changes before vehicle positions are updated (or after outFlow) to ensure

@@ -38,10 +38,8 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
 
         for (DecisionPoint decisionPoint : serviceProvider.getDecisionPoints()) {
             for (RouteAlternative alternative : decisionPoint) {
-                writer.printf(outputHeading,
-                        "disutility_RoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel(),
-                        "probRoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel(),
-                        "traveltimeError_RoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRouteLabel());
+                String alternativeId = "_RoadId" + decisionPoint.getRoadId() + "_Route" + alternative.getRoute().getName();
+                writer.printf(outputHeading, "disutility" + alternativeId, "prob" + alternativeId, "traveltimeError" + alternativeId);
             }
         }
         writer.printf("%n");

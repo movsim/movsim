@@ -24,7 +24,7 @@ public class DecisionPoints implements Iterable<DecisionPoint> {
         this.uncertainty = configuration.getUncertainty();
         if (configuration.isSetDecisionPoint()) {
             for (DecisionPointType decisionPointType : configuration.getDecisionPoint()) {
-                DecisionPoint decisionPoint = new DecisionPoint(decisionPointType);
+                DecisionPoint decisionPoint = new DecisionPoint(decisionPointType, routing);
                 String roadId = decisionPoint.getRoadId();
                 if (decisionPoints.containsKey(roadId)) {
                     throw new IllegalArgumentException("decision point with roadId=" + roadId + " already exists.");

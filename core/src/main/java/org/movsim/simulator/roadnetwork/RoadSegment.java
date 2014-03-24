@@ -873,10 +873,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         checkFinishingOvertaking(dt);
     }
 
-    public void makeDynamicRoutingDecisions() {
+    public void makeDynamicRoutingDecisions(double dt, double simulationTime, long iterationCount) {
         for (LaneSegment laneSegment : laneSegments) {
             for (Vehicle vehicle : laneSegment) {
-                vehicle.routingDecisions().considerRouteAlternatives(this);
+                vehicle.routingDecisions().considerRouteAlternatives(simulationTime, this);
             }
         }
     }

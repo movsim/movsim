@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 import org.movsim.autogen.DecisionPointType;
 import org.movsim.autogen.RouteAlternativeType;
+import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.roadnetwork.routing.Routing;
 
 import com.google.common.base.Preconditions;
 
@@ -16,7 +18,7 @@ public class DecisionPoint implements Iterable<RouteAlternative> {
     /** sorted according to routeLabel for assuring a consistent */
     private final SortedMap<String, RouteAlternative> routeAlternatives = new TreeMap<>();
 
-    public DecisionPoint(DecisionPointType configuration) {
+    public DecisionPoint(DecisionPointType configuration, Routing routing) {
         Preconditions.checkNotNull(configuration);
         if (!configuration.isSetRouteAlternative() || configuration.getRouteAlternative().isEmpty()) {
             throw new IllegalArgumentException("at least one alternative must be defined.");
@@ -25,8 +27,10 @@ public class DecisionPoint implements Iterable<RouteAlternative> {
         this.roadId = configuration.getRoadId();
         for (RouteAlternativeType routeAlternative : configuration.getRouteAlternative()) {
             String routeLabel = routeAlternative.getRoute();
-            RouteAlternative alternative = new RouteAlternative(routeLabel);
-            routeAlternatives.put(alternative.getRouteLabel(), alternative);
+            Route route = Preconditions.checkNotNull(routing.get(routeLabel), "route with label=" + routeLabel
+                    + " not configured in <Routes> input!");
+            RouteAlternative alternative = new RouteAlternative(route);
+            routeAlternatives.put(alternative.getRoute().getName(), alternative);
         }
     }
 

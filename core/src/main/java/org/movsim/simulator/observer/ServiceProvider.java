@@ -4,6 +4,7 @@ import org.movsim.autogen.ServiceProviderType;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadNetworkUtils;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,12 @@ public class ServiceProvider implements SimulationTimeStep {
 
     private final String label;
 
-    private final double updateTime;
+    private final double serverUpdateInterval;
 
-    private boolean update = true;
-
+    private boolean serverUpdate = true;
+    
+    private final double vehicleUpdateInterval;
+    
     private final DecisionPoints decisionPoints;
 
     private final Noise noise;
@@ -36,7 +39,8 @@ public class ServiceProvider implements SimulationTimeStep {
         Preconditions.checkNotNull(configuration);
         this.routing = Preconditions.checkNotNull(routing);
         this.label = configuration.getLabel();
-        this.updateTime = configuration.getUpdateTime();
+        this.serverUpdateInterval = configuration.getServerUpdateInterval();
+        this.vehicleUpdateInterval = configuration.getVehicleUpdateInterval();
         this.decisionPoints = new DecisionPoints(configuration.getDecisionPoints(), routing);
         this.noise = new Noise(configuration.getTau(), configuration.getFluctStrength());
         this.fileOutput = configuration.isLogging() ? new ServiceProviderLogging(this) : null;
@@ -52,8 +56,8 @@ public class ServiceProvider implements SimulationTimeStep {
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (updateTime != 0) {
-            update = (iterationCount % (updateTime / dt) == 0) ? true : false;
+        if (serverUpdateInterval != 0) {
+            serverUpdate = (iterationCount % (serverUpdateInterval / dt) == 0) ? true : false;
         }
         evaluateDecisionPoints(dt);
         if (fileOutput != null) {
@@ -65,14 +69,14 @@ public class ServiceProvider implements SimulationTimeStep {
      * @param uncertainty
      * @param roadSegmentUserId
      * @param random
-     * @return
+     * @return the selected route or null if no route can be found
      */
-    public String selectRoute(double uncertainty, String roadSegmentUserId, double random) {
+    public Route selectRoute(double uncertainty, String roadSegmentUserId, double random) {
         DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
         if (decisionPoint != null) {
             return selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty, random);
         }
-        return ""; // TODO
+        return null;
     }
 
     private void evaluateDecisionPoints(double dt) {
@@ -90,11 +94,10 @@ public class ServiceProvider implements SimulationTimeStep {
                 noise.update(dt, alternative.getTravelTimeError());
                 traveltimeError = noise.getTimeError();
             }
-            // usage of metric for disutility
-            double traveltime = traveltimeError
-                    + RoadNetworkUtils.instantaneousTravelTime(routing.get(alternative.getRouteLabel()));
+            // traveltime is the metric for disutility
+            double traveltime = traveltimeError + RoadNetworkUtils.instantaneousTravelTime(alternative.getRoute());
             alternative.setTravelTimeError(traveltimeError);
-            if (update) {
+            if (serverUpdate) {
                 alternative.setDisutility(traveltime);
             }
         }
@@ -145,7 +148,7 @@ public class ServiceProvider implements SimulationTimeStep {
         bestAlternative.setProbability(1);
     }
 
-    private static String selectAlternativeRoute(Iterable<RouteAlternative> alternatives, double uncertainty,
+    private static Route selectAlternativeRoute(Iterable<RouteAlternative> alternatives, double uncertainty,
             double random) {
         Preconditions.checkArgument(random >= 0 && random < 1);
         calcProbabilities(alternatives, uncertainty);
@@ -154,7 +157,7 @@ public class ServiceProvider implements SimulationTimeStep {
             sumProb += alternative.getProbability();
             LOG.debug("alternative={}, sumProb={}", alternative.toString(), sumProb);
             if (random <= sumProb) {
-                return alternative.getRouteLabel();
+                return alternative.getRoute();
             }
         }
         Preconditions.checkState(false, "probabilities not sumed correctly: random=" + random + ", sumProb=" + sumProb);
@@ -170,6 +173,10 @@ public class ServiceProvider implements SimulationTimeStep {
             }
         }
         return false;
+    }
+
+    public double getVehicleUpdateInterval() {
+        return vehicleUpdateInterval;
     }
 
 }
