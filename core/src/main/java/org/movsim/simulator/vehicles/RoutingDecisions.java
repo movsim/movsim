@@ -1,5 +1,6 @@
 package org.movsim.simulator.vehicles;
 
+import org.movsim.simulator.observer.DecisionPoint;
 import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -22,7 +23,6 @@ public class RoutingDecisions {
 
     private final Vehicle vehicle;
 
-    private Route route;
     private double lastUpdateTime = NOT_INIT;
 
     public RoutingDecisions(Vehicle vehicle) {
@@ -39,16 +39,28 @@ public class RoutingDecisions {
             lastUpdateTime = -MyRandom.nextDouble() * serviceProvider.getVehicleUpdateInterval();
         }
 
+        Route route = null;
+        RoadSegment decisionPointRoadSegment = roadSegment;
+        if (roadSegment.userId().equals("1")) {
+            decisionPointRoadSegment = roadSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
+        }
         // discrete update works only for one decision point
         if (readyForNextUpdate(serviceProvider.getVehicleUpdateInterval(), simulationTime)) {
-            LOG.debug("vehicle gets update at time={}, last update was at time={}", simulationTime, lastUpdateTime);
+
+            DecisionPoint decisionPoint = serviceProvider.getDecisionPoint(decisionPointRoadSegment.userId());
+
+            // LOG.debug("vehicle gets update at time={}, last update was at time={}", simulationTime, lastUpdateTime);
             lastUpdateTime = simulationTime;
 
-            // FIXME avoid hack of getting relevant decision point
-            // String roadSegmentWithDecisionPoint = roadSegment.userId().equals("1") || roadSegment.userId().equals("2") ? "2"
-            // : roadSegment.userId();
-            route = serviceProvider.selectRoute(uncertainty, roadSegment.userId(), randomAlternative);
-            LOG.debug("selected route is={}", route != null ? route.getName() : "");
+            if (decisionPoint != null) {
+                // FIXME avoid hack of getting relevant decision point
+                // String roadSegmentWithDecisionPoint = roadSegment.userId().equals("1") || roadSegment.userId().equals("2") ? "2"
+                // : roadSegment.userId();
+                route = serviceProvider.selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty,
+                        randomAlternative);
+                // route = serviceProvider.selectRoute(uncertainty, roadSegment.userId(), randomAlternative);
+                LOG.debug("selected route is={}", route != null ? route.getName() : "");
+            }
         }
 
         if (route == null) {
@@ -57,16 +69,15 @@ public class RoutingDecisions {
 
         // FIXME fully-fleshed routing decision making, here quick hack
         if (!route.getName().equals("A1") && !route.getName().equals("A2")) {
-            throw new IllegalArgumentException("cannot handle other alternatives="+route+"  then A1 and A2 yet!!!");
+            throw new IllegalArgumentException("cannot handle other alternatives=" + route + "  then A1 and A2 yet!!!");
         }
-
 
         if ("A2".equals(route.getName())) {
             // activate decision to diverge at exit
-            vehicle.setExitRoadSegmentId(roadSegment.id());
-            if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
-                throw new IllegalArgumentException("cannot do diverge on roadSegment " + roadSegment.userId()
-                        + " without exit lane!");
+            vehicle.setExitRoadSegmentId(decisionPointRoadSegment.id());
+            if (decisionPointRoadSegment.laneType(decisionPointRoadSegment.laneCount()) != Lanes.Type.EXIT) {
+                throw new IllegalArgumentException("cannot do diverge on roadSegment "
+                        + decisionPointRoadSegment.userId() + " without exit lane!");
             }
         } else if ("A1".equals(route.getName())) {
             // reset if A2 has been chosen in previous update

@@ -31,13 +31,10 @@ public class ServiceProvider implements SimulationTimeStep {
 
     private final Noise noise;
 
-    private final Routing routing;
-
     private final ServiceProviderLogging fileOutput;
 
     public ServiceProvider(ServiceProviderType configuration, Routing routing, RoadNetwork roadNetwork) {
         Preconditions.checkNotNull(configuration);
-        this.routing = Preconditions.checkNotNull(routing);
         this.label = configuration.getLabel();
         this.serverUpdateInterval = configuration.getServerUpdateInterval();
         this.vehicleUpdateInterval = configuration.getVehicleUpdateInterval();
@@ -71,12 +68,16 @@ public class ServiceProvider implements SimulationTimeStep {
      * @param random
      * @return the selected route or null if no route can be found
      */
-    public Route selectRoute(double uncertainty, String roadSegmentUserId, double random) {
-        DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
-        if (decisionPoint != null) {
-            return selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty, random);
-        }
-        return null;
+    // public Route selectRoute(double uncertainty, String roadSegmentUserId, double random) {
+    // DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
+    // if (decisionPoint != null) {
+    // return selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty, random);
+    // }
+    // return null;
+    // }
+
+    public DecisionPoint getDecisionPoint(String roadSegmentUserId) {
+        return decisionPoints.get(roadSegmentUserId);
     }
 
     private void evaluateDecisionPoints(double dt) {
@@ -148,7 +149,7 @@ public class ServiceProvider implements SimulationTimeStep {
         bestAlternative.setProbability(1);
     }
 
-    private static Route selectAlternativeRoute(Iterable<RouteAlternative> alternatives, double uncertainty,
+    public static Route selectAlternativeRoute(Iterable<RouteAlternative> alternatives, double uncertainty,
             double random) {
         Preconditions.checkArgument(random >= 0 && random < 1);
         calcProbabilities(alternatives, uncertainty);

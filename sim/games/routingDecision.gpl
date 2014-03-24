@@ -164,7 +164,7 @@ set xlabel timeMinuteLabel
 set ylabel "Position [km]"
 
 set palette defined (0 "red", 20 "orange", 40 "yellow", 60 "green", 80 "blue",  100 "#dd00ff" )
-set xrange [0:130]  
+set xrange [0:140]  
 set cbrange [0:]
 
 #set out v2dOutputA1
