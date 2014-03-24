@@ -139,6 +139,7 @@ set out fundOutput
 plot fundFile using 1:4 title "" with lines linestyle 10
 
 ########  Detectors  ####################################
+print "using input files %s and %s",detFileA1(13000), detFileA2(13000)
 set xlabel densityLabel
 set ylabel flowLabel
 set out detOutput

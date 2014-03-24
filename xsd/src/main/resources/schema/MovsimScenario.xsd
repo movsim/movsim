@@ -463,8 +463,8 @@
         <xs:attribute name="logging" type="xs:boolean" default="false" />
         <xs:attribute name="tau" type="nonNegativeDouble" default="0" />
         <xs:attribute name="fluct_strength" type="nonNegativeDouble" default="0" />
-        <xs:attribute name="update_time" type="nonNegativeDouble" default="0" />
-        <xs:attribute name="vehicle_update_time" type="nonNegativeDouble" default="0" />
+        <xs:attribute name="server_update_interval" type="nonNegativeDouble" default="0" />
+        <xs:attribute name="vehicle_update_interval" type="nonNegativeDouble" default="0" />
     </xs:complexType>
     <xs:complexType name="RouteAlternativesType">
         <xs:sequence>
