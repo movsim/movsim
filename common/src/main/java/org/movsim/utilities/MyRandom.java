@@ -62,7 +62,8 @@ public class MyRandom {
     /**
      * Next double.
      * 
-     * @return the double
+     * @return the next pseudo-random, uniformly distributed {@code double} value between {@code 0.0} and {@code 1.0} from the
+     *         random number generator's sequence
      */
     public static double nextDouble() {
         return rand.nextDouble();
