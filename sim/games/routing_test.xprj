@@ -11,7 +11,7 @@
                 <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
             </LaneChangeModelType>
             <!-- uncertainty=30 -->
-            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="0" /> <!-- threshold for re-routing -->
+            <PersonalNavigationDevice service_provider="wiseGuy" uncertainty="0" rerouting_threshold="120" /> 
         </VehiclePrototypeConfiguration>
         <!-- car without traffic information -->
         <VehiclePrototypeConfiguration label="NonEquipped" length="6" maximum_deceleration="10">
@@ -25,7 +25,7 @@
     </VehiclePrototypes>
     <ServiceProviders>
 		<!-- disable logging for scan --> <!-- tau="300" fluct_strength="30" -->
-        <ServiceProvider label="wiseGuy" logging="true" tau="0" fluct_strength="0" server_update_interval="0" vehicle_update_interval="120" >
+        <ServiceProvider label="wiseGuy" logging="true" tau="0" fluct_strength="0" server_update_interval="0" vehicle_update_interval="0" >
 			<!-- disutility just for logging, keep consistent with vehicle's disutility -->
             <DecisionPoints uncertainty="0">
                 <!-- disutility in seconds -->

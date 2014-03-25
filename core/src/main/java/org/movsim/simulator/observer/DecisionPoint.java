@@ -1,6 +1,8 @@
 package org.movsim.simulator.observer;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -43,8 +45,12 @@ public class DecisionPoint implements Iterable<RouteAlternative> {
         return routeAlternatives.values().iterator();
     }
 
-    public Iterable<RouteAlternative> getAlternatives() {
-        return routeAlternatives.values();
+    public List<RouteAlternative> createRouteAlternatives() {
+        List<RouteAlternative> alternatives = new ArrayList<>(routeAlternatives.size());
+        for(RouteAlternative routeAlternative : routeAlternatives.values()){
+            alternatives.add(new RouteAlternative(routeAlternative));
+        }
+        return alternatives;
     }
 
 }

@@ -83,6 +83,7 @@ public final class VehicleFactory {
         }
         vehicle.routingDecisions().setServiceProvider(provider);
         vehicle.routingDecisions().setUncertainty(personalNavigationDevice.getUncertainty());
+        vehicle.routingDecisions().setReroutingThreshold(personalNavigationDevice.getReroutingThreshold());
     }
 
     // route is determined via the traffic composition

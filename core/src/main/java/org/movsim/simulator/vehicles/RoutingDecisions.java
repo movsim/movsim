@@ -1,6 +1,8 @@
 package org.movsim.simulator.vehicles;
 
-import org.movsim.simulator.observer.DecisionPoint;
+import java.util.List;
+
+import org.movsim.simulator.observer.RouteAlternative;
 import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -16,14 +18,20 @@ public class RoutingDecisions {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(RoutingDecisions.class);
 
-    private static final double NOT_INIT = -1d;
+    private static final double NOT_INIT = -1.0;
+
+    private static int countReroutings = 0;
+
     private ServiceProvider serviceProvider;
     private double uncertainty;
+    private double reroutingThreshold;
     private final double randomAlternative = MyRandom.nextDouble();
 
     private final Vehicle vehicle;
 
     private double lastUpdateTime = NOT_INIT;
+
+    private RouteAlternative routeAlternative;
 
     public RoutingDecisions(Vehicle vehicle) {
         this.vehicle = vehicle;
@@ -39,31 +47,62 @@ public class RoutingDecisions {
             lastUpdateTime = simulationTime - MyRandom.nextDouble() * serviceProvider.getVehicleUpdateInterval();
         }
 
-        if (!readyForNextUpdate(serviceProvider.getVehicleUpdateInterval(), simulationTime)) {
-            return;
+        if (readyForNextUpdate(serviceProvider.getVehicleUpdateInterval(), simulationTime)) {
+
+            LOG.debug("vehicle gets update at time={}, last update was at time={}", (int) simulationTime,
+                    (int) lastUpdateTime);
+            lastUpdateTime = simulationTime;
+
+            // quick hack for finite vehicle update interval: look-ahead one road segment to assign routing decision in advance
+            RoadSegment decisionPointSegment = roadSegment;
+            if (roadSegment.userId().equals("1")) {
+                decisionPointSegment = roadSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
+            }
+
+            List<RouteAlternative> alternatives = serviceProvider.getAlternativesForDecisionPoint(decisionPointSegment);
+            if (alternatives != null) {
+                serviceProvider.updateRouteAlternatives(alternatives, uncertainty);
+                RouteAlternative newRouteAlternative = serviceProvider.selectMostProbableAlternative(alternatives,
+                        randomAlternative);
+
+                // quick-hack: assign exit lane to vehicle since routing capabilities not yet available in movsim
+                boolean doRerouting = (uncertainty > 0) ? true : checkForRerouting(newRouteAlternative, alternatives);
+                if (doRerouting) {
+                    routeAlternative = newRouteAlternative;
+                    assignRoute(decisionPointSegment, routeAlternative.getRoute());
+                }
+            }
+        }
+    }
+
+    private boolean checkForRerouting(RouteAlternative newRouteAlternative, List<RouteAlternative> alternatives) {
+        if (routeAlternative == null) {
+            return true;
         }
 
-        LOG.debug("vehicle gets update at time={}, last update was at time={}", (int) simulationTime,
-                (int) lastUpdateTime);
-        lastUpdateTime = simulationTime;
-
-        // quick hack for finite vehicle update interval: look-ahead one road segment to assign routing decision in advance
-        RoadSegment decisionPointRoadSegment = roadSegment;
-        if (roadSegment.userId().equals("1")) {
-            decisionPointRoadSegment = roadSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
+        if (newRouteAlternative.getRoute().equals(routeAlternative.getRoute())) {
+            return false; // no new route
         }
 
-        DecisionPoint decisionPoint = serviceProvider.getDecisionPoint(decisionPointRoadSegment.userId());
-        if (decisionPoint == null) {
-            return;
+        RouteAlternative alternativeFromLastRouting = getAlternativeFromLastUpdate(alternatives);
+
+        boolean doRerouting = newRouteAlternative.getDisutility() + reroutingThreshold < alternativeFromLastRouting
+                .getDisutility();
+        if (doRerouting) {
+            ++countReroutings;
+            LOG.info("vehicle is re-routed: diff disutility={}, counterReroutings={}",
+                    newRouteAlternative.getDisutility() - alternativeFromLastRouting.getDisutility(), countReroutings);
         }
+        return doRerouting;
+    }
 
-        Route route = ServiceProvider.selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty,
-                randomAlternative);
-        LOG.debug("selected route is={}", route != null ? route.getName() : "");
-
-        // quick-hack: assign exit lane to vehicle since routing capabilities not yet available in movsim
-        assignRoute(decisionPointRoadSegment, route);
+    private RouteAlternative getAlternativeFromLastUpdate(List<RouteAlternative> alternatives) {
+        for (RouteAlternative alternative : alternatives) {
+            if (alternative.getRoute().equals(routeAlternative.getRoute())) {
+                return alternative;
+            }
+        }
+        throw new IllegalStateException("shouldn't come here - alternative not found");
     }
 
     private void assignRoute(RoadSegment roadSegment, Route route) {
@@ -106,6 +145,14 @@ public class RoutingDecisions {
 
     public boolean hasServiceProvider() {
         return serviceProvider != null;
+    }
+
+    public double getReroutingThreshold() {
+        return reroutingThreshold;
+    }
+
+    public void setReroutingThreshold(double reroutingThreshold) {
+        this.reroutingThreshold = reroutingThreshold;
     }
 
 }

@@ -448,6 +448,7 @@
     <xs:complexType name="PersonalNavigationDeviceType">
         <xs:attribute name="service_provider" type="xs:string" />
         <xs:attribute name="uncertainty" type="nonNegativeDouble" default="0.0" />
+        <xs:attribute name="rerouting_threshold" type="nonNegativeDouble" default="0.0" />
     </xs:complexType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:complexType name="ServiceProvidersType">

@@ -316,6 +316,7 @@ public class Vehicle {
         if (source.routingDecisions.hasServiceProvider()) {
             routingDecisions.setServiceProvider(source.routingDecisions().getServiceProvider());
             routingDecisions.setUncertainty(source.routingDecisions().getUncertainty());
+            routingDecisions.setReroutingThreshold(source.routingDecisions.getReroutingThreshold());
         }
     }
 

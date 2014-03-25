@@ -4,7 +4,7 @@ import org.movsim.simulator.roadnetwork.routing.Route;
 
 import com.google.common.base.Preconditions;
 
-class RouteAlternative {
+public class RouteAlternative {
 
     private final Route route;
 
@@ -19,6 +19,15 @@ class RouteAlternative {
     public RouteAlternative(Route route) {
         Preconditions.checkArgument(route != null);
         this.route = route;
+    }
+
+    /** copy-constructur for immutable object copy */
+    public RouteAlternative(RouteAlternative routeAlternative) {
+        Preconditions.checkNotNull(routeAlternative);
+        this.route = routeAlternative.getRoute();
+        this.disutility = routeAlternative.getDisutility();
+        this.probability = routeAlternative.getProbability();
+        this.travelTimeError = routeAlternative.getTravelTimeError();
     }
 
     public Route getRoute() {

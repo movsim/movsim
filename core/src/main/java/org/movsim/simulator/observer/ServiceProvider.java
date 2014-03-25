@@ -1,22 +1,22 @@
 package org.movsim.simulator.observer;
 
+import java.util.List;
+
+import javax.annotation.CheckForNull;
+
 import org.movsim.autogen.ServiceProviderType;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadNetworkUtils;
-import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
 
 public class ServiceProvider implements SimulationTimeStep {
 
-    private static final int TOO_LARGE_EXPONENT = 100;
-
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(ServiceProvider.class);
 
     private final String label;
@@ -24,9 +24,9 @@ public class ServiceProvider implements SimulationTimeStep {
     private final double serverUpdateInterval;
 
     private boolean serverUpdate = true;
-    
+
     private final double vehicleUpdateInterval;
-    
+
     private final DecisionPoints decisionPoints;
 
     private final Noise noise;
@@ -51,6 +51,10 @@ public class ServiceProvider implements SimulationTimeStep {
         return decisionPoints;
     }
 
+    public double getVehicleUpdateInterval() {
+        return vehicleUpdateInterval;
+    }
+
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (serverUpdateInterval != 0) {
@@ -62,23 +66,35 @@ public class ServiceProvider implements SimulationTimeStep {
         }
     }
 
-    /**
-     * @param uncertainty
-     * @param roadSegmentUserId
-     * @param random
-     * @return the selected route or null if no route can be found
-     */
-    // public Route selectRoute(double uncertainty, String roadSegmentUserId, double random) {
-    // DecisionPoint decisionPoint = decisionPoints.get(roadSegmentUserId);
-    // if (decisionPoint != null) {
-    // return selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty, random);
-    // }
-    // return null;
-    // }
+    /** calculate individual probabilities */
+    public void updateRouteAlternatives(Iterable<RouteAlternative> alternatives, double uncertainty) {
+        LogitRouteDecisionMaking.calcProbabilities(alternatives, uncertainty);
+    }
+    
+    public RouteAlternative selectMostProbableAlternative(Iterable<RouteAlternative> alternatives, double random) {
+        return LogitRouteDecisionMaking.selectMostProbableAlternative(alternatives, random);
+    }
 
-    public DecisionPoint getDecisionPoint(String roadSegmentUserId) {
+    @CheckForNull
+    public List<RouteAlternative> getAlternativesForDecisionPoint(RoadSegment roadSegment) {
+        DecisionPoint decisionPoint = getDecisionPoint(roadSegment.userId());
+        if (decisionPoint == null) {
+            return null;
+        }
+        return decisionPoint.createRouteAlternatives();
+    }
+
+    @CheckForNull
+    private DecisionPoint getDecisionPoint(String roadSegmentUserId) {
         return decisionPoints.get(roadSegmentUserId);
     }
+
+    // public RouteAlternative selectRouteAlternative(Iterable<RouteAlternative> alternatives, double uncertainty,
+    // double random) {
+    // RouteAlternative routeAlternative = LogitRouteDecisionMaking.selectAlternativeRoute(alternatives, uncertainty,
+    // random);
+    // return new RouteAlternative(routeAlternative);
+    // }
 
     private void evaluateDecisionPoints(double dt) {
         double uncertainty = decisionPoints.getUncertainty();
@@ -102,82 +118,7 @@ public class ServiceProvider implements SimulationTimeStep {
                 alternative.setDisutility(traveltime);
             }
         }
-        calcProbabilities(decisionPoint, uncertainty);
-    }
-
-    private static void calcProbabilities(Iterable<RouteAlternative> alternatives, double uncertainty) {
-        if (uncertainty > 0) {
-            calcProbabilityIfStochastic(alternatives, uncertainty);
-        } else {
-            calcProbabilityForDeterministic(alternatives);
-        }
-    }
-
-    private static void calcProbabilityIfStochastic(Iterable<RouteAlternative> alternatives, double uncertainty) {
-        final double beta = -1 / uncertainty;
-        for (RouteAlternative alternative : alternatives) {
-            // check first for large exponential
-            if (hasTooLargeExponent(beta, alternative, alternatives)) {
-                // probability of 0 as trivial result
-                alternative.setProbability(0);
-
-            } else {
-                double probAlternative = calcProbability(beta, alternative, alternatives);
-                alternative.setProbability(probAlternative);
-            }
-            LOG.debug("calculated prob for stochastic case: {}", alternative);
-        }
-    }
-
-    private static double calcProbability(double beta, RouteAlternative alternative,
-            Iterable<RouteAlternative> alternatives) {
-        double denom = 0;
-        for (RouteAlternative otherAlternative : alternatives) {
-            denom += Math.exp(beta * (otherAlternative.getDisutility() - alternative.getDisutility()));
-        }
-        return 1. / denom;
-    }
-
-    private static void calcProbabilityForDeterministic(Iterable<RouteAlternative> alternatives) {
-        RouteAlternative bestAlternative = Iterables.getLast(alternatives);
-        for (RouteAlternative alternative : alternatives) {
-            alternative.setProbability(0);
-            if (alternative.getDisutility() < bestAlternative.getDisutility()) {
-                bestAlternative = alternative;
-            }
-        }
-        bestAlternative.setProbability(1);
-    }
-
-    public static Route selectAlternativeRoute(Iterable<RouteAlternative> alternatives, double uncertainty,
-            double random) {
-        Preconditions.checkArgument(random >= 0 && random < 1);
-        calcProbabilities(alternatives, uncertainty);
-        double sumProb = 0;
-        for (RouteAlternative alternative : alternatives) {
-            sumProb += alternative.getProbability();
-            LOG.debug("alternative={}, sumProb={}", alternative.toString(), sumProb);
-            if (random <= sumProb) {
-                return alternative.getRoute();
-            }
-        }
-        Preconditions.checkState(false, "probabilities not sumed correctly: random=" + random + ", sumProb=" + sumProb);
-        return null;
-    }
-
-    private static boolean hasTooLargeExponent(double beta, RouteAlternative alternative,
-            Iterable<RouteAlternative> alternatives) {
-        for (RouteAlternative otherAlternative : alternatives) {
-            double delta = Math.abs(alternative.getDisutility() - otherAlternative.getDisutility());
-            if (beta * delta > TOO_LARGE_EXPONENT) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public double getVehicleUpdateInterval() {
-        return vehicleUpdateInterval;
+        LogitRouteDecisionMaking.calcProbabilities(decisionPoint, uncertainty);
     }
 
 }
