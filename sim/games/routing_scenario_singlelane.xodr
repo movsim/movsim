@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenDRIVE>
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep 2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-    <road name="R1" length="3000.0" id="1" junction="-1">
+    <road name="R1" length="5000.0" id="1" junction="-1">
         <link>
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
         <type type="motorway" />
         <planView>
-            <geometry s="0.0" x="0" y="105" hdg="0.0" length="3000.0">
+            <geometry s="0.0" x="-2000" y="105" hdg="0.0" length="5000.0">
                 <line />
             </geometry>
         </planView>

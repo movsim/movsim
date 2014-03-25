@@ -36,55 +36,52 @@ public class RoutingDecisions {
 
         if (lastUpdateTime == NOT_INIT) {
             // initialize update time with random (negative) offset to avoid synchronization at the inflow boundary
-            lastUpdateTime = -MyRandom.nextDouble() * serviceProvider.getVehicleUpdateInterval();
+            lastUpdateTime = simulationTime - MyRandom.nextDouble() * serviceProvider.getVehicleUpdateInterval();
         }
 
-        Route route = null;
+        if (!readyForNextUpdate(serviceProvider.getVehicleUpdateInterval(), simulationTime)) {
+            return;
+        }
+
+        LOG.debug("vehicle gets update at time={}, last update was at time={}", (int) simulationTime,
+                (int) lastUpdateTime);
+        lastUpdateTime = simulationTime;
+
+        // quick hack for finite vehicle update interval: look-ahead one road segment to assign routing decision in advance
         RoadSegment decisionPointRoadSegment = roadSegment;
         if (roadSegment.userId().equals("1")) {
             decisionPointRoadSegment = roadSegment.sinkRoadSegment(Lanes.MOST_INNER_LANE);
         }
-        // discrete update works only for one decision point
-        if (readyForNextUpdate(serviceProvider.getVehicleUpdateInterval(), simulationTime)) {
 
-            DecisionPoint decisionPoint = serviceProvider.getDecisionPoint(decisionPointRoadSegment.userId());
-
-            // LOG.debug("vehicle gets update at time={}, last update was at time={}", simulationTime, lastUpdateTime);
-            lastUpdateTime = simulationTime;
-
-            if (decisionPoint != null) {
-                // FIXME avoid hack of getting relevant decision point
-                // String roadSegmentWithDecisionPoint = roadSegment.userId().equals("1") || roadSegment.userId().equals("2") ? "2"
-                // : roadSegment.userId();
-                route = serviceProvider.selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty,
-                        randomAlternative);
-                // route = serviceProvider.selectRoute(uncertainty, roadSegment.userId(), randomAlternative);
-                LOG.debug("selected route is={}", route != null ? route.getName() : "");
-            }
-        }
-
-        if (route == null) {
+        DecisionPoint decisionPoint = serviceProvider.getDecisionPoint(decisionPointRoadSegment.userId());
+        if (decisionPoint == null) {
             return;
         }
 
-        // FIXME fully-fleshed routing decision making, here quick hack
+        Route route = ServiceProvider.selectAlternativeRoute(decisionPoint.getAlternatives(), uncertainty,
+                randomAlternative);
+        LOG.debug("selected route is={}", route != null ? route.getName() : "");
+
+        // quick-hack: assign exit lane to vehicle since routing capabilities not yet available in movsim
+        assignRoute(decisionPointRoadSegment, route);
+    }
+
+    private void assignRoute(RoadSegment roadSegment, Route route) {
         if (!route.getName().equals("A1") && !route.getName().equals("A2")) {
             throw new IllegalArgumentException("cannot handle other alternatives=" + route + "  then A1 and A2 yet!!!");
         }
 
         if ("A2".equals(route.getName())) {
             // activate decision to diverge at exit
-            vehicle.setExitRoadSegmentId(decisionPointRoadSegment.id());
-            if (decisionPointRoadSegment.laneType(decisionPointRoadSegment.laneCount()) != Lanes.Type.EXIT) {
-                throw new IllegalArgumentException("cannot do diverge on roadSegment "
-                        + decisionPointRoadSegment.userId() + " without exit lane!");
+            vehicle.setExitRoadSegmentId(roadSegment.id());
+            if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
+                throw new IllegalArgumentException("cannot do diverge on roadSegment " + roadSegment.userId()
+                        + " without exit lane!");
             }
         } else if ("A1".equals(route.getName())) {
             // reset if A2 has been chosen in previous update
             vehicle.setExitRoadSegmentId(Vehicle.ROAD_SEGMENT_ID_NOT_SET);
         }
-
-        route = null;
     }
 
     private boolean readyForNextUpdate(double vehicleUpdateInterval, double simulationTime) {

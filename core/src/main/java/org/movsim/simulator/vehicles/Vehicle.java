@@ -1058,7 +1058,6 @@ public class Vehicle {
      * @param roadSegmentLength
      * 
      */
-
     public final void setRoadSegment(RoadSegment roadSegment) {
         this.roadSegment = Preconditions.checkNotNull(roadSegment);
         if (originRoadSegmentId == ROAD_SEGMENT_ID_NOT_SET) {
@@ -1196,7 +1195,7 @@ public class Vehicle {
 
     public void setRoute(Route newRoute) {
         LOG.debug("set route={} to vehicle {}", getRouteName(), id);
-        if (this.route != null && newRoute != null) {
+        if (this.route != null && newRoute != null && !newRoute.getName().equals(route.getName())) {
             LOG.info("vehicle changed route from={} to new route={}", this.route, newRoute);
         }
         this.route = newRoute;
