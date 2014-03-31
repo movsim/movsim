@@ -1,9 +1,11 @@
-/.settings/
-**/.settings/
-**/.classpath
-.classpath
-**/.project
+# ignore Eclipse stuff
 .project
+.settings
+*/.project
+*/.settings/
+*/.classpath
+*/test-output
+*/.gitignore
 target/
 bin/
 figs/
