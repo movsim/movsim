@@ -786,7 +786,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (RoadSegment roadSegment : roadNetwork) {
             AbstractTrafficSource trafficSource = roadSegment.trafficSource();
             if (trafficSource != null) {
-                TrafficCanvasUtils.drawLine(g, roadSegment.roadMapping(), 0, 4, Color.WHITE);
+                TrafficCanvasUtils.drawLine(g, roadSegment.roadMapping(), 0, 4, sourceColor);
             }
         }
     }
@@ -801,7 +801,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             TrafficSink sink = roadSegment.sink();
             if (sink != null) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
-                TrafficCanvasUtils.drawLine(g, roadMapping, roadMapping.roadLength(), 4, Color.BLACK);
+                TrafficCanvasUtils.drawLine(g, roadMapping, roadMapping.roadLength(), 4, sinkColor);
             }
         }
     }
@@ -813,35 +813,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 TrafficCanvasUtils.drawLine(g, roadMapping, notifyObject.getPosition(), 2, Color.DARK_GRAY);
             }
         }
-    }
-
-    // ============================================================================================
-    // SimulationRunnable callbacks
-    // ============================================================================================
-
-    /**
-     * <p>
-     * Implements SimulationRunnable.UpdateDrawingCallback.updateDrawing().
-     * </p>
-     * <p>
-     * Calls repaint() which causes UI framework to asynchronously call update(g).
-     * </p>
-     */
-    @Override
-    public void updateDrawing(double simulationTime) {
-        repaint();
-    }
-
-    /**
-     * <p>
-     * Implements SimulationRunnable.HandleExceptionCallback.handleException().
-     * </p>
-     * <p>
-     * Called back from the TrafficRunnable thread, in the synchronization block, if an exception occurs.
-     * </p>
-     */
-    @Override
-    public void handleException(Exception e) {
     }
 
     public void showSinkMouseOverInfo(Point point, TrafficSink sink) {
@@ -874,6 +845,35 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             mouseOverTipWindow.show(point, vehicle);
         }
 
+    }
+
+    // ============================================================================================
+    // SimulationRunnable callbacks
+    // ============================================================================================
+
+    /**
+     * <p>
+     * Implements SimulationRunnable.UpdateDrawingCallback.updateDrawing().
+     * </p>
+     * <p>
+     * Calls repaint() which causes UI framework to asynchronously call update(g).
+     * </p>
+     */
+    @Override
+    public void updateDrawing(double simulationTime) {
+        repaint();
+    }
+
+    /**
+     * <p>
+     * Implements SimulationRunnable.HandleExceptionCallback.handleException().
+     * </p>
+     * <p>
+     * Called back from the TrafficRunnable thread, in the synchronization block, if an exception occurs.
+     * </p>
+     */
+    @Override
+    public void handleException(Exception e) {
     }
 
 }
