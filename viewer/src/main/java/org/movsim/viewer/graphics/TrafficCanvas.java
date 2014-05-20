@@ -255,7 +255,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             throw new RuntimeException("Jaxb exception:" + e.toString());
         }
         simulator.reset();
-        mouseListener.reset();
         vehicleToHighlightId = -1;
         initGraphicSettings();
         forceRepaintBackground();

@@ -60,7 +60,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     private final TrafficCanvas trafficCanvas;
     private final TrafficCanvasController controller;
     private final RoadNetwork roadNetwork;
-    private boolean diversionOn;
     private boolean inDrag;
     private int startDragX;
     private int startDragY;
@@ -76,10 +75,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         this.trafficCanvas = Preconditions.checkNotNull(trafficCanvas);
         this.controller = Preconditions.checkNotNull(controller);
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
-    }
-
-    public void reset() {
-        diversionOn = false;
     }
 
     @Override
@@ -135,7 +130,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             path.lineTo(posTheta.getScreenX(), posTheta.getScreenY());
             path.closePath();
             if (path.contains(transformedPoint)) {
-                LOG.info("mouse clicked: toggle status of variable message sign={}", diversionOn);
+                LOG.info("mouse clicked: toggle status of variable message sign");
                 vmsDiversion.toogleActiveStatus();
                 trafficCanvas.repaint();
             }
