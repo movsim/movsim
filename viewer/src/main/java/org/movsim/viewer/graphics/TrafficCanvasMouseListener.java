@@ -160,7 +160,9 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     public void mouseReleased(MouseEvent mouseEvent) {
         inDrag = false;
         trafficCanvas.backgroundChanged = false;
-        trafficCanvas.mouseOverTipWindow.setVisible(false);
+        if (trafficCanvas.mouseOverTipWindow != null) {
+            trafficCanvas.mouseOverTipWindow.setVisible(false);
+        }
     }
 
     @Override
