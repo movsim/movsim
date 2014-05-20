@@ -173,6 +173,8 @@ public class TrafficLight extends RoadObjectController {
         if (hasTriggerCallback()) {
             LOG.debug("mouse click triggers next phase");
             triggerCallback.nextPhase();
+        } else {
+            LOG.debug("no trigger callback set");
         }
     }
 
@@ -184,22 +186,22 @@ public class TrafficLight extends RoadObjectController {
         return triggerCallback != null;
     }
 
-    // not needed in future
-    @Deprecated
-    void addPossibleState(TrafficLightStatus status) {
-        possibleStati.add(status);
-    }
+    // // not needed in future
+    // @Deprecated
+    // void addPossibleState(TrafficLightStatus status) {
+    // possibleStati.add(status);
+    // }
 
-    /**
-     * Return the number of lights this traffic light has, can be 1, 2 or 3.
-     * 
-     * @return
-     */
-    @Deprecated
-    public static int lightCount() {
-        // return Math.min(3, possibleStati.size());
-        return 3;
-    }
+    // /**
+    // * Return the number of lights this traffic light has, can be 1, 2 or 3.
+    // *
+    // * @return
+    // */
+    // @Deprecated
+    // public static int lightCount() {
+    // // return Math.min(3, possibleStati.size());
+    // return 3;
+    // }
 
     @Override
     public String toString() {

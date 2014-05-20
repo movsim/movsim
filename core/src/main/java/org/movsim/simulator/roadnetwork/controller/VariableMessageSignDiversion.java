@@ -123,7 +123,7 @@ public class VariableMessageSignDiversion extends RoadObjectController {
         }
     }
 
-    public void activateDiversion(boolean diversionActive) {
-        this.diversionActive = diversionActive;
+    public void toogleActiveStatus() {
+        this.diversionActive = !this.diversionActive;
     }
 }

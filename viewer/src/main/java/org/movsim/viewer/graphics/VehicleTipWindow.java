@@ -37,20 +37,21 @@ import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Units;
 
-@SuppressWarnings("synthetic-access")
+import com.google.common.base.Preconditions;
+
 class VehicleTipWindow extends Window {
 
     private static final long serialVersionUID = 1L;
 
     private final TrafficCanvas trafficCanvas;
 
-    long currentPopupId = 0;
+    private long currentPopupId = 0;
 
-    final Frame owner;
+    private final Frame owner;
 
     class PopupTimer {
 
-        private static final int popupTime = 4000; // milliseconds
+        private static final int POPUP_TIME_MS = 4000; // milliseconds
 
         private final Timer timer = new Timer();
 
@@ -66,17 +67,16 @@ class VehicleTipWindow extends Window {
                         VehicleTipWindow.this.trafficCanvas.vehiclePopup = null;
                     }
                 }
-            }, popupTime);
+            }, POPUP_TIME_MS);
         }
     }
 
     public VehicleTipWindow(TrafficCanvas trafficCanvas, Frame owner) {
         super(owner);
-        this.trafficCanvas = trafficCanvas;
-        this.owner = owner;
+        this.trafficCanvas = Preconditions.checkNotNull(trafficCanvas);
+        this.owner = Preconditions.checkNotNull(owner);
     }
 
-    @SuppressWarnings({ "boxing" })
     public void show(Point point, Vehicle vehicle) {
         final String exitString;
         if (vehicle.exitRoadSegmentId() == Vehicle.ROAD_SEGMENT_ID_NOT_SET) {

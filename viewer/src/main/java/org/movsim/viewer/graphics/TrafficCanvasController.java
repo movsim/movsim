@@ -137,7 +137,7 @@ public class TrafficCanvasController {
     }
 
     void commandToogleDrawJunctions() {
-        trafficCanvas.drawRoadId = !trafficCanvas.drawRoadId;
+        trafficCanvas.toogleDrawRoadId();
         trafficCanvas.forceRepaintBackground();
     }
 

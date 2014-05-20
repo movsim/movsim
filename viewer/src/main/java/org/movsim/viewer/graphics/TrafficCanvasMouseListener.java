@@ -36,6 +36,7 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -79,8 +80,8 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        LOG.debug("mouseClicked at screen={}", e.getPoint()); //$NON-NLS-1$
+    public void mouseClicked(MouseEvent mouseEvent) {
+        LOG.debug("mouseClicked at screen={}", mouseEvent.getPoint()); //$NON-NLS-1$
         if (trafficCanvas.lastVehicleViewed != -1) {
             LOG.debug("vehicle id set"); //$NON-NLS-1$
             trafficCanvas.vehicleToHighlightId = trafficCanvas.lastVehicleViewed;
@@ -88,54 +89,64 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             trafficCanvas.repaint();
         }
 
-        if (LOG.isDebugEnabled()) {
-            final Point point = e.getPoint();
-            final Point2D transformedPoint = new Point2D.Float();
+        try {
+            final Point eventPoint = mouseEvent.getPoint();
             // convert from mouse coordinates to canvas coordinates
-            try {
-                trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
-                LOG.debug("mouse clicked at={}", transformedPoint);
-            } catch (NoninvertibleTransformException e1) {
-                e1.printStackTrace();
+            Point2D transformedPoint = TrafficCanvasUtils.getTransformed(eventPoint, trafficCanvas.transform);
+            LOG.debug("mouse clicked at transformed point={}", transformedPoint);
+            for (final RoadSegment roadSegment : roadNetwork) {
+                final RoadMapping roadMapping = roadSegment.roadMapping();
+                // TODO check if angles are correctly mapped
+                checkForVariableMessageSigns(transformedPoint, roadSegment, roadMapping);
+                checkForTrafficLights(transformedPoint, roadSegment, roadMapping);
             }
+        } catch (NoninvertibleTransformException e1) {
+            LOG.error(e1.getMessage());
+            return;
         }
 
-        // TODO for the moment clicking anywhere sets vehicles in lane1 of roadsegment1 to exit in next road segment
-        diversionOn = !diversionOn;
-        for (final RoadSegment roadSegment : roadNetwork) {
-            for (VariableMessageSignDiversion vmsDiversion : roadSegment.variableMessageSignDiversions()) {
-                vmsDiversion.activateDiversion(diversionOn);
+
+    }
+
+    private void checkForTrafficLights(Point2D transformedPoint, RoadSegment roadSegment, RoadMapping roadMapping) {
+        for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
+            final double widthHeight = roadMapping.roadWidth(); // hack: just proxy for strokeWidth
+            final PosTheta posTheta = roadMapping.map(trafficLight.position(), 0);
+            final Rectangle2D trafficLightRect = TrafficCanvasUtils.getRectangle(posTheta, widthHeight);
+            if (trafficLightRect.contains(transformedPoint)) {
+                LOG.info("mouse clicked: traffic light triggers next phase");
+                trafficLight.triggerNextPhase();
                 trafficCanvas.repaint();
             }
+        }
+    }
 
-            final RoadMapping roadMapping = roadSegment.roadMapping();
-            for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
-                final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
-                // check if the user has clicked on a traffic light, if they have then change the
-                // traffic light to the next color
-                final Point point = e.getPoint();
-                final Point2D transformedPoint = new Point2D.Float();
-                try {
-                    // convert from mouse coordinates to canvas coordinates
-                    trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
-                } catch (final NoninvertibleTransformException e1) {
-                    e1.printStackTrace();
-                    return;
-                }
-                if (trafficLightRect.contains(transformedPoint)) {
-                    trafficLight.triggerNextPhase();
-                    trafficCanvas.repaint();
-                }
+    private void checkForVariableMessageSigns(Point2D transformedPoint, RoadSegment roadSegment, RoadMapping roadMapping) {
+        for (VariableMessageSignDiversion vmsDiversion : roadSegment.variableMessageSignDiversions()) {
+            PosTheta posTheta = roadMapping.startPos();
+            GeneralPath path = new GeneralPath();
+            path.moveTo(posTheta.getScreenX(), posTheta.getScreenY());
+            posTheta = roadMapping.map(roadMapping.roadLength(), 0);
+            path.lineTo(posTheta.getScreenX(), posTheta.getScreenY());
+            posTheta = roadMapping.map(roadMapping.roadLength(), roadMapping.getMaxOffsetRight());
+            path.lineTo(posTheta.getScreenX(), posTheta.getScreenY());
+            posTheta = roadMapping.map(0, roadMapping.getMaxOffsetRight());
+            path.lineTo(posTheta.getScreenX(), posTheta.getScreenY());
+            path.closePath();
+            if (path.contains(transformedPoint)) {
+                LOG.info("mouse clicked: toggle status of variable message sign={}", diversionOn);
+                vmsDiversion.toogleActiveStatus();
+                trafficCanvas.repaint();
             }
         }
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent mouseEvent) {
         if (!draggingAllowed) {
             return;
         }
-        final Point point = e.getPoint();
+        final Point point = mouseEvent.getPoint();
         startDragX = point.x;
         startDragY = point.y;
         xOffsetSave = trafficCanvas.xOffset;
@@ -145,23 +156,23 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent mouseEvent) {
         inDrag = false;
         trafficCanvas.backgroundChanged = false;
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent mouseEvent) {
         LOG.debug("SimCanvas mouseEntered"); //$NON-NLS-1$
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent mouseEvent) {
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
-        final Point p = e.getPoint();
+    public void mouseDragged(MouseEvent mouseEvent) {
+        final Point p = mouseEvent.getPoint();
         if (inDrag) {
             final int xOffsetNew = xOffsetSave + (int) ((p.x - startDragX) / trafficCanvas.scale);
             final int yOffsetNew = yOffsetSave + (int) ((p.y - startDragY) / trafficCanvas.scale);
@@ -176,53 +187,48 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent mouseEvent) {
         if (trafficCanvas.isStopped() || trafficCanvas.isPaused()) {
             if (trafficCanvas.vehicleTipWindow == null) {
                 trafficCanvas.vehicleTipWindow = new VehicleTipWindow(trafficCanvas,
                         SwingHelper.getFrame(trafficCanvas));
             }
-            final Point point = e.getPoint();
-            final Point2D transformedPoint = new Point2D.Float();
-            final GeneralPath path = new GeneralPath();
+
             try {
-                // convert from mouse coordinates to vehicle coordinates
-                trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
-            } catch (final NoninvertibleTransformException e1) {
-                e1.printStackTrace();
-                return;
-            }
-            // iterate over all vehicles in all road segments, to see if the
-            // mouse is over a vehicle
-            for (final RoadSegment roadSegment : roadNetwork) {
-                final RoadMapping roadMapping = roadSegment.roadMapping();
-                for (final Vehicle vehicle : roadSegment) {
-                    // TODO quick hack here,no correction for offsets
-                    final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle);
-                    path.reset();
-                    path.moveTo(polygon.getXPoint(0), polygon.getYPoint(0));
-                    path.lineTo(polygon.getXPoint(1), polygon.getYPoint(1));
-                    path.lineTo(polygon.getXPoint(2), polygon.getYPoint(2));
-                    path.lineTo(polygon.getXPoint(3), polygon.getYPoint(3));
-                    path.closePath();
-                    if (path.contains(transformedPoint)) {
-                        // the mouse is over a vehicle
-                        if (trafficCanvas.vehiclePopup == null || trafficCanvas.vehiclePopup.getId() != vehicle.getId()) {
-                            trafficCanvas.lastVehicleViewed = vehicle.getId();
-                            // display popup
-                            trafficCanvas.vehicleTipWindow.setVisible(false);
-                            trafficCanvas.vehicleTipWindow.show(point, vehicle);
+                Point2D transformedPoint = TrafficCanvasUtils.getTransformed(mouseEvent.getPoint(),
+                        trafficCanvas.transform);
+                final GeneralPath path = new GeneralPath();
+                // iterate over all vehicles in all road segments, to see if the
+                // mouse is over a vehicle
+                for (final RoadSegment roadSegment : roadNetwork) {
+                    final RoadMapping roadMapping = roadSegment.roadMapping();
+                    for (final Vehicle vehicle : roadSegment) {
+                        // TODO quick hack here,no correction for offsets
+                        final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle);
+                        TrafficCanvasUtils.fillPath(polygon, path);
+                        if (path.contains(transformedPoint)) {
+                            // the mouse is over a vehicle
+                            if (trafficCanvas.vehiclePopup == null
+                                    || trafficCanvas.vehiclePopup.getId() != vehicle.getId()) {
+                                trafficCanvas.lastVehicleViewed = vehicle.getId();
+                                // display popup
+                                trafficCanvas.vehicleTipWindow.setVisible(false);
+                                trafficCanvas.vehicleTipWindow.show(mouseEvent.getPoint(), vehicle);
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
+            } catch (NoninvertibleTransformException e) {
+                LOG.error(e.getMessage());
+                return;
             }
         }
     }
 
     @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        final int notches = e.getWheelRotation();
+    public void mouseWheelMoved(MouseWheelEvent event) {
+        final int notches = event.getWheelRotation();
         if (notches < 0) {
             LOG.info("Mouse wheel moved UP {} notch(es)", -notches);
             controller.commandZoomIn();
