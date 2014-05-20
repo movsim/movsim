@@ -96,15 +96,16 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
                 JOptionPane.showMessageDialog(null, getDialogMessage(highscoreEntry, sortedResults.size(), rank));
 
                 if (rank <= maxRankForHighscore) {
-                    // TODO limit input to reasonable number of characters
+                    int maxChars = 20;
                     String username = JOptionPane.showInputDialog(null, askingForName, "");
+                    if (username.length() > maxChars) {
+                        username = username.substring(0, maxChars);
+                    }
                     highscoreEntry.setPlayerName(username);
                 }
 
                 sortedResults.add(highscoreEntry);
-
                 writeFile(highscoreFilename, sortedResults);
-
                 displayHighscores(sortedResults);
             }
 
@@ -157,7 +158,6 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
             }
         } catch (IOException e) {
             LOG.error("error reading file {} - starting new high score.", filename);
-            return new LinkedList<>();
         }
         return highscores;
     }
@@ -175,9 +175,9 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
             if (row > maxRankForHighscore) {
                 break;
             }
+            table[row][0] = String.format("%d", row + 1);
+            table[row][1] = String.format("%s", entry.getPlayerName());
             for (Quantity quantity : Quantity.values()) {
-                table[row][0] = String.format("%d", row + 1);
-                table[row][1] = String.format("%s", entry.getPlayerName());
                 table[row][2 + quantity.ordinal()] = String.format("%.1f", entry.getQuantity(quantity));
             }
             ++row;
