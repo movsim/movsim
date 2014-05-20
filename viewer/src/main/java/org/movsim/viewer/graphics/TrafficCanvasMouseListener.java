@@ -47,9 +47,12 @@ import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 public class TrafficCanvasMouseListener implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-    final static Logger LOG = LoggerFactory.getLogger(TrafficCanvasMouseListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficCanvasMouseListener.class);
+
     private final TrafficCanvas trafficCanvas;
     private final TrafficCanvasController controller;
     private final RoadNetwork roadNetwork;
@@ -66,20 +69,15 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     public TrafficCanvasMouseListener(TrafficCanvas trafficCanvas, TrafficCanvasController controller,
             RoadNetwork roadNetwork) {
-        this.trafficCanvas = trafficCanvas;
-        this.controller = controller;
-        this.roadNetwork = roadNetwork;
+        this.trafficCanvas = Preconditions.checkNotNull(trafficCanvas);
+        this.controller = Preconditions.checkNotNull(controller);
+        this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
     }
 
     public void reset() {
         diversionOn = false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseClicked(MouseEvent e) {
         LOG.debug("mouseClicked at screen={}", e.getPoint()); //$NON-NLS-1$
@@ -117,7 +115,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 // traffic light to the next color
                 final Point point = e.getPoint();
                 final Point2D transformedPoint = new Point2D.Float();
-                final GeneralPath path = new GeneralPath();
                 try {
                     // convert from mouse coordinates to canvas coordinates
                     trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
@@ -133,11 +130,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-     */
     @Override
     public void mousePressed(MouseEvent e) {
         if (!draggingAllowed) {
@@ -152,41 +144,21 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         trafficCanvas.backgroundChanged = false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseReleased(MouseEvent e) {
         inDrag = false;
         trafficCanvas.backgroundChanged = false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseEntered(MouseEvent e) {
         LOG.debug("SimCanvas mouseEntered"); //$NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseExited(MouseEvent e) {
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseDragged(MouseEvent e) {
         final Point p = e.getPoint();
@@ -203,11 +175,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseMoved(MouseEvent e) {
         if (trafficCanvas.isStopped() || trafficCanvas.isPaused()) {
@@ -227,7 +194,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             }
             // iterate over all vehicles in all road segments, to see if the
             // mouse is over a vehicle
-            final double simulationTime = trafficCanvas.simulationRunnable.simulationTime();
             for (final RoadSegment roadSegment : roadNetwork) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 for (final Vehicle vehicle : roadSegment) {
@@ -254,11 +220,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
-     */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         final int notches = e.getWheelRotation();
