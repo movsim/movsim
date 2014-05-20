@@ -45,8 +45,8 @@ public class TrafficCanvasController {
      */
     public void commandTogglePause() {
         if (trafficCanvas.isPaused()) {
-            if (trafficCanvas.vehicleTipWindow != null) {
-                trafficCanvas.vehicleTipWindow.setVisible(false);
+            if (trafficCanvas.mouseOverTipWindow != null) {
+                trafficCanvas.mouseOverTipWindow.setVisible(false);
             }
             trafficCanvas.resume();
         } else if (trafficCanvas.isStopped() == false) {

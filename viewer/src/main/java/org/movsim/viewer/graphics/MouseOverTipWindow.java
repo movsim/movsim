@@ -35,11 +35,12 @@ import java.util.TimerTask;
 
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Units;
 
 import com.google.common.base.Preconditions;
 
-class VehicleTipWindow extends Window {
+class MouseOverTipWindow extends Window {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,7 +52,7 @@ class VehicleTipWindow extends Window {
 
     class PopupTimer {
 
-        private static final int POPUP_TIME_MS = 4000; // milliseconds
+        private static final int POPUP_TIME_MS = 3000; // milliseconds
 
         private final Timer timer = new Timer();
 
@@ -64,21 +65,21 @@ class VehicleTipWindow extends Window {
                 public void run() {
                     if (timedPopupId == currentPopupId) {
                         setVisible(false);
-                        VehicleTipWindow.this.trafficCanvas.vehiclePopup = null;
+                        MouseOverTipWindow.this.trafficCanvas.vehiclePopup = null;
                     }
                 }
             }, POPUP_TIME_MS);
         }
     }
 
-    public VehicleTipWindow(TrafficCanvas trafficCanvas, Frame owner) {
+    public MouseOverTipWindow(TrafficCanvas trafficCanvas, Frame owner) {
         super(owner);
         this.trafficCanvas = Preconditions.checkNotNull(trafficCanvas);
         this.owner = Preconditions.checkNotNull(owner);
     }
 
-    public void show(Point point, Vehicle vehicle) {
-        final String exitString;
+    protected void show(Point point, Vehicle vehicle) {
+        String exitString;
         if (vehicle.exitRoadSegmentId() == Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
             exitString = this.trafficCanvas.popupStringExitEndRoad;
         } else {
@@ -96,6 +97,20 @@ class VehicleTipWindow extends Window {
         final Point screenLocation = owner.getLocationOnScreen();
         setLocation(point.x + screenLocation.x + 15, point.y + screenLocation.y + 90);
         currentPopupId = vehicle.getId();
+        setVisible(true);
+        final PopupTimer popupTimer = new PopupTimer();
+        popupTimer.start(currentPopupId);
+    }
+
+    protected void show(Point point, String info) {
+        final Label label = new Label(info, Label.LEFT);
+        label.setBackground(new Color(200, 220, 240));
+        removeAll();
+        add(label);
+        pack();
+        final Point screenLocation = owner.getLocationOnScreen();
+        setLocation(point.x + screenLocation.x + 15, point.y + screenLocation.y + 90);
+        currentPopupId = MyRandom.nextInt();
         setVisible(true);
         final PopupTimer popupTimer = new PopupTimer();
         popupTimer.start(currentPopupId);

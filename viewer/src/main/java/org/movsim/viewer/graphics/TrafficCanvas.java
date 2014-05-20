@@ -30,6 +30,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
@@ -58,6 +59,7 @@ import org.movsim.simulator.roadnetwork.regulator.NotifyObject;
 import org.movsim.simulator.roadnetwork.regulator.Regulator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
+import org.movsim.utilities.Units;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.SwingHelper;
@@ -170,7 +172,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     String popupString;
     String popupStringExitEndRoad;
     protected Vehicle vehiclePopup;
-    protected VehicleTipWindow vehicleTipWindow;
+    protected MouseOverTipWindow mouseOverTipWindow;
     final TrafficCanvasMouseListener mouseListener;
     final TrafficCanvasKeyListener controller;
 
@@ -786,18 +788,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             if (trafficSource != null) {
                 TrafficCanvasUtils.drawLine(g, roadSegment.roadMapping(), 0, 4, Color.WHITE);
             }
-            // FIXME add additional inflow string infos in mouse over hint
-            // StringBuilder inflowStringBuilder = new StringBuilder();
-            // inflowStringBuilder.append("set/target inflow: ");
-            // inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime())));
-            // inflowStringBuilder.append("/");
-            // inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.measuredInflow()));
-            // inflowStringBuilder.append(" veh/h");
-            // inflowStringBuilder.append(" (");
-            // inflowStringBuilder.append(trafficSource.getQueueLength());
-            // inflowStringBuilder.append(")");
-            // g.drawString(inflowStringBuilder.toString(), (int) (posTheta.x) + radius / 2, (int) (posTheta.y)
-            // + radius / 2);
         }
     }
 
@@ -813,9 +803,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 TrafficCanvasUtils.drawLine(g, roadMapping, roadMapping.roadLength(), 4, Color.BLACK);
             }
-            // FIXME outflow as mouse over hint
-            // String outflowString = "outflow: " + (int) (Units.INVS_TO_INVH * sink.measuredOutflow()) + " veh/h";
-            // g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
         }
     }
 
@@ -855,6 +842,38 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     @Override
     public void handleException(Exception e) {
+    }
+
+    public void showSinkMouseOverInfo(Point point, TrafficSink sink) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("outflow: ");
+        sb.append((int) (Units.INVS_TO_INVH * sink.measuredOutflow()));
+        sb.append(" veh/h");
+
+        mouseOverTipWindow.setVisible(false);
+        mouseOverTipWindow.show(point, sb.toString());
+    }
+
+    public void showSourceMouseOverInfo(Point point, AbstractTrafficSource source) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("set inflow: ");
+        sb.append((int) (Units.INVS_TO_INVH * source.getTotalInflow(simulationTime())));
+        sb.append(" veh/h, actual inflow: ");
+        sb.append((int) (Units.INVS_TO_INVH * source.measuredInflow()));
+        sb.append(" veh/h, queue: ");
+        sb.append(source.getQueueLength());
+
+        mouseOverTipWindow.setVisible(false);
+        mouseOverTipWindow.show(point, sb.toString());
+    }
+
+    public void showVehicleMouseOverInfo(Point point, Vehicle vehicle) {
+        if (vehiclePopup == null || vehiclePopup.getId() != vehicle.getId()) {
+            lastVehicleViewed = vehicle.getId();
+            mouseOverTipWindow.setVisible(false);
+            mouseOverTipWindow.show(point, vehicle);
+        }
+
     }
 
 }

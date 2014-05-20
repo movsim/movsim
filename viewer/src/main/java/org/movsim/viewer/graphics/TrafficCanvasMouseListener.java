@@ -38,8 +38,11 @@ import java.awt.geom.Rectangle2D;
 
 import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMapping.PolygonFloat;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
+import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -104,8 +107,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             LOG.error(e1.getMessage());
             return;
         }
-
-
     }
 
     private void checkForTrafficLights(Point2D transformedPoint, RoadSegment roadSegment, RoadMapping roadMapping) {
@@ -159,6 +160,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     public void mouseReleased(MouseEvent mouseEvent) {
         inDrag = false;
         trafficCanvas.backgroundChanged = false;
+        trafficCanvas.mouseOverTipWindow.setVisible(false);
     }
 
     @Override
@@ -189,8 +191,8 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         if (trafficCanvas.isStopped() || trafficCanvas.isPaused()) {
-            if (trafficCanvas.vehicleTipWindow == null) {
-                trafficCanvas.vehicleTipWindow = new VehicleTipWindow(trafficCanvas,
+            if (trafficCanvas.mouseOverTipWindow == null) {
+                trafficCanvas.mouseOverTipWindow = new MouseOverTipWindow(trafficCanvas,
                         SwingHelper.getFrame(trafficCanvas));
             }
 
@@ -200,21 +202,41 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 final GeneralPath path = new GeneralPath();
                 // iterate over all vehicles in all road segments, to see if the
                 // mouse is over a vehicle
-                for (final RoadSegment roadSegment : roadNetwork) {
-                    final RoadMapping roadMapping = roadSegment.roadMapping();
-                    for (final Vehicle vehicle : roadSegment) {
-                        // TODO quick hack here,no correction for offsets
+                for (RoadSegment roadSegment : roadNetwork) {
+                    RoadMapping roadMapping = roadSegment.roadMapping();
+
+                    AbstractTrafficSource source = roadSegment.trafficSource();
+                    if (source != null) {
+                        PolygonFloat polygon = roadMapping.mapFloat(roadMapping.startPos(), 5, roadMapping.roadWidth());
+                        TrafficCanvasUtils.fillPath(polygon, path);
+                        if (path.contains(transformedPoint)) {
+                            // the mouse is over a source
+                            LOG.debug("mouse over source ");
+                            trafficCanvas.showSourceMouseOverInfo(mouseEvent.getPoint(), source);
+                        }
+                    }
+
+                    TrafficSink sink = roadSegment.sink();
+                    if (sink != null) {
+                        double length = 5;
+                        PolygonFloat polygon = roadMapping.mapFloat(roadMapping.endPos(), length,
+                                roadMapping.roadWidth());
+                        TrafficCanvasUtils.fillPath(polygon, path);
+                        if (path.contains(transformedPoint)) {
+                            // the mouse is over a source
+                            LOG.debug("mouse over sink");
+                            trafficCanvas.showSinkMouseOverInfo(mouseEvent.getPoint(), sink);
+                        }
+                    }
+
+                    for (Vehicle vehicle : roadSegment) {
+                        // TODO quick hack here, no correction for offsets
                         final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle);
                         TrafficCanvasUtils.fillPath(polygon, path);
                         if (path.contains(transformedPoint)) {
                             // the mouse is over a vehicle
-                            if (trafficCanvas.vehiclePopup == null
-                                    || trafficCanvas.vehiclePopup.getId() != vehicle.getId()) {
-                                trafficCanvas.lastVehicleViewed = vehicle.getId();
-                                // display popup
-                                trafficCanvas.vehicleTipWindow.setVisible(false);
-                                trafficCanvas.vehicleTipWindow.show(mouseEvent.getPoint(), vehicle);
-                            }
+                            LOG.debug("mouse over vehicle={}", vehicle.toString());
+                            trafficCanvas.showVehicleMouseOverInfo(mouseEvent.getPoint(), vehicle);
                             break;
                         }
                     }

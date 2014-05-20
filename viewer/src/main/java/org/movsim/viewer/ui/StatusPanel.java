@@ -246,7 +246,6 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         }
     }
 
-    @SuppressWarnings("hiding")
     public void notifyObserver(double time) {
         if (time != this.time) {
             final int intTime = (int) time;
