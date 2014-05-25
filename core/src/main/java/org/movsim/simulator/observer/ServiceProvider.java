@@ -67,11 +67,11 @@ public class ServiceProvider implements SimulationTimeStep {
     }
 
     /** calculate individual probabilities */
-    public void updateRouteAlternatives(Iterable<RouteAlternative> alternatives, double uncertainty) {
+    public static void updateRouteAlternatives(Iterable<RouteAlternative> alternatives, double uncertainty) {
         LogitRouteDecisionMaking.calcProbabilities(alternatives, uncertainty);
     }
     
-    public RouteAlternative selectMostProbableAlternative(Iterable<RouteAlternative> alternatives, double random) {
+    public static RouteAlternative selectMostProbableAlternative(Iterable<RouteAlternative> alternatives, double random) {
         return LogitRouteDecisionMaking.selectMostProbableAlternative(alternatives, random);
     }
 
