@@ -37,3 +37,12 @@ git branch -D delete_branch
 
 git remote prune origin # --dry-run # 
 git fetch -p # fetches and prunes all origins.
+
+
+Tools
+=========
+# visual diff tool
+git gui
+
+# branch visualization
+gitk
