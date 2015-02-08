@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimInitialConditions>
+    <RoadInitialConditions id="1">
+        <MacroscopicInitialConditions>
+            <MacroCondition position="8600" density_per_km="2" speed="30" />
+        </MacroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="2">
+        <MacroscopicInitialConditions>
+            <MacroCondition position="0" density_per_km="2" speed="30" />
+        </MacroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="3">
+        <MacroscopicInitialConditions>
+            <MacroCondition position="0" density_per_km="2" speed="30" />
+        </MacroscopicInitialConditions>
+    </RoadInitialConditions>
+</MovsimInitialConditions>
+

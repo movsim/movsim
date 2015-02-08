@@ -92,6 +92,22 @@
                             </bindingIncludes>
                         </configuration>
                     </execution>
+                    					<execution>
+						<id>movsimInitialConditions</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+						<forceRegenerate>true</forceRegenerate>
+							<schemaIncludes>
+								<schemaInclude>MovsimInitialConditions.xsd</schemaInclude>
+							</schemaIncludes>
+							<bindingIncludes>
+								<bindingInclude>globalBinding.xjc</bindingInclude>
+								<bindingInclude>movsimInitialConditionsBinding.xjc</bindingInclude>
+							</bindingIncludes>
+						</configuration>
+					</execution>
                 </executions>
             </plugin>
             <!-- build executable jar with all dependencies -->
