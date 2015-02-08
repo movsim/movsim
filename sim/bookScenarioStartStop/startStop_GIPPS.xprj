@@ -21,7 +21,7 @@
                 <VehicleType label="GIPPS1" fraction="1" />
                 <VehicleType label="Obstacle" fraction="0" />
             </TrafficComposition>
-            <Road id="1" /> 
+            <Road id="1" />
         </Simulation>
         <Routes>
             <Route label="main">
