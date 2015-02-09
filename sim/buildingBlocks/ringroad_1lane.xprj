@@ -11,17 +11,11 @@
             <NoiseParameter tau="5" fluct_strength="0.07" />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="ringroad.xodr">
+    <Scenario network_filename="ringroad.xodr" initial_conditions_filename="ringroad_initialConditions.xml">
         <Simulation timestep="0.2" seed="42">
             <TrafficComposition>
                 <VehicleType label="IDM" fraction="1" />
             </TrafficComposition>
-            <Road id="1">
-                <InitialConditions>
-                    <!-- critical density for emerging stop-and-go wave about >= 33 vehicles per km per lane -->
-                    <MacroIC position="1" density_per_km="36" speed="20" />
-                </InitialConditions>
-            </Road>
         </Simulation>
     </Scenario>
 </Movsim>
