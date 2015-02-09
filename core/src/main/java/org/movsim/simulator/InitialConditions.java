@@ -1,7 +1,9 @@
 package org.movsim.simulator;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.movsim.scenario.initial.autogen.MacroCondition;
 import org.movsim.scenario.initial.autogen.MacroscopicInitialConditions;
@@ -27,12 +29,15 @@ import com.google.common.base.Preconditions;
 public class InitialConditions {
 
     private static final Logger LOG = LoggerFactory.getLogger(InitialConditions.class);
+    
+    private final Set<String> alreadyHandled;
 
     private final File file;
 
     private final MovsimInitialConditions movsimInitialConditions;
 
     public InitialConditions(File file) {
+    	alreadyHandled= new HashSet<>();
         this.file = Preconditions.checkNotNull(file);
         Preconditions.checkArgument(file.exists(), "initial conditions file "+file+" not found");
         movsimInitialConditions = MovsimInitialConditionsLoader.unmarshallData(file);
@@ -42,14 +47,21 @@ public class InitialConditions {
 
     public void setInitialConditions(RoadNetwork roadNetwork, TrafficCompositionGenerator composition) {
         for (RoadInitialConditions roadIC : movsimInitialConditions.getRoadInitialConditions()) {
-            RoadSegment roadSegment = roadNetwork.findByUserId(roadIC.getId());
-
+            String roadId = roadIC.getId();
+			RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
+			
             if (roadSegment == null) {
                 // TODO improve error reporting LOG.error
-                throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadIC.getId() +
+                throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId +
                         " not defined in road network");
             }
+            
+            if(alreadyHandled.contains(roadId)){
+            	throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId +
+                        " defined twice in input file");
+            }
 
+            alreadyHandled.add(roadId);
             setInitialConditions(roadSegment, roadIC, composition);
         }
     }
@@ -62,7 +74,7 @@ public class InitialConditions {
         } else if (roadInitialConditions.isSetMicroscopicInitialConditions()) {
             setMicroscopicInitialConditions(roadSegment, roadInitialConditions.getMicroscopicInitialConditions(), vehGenerator);
         } else {
-            LOG.info("no initial conditions defined");
+            LOG.warn("no initial conditions defined for roadSegment={}", roadSegment.userId());
         }
     }
 
@@ -77,7 +89,7 @@ public class InitialConditions {
     private void setMacroscopicInitialConditions(RoadSegment roadSegment, MacroscopicInitialConditions macroInitialConditions,
             TrafficCompositionGenerator vehGenerator) {
 
-        LOG.info("choose macro initial conditions: generate vehicles from macro-localDensity ");
+        LOG.info("set macro initial conditions: generate vehicles from macro-localDensity ");
         final InitialConditionsMacro icMacro = new InitialConditionsMacro(macroInitialConditions.getMacroCondition());
 
         for (LaneSegment laneSegment : roadSegment.laneSegments()) {
@@ -147,7 +159,7 @@ public class InitialConditions {
 
     private void setMicroscopicInitialConditions(RoadSegment roadSegment, MicroscopicInitialConditions initialMicroConditions,
             TrafficCompositionGenerator vehGenerator) {
-        LOG.debug(("choose micro initial conditions"));
+        LOG.debug(("set microscopic initial conditions"));
         int vehicleNumber = 1;
         for (final VehicleInitialCondition ic : initialMicroConditions.getVehicleInitialCondition()) {
             // TODO counter
@@ -179,17 +191,16 @@ public class InitialConditions {
     private static class InitialConditionsMacro {
 
         /** the positions along the road segment in m */
-        double[] pos;
+        private double[] pos;
 
         /** The density profile in 1/m */
-        double[] rho;
+        private double[] rho;
 
         /** the speeds along the road segment in m/s. Only initialized when initial speeds are provided. */
-        double[] speed;
+        private double[] speed;
 
         /**
          * Instantiates a new initial conditions macro.
-         * @param icData the ic data
          */
         public InitialConditionsMacro(List<MacroCondition> macroConditions) {
 
@@ -218,8 +229,9 @@ public class InitialConditions {
             }
         }
 
-        private static boolean useUserDefinedSpeeds(List<MacroCondition> macroConditions) {
+        private boolean useUserDefinedSpeeds(List<MacroCondition> macroConditions) {
             boolean userDefinedSpeed = true;
+            
             for (int i = 0, N = macroConditions.size(); i < N; i++) {
                 if (i == 0) {
                     // set initial value
@@ -230,6 +242,7 @@ public class InitialConditions {
                             "decide whether equilibrium speed or user-defined speeds should be used. Do not mix the speed input!");
                 }
             }
+            
             return userDefinedSpeed;
         }
 
