@@ -66,7 +66,6 @@
                     <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="north" />
                     <VehicleType label="ACC3" fraction="0.7" relative_v0_randomization="0.2" route_label="north_then_east" />
                 </TrafficComposition>
-                <InitialConditions />
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="1900" v="24" />
                     <Inflow t="60" q_per_hour="1900" v="24" />
