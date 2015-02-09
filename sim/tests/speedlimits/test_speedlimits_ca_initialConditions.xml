@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimInitialConditions>
+    <RoadInitialConditions id="1">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10000" speed="3" label="BARL1" />
+            <VehicleInitialCondition position="20000" speed="3" label="NSM1" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+</MovsimInitialConditions>
+
