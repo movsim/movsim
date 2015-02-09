@@ -41,7 +41,6 @@
                     <CrossSection position="2000" />
                 </Detectors>
             </Road>
-            <Road id="3" />
         </Simulation>
         <Routes>
             <Route label="main">
