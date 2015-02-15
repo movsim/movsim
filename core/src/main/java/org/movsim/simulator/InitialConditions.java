@@ -29,7 +29,7 @@ import com.google.common.base.Preconditions;
 public class InitialConditions {
 
     private static final Logger LOG = LoggerFactory.getLogger(InitialConditions.class);
-    
+
     private final Set<String> alreadyHandled;
 
     private final File file;
@@ -37,44 +37,40 @@ public class InitialConditions {
     private final MovsimInitialConditions movsimInitialConditions;
 
     public InitialConditions(File file) {
-    	alreadyHandled= new HashSet<>();
         this.file = Preconditions.checkNotNull(file);
-        Preconditions.checkArgument(file.exists(), "initial conditions file "+file+" not found");
+        Preconditions.checkArgument(file.exists(), "initial conditions file " + file + " not found");
+        alreadyHandled = new HashSet<>();
         movsimInitialConditions = MovsimInitialConditionsLoader.unmarshallData(file);
+
         LOG.info("loaded initial conditions from file={}", file);
         LOG.info("unmarshalled initial conditions for {} roads", movsimInitialConditions.getRoadInitialConditions().size());
     }
 
-    public void setInitialConditions(RoadNetwork roadNetwork, TrafficCompositionGenerator composition) {
+    public void setInitialConditions(RoadNetwork roadNetwork, TrafficCompositionGenerator defaultComposition) {
         for (RoadInitialConditions roadIC : movsimInitialConditions.getRoadInitialConditions()) {
             String roadId = roadIC.getId();
-			RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
-			
+            RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
+
             if (roadSegment == null) {
                 // TODO improve error reporting LOG.error
                 throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId +
                         " not defined in road network");
             }
-            
-            if(alreadyHandled.contains(roadId)){
-            	throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId +
+
+            if (alreadyHandled.contains(roadId)) {
+                throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId +
                         " defined twice in input file");
             }
 
             alreadyHandled.add(roadId);
-            setInitialConditions(roadSegment, roadIC, composition);
-        }
-    }
 
-    private void setInitialConditions(RoadSegment roadSegment, RoadInitialConditions roadInitialConditions,
-            TrafficCompositionGenerator vehGenerator) {
-
-        if (roadInitialConditions.isSetMacroscopicInitialConditions()) {
-            setMacroscopicInitialConditions(roadSegment, roadInitialConditions.getMacroscopicInitialConditions(), vehGenerator);
-        } else if (roadInitialConditions.isSetMicroscopicInitialConditions()) {
-            setMicroscopicInitialConditions(roadSegment, roadInitialConditions.getMicroscopicInitialConditions(), vehGenerator);
-        } else {
-            LOG.warn("no initial conditions defined for roadSegment={}", roadSegment.userId());
+            if (roadIC.isSetMacroscopicInitialConditions()) {
+                setMacroscopicInitialConditions(roadSegment, roadIC.getMacroscopicInitialConditions(), defaultComposition);
+            } else if (roadIC.isSetMicroscopicInitialConditions()) {
+                setMicroscopicInitialConditions(roadSegment, roadIC.getMicroscopicInitialConditions(), defaultComposition);
+            } else {
+                LOG.warn("no initial conditions defined for roadSegment={}", roadSegment.userId());
+            }
         }
     }
 
@@ -158,18 +154,21 @@ public class InitialConditions {
     }
 
     private void setMicroscopicInitialConditions(RoadSegment roadSegment, MicroscopicInitialConditions initialMicroConditions,
-            TrafficCompositionGenerator vehGenerator) {
+            TrafficCompositionGenerator defaultComposition) {
         LOG.debug(("set microscopic initial conditions"));
+
+        TrafficCompositionGenerator trafficComposition = roadSegment.trafficSource().getTrafficComposition();
+        if (trafficComposition == null) {
+            trafficComposition = defaultComposition;
+        }
+
         int vehicleNumber = 1;
         for (final VehicleInitialCondition ic : initialMicroConditions.getVehicleInitialCondition()) {
             // TODO counter
-            final String vehTypeFromFile = ic.getLabel();
             final Vehicle veh =
-                    (vehTypeFromFile.length() == 0) ? vehGenerator.createVehicle() : vehGenerator
-                            .createVehicle(vehTypeFromFile);
-            veh.setVehNumber(vehicleNumber);
-            vehicleNumber++;
-            // testwise:
+                    ic.isSetLabel() ? trafficComposition.createVehicle(ic.getLabel()) : trafficComposition.createVehicle();
+            veh.setVehNumber(vehicleNumber++);
+            // test-wise:
             veh.setFrontPosition(Math.round(ic.getPosition() / veh.physicalQuantities().getxScale()));
             veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
             final int lane = ic.getLane();
@@ -231,7 +230,7 @@ public class InitialConditions {
 
         private boolean useUserDefinedSpeeds(List<MacroCondition> macroConditions) {
             boolean userDefinedSpeed = true;
-            
+
             for (int i = 0, N = macroConditions.size(); i < N; i++) {
                 if (i == 0) {
                     // set initial value
@@ -242,7 +241,7 @@ public class InitialConditions {
                             "decide whether equilibrium speed or user-defined speeds should be used. Do not mix the speed input!");
                 }
             }
-            
+
             return userDefinedSpeed;
         }
 

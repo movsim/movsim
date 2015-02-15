@@ -1,31 +1,18 @@
 /*
- * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- * <movsim.org@gmail.com>
- * -----------------------------------------------------------------------------------------
- * 
- * This file is part of
- * 
- * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with MovSim. If not, see <http://www.gnu.org/licenses/>
- * or <http://www.movsim.org>.
- * 
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <movsim.org@gmail.com>
+ * ----------------------------------------------------------------------------------------- This file is part of MovSim - the
+ * multi-model open-source vehicular-traffic simulator. MovSim is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version. MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details. You should have received a copy of the GNU General Public License along with MovSim. If not, see
+ * <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * -----------------------------------------------------------------------------------------
  */
 
 package org.movsim.simulator.roadnetwork.boundaries;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.movsim.simulator.SimulationTimeStep;
@@ -49,7 +36,6 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     public interface RecordDataCallback {
         /**
          * Callback to allow the application to process or record the traffic source data.
-         * 
          */
         public void recordData(double simulationTime, int laneEnter, double xEnter, double vEnter, double totalInflow,
                 int enteringVehCounter, double nWait);
@@ -65,8 +51,11 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     }
 
     protected static final double MEASURING_INTERVAL_S = 60.0;
+
     private double measuredTime;
+
     private int measuredInflowCount;
+
     protected double measuredInflow;
 
     int enteringVehCounter;
@@ -96,7 +85,6 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     /**
      * Sets the traffic source recorder.
-     * 
      * @param recordDataCallback
      */
     public void setRecorder(RecordDataCallback recordDataCallback) {
@@ -104,9 +92,13 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         this.recordDataCallback = recordDataCallback;
     }
 
+    @CheckForNull
+    public TrafficCompositionGenerator getTrafficComposition() {
+        return vehGenerator;
+    }
+
     /**
      * Gets the entering veh counter.
-     * 
      * @return the entering veh counter
      */
     public int getEnteringVehCounter() {
@@ -115,16 +107,13 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     /**
      * Gets the total inflow over all lanes.
-     * 
-     * @param time
-     *            the time
+     * @param time the time
      * @return the total inflow over all lanes
      */
     public abstract double getTotalInflow(double time);
 
     /**
      * Returns the number of vehicles in the queue.
-     * 
      * @return integer queue length over all lanes
      */
     public int getQueueLength() {
@@ -157,9 +146,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     /**
      * Gets the new cyclic lane for entering.
-     * 
-     * @param iLane
-     *            the i lane
+     * @param iLane the i lane
      * @return the new cyclic lane for entering
      */
     protected int getNewCyclicLaneForEntering(int iLane) {
@@ -168,9 +155,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     /**
      * Returns the measured inflow in vehicles per second, averaged over the measuring interval.
-     * 
      * @return measured inflow over all lanes in vehicles per seconds
-     * 
      */
     public double measuredInflow() {
         return measuredInflow;
