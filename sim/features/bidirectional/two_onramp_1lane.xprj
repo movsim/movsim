@@ -34,7 +34,7 @@
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="100" v="15" />
                 </TrafficSource>
-            </Road> 
+            </Road>
             <Road id="4">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="200" v="5" />

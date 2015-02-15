@@ -25,7 +25,6 @@
                 <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
                 <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" />
             </TrafficComposition>
-                    
             <!-- arc -->
             <Road id="north_not_clockwise">
                 <TrafficSource>
@@ -33,18 +32,16 @@
                 </TrafficSource>
             </Road>
             <!-- arc north_not_clockwise -->
-             <Road id="north_clockwise-">
+            <Road id="north_clockwise-">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
-            
             <Road id="north_clockwise+">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
-			
         </Simulation>
     </Scenario>
 </Movsim>
