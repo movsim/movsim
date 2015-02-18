@@ -63,11 +63,14 @@ public class InitialConditions {
             }
 
             alreadyHandled.add(roadId);
+            
+            TrafficCompositionGenerator trafficComposition = roadSegment.hasTrafficComposition() ? roadSegment
+                    .getTrafficComposition() : defaultComposition;
 
             if (roadIC.isSetMacroscopicInitialConditions()) {
-                setMacroscopicInitialConditions(roadSegment, roadIC.getMacroscopicInitialConditions(), defaultComposition);
+                setMacroscopicInitialConditions(roadSegment, roadIC.getMacroscopicInitialConditions(), trafficComposition);
             } else if (roadIC.isSetMicroscopicInitialConditions()) {
-                setMicroscopicInitialConditions(roadSegment, roadIC.getMicroscopicInitialConditions(), defaultComposition);
+                setMicroscopicInitialConditions(roadSegment, roadIC.getMicroscopicInitialConditions(), trafficComposition);
             } else {
                 LOG.warn("no initial conditions defined for roadSegment={}", roadSegment.userId());
             }
@@ -80,10 +83,10 @@ public class InitialConditions {
      * are not considered.
      * @param roadSegment
      * @param macroInitialConditions
-     * @param vehGenerator
+     * @param trafficComposition
      */
     private void setMacroscopicInitialConditions(RoadSegment roadSegment, MacroscopicInitialConditions macroInitialConditions,
-            TrafficCompositionGenerator vehGenerator) {
+            TrafficCompositionGenerator trafficComposition) {
 
         LOG.info("set macro initial conditions: generate vehicles from macro-localDensity ");
         final InitialConditionsMacro icMacro = new InitialConditionsMacro(macroInitialConditions.getMacroCondition());
@@ -96,7 +99,7 @@ public class InitialConditions {
 
             double position = roadSegment.roadLength(); // start at end of segment
             while (position > 0) {
-                final TestVehicle testVehicle = vehGenerator.getTestVehicle();
+                final TestVehicle testVehicle = trafficComposition.getTestVehicle();
 
                 final double rhoLocal = icMacro.rho(position);
                 double speedInit =
@@ -117,7 +120,7 @@ public class InitialConditions {
                     continue;
                 }
 
-                final Vehicle veh = vehGenerator.createVehicle(testVehicle);
+                final Vehicle veh = trafficComposition.createVehicle(testVehicle);
                 final double meanDistanceInLane = 1. / (rhoLocal + MovsimConstants.SMALL_VALUE);
                 // TODO icMacro for ca
                 // final double minimumGap = veh.getLongitudinalModel().isCA() ? veh.getLength() : veh.getLength() +
@@ -154,13 +157,8 @@ public class InitialConditions {
     }
 
     private void setMicroscopicInitialConditions(RoadSegment roadSegment, MicroscopicInitialConditions initialMicroConditions,
-            TrafficCompositionGenerator defaultComposition) {
+            TrafficCompositionGenerator trafficComposition) {
         LOG.debug(("set microscopic initial conditions"));
-
-        TrafficCompositionGenerator trafficComposition = roadSegment.trafficSource().getTrafficComposition();
-        if (trafficComposition == null) {
-            trafficComposition = defaultComposition;
-        }
 
         int vehicleNumber = 1;
         for (final VehicleInitialCondition ic : initialMicroConditions.getVehicleInitialCondition()) {

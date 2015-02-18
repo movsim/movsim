@@ -77,7 +77,7 @@
             <xs:attribute name="speed" type="nonNegativeDouble" use="required" />
             <!-- By convention the lane index starts with 1 for the most inner lane. -->
             <xs:attribute name="lane" type="nonNegativeInteger" default="1" />
-            <xs:attribute name="label" type="xs:string" default="" />
+            <xs:attribute name="label" type="xs:string" use="optional" />
         </xs:complexType>
     </xs:element>
 </xs:schema>

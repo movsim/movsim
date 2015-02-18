@@ -34,6 +34,7 @@ import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.roadnetwork.predicates.VehicleWithinRange;
+import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.Vehicle.Type;
 import org.slf4j.Logger;
@@ -123,7 +124,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     // Sources and Sinks
     private AbstractTrafficSource trafficSource;
-
+    
     private TrafficSink sink;
 
     private RoadMapping roadMapping;
@@ -133,6 +134,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private Node origin = new NodeImpl("origin");
 
     private Node destination = new NodeImpl("destination");
+    
+    private TrafficCompositionGenerator trafficComposition;
 
     /** simple ramp (source) with dropping mechanism */
     private SimpleRamp simpleRamp;
@@ -1184,6 +1187,18 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         Preconditions.checkNotNull(peerRoadSegment);
         Preconditions.checkArgument(!peerRoadSegment.equals(this));
         this.peerRoadSegment = peerRoadSegment;
+    }
+
+    public void setTrafficComposition(TrafficCompositionGenerator composition) {
+        this.trafficComposition = composition;
+    }
+
+    public TrafficCompositionGenerator getTrafficComposition() {
+        return trafficComposition;
+    }
+
+    public boolean hasTrafficComposition() {
+        return trafficComposition != null;
     }
 
 }

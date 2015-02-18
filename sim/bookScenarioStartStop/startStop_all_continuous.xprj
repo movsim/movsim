@@ -46,54 +46,17 @@
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="startStop_all_continous.xodr" initial_conditions_filename="startStop_all_continuous_initialConditions.xml">
+    <Scenario network_filename="startStop_all_continuous.xodr" initial_conditions_filename="startStop_all_continuous_initialConditions.xml">
         <Simulation timestep="0.2" duration="780" seed="42">
             <TrafficComposition>
+                <VehicleType label="IDM1" fraction="1" />
+                <VehicleType label="IIDM1" fraction="1" />
+                <VehicleType label="IDMM1" fraction="1" />
                 <VehicleType label="ACC1" fraction="1" />
+                <VehicleType label="FVDM1" fraction="1" />
+                <VehicleType label="OVM1" fraction="1" />
                 <VehicleType label="Obstacle" fraction="0" />
             </TrafficComposition>
-            <!-- ############################ -->
-            <Road id="IDM">
-                <TrafficComposition>
-                    <VehicleType label="IDM1" fraction="1" />
-                    <VehicleType label="Obstacle" fraction="0" />
-                </TrafficComposition>
-            </Road>
-            <!-- ############################ -->
-            <Road id="IIDM">
-                <TrafficComposition>
-                    <VehicleType label="IIDM1" fraction="1" />
-                    <VehicleType label="Obstacle" fraction="0" />
-                </TrafficComposition>
-            </Road>
-            <!-- ############################ -->
-            <Road id="ACC">
-                <TrafficComposition>
-                    <VehicleType label="ACC1" fraction="1" />
-                    <VehicleType label="Obstacle" fraction="0" />
-                </TrafficComposition>
-            </Road>
-            <!-- ############################ -->
-            <Road id="IDMM">
-                <TrafficComposition>
-                    <VehicleType label="IDMM1" fraction="1" />
-                    <VehicleType label="Obstacle" fraction="0" />
-                </TrafficComposition>
-            </Road>
-            <!-- ############################ -->
-            <Road id="FVDM">
-                <TrafficComposition>
-                    <VehicleType label="FVDM1" fraction="1" />
-                    <VehicleType label="Obstacle" fraction="0" />
-                </TrafficComposition>
-            </Road>
-            <!-- ############################ -->
-            <Road id="OVM">
-                <TrafficComposition>
-                    <VehicleType label="OVM1" fraction="1" />
-                    <VehicleType label="Obstacle" fraction="0" />
-                </TrafficComposition>
-            </Road>
         </Simulation>
     </Scenario>
 </Movsim>

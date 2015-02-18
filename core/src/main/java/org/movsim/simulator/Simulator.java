@@ -154,7 +154,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         regulators = new Regulators(inputData.getScenario().getRegulators(), roadNetwork);
 
-        checkTrafficLightseInitialized();
+        checkTrafficLightBeingInitialized();
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
@@ -218,7 +218,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         createSignalPoints();
     }
 
-    private void checkTrafficLightseInitialized() {
+    private void checkTrafficLightBeingInitialized() {
         for (RoadSegment roadSegment : roadNetwork) {
             for (TrafficLight trafficLight : roadSegment.trafficLights()) {
                 if (trafficLight.status() == null) {
@@ -263,10 +263,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     private void addInputToRoadSegment(RoadSegment roadSegment, Road roadInput) {
         // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
-        TrafficCompositionGenerator composition =
-                roadInput.isSetTrafficComposition() ? new TrafficCompositionGenerator(roadInput.getTrafficComposition(),
-                        vehicleFactory) : defaultTrafficComposition;
+        TrafficCompositionGenerator composition = defaultTrafficComposition;
+
         if (roadInput.isSetTrafficComposition()) {
+            composition = new TrafficCompositionGenerator(roadInput.getTrafficComposition(), vehicleFactory);
+            roadSegment.setTrafficComposition(composition);
             LOG.info("road with id={} has its own vehicle composition generator.", roadSegment.id());
         }
 

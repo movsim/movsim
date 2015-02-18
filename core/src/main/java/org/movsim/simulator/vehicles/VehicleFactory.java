@@ -26,7 +26,7 @@ public final class VehicleFactory {
 
     private final Map<String, VehiclePrototype> vehiclePrototypes = new HashMap<>();
 
-    private Routing routing;
+    private final Routing routing;
 
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
@@ -45,7 +45,7 @@ public final class VehicleFactory {
         }
     }
 
-    // set route explicitely, e.g. in microscopic initial or boundary conditions
+    // set route explicitly, e.g. in microscopic initial or boundary conditions
     public Vehicle create(VehicleType vehicleType, @Nullable Route route) {
         VehiclePrototype prototype = getPrototype(vehicleType.getVehiclePrototypeLabel());
         LongitudinalModelBase accelerationModel = prototype.createAccelerationModel();
@@ -99,6 +99,9 @@ public final class VehicleFactory {
         return vehiclePrototypes.get(label);
     }
 
+    /**
+     * @return immutable
+     */
     public Iterable<String> getLabels() {
         return Collections.unmodifiableCollection(vehiclePrototypes.keySet());
     }
