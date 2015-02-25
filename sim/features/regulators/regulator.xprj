@@ -48,9 +48,9 @@
         <Regulators>
             <Regulator type="Ferry" id="test1">
                 <NotifyObject road_id="4+" position="100" name="test" id="suppressLaneChanges">
-					 <userData code="comment" value="50 m vor Schleuse (OW)" />
-                     <userData code="notifier_subfunction" value="lock_in" />
-                     <userData code="regulator_name" value="Schleuse 7_Hermelingen" />
+                    <userData code="comment" value="50 m vor Schleuse (OW)" />
+                    <userData code="notifier_subfunction" value="lock_in" />
+                    <userData code="regulator_name" value="Schleuse 7_Hermelingen" />
                 </NotifyObject>
                 <NotifyObject road_id="4+" s="350" name="test" id="testS" />
                 <NotifyObject road_id="4+" position="800" name="test" id="stopToStandstill-pos" />
@@ -58,7 +58,7 @@
                 <Signal signal_id="r4_2+" />
                 <Signal signal_id="r4_1-" />
             </Regulator>
-           <Regulator type="AdaptiveSpeedLimit" name="ttt" id="test2">
+            <Regulator type="AdaptiveSpeedLimit" name="ttt" id="test2">
                 <NotifyObject road_id="4-" s="500" name="test" id="testId3-s" />
                 <NotifyObject road_id="4-" position="1000" name="test" id="testId4" />
             </Regulator>

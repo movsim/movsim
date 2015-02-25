@@ -91,7 +91,7 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="vasa.xodr">
+    <Scenario network_filename="vasa.xodr" initial_conditions_filename="vasa_CCS_initialConditions.xml">
         <Simulation timestep="0.2" duration="10000" seed="42" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="CCS1" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
@@ -100,89 +100,56 @@
                 <TrafficComposition>
                     <VehicleType label="CCS0" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="100" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-1">
                 <TrafficComposition>
                     <VehicleType label="CCS1" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="200" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-2">
                 <TrafficComposition>
                     <VehicleType label="CCS2" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="300" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-3">
                 <TrafficComposition>
                     <VehicleType label="CCS3" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="370" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-4">
                 <TrafficComposition>
                     <VehicleType label="CCS4" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="370" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-5">
                 <TrafficComposition>
                     <VehicleType label="CCS5" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="370" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-6">
                 <TrafficComposition>
                     <VehicleType label="CCS6" fraction="1.0" relative_v0_randomization="0.3" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="370" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-7">
                 <TrafficComposition>
                     <VehicleType label="CCS7" fraction="1.0" relative_v0_randomization="0.3" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="370" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-8">
                 <TrafficComposition>
                     <VehicleType label="CCS8" fraction="1.0" relative_v0_randomization="0.3" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="370" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-9">
                 <TrafficComposition>
                     <VehicleType label="CCS9" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="390" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="-10">
                 <TrafficComposition>
                     <VehicleType label="CCS10" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
                 </TrafficComposition>
-                <InitialConditions>
-                    <MacroIC position="10" density_per_km="390" speed="0" />
-                </InitialConditions>
             </Road>
             <Road id="11">
                 <!--             <Slopes> -->

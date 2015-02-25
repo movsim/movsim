@@ -19,7 +19,7 @@
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="startStop.xodr">
+    <Scenario network_filename="startStop.xodr" initial_conditions_filename="startStop_initialConditions_BARL.xml">
         <Simulation timestep="1" duration="360" seed="42">
             <TrafficComposition>
                 <VehicleType label="BARL1" fraction="1" />

@@ -25,24 +25,23 @@
                 <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="west_exit" />
             </TrafficComposition>
             <Road id="1+">
-				<TrafficComposition>
-                <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.2" route_label="west"  />
-                <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="west_exit" />
-            </TrafficComposition>
+                <TrafficComposition>
+                    <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.2" route_label="west" />
+                    <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="west_exit" />
+                </TrafficComposition>
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="15" />
                 </TrafficSource>
             </Road>
             <Road id="4-">
-				<TrafficComposition>
-                <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.2"  />
-                <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="east_exit" />
-            </TrafficComposition>
+                <TrafficComposition>
+                    <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
+                    <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="east_exit" />
+                </TrafficComposition>
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="15" />
                 </TrafficSource>
             </Road>
-            
             <Road id="20">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="100" v="5" />
@@ -74,5 +73,4 @@
         </Routes>
     </Scenario>
 </Movsim>
-
 

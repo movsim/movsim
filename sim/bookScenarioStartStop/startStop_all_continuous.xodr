@@ -3,7 +3,7 @@
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep 2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
     <road name="" length="800.0" id="IDM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="50.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="350.0" hdg="0.0" length="2500.0">
                 <line />
             </geometry>
         </planView>
@@ -19,7 +19,7 @@
     </road>
     <road name="" length="800.0" id="IIDM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="100.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="300.0" hdg="0.0" length="2500.0">
                 <line />
             </geometry>
         </planView>
@@ -35,7 +35,7 @@
     </road>
     <road name="" length="800.0" id="ACC" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="150.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="250.0" hdg="0.0" length="2500.0">
                 <line />
             </geometry>
         </planView>
@@ -67,7 +67,7 @@
     </road>
     <road name="" length="800.0" id="IDM_noise" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="250.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="150.0" hdg="0.0" length="2500.0">
                 <line />
             </geometry>
         </planView>
@@ -83,7 +83,7 @@
     </road>
     <road name="" length="800.0" id="FVDM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="300.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="100.0" hdg="0.0" length="2500.0">
                 <line />
             </geometry>
         </planView>
@@ -99,7 +99,7 @@
     </road>
     <road name="" length="800.0" id="OVM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="350.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="50.0" hdg="0.0" length="2500.0">
                 <line />
             </geometry>
         </planView>

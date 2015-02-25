@@ -16,6 +16,7 @@ public class VehicleType {
         this.configuration = configuration;
         this.testVehicle = new TestVehicle(this, vehiclePrototype);
     }
+    
 
     public double getFraction() {
         return configuration.getFraction();

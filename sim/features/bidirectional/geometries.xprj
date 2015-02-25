@@ -19,7 +19,7 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="geometries.xodr">
+    <Scenario network_filename="geometries.xodr" initial_conditions_filename="geometries_initialConditions.xml">
         <Simulation timestep="0.2" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
@@ -37,7 +37,7 @@
                 </TrafficSource>
             </Road>
             <!-- poly line -->
-               <Road id="10-">
+            <Road id="10-">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
@@ -54,21 +54,19 @@
                 </TrafficSource>
             </Road>
             <!-- arc north_not_clockwise -->
-             <!-- <Road id="north_not_clockwise-">
+            <!-- <Road id="north_not_clockwise-">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
             -->
-            
             <Road id="north_not_clockwise">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
-            
-			<!-- arc -->
-             <Road id="east-">
+            <!-- arc -->
+            <Road id="east-">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
@@ -89,19 +87,9 @@
                     <Inflow t="0" q_per_hour="500" v="0" />
                 </TrafficSource>
             </Road>
-            
             <!-- ringroad: special case of arc -->
-            <Road id="3-">
-                <InitialConditions>
-                    <MacroIC position="1" density_per_km="8" speed="20" />
-                </InitialConditions>
-            </Road>
-            <Road id="3+">
-                <InitialConditions>
-                    <MacroIC position="1" density_per_km="8" speed="20" />
-                </InitialConditions>
-            </Road>
-            
+            <Road id="3-" />
+            <Road id="3+" />
             <Road id="4-">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="0" />
