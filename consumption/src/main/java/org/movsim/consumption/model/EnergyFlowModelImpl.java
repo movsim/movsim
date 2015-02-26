@@ -60,7 +60,6 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
         engineRotationModel = new EngineRotationModel(modelInput.getRotationModel());
         engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(), engineRotationModel);
 
-        // TODO boolean type
         if (modelInput.isOutput()) {
             writeOutput(keyLabel);
         }

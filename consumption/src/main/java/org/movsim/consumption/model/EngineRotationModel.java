@@ -39,7 +39,7 @@ import com.google.common.collect.Lists;
 class EngineRotationModel {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(EngineRotationModel.class);
+    private final static Logger LOG = LoggerFactory.getLogger(EngineRotationModel.class);
 
     private static final double INVMIN_TO_INVSEC = 1. / 60;
     /** idle rotation rate, minimum frequency(1/s) */
@@ -126,7 +126,7 @@ class EngineRotationModel {
 
     public double getEngineFrequency(double v, int gearIndex) {
         if (gearIndex < 0 || gearIndex > getMaxGearIndex()) {
-            logger.error("gear out of range! g={}", gearIndex);
+            LOG.error("gear out of range! g={}", gearIndex);
         }
         final double freq = getGearRatio(gearIndex) * v / dynamicWheelCircumfence();
         return Math.max(minFrequency, Math.min(freq, maxFrequency));
@@ -134,7 +134,7 @@ class EngineRotationModel {
 
     public boolean isFrequencyPossible(double v, int gearIndex) {
         if (gearIndex < 0 || gearIndex > getMaxGearIndex()) {
-            logger.error("gear out of range !  g={}", gearIndex);
+            LOG.error("gear out of range !  g={}", gearIndex);
         }
         final double frequencyTest = getGearRatio(gearIndex) * v / dynamicWheelCircumfence();
         if (frequencyTest > maxFrequency || frequencyTest < minFrequency) {
