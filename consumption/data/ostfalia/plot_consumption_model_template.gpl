@@ -63,6 +63,7 @@ set style line 99 lt 7 lw 1 linecolor rgb "#000000" #black
 
 select(x,xmin,xmax)=((x>=xmin)&&(x<=xmax)) ? 0 : 1/0  #-1000
 
+set grid
 set title "Consumption for zero acceleration, model ".consumptionModelName
 set xlabel "Speed (km/h)"
 set ylabel "Consumption (l/100km)"
@@ -79,7 +80,7 @@ plot\
  constAccInput u ($1*3.6):($5+select($4,5.9,6.1)) t "Gear 6" w p ls 6,\
  constAccInput u ($1*3.6):($5+select($4,6.9,7.1)) t "Gear 7" w p ls 8
 
-
+unset grid
 #################################
 # Definition of Contour lines   (line style=line style indicated at splot)
 #################################

@@ -41,10 +41,10 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     private final double idleConsumptionRate; //
 
     /** max. effective mechanical engine power in Watt (W) */
-    private final double maxPower; 
+    private final double maxPower;
 
     /** effective volume of the cylinders of the engine (in milliliters, SI) */
-    private final double cylinderVolume; 
+    private final double cylinderVolume;
 
     /** effective part of pe lost by gear and engine friction, in Pascal (N/m^2) */
     private final double minEffPressure;
@@ -63,22 +63,24 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     public EngineEfficiencyModelAnalyticImpl(EngineCombustionMap engineCombustionMap,
             EngineRotationModel engineRotationModel) {
         Preconditions.checkNotNull(engineRotationModel);
-        
+
         this.maxPower = engineCombustionMap.getMaxPowerKW() * KW_TO_W;
         this.idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * HOUR_TO_SECOND;
-        this.minSpecificConsumption = engineCombustionMap.getCspecMinGPerKwh() / 3.6e9;
+        this.minSpecificConsumption = engineCombustionMap.getCspecMinGPerKwh()
+                * ConsumptionConstants.GRAMM_PER_KWH_TO_KG_PER_WS;
         this.cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
         this.minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
         this.maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
         this.idleMoment = MomentsHelper.getModelLossMoment(engineRotationModel.getIdleFrequency());
 
         double powerIdle = MomentsHelper.getLossPower(engineRotationModel.getIdleFrequency());
-        this.cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle; 
-        }
-    
+        this.cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle;
+    }
+
     // consumption rate (m^3/s) as function of frequency and output power
     private double calcConsumptionRate(double frequency, double mechPower) {
-        final double indMoment = MomentsHelper.getMoment(mechPower, frequency) + MomentsHelper.getModelLossMoment(frequency);
+        final double indMoment = MomentsHelper.getMoment(mechPower, frequency)
+                + MomentsHelper.getModelLossMoment(frequency);
         final double totalPower = mechPower + MomentsHelper.getLossPower(frequency);
         final double dotCInLiterPerSecond = 1. / ConsumptionConstants.RHO_FUEL_PER_LITER * totalPower
                 * cSpecific0(frequency, indMoment, minSpecificConsumption);
