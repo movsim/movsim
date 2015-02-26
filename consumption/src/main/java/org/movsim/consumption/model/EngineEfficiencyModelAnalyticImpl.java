@@ -39,7 +39,7 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     private double idleConsumptionRate; //
 
     /** max. effective mechanical engine power in Watts (W) */
-    public double maxPower; //
+    private double maxPower; //
 
     /** effective volume of the cylinders of the engine (in milliliters, SI) */
     private double cylinderVolume; //
