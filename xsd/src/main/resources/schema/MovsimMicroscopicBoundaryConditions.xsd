@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
     <xs:annotation>
-        <xs:documentation>XML Schema Definition for Movsim microscopic or macroscopic initial condition input file, (c) 2015 by MovSim.org</xs:documentation>
+        <xs:documentation>XML Schema Definition for Movsim microscopic boundary condition input file, (c) 2015 by MovSim.org</xs:documentation>
     </xs:annotation>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <!-- own definition -->
@@ -34,50 +34,36 @@
     </xs:simpleType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <!-- root element -->
-    <xs:element name="MovsimInitialConditions">
+    <xs:element name="MovsimMicroscopicBoundaryConditions">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="RoadInitialConditions" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="RoadMicroscopicBoundaryConditions" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="RoadInitialConditions">
+    <xs:element name="RoadMicroscopicBoundaryConditions">
         <xs:complexType>
-            <xs:choice>
-                <xs:element ref="MacroscopicInitialConditions" />
-                <xs:element ref="MicroscopicInitialConditions" />
-            </xs:choice>
+        <xs:sequence>
+            <xs:element ref="MicroscopicBoundaryConditions" />
+            </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="MacroscopicInitialConditions">
+    <xs:element name="MicroscopicBoundaryConditions">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="MacroCondition" minOccurs="1" maxOccurs="unbounded" />
+                <xs:element ref="VehicleBoundaryCondition" minOccurs="1" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="MacroCondition">
+    <xs:element name="VehicleBoundaryCondition">
         <xs:complexType>
-            <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="density_per_km" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="speed" type="nonNegativeDouble" use="optional" />
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="MicroscopicInitialConditions">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="VehicleInitialCondition" minOccurs="1" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="VehicleInitialCondition">
-        <xs:complexType>
+            <xs:attribute name="time" type="xs:string" use="required" />
+            <xs:attribute name="label" type="xs:string" use="optional" />
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
             <xs:attribute name="speed" type="nonNegativeDouble" use="required" />
             <!-- By convention the lane index starts with 1 for the most inner lane. -->
             <xs:attribute name="lane" type="nonNegativeInteger" default="1" />
-            <xs:attribute name="label" type="xs:string" use="optional" />
         </xs:complexType>
     </xs:element>
 </xs:schema>
