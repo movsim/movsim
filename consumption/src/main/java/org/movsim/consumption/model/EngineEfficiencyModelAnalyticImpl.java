@@ -33,9 +33,6 @@ import com.google.common.base.Preconditions;
 
 class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
-    /** The Constant logger. */
-    private static final Logger LOG = LoggerFactory.getLogger(EngineEfficiencyModelAnalyticImpl.class);
-
     private static final double HOUR_TO_SECOND = 1 / 3600.;
 
     private static final double KW_TO_W = 1000.;
@@ -65,11 +62,9 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     /** in (kg/Ws) */
     private final double minSpecificConsumption;
 
-    private final EngineRotationModel engineRotationModel;
-
     public EngineEfficiencyModelAnalyticImpl(EngineCombustionMap engineCombustionMap,
             EngineRotationModel engineRotationModel) {
-        this.engineRotationModel = Preconditions.checkNotNull(engineRotationModel);
+        Preconditions.checkNotNull(engineRotationModel);
         
         this.maxPower = engineCombustionMap.getMaxPowerKW() * KW_TO_W;
         this.idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * HOUR_TO_SECOND;
@@ -77,9 +72,9 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         this.cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
         this.minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
         this.maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
-        this.idleMoment = MomentsHelper.getModelLossMoment(this.engineRotationModel.getIdleFrequency());
+        this.idleMoment = MomentsHelper.getModelLossMoment(engineRotationModel.getIdleFrequency());
 
-        double powerIdle = MomentsHelper.getLossPower(this.engineRotationModel.getIdleFrequency());
+        double powerIdle = MomentsHelper.getLossPower(engineRotationModel.getIdleFrequency());
         this.cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle; 
         }
     
