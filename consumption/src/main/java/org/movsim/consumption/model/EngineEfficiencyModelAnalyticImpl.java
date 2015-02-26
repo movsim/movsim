@@ -26,8 +26,6 @@
 package org.movsim.consumption.model;
 
 import org.movsim.autogen.EngineCombustionMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -42,8 +40,8 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     /** idling consumption rate (liter/s) */
     private final double idleConsumptionRate; //
 
-    /** max. effective mechanical engine power in Watts (W) */
-    private final double maxPower; //
+    /** max. effective mechanical engine power in Watt (W) */
+    private final double maxPower; 
 
     /** effective volume of the cylinders of the engine (in milliliters, SI) */
     private final double cylinderVolume; 
@@ -59,7 +57,7 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     /** in kg/(Ws) */
     public final double cSpec0Idle;
 
-    /** in (kg/Ws) */
+    /** in kg/(Ws) */
     private final double minSpecificConsumption;
 
     public EngineEfficiencyModelAnalyticImpl(EngineCombustionMap engineCombustionMap,
