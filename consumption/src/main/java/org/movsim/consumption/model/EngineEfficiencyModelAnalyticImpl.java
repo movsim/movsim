@@ -29,6 +29,8 @@ import org.movsim.autogen.EngineCombustionMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     /** The Constant logger. */
@@ -57,16 +59,17 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     private final double idleMoment;
 
+    /** in kg/(Ws) */
     public final double cSpec0Idle;
 
     /** in (kg/Ws) */
     private final double minSpecificConsumption;
 
-    private final EngineRotationModel engineRotationsModel;
+    private final EngineRotationModel engineRotationModel;
 
     public EngineEfficiencyModelAnalyticImpl(EngineCombustionMap engineCombustionMap,
-            EngineRotationModel engineRotationsModel) {
-        this.engineRotationsModel = engineRotationsModel;
+            EngineRotationModel engineRotationModel) {
+        this.engineRotationModel = Preconditions.checkNotNull(engineRotationModel);
         
         this.maxPower = engineCombustionMap.getMaxPowerKW() * KW_TO_W;
         this.idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * HOUR_TO_SECOND;
@@ -74,11 +77,11 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         this.cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
         this.minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
         this.maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
-        this.idleMoment = MomentsHelper.getModelLossMoment(engineRotationsModel.getIdleFrequency());
+        this.idleMoment = MomentsHelper.getModelLossMoment(this.engineRotationModel.getIdleFrequency());
 
-        double powerIdle = MomentsHelper.getLossPower(engineRotationsModel.getIdleFrequency());
-        this.cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle; // in kg/(Ws)
-    }
+        double powerIdle = MomentsHelper.getLossPower(this.engineRotationModel.getIdleFrequency());
+        this.cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle; 
+        }
     
     // consumption rate (m^3/s) as function of frequency and output power
     private double calcConsumptionRate(double frequency, double mechPower) {
