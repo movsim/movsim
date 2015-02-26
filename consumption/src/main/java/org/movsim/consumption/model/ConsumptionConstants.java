@@ -28,7 +28,7 @@ package org.movsim.consumption.model;
 final class ConsumptionConstants {
 
     private ConsumptionConstants() {
-        // Suppresses default constructor, ensuring non-instantiability.
+        throw new IllegalStateException("do not invoke private constructor");
     }
 
     /** grav. acceleration (m/s^2) */
@@ -46,7 +46,7 @@ final class ConsumptionConstants {
     /** caloric density of gasoline: 44 MJ/kg (--> 0.76*44 JM/liter) */
     static final double CALORIC_DENSITY = 44e6;
 
-    /** tranforming factor g/kWh => m^3/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
+    /** transforming factor g/kWh => m^3/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
     static final double CONVERSION_GRAMM_PER_KWH_TO_SI = 1. / (RHO_FUEL * 3.6e9);
 
     static final double CONVERSION_BAR_TO_PASCAL = 1e5;
