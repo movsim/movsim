@@ -118,7 +118,7 @@ class FileFuelConsumptionModel extends FileOutputBase {
                 / (N_FREQ - 1);
         final int N_POW = 80;
         final double powMin = -20000; // range
-        final double dPow = (engineModel.maxPower - powMin) / (N_POW - 1);
+        final double dPow = (engineModel.getMaxPower() - powMin) / (N_POW - 1);
 
         for (int i = 0; i < N_FREQ; i++) {
             final double f = engineRotationModel.getMinFrequency() + i * df;

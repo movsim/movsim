@@ -26,8 +26,13 @@
 package org.movsim.consumption.model;
 
 import org.movsim.autogen.EngineCombustionMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
+
+    /** The Constant logger. */
+    private static final Logger LOG = LoggerFactory.getLogger(EngineEfficiencyModelAnalyticImpl.class);
 
     private static final double HOUR_TO_SECOND = 1 / 3600.;
 
@@ -36,72 +41,45 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     private static final double LITER_TO_MILLILITER = 1 / 1000.;
 
     /** idling consumption rate (liter/s) */
-    private double idleConsumptionRate; //
+    private final double idleConsumptionRate; //
 
     /** max. effective mechanical engine power in Watts (W) */
-    private double maxPower; //
+    private final double maxPower; //
 
     /** effective volume of the cylinders of the engine (in milliliters, SI) */
-    private double cylinderVolume; //
+    private final double cylinderVolume; 
 
     /** effective part of pe lost by gear and engine friction, in Pascal (N/m^2) */
-    private double minEffPressure;
+    private final double minEffPressure;
 
     /** in Pascal */
-    private double maxEffPressure;
+    private final double maxEffPressure;
 
-    /** */
-    private double idleMoment;
+    private final double idleMoment;
 
-    public double cSpec0Idle;
+    public final double cSpec0Idle;
 
     /** in (kg/Ws) */
-    private double minSpecificConsumption;
+    private final double minSpecificConsumption;
 
     private final EngineRotationModel engineRotationsModel;
 
     public EngineEfficiencyModelAnalyticImpl(EngineCombustionMap engineCombustionMap,
             EngineRotationModel engineRotationsModel) {
         this.engineRotationsModel = engineRotationsModel;
-        initialize(engineCombustionMap);
-    }
-
-    private void initialize(EngineCombustionMap engineCombustionMap) {
-        maxPower = engineCombustionMap.getMaxPowerKW() * KW_TO_W;
-        idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * HOUR_TO_SECOND;
-        minSpecificConsumption = engineCombustionMap.getCspecMinGPerKwh() / 3.6e9;
-        cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
-        minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
-        maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
-        idleMoment = MomentsHelper.getModelLossMoment(engineRotationsModel.getIdleFrequency());
+        
+        this.maxPower = engineCombustionMap.getMaxPowerKW() * KW_TO_W;
+        this.idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * HOUR_TO_SECOND;
+        this.minSpecificConsumption = engineCombustionMap.getCspecMinGPerKwh() / 3.6e9;
+        this.cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
+        this.minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
+        this.maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
+        this.idleMoment = MomentsHelper.getModelLossMoment(engineRotationsModel.getIdleFrequency());
 
         double powerIdle = MomentsHelper.getLossPower(engineRotationsModel.getIdleFrequency());
-        cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle; // in kg/(Ws)
-
-        // if (LOG.isDebugEnabled()) {
-        // LOG.debug(String.format("powerIdle=%f W", getLossPower(getIdleFrequency())));
-        // LOG.debug(String.format("maxMoment=%f Nm", maxMoment));
-        // LOG.debug(String.format("idleMoment=%f Nm", idleMoment));
-        //
-        // LOG.debug(String.format("cSpez0Idle=%f kg/kWh=%f l/kWh\n minimumSpecificConsumption=%e kg/Ws=%f kg/kWh \n"
-        // + "cSpez0(fIdle,M=160Nm)=%f g/kWh", 3.6e6 * cSpec0Idle, 3.6e6 * cSpec0Idle
-        // / ConsumptionConstants.RHO_FUEL_PER_LITER, minSpecificConsumption, 3.6e6 * minSpecificConsumption,
-        // cSpecific0(getIdleFrequency(), 160, minSpecificConsumption) * 3.6e9));
-        //
-        // LOG.debug(String
-        // .format("Test: dotC(f_idle,0)=%f l/h", 3.6e6 * consRateAnalyticModel(getIdleFrequency(), 0)));
-        //
-        // LOG.debug(String.format("dotC(0.5*fmax,0.5*Pmax)=%f l/h",
-        // 3.6e6 * consRateAnalyticModel(0.5 * getMaxFrequency(), 0.5 * getMaxPower())));
-        //
-        // LOG.debug(String.format("cSpecific(f=3000/min, M=160Nm)=%f g/kWh",
-        // 3.6e9 * cSpecific0ForMechMoment(3000 / 60., 160)));
-        // LOG.debug(String.format("cSpecific(f=5000/min, M=200Nm)=%f g/kWh",
-        // 3.6e9 * cSpecific0ForMechMoment(5000 / 60., 200)));
-        // }
-
+        this.cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle; // in kg/(Ws)
     }
-
+    
     // consumption rate (m^3/s) as function of frequency and output power
     private double calcConsumptionRate(double frequency, double mechPower) {
         final double indMoment = MomentsHelper.getMoment(mechPower, frequency) + MomentsHelper.getModelLossMoment(frequency);
