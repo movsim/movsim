@@ -130,7 +130,7 @@ set ylabel "Torque [Nm]"
 set yrange [0:230]
 
 set title "Specific consumption(f,pressure) [g/kWh] for model ".consumptionModelName
-set zrange [200:500]
+set zrange [150:500]
 unset ztics 
 
 set cntrparam levels discrete 200,210,220,230,240,250,260,270,280,290,300 # freely set lines

@@ -6,14 +6,17 @@
     <BatchJobs>
         <BatchData inputfile="city_example.car.route_main.000002.dat" outputfile="city_example.car.route_main.000002.AudiA3.csv" model="AudiA3">
             <Columns time="1" speed="6" acceleration="7" gradient="14"/>
+	    <Conversions />
         </BatchData>
 
         <BatchData inputfile="city_example.car.route_main.000003.dat" outputfile="city_example.car.route_main.000003.AudiA3.csv" model="AudiA3">
             <Columns time="1" speed="6" acceleration="7" gradient="14"/>
+	    <Conversions />
         </BatchData>
 
         <BatchData inputfile="city_example.car.route_main.000004.dat" outputfile="city_example.car.route_main.000004.AudiA3.csv" model="AudiA3">
             <Columns time="1" speed="6" acceleration="7" gradient="14"/>
+	    <Conversions />
         </BatchData>
     </BatchJobs>
 

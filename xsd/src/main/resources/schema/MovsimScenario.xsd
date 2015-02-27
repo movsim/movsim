@@ -64,8 +64,9 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="Columns" />
-                <xs:element ref="Conversions" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="Conversions" minOccurs="1" maxOccurs="1" />
             </xs:sequence>
+            <xs:attribute name="separator" type="xs:string" default="," />
             <xs:attribute name="inputfile" type="xs:string" use="required" />
             <xs:attribute name="outputfile" type="xs:string" use="required" />
             <xs:attribute name="model" type="xs:string" use="required" />
@@ -82,7 +83,8 @@
     </xs:element>
     <xs:element name="Conversions">
         <xs:complexType>
-            <xs:attribute name="time" type="xs:string" default="" />
+            <!-- <xs:attribute name="time" type="xs:string" default="yyyy-MM-dd'T'HH:mm:ssZ" /> -->
+            <xs:attribute name="time" type="xs:string" default="1" />
             <xs:attribute name="speed" type="positiveDouble" default="1" />
             <xs:attribute name="acceleration" type="positiveDouble" default="1" />
             <xs:attribute name="gradient" type="positiveDouble" default="1" />

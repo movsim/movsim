@@ -38,19 +38,20 @@ import com.google.common.base.Preconditions;
 
 public class OutputWriter {
 
-    private static final char SEPARATOR_CHARACTER = ',';
+    private char separator = ',';
     private static final char QUOTE_CHARACTER = CSVWriter.NO_QUOTE_CHARACTER;
     private final File output;
 
     public static OutputWriter create(BatchData batch, String outputPath) {
         File outputFile = new File(outputPath, batch.getOutputfile());
-        return new OutputWriter(outputFile);
+        char separator = batch.getSeparator().charAt(0);
+        return new OutputWriter(outputFile, separator);
     }
 
     public static OutputWriter create(File outputFile) {
         return new OutputWriter(outputFile);
     }
-
+    
     private OutputWriter(File output) {
         Preconditions.checkNotNull(output);
         if (output.exists()) {
@@ -60,15 +61,19 @@ public class OutputWriter {
         this.output = output;
     }
 
+    public OutputWriter(File outputFile, char separator) {
+        this(outputFile);
+        this.separator = separator;
+    }
+
     public void write(List<ConsumptionDataRecord> records) {
         CSVWriter writer = null;
         try {
-            writer = new CSVWriter(new FileWriter(output), SEPARATOR_CHARACTER, QUOTE_CHARACTER);
+            writer = new CSVWriter(new FileWriter(output), separator, QUOTE_CHARACTER);
             if (!records.isEmpty()) {
-                writer.writeNext(records.get(0).csvHeader(String.valueOf(SEPARATOR_CHARACTER)));
+                writer.writeNext(records.get(0).csvHeader(String.valueOf(separator)));
                 for (ConsumptionDataRecord record : records) {
-                    // feed in your array (or convert your data to an array)
-                    writer.writeNext(record.toCsv(String.valueOf(SEPARATOR_CHARACTER)));
+                    writer.writeNext(record.toCsv(String.valueOf(separator)));
                 }
             }
         } catch (IOException e) {
