@@ -25,12 +25,14 @@ specCons=".specCons_"
 
 # input files
 canFile=inputPathData.baseName.canInput.inputFileEndingData
-
 print "empiric CAN data input file = ".canFile
 
 # plot output files
 specConsPressureOutput = outputPath.baseName.specCons."pressure_emp".outputFileEnding
+print "specConsPressureOutput=".specConsPressureOutput
 specConsPowerOutput = outputPath.baseName.specCons."power_emp".outputFileEnding
+print "specConsPowerOutput=".specConsPowerOutput
+
 ########  Line Styles  ###################################
 
 set style line 1 linetype 1 linewidth 2 pointtype 7 pointsize 1
@@ -88,7 +90,7 @@ unset ztics
 
 const=300
 set out specConsPressureOutput
-splot canFile u 3:4:(300) t "CAN data" w p palette
+splot canFile u 3:4:(const) t "CAN data" w p palette
 
 ## specConsInput u 1:4:5  w pm3d,\ 
 ## TODO l/h --> g/kWh
@@ -103,5 +105,5 @@ set ylabel "Power [kW]"
 set yrange [0:95]
 
 set out specConsPowerOutput
-splot canFile u 3:(powerFuncFromM($4,$3)/1000.):(300) t "CAN data" w p palette
+splot canFile u 3:(powerFuncFromM($4,$3)/1000.):(const) t "CAN data" w p palette
 

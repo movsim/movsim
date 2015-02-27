@@ -458,6 +458,8 @@
                 <xs:element ref="OutputConfiguration" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="network_filename" type="xs:string" use="required" />
+            <xs:attribute name="initial_conditions_filename" type="xs:string" />
+            <!--  TODO add external_control_filename -->
         </xs:complexType>
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
@@ -511,7 +513,6 @@
             <xs:sequence>
                 <xs:element ref="TrafficComposition" minOccurs="0" maxOccurs="1" />
                 <!-- todo: rethink if IC and BC could be nested together with trafficComposition-->
-                <xs:element ref="InitialConditions" minOccurs="0" maxOccurs="1" />
                 <xs:element name="TrafficSource" type="TrafficSourceType" minOccurs="0" maxOccurs="1" />
                 <xs:element name="TrafficSink" type="TrafficSinkType" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="FlowConservingInhomogeneities" minOccurs="0" maxOccurs="1" />
@@ -521,30 +522,6 @@
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required" />
             <xs:attribute name="logging" type="xs:boolean" default="false" />
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="InitialConditions">
-        <xs:complexType>
-            <xs:choice>
-                <xs:element ref="MacroIC" minOccurs="0" maxOccurs="unbounded" />
-                <xs:element ref="MicroIC" minOccurs="0" maxOccurs="unbounded" />
-            </xs:choice>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="MacroIC">
-        <xs:complexType>
-            <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="density_per_km" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="speed" type="nonNegativeDouble" use="optional" />
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="MicroIC">
-        <xs:complexType>
-            <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="speed" type="nonNegativeDouble" use="required" />
-            <!-- By convention the lane index starts with 1 for the most inner lane. -->
-            <xs:attribute name="lane" type="nonNegativeInteger" default="1" />
-            <xs:attribute name="label" type="xs:string" default="" />
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TrafficSourceType">

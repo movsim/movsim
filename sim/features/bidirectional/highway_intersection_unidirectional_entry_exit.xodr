@@ -183,7 +183,7 @@
             <predecessor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="2300" y="320" hdg="4.712" length="200">
+            <geometry s="0.0" x="2300" y="270" hdg="4.712" length="200">
                 <line />
             </geometry>
         </planView>
@@ -203,7 +203,7 @@
             <predecessor elementType="junction" elementId="30" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="2320" y="520" hdg="1.571" length="200">
+            <geometry s="0.0" x="2300" y="70" hdg="1.571" length="200">
                 <line />
             </geometry>
         </planView>
@@ -225,7 +225,7 @@
             <successor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="2300" y="80" hdg="4.712" length="200">
+            <geometry s="0.0" x="2300" y="530" hdg="4.712" length="200">
                 <line />
             </geometry>
         </planView>
@@ -245,7 +245,7 @@
             <predecessor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="2320" y="280" hdg="1.571" length="200">
+            <geometry s="0.0" x="2300" y="330" hdg="1.571" length="200">
                 <line />
             </geometry>
         </planView>

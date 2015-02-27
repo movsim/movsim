@@ -54,8 +54,7 @@
                     <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
             </Road>
-            
-             <Road id="4+">
+            <Road id="4+">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="500" />
                 </TrafficSource>
@@ -67,13 +66,13 @@
             </Road>
         </Simulation>
         <TrafficLights logging="true" n_timestep="5">
-            <ControllerGroup id="plan1"  >
+            <ControllerGroup id="plan1">
                 <Phase duration="35">
                     <TrafficLightState type="first" status="Green" />
                     <TrafficLightState type="second" status="Red" />
                 </Phase>
                 <Phase duration="3">
-                    <TrafficLightState type="first" status="GreenRed" /> 
+                    <TrafficLightState type="first" status="GreenRed" />
                     <!-- <TrafficLightState type="second" status="RedGreen" /> -->
                 </Phase>
                 <Phase duration="40">
@@ -85,25 +84,24 @@
                     <TrafficLightState type="second" status="GreenRed" />
                 </Phase>
             </ControllerGroup>
-                <ControllerGroup id="single"  >
+            <ControllerGroup id="single">
                 <Phase duration="35">
                     <TrafficLightState type="first" status="Green" />
                 </Phase>
                 <Phase duration="3">
-                    <TrafficLightState type="first" status="GreenRed" /> 
+                    <TrafficLightState type="first" status="GreenRed" />
                 </Phase>
                 <Phase duration="40">
                     <TrafficLightState type="first" status="Red" />
                 </Phase>
             </ControllerGroup>
-            
-            <ControllerGroup id="road4"  >
+            <ControllerGroup id="road4">
                 <Phase duration="35">
                     <TrafficLightState type="first" status="Green" />
                     <TrafficLightState type="second" status="Red" />
                 </Phase>
                 <Phase duration="3">
-                    <TrafficLightState type="first" status="GreenRed" /> 
+                    <TrafficLightState type="first" status="GreenRed" />
                     <!-- <TrafficLightState type="second" status="RedGreen" /> -->
                 </Phase>
                 <Phase duration="40">
@@ -115,7 +113,6 @@
                     <TrafficLightState type="second" status="GreenRed" />
                 </Phase>
             </ControllerGroup>
-            
         </TrafficLights>
     </Scenario>
 </Movsim>

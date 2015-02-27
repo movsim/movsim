@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 class InstantaneousPowerModelImpl implements InstantaneousPowerModel {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(InstantaneousPowerModelImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InstantaneousPowerModelImpl.class);
 
     private final VehicleAttributes vehicle;
 
@@ -57,8 +57,7 @@ class InstantaneousPowerModelImpl implements InstantaneousPowerModel {
                 * (vehicle.constantFrictionCoefficient() + slopeGrade);
         final double d = vehicle.mass() * ConsumptionConstants.GRAVITATION * vehicle.speedFrictionCoefficient();
         final double e = 0.5 * ConsumptionConstants.RHO_AIR * vehicle.cwValue() * vehicle.crossSectionSurface();
-        // System.out.println("v=" + v + ", acc=" + acc + ", slope gradient=" + slopeGrade + ", c=" + c + ", d=" + d
-        // + ", e=" + e);
+        LOG.debug("v=" + v + ", acc=" + acc + ", slope gradient=" + slopeGrade + ", c=" + c + ", d=" + d + ", e=" + e);
         return vehicle.mass() * acc + c + d * v + e * v * v;
     }
 

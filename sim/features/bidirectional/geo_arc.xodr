@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep  2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
+    
+    <!-- arc road -->
+    <road id="north_not_clockwise" name="arc" length="1400" junction="-1">
+        <planView>
+            <geometry s="0.0" x="875" y="0" hdg="1.570796" length="1400">
+                <arc curvature="0.001143" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+               <!-- <left>
+                    <lane id="1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="2" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                -->
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    <!-- arc road -->
+    <road id="north_clockwise" name="arc" length="1000" junction="-1">
+        <planView>
+            <geometry s="0.0" x="1000" y="0" hdg="1.570796" length="1000">
+                <arc curvature="-0.001143" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+              <left>
+                    <lane id="1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="2" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="3" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </left>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+   
+    
+</OpenDRIVE>
+

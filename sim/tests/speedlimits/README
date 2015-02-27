@@ -1,8 +1,0 @@
-* FVDM does not obey speed limit if there are other vehicles (far) in front
-
-* Cellular automata do not yet obey speed limits. We could try to map speed limits 
-  to the nearest multiple of the elementary speed step. Maybe, a 
-  warning would be appropriate if an imposed speed limits is uneffective 
-  because it does not change the integer speed.
-
-* Check also speed limit for two road segments (must be reset on second road segment)

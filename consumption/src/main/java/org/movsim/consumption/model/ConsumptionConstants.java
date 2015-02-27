@@ -28,26 +28,29 @@ package org.movsim.consumption.model;
 final class ConsumptionConstants {
 
     private ConsumptionConstants() {
-        // Suppresses default constructor, ensuring non-instantiability.
+        throw new IllegalStateException("do not invoke private constructor");
     }
 
-    /** grav. acceleration (m/s^2) */
+    /** gravitation acceleration (m/s^2) */
     static final double GRAVITATION = 9.81;
 
-    /** 1.29 (kg/m^3) at 0 degress celsius, 1014 hPa */
+    /** 1.29 (kg/m^3) at 0 degrees celsius, 1014 hPa */
     static final double RHO_AIR = 1.29;
 
     /** density of gasoline (kg/m^3) */
-    static final double RHO_FUEL = 760;
+    static final double RHO_FUEL = 760; // diesel: 830
 
     /** density of gasoline (kg/l) */
     static final double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.;
 
     /** caloric density of gasoline: 44 MJ/kg (--> 0.76*44 JM/liter) */
-    static final double CALORIC_DENSITY = 44e6;
+    // static final double CALORIC_DENSITY = 44e6;
 
-    /** tranforming factor g/kWh => m^3/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
-    static final double CONVERSION_GRAMM_PER_KWH_TO_SI = 1. / (RHO_FUEL * 3.6e9);
+    /** transforming factor g/kWh => kg/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
+    static final double GRAMM_PER_KWH_TO_KG_PER_WS = 1 / 3.6e9;
+
+    /** conversion factor from g/kWh to m^3/kWh */
+    static final double CONVERSION_GRAMM_PER_KWH_TO_SI = 1. / RHO_FUEL * GRAMM_PER_KWH_TO_KG_PER_WS;
 
     static final double CONVERSION_BAR_TO_PASCAL = 1e5;
 
