@@ -45,9 +45,9 @@ import com.google.common.collect.Lists;
 
 public class InputReader {
 
-    static final Logger LOG = LoggerFactory.getLogger(InputReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InputReader.class);
 
-    private final char separator = ',';
+    private final char separator;
 
     private List<ConsumptionDataRecord> records;
 
@@ -64,8 +64,9 @@ public class InputReader {
         Preconditions.checkNotNull(batch);
         Preconditions.checkArgument(inputFile.exists() && inputFile.isFile(), "file=" + inputFile.getAbsolutePath()
                 + " does not exist!");
+        this.separator = batch.getSeparator().charAt(0);
         this.batchInput = batch;
-        records = new LinkedList<ConsumptionDataRecord>();
+        this.records = new LinkedList<ConsumptionDataRecord>();
 
         process(inputFile);
     }
@@ -127,8 +128,8 @@ public class InputReader {
             ConsumptionDataRecord recordBwd = records.get(Math.max(0, i - 1));
             double speed = calcDerivate(recordFwd.getPosition() - recordBwd.getPosition(), recordFwd.getTime()
                     - recordBwd.getTime());
-            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getPosition(), speed,
-                    record.getAcceleration(), record.getGrade()));
+            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getTimestamp(), record
+                    .getPosition(), speed, record.getAcceleration(), record.getGrade()));
         }
         return newRecords;
     }
@@ -143,8 +144,8 @@ public class InputReader {
             ConsumptionDataRecord recordBwd = records.get(Math.max(0, i - 1));
             double acceleration = calcDerivate(recordFwd.getSpeed() - recordBwd.getSpeed(), recordFwd.getTime()
                     - recordBwd.getTime());
-            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getPosition(), record
-                    .getSpeed(), acceleration, record.getGrade()));
+            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getTimestamp(), record
+                    .getPosition(), record.getSpeed(), acceleration, record.getGrade()));
         }
         return newRecords;
     }

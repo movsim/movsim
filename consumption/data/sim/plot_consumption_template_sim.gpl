@@ -89,15 +89,15 @@ set ylabel "Model Quantities"
 set out fuelPlot
 print "plot ".fuelPlot
 plot\
-  modelFile u ($1/60.):($7*3600*10) t "10*consumption [l/h]" w l ls 4,\
-  modelFile u ($1/60.):(fuel100($7*3600,$4*3.6)) t "consumption [l/100km]" w l ls 5
+  modelFile u ($1/60.):($8*3600*10) t "10*consumption [l/h]" w l ls 4,\
+  modelFile u ($1/60.):(fuel100($8*3600,$5*3.6)) t "consumption [l/100km]" w l ls 5
 
-##  modelFile u ($1/60.):($9*10) t "10*gear" w l ls 6
+##  modelFile u ($1/60.):($10*10) t "10*gear" w l ls 6
 
 set key left
 set ylabel "Cumulated Consumption (liter)"
 set out fuelCumPlot
 print "plot ".fuelCumPlot
 plot\
-  modelFile u ($2/60.):8 t "model" w l ls 3
+  modelFile u ($2/60.):9 t "model" w l ls 3
 
