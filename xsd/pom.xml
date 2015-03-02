@@ -108,6 +108,22 @@
                             </bindingIncludes>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>movsimMicroscopicBoundaryConditions</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <forceRegenerate>true</forceRegenerate>
+                            <schemaIncludes>
+                                <schemaInclude>MovsimMicroscopicBoundaryConditions.xsd</schemaInclude>
+                            </schemaIncludes>
+                            <bindingIncludes>
+                                <bindingInclude>globalBinding.xjc</bindingInclude>
+                                <bindingInclude>movsimMicroscopicBoundaryConditionsBinding.xjc</bindingInclude>
+                            </bindingIncludes>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <!-- build executable jar with all dependencies -->

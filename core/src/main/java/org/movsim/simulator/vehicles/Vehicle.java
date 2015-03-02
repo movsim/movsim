@@ -116,7 +116,6 @@ public class Vehicle {
 
     private double length; // can be set in micro-boundary conditions
     private final double width;
-    private double weight; // used in a project, not in fuel consumption calculation!
 
     /** The front position of the vehicle. The reference position. */
     private double frontPosition;
