@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.movsim.scenario.initial.autogen.MacroCondition;
-import org.movsim.scenario.initial.autogen.MacroscopicInitialConditions;
-import org.movsim.scenario.initial.autogen.MicroscopicInitialConditions;
+import org.movsim.scenario.initial.autogen.MacroConditionType;
+import org.movsim.scenario.initial.autogen.MacroscopicInitialConditionsType;
+import org.movsim.scenario.initial.autogen.MicroscopicInitialConditionsType;
 import org.movsim.scenario.initial.autogen.MovsimInitialConditions;
-import org.movsim.scenario.initial.autogen.RoadInitialConditions;
-import org.movsim.scenario.initial.autogen.VehicleInitialCondition;
+import org.movsim.scenario.initial.autogen.RoadInitialConditionsType;
+import org.movsim.scenario.initial.autogen.VehicleInitialConditionType;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -48,7 +48,7 @@ public class InitialConditions {
     }
 
     public void setInitialConditions(RoadNetwork roadNetwork, TrafficCompositionGenerator defaultComposition) {
-        for (RoadInitialConditions roadIC : movsimInitialConditions.getRoadInitialConditions()) {
+        for (RoadInitialConditionsType roadIC : movsimInitialConditions.getRoadInitialConditions()) {
             String roadId = roadIC.getId();
             RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
 
@@ -86,7 +86,7 @@ public class InitialConditions {
      * @param macroInitialConditions
      * @param trafficComposition
      */
-    private void setMacroscopicInitialConditions(RoadSegment roadSegment, MacroscopicInitialConditions macroInitialConditions,
+    private void setMacroscopicInitialConditions(RoadSegment roadSegment, MacroscopicInitialConditionsType macroInitialConditions,
             TrafficCompositionGenerator trafficComposition) {
 
         LOG.info("set macro initial conditions: generate vehicles from macro-localDensity ");
@@ -157,12 +157,12 @@ public class InitialConditions {
         }
     }
 
-    private void setMicroscopicInitialConditions(RoadSegment roadSegment, MicroscopicInitialConditions initialMicroConditions,
+    private void setMicroscopicInitialConditions(RoadSegment roadSegment, MicroscopicInitialConditionsType initialMicroConditions,
             TrafficCompositionGenerator trafficComposition) {
         LOG.debug(("set microscopic initial conditions"));
 
         int vehicleNumber = 1;
-        for (final VehicleInitialCondition ic : initialMicroConditions.getVehicleInitialCondition()) {
+        for (final VehicleInitialConditionType ic : initialMicroConditions.getVehicleInitialCondition()) {
             // TODO counter
             final Vehicle veh =
                     ic.isSetLabel() ? trafficComposition.createVehicle(ic.getLabel()) : trafficComposition.createVehicle();
@@ -200,7 +200,7 @@ public class InitialConditions {
         /**
          * Instantiates a new initial conditions macro.
          */
-        public InitialConditionsMacro(List<MacroCondition> macroConditions) {
+        public InitialConditionsMacro(List<MacroConditionType> macroConditions) {
 
             final int size = macroConditions.size();
 
@@ -214,7 +214,7 @@ public class InitialConditions {
             // generateMacroFields: rho guaranteed to be > RHOMIN, v to be < VMAX
 
             for (int i = 0; i < size; i++) {
-                MacroCondition localMacroIC = macroConditions.get(i);
+                MacroConditionType localMacroIC = macroConditions.get(i);
                 final double rhoLocal = localMacroIC.getDensityPerKm() * Units.INVKM_TO_INVM;
                 if (rhoLocal > MovsimConstants.SMALL_VALUE) {
                     pos[i] = localMacroIC.getPosition();
@@ -227,7 +227,7 @@ public class InitialConditions {
             }
         }
 
-        private boolean useUserDefinedSpeeds(List<MacroCondition> macroConditions) {
+        private boolean useUserDefinedSpeeds(List<MacroConditionType> macroConditions) {
             boolean userDefinedSpeed = true;
 
             for (int i = 0, N = macroConditions.size(); i < N; i++) {
