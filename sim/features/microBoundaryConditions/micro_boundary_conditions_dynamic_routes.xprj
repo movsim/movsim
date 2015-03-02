@@ -46,12 +46,12 @@
                 <Road id="4" />
             </Route>
         </Routes>
-        <!-- <OutputConfiguration>
--            <FloatingCarOutput n_timestep="1" route="exit">
--                <FloatingCar number="1" />
--                <FloatingCar number="3" />
--            </FloatingCarOutput> 
--        </OutputConfiguration>-->
+         <OutputConfiguration>
+            <FloatingCarOutput n_timestep="1" route="exit">
+                <FloatingCar number="2" />
+                <FloatingCar number="3" />
+            </FloatingCarOutput>
+        </OutputConfiguration>
     </Scenario>
 </Movsim>
 
