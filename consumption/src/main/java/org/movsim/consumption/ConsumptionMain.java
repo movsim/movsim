@@ -63,7 +63,7 @@ public class ConsumptionMain {
         // ConsumptionCommandLine.parse(ProjectMetaData.getInstance(), args);
         MovsimCommandLine.parse(args);
 
-        Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getInputFile());
+        Movsim inputData = MovsimInputLoader.unmarshall(ProjectMetaData.getInstance().getInputFile());
 
         if (!inputData.isSetConsumption()) {
             System.err.println("no consumption element configured in input file");

@@ -54,21 +54,6 @@ public class FileUnmarshaller<T> {
         return load(new StreamSource(file), clazz, factory, xsdFile);
     }
     
-//    public final T load(File file, Class<T> clazz, Class<?> factory, URL xsdFile) throws JAXBException, SAXException, ParserConfigurationException {
-//        Preconditions.checkNotNull(file);
-//        Preconditions.checkNotNull(xsdFile);
-//        FileInputStream fileInputStream = null;
-//        try {
-//            fileInputStream = new FileInputStream(file);
-//            InputSource inputSource = new InputSource(new InputStreamReader(fileInputStream));
-//            inputSource.setEncoding("UTF-8");
-//            return load(inputSource, clazz, factory, xsdFile);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
     private final Unmarshaller createUnmarshaller(final Class<?> objectFactoryClass, final URL xsdFile)
             throws JAXBException, SAXException {
         JAXBContext context = JAXBContext.newInstance(objectFactoryClass);

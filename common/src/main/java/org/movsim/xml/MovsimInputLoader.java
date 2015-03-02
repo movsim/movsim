@@ -17,47 +17,53 @@ import java.net.URL;
 
 import javax.xml.bind.JAXBException;
 
+import org.jdom.IllegalDataException;
 import org.movsim.autogen.Movsim;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-// TODO rename
 public final class MovsimInputLoader {
 
     /** The Constant logger. */
     private final static Logger LOG = LoggerFactory.getLogger(MovsimInputLoader.class);
 
-    private static final Class<?> SCENARIO_FACTORY = Movsim.class;
+    private static final Class<?> FACTORY = Movsim.class;
 
     private static final String SCENARIO_XML_SCHEMA = "/schema/MovsimScenario.xsd";
 
-    private static final URL SCENARIO_XSD_URL = MovsimInputLoader.class.getResource(SCENARIO_XML_SCHEMA);
-
-    private MovsimInputLoader() {
+    private static URL getUrl() {
+        return MovsimInputLoader.class.getResource(SCENARIO_XML_SCHEMA);
     }
 
-    public static Movsim validateAndLoadScenarioInput(final File xmlFile) throws JAXBException, SAXException {
-        return new FileUnmarshaller<Movsim>().load(xmlFile, Movsim.class, SCENARIO_FACTORY, SCENARIO_XSD_URL);
+    public static Movsim unmarshall(File xmlFile) {
+        MovsimInputLoader loader = new MovsimInputLoader();
+        return loader.unmarshallData(xmlFile);
     }
-
-    public static Movsim getInputData(File xmlFile) {
-        // testwise jaxb unmarshalling
-        Movsim inputData = null;
+    
+    /**
+     * @throws IllegalStateException
+     * @throws IllegalDataException
+     */
+    private Movsim unmarshallData(File xmlFile) {
+        LOG.info("try to open file={}", xmlFile.getName());
+        FileUnmarshaller<Movsim> fileUnmarshaller = new FileUnmarshaller<Movsim>();
+        Movsim data = null;
         try {
-            LOG.info("try to open file={}", xmlFile.getName());
-            inputData = MovsimInputLoader.validateAndLoadScenarioInput(xmlFile);
+            data = fileUnmarshaller.load(xmlFile, Movsim.class, FACTORY, getUrl());
         } catch (JAXBException | SAXException e) {
-            throw new IllegalArgumentException(e.toString());
+            throw new IllegalStateException(e.toString());
         }
-        if (inputData == null) {
-            LOG.error("input not valid. exit.");
-            System.exit(-1);
-        }
-        return inputData;
-    }
 
+        if (data == null) {
+            LOG.error("input not valid. exit.");
+            throw new IllegalDataException("xml input not valid");
+        }
+
+        return data;
+    }
+    
     /**
      * writes the movsim xsd to the current working directory.
      * 
@@ -65,7 +71,7 @@ public final class MovsimInputLoader {
      */
     public static void writeXsdToFile() throws IOException {
         String filename = new File(SCENARIO_XML_SCHEMA).getName();
-        FileUtils.writeStreamToFile(filename, SCENARIO_XSD_URL.openStream());
+        FileUtils.writeStreamToFile(filename, getUrl().openStream());
         LOG.info("wrote file={}", filename);
     }
 

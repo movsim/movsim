@@ -10,7 +10,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionType;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
 import org.movsim.scenario.boundary.autogen.VehicleUserDataType;
-import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.Vehicle;
