@@ -5,42 +5,46 @@ import java.net.URL;
 
 import javax.xml.bind.JAXBException;
 
+import org.jdom.IllegalDataException;
 import org.movsim.scenario.initial.autogen.MovsimInitialConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 public final class MovsimInitialConditionsLoader {
-    /** The Constant logger. */
-    private final static Logger LOG = LoggerFactory.getLogger(MovsimInitialConditionsLoader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MovsimInitialConditionsLoader.class);
 
     private static final Class<?> FACTORY = MovsimInitialConditions.class;
-
     private static final String XML_SCHEMA = "/schema/MovsimInitialConditions.xsd";
 
-    private static final URL XSD_URL = MovsimInitialConditionsLoader.class.getResource(XML_SCHEMA);
+    public static MovsimInitialConditions unmarshall(File file) {
+        MovsimInitialConditionsLoader loader = new MovsimInitialConditionsLoader();
+        return loader.unmarshallData(file);
+    }
 
-    private MovsimInitialConditionsLoader() {}
-
-    private static MovsimInitialConditions validateAndLoadInput(final File xmlFile) throws JAXBException, SAXException {
-        return new FileUnmarshaller<MovsimInitialConditions>().load(xmlFile, MovsimInitialConditions.class, FACTORY, XSD_URL);
+    private URL getUrl() {
+        return MovsimInitialConditionsLoader.class.getResource(XML_SCHEMA);
     }
 
     /**
      * @throws IllegalStateException
+     * @throws IllegalDataException
      */
-    public static MovsimInitialConditions unmarshallData(File xmlFile) {
+    private MovsimInitialConditions unmarshallData(File xmlFile) {
+        LOG.info("try to open file={}", xmlFile.getName());
+        FileUnmarshaller<MovsimInitialConditions> fileUnmarshaller = new FileUnmarshaller<MovsimInitialConditions>();
         MovsimInitialConditions data = null;
         try {
-            LOG.info("try to open file={}", xmlFile.getName());
-            data = validateAndLoadInput(xmlFile);
+            data = fileUnmarshaller.load(xmlFile, MovsimInitialConditions.class, FACTORY, getUrl());
         } catch (JAXBException | SAXException e) {
             throw new IllegalStateException(e.toString());
         }
+
         if (data == null) {
             LOG.error("input not valid. exit.");
-            System.exit(-1);
+            throw new IllegalDataException("xml input not valid");
         }
+
         return data;
     }
 

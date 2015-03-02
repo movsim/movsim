@@ -35,7 +35,8 @@ public final class MovsimInputLoader {
 
     private static final URL SCENARIO_XSD_URL = MovsimInputLoader.class.getResource(SCENARIO_XML_SCHEMA);
 
-    private MovsimInputLoader() {}
+    private MovsimInputLoader() {
+    }
 
     public static Movsim validateAndLoadScenarioInput(final File xmlFile) throws JAXBException, SAXException {
         return new FileUnmarshaller<Movsim>().load(xmlFile, Movsim.class, SCENARIO_FACTORY, SCENARIO_XSD_URL);
@@ -59,6 +60,7 @@ public final class MovsimInputLoader {
 
     /**
      * writes the movsim xsd to the current working directory.
+     * 
      * @throws IOException
      */
     public static void writeXsdToFile() throws IOException {

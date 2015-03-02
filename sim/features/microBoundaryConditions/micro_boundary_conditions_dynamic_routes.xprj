@@ -18,7 +18,7 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="offramp_onramp_1lane.xodr">
+    <Scenario network_filename="offramp_onramp_1lane.xodr" micro_boundary_conditions_filename="micro_boundary_conditions_dynamic_routes_input.xml">
         <Simulation timestep="0.2" duration="1200" seed="42" time_offset="2013-02-01T00:00:00Z">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="0.6" relative_v0_randomization="0.2" />
@@ -26,11 +26,7 @@
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="true">
-					<!-- 2013-02-01T00:00:20 -->
-                    <InflowFromFile filename="micro_boundary_conditions_dynamic_routes.dat"  column_route_or_destination="4" 
-                        column_time="1" format_time="YYYY-MM-dd'T'HH:mm:ss" column_vehicle_type="2"  column_speed="3" 
-                        format_speed="0.27777" column_length="5" column_weight="6" column_comment="7" column_separator=","/>
-                    <!-- format_time column_comment column separator -->
+                    <!-- microscopic input from file -->
                 </TrafficSource>
             </Road>
             <Road id="4">
@@ -43,14 +39,19 @@
                 <TrafficSink logging="true" />
             </Road>
         </Simulation>
-        <OutputConfiguration>
-            <!-- <FloatingCarOutput n_timestep="1" route="exit">
-                <FloatingCar number="2" />
-                <FloatingCar number="3" />
-            </FloatingCarOutput>
-            -->
-            <!-- <SpatioTemporalConfiguration dx="100" dt="40" route="main" /> -->
-            <!-- <Trajectories dt="1" route="main" offset_position="1000" /> -->
-        </OutputConfiguration>
+        <Routes>
+            <Route label="exit">
+                <Road id="1" />
+                <Road id="2" />
+                <Road id="4" />
+            </Route>
+        </Routes>
+        <!-- <OutputConfiguration>
+-            <FloatingCarOutput n_timestep="1" route="exit">
+-                <FloatingCar number="1" />
+-                <FloatingCar number="3" />
+-            </FloatingCarOutput> 
+-        </OutputConfiguration>-->
     </Scenario>
 </Movsim>
+

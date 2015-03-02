@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:annotation>
         <xs:documentation>XML Schema Definition for Movsim microscopic boundary condition input file, (c) 2015 by MovSim.org</xs:documentation>
     </xs:annotation>
@@ -37,34 +37,44 @@
     <xs:element name="MovsimMicroscopicBoundaryConditions">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="RoadMicroscopicBoundaryConditions" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="RoadMicroscopicBoundaryConditions" type="RoadMicroscopicBoundaryConditionsType" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
+             <!-- Notation for JodaTime.DateTimeFormatter, eg "HH:mm:ss" -->
+            <xs:attribute name="time_format" type="xs:string" default="" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="RoadMicroscopicBoundaryConditions">
-        <xs:complexType>
-        <xs:sequence>
-            <xs:element ref="MicroscopicBoundaryConditions" />
+        <xs:complexType name="RoadMicroscopicBoundaryConditionsType">
+            <xs:sequence>
+                <xs:element name="BoundaryConditions" type="BoundaryConditionsType" />
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required" />
         </xs:complexType>
-    </xs:element>
-    <xs:element name="MicroscopicBoundaryConditions">
-        <xs:complexType>
+        <xs:complexType name="BoundaryConditionsType">
             <xs:sequence>
-                <xs:element ref="VehicleBoundaryCondition" minOccurs="1" maxOccurs="unbounded" />
+                <xs:element name="BoundaryCondition" type="BoundaryConditionType" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
-    </xs:element>
-    <xs:element name="VehicleBoundaryCondition">
-        <xs:complexType>
+        <xs:complexType name="BoundaryConditionType">
+            <xs:sequence>
+                <xs:element name="VehicleUserData" type="VehicleUserDataType" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
             <xs:attribute name="time" type="xs:string" use="required" />
-            <xs:attribute name="label" type="xs:string" use="optional" />
-            <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="speed" type="nonNegativeDouble" use="required" />
-            <!-- By convention the lane index starts with 1 for the most inner lane. -->
+            <xs:attribute name="label" type="xs:string" use="required" />
+            <!-- By convention the lane index starts with 1 for the most inner lane -->
             <xs:attribute name="lane" type="nonNegativeInteger" default="1" />
+            <!-- route label or destination node to find route -->
+            <xs:attribute name="route" type="xs:string" use="optional" />
+            <xs:attribute name="destination" type="xs:string"  use="optional" />
+            <xs:attribute name="speed" type="nonNegativeDouble" use="optional" />
+            <xs:attribute name="length" type="nonNegativeDouble" use="optional" />
         </xs:complexType>
-    </xs:element>
+        
+        <xs:complexType name="VehicleUserDataType">
+			<xs:annotation>
+            <xs:documentation>Allows to assign additional information by key-value pairs like the vehicle's weight, etc</xs:documentation>
+        </xs:annotation>
+            <xs:attribute name="key" type="xs:string" use="required" />
+            <xs:attribute name="value" type="xs:string" use="optional" />
+        </xs:complexType>
 </xs:schema>
 

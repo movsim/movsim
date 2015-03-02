@@ -457,6 +457,7 @@
             </xs:sequence>
             <xs:attribute name="network_filename" type="xs:string" use="required" />
             <xs:attribute name="initial_conditions_filename" type="xs:string" />
+            <xs:attribute name="micro_boundary_conditions_filename" type="xs:string" />
             <!--  TODO add external_control_filename -->
         </xs:complexType>
     </xs:element>
@@ -523,10 +524,10 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TrafficSourceType">
-        <xs:choice>
-            <xs:element ref="Inflow" maxOccurs="unbounded" />
-            <xs:element ref="InflowFromFile" minOccurs="1" maxOccurs="1" />
-        </xs:choice>
+        <xs:sequence>
+            <xs:element ref="Inflow" minOccurs="0" maxOccurs="unbounded" />
+            <!-- alternatively microscopic input data from separate file --> 
+        </xs:sequence>
         <xs:attribute name="logging" type="xs:boolean" default="false" />
     </xs:complexType>
     <xs:element name="Inflow">
@@ -537,26 +538,6 @@
             <xs:attribute name="t" type="nonNegativeDouble" use="required" />
             <xs:attribute name="q_per_hour" type="nonNegativeDouble" use="required" />
             <xs:attribute name="v" type="nonNegativeDouble" default="0" />
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="InflowFromFile">
-        <xs:annotation>
-            <xs:documentation>Time-dependent microscopic boundary conditions. The vehicle type refers to the type defined in the vehicle composition. Optionally a route etc. can be set to overrule the settings in the composition definition.</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:attribute name="filename" type="xs:string" use="required" />
-            <xs:attribute name="column_time" type="positiveInteger" use="required" />
-            <xs:attribute name="column_vehicle_type" type="positiveInteger" use="required" />
-            <xs:attribute name="column_route_or_destination" type="positiveInteger" />
-            <!-- Notation for JodaTime.DateTimeFormatter, eg "HH:mm:ss" -->
-            <xs:attribute name="format_time" type="xs:string" default="" />
-            <xs:attribute name="column_speed" type="positiveInteger" />
-            <xs:attribute name="format_speed" type="positiveDouble" default="1" />
-            <xs:attribute name="column_length" type="positiveInteger" />
-            <xs:attribute name="column_weight" type="positiveInteger" />
-            <xs:attribute name="column_lane" type="positiveInteger" />
-            <xs:attribute name="column_comment" type="positiveInteger" />
-            <xs:attribute name="column_separator" type="xs:string" default=";" />
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TrafficSinkType">

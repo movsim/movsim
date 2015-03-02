@@ -40,7 +40,8 @@ public class InitialConditions {
         this.file = Preconditions.checkNotNull(file);
         Preconditions.checkArgument(file.exists(), "initial conditions file " + file + " not found");
         alreadyHandled = new HashSet<>();
-        movsimInitialConditions = MovsimInitialConditionsLoader.unmarshallData(file);
+        
+        movsimInitialConditions = MovsimInitialConditionsLoader.unmarshall(file);
 
         LOG.info("loaded initial conditions from file={}", file);
         LOG.info("unmarshalled initial conditions for {} roads", movsimInitialConditions.getRoadInitialConditions().size());

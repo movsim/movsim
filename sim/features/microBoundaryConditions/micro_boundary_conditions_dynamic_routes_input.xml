@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimMicroscopicBoundaryConditions time_format="YYYY-MM-dd'T'HH:mm:ss">
+    <RoadMicroscopicBoundaryConditions id="1">
+        <BoundaryConditions>
+            <BoundaryCondition time="2013-02-01T00:00:20" label="ACC1" lane="1" speed="30" route="exit" length="10">
+                <VehicleUserData key="comment" value="car 1" />
+                <VehicleUserData key="weight" value="1000" />
+            </BoundaryCondition>
+            <!-- by purpose not in temporal order, destination edge is route to exit -->
+            <BoundaryCondition time="2013-02-01T00:01:00" label="ACC1" lane="1" speed="15" destination="4" length="30">
+                <VehicleUserData key="comment" value="car 3" />
+                <VehicleUserData key="weight" value="2000" />
+            </BoundaryCondition>
+            <BoundaryCondition time="2013-02-01T00:00:40" label="ACC2" lane="1" speed="0" destination="10" length="20">
+                <VehicleUserData key="comment" value="car 2" />
+            </BoundaryCondition>
+            <BoundaryCondition time="2013-02-01T00:01:20" label="ACC2" lane="3" speed="0" destination="10" length="40">
+                <VehicleUserData key="comment" value="car 4" />
+            </BoundaryCondition>
+            <BoundaryCondition time="2013-02-01T00:02:10" label="ACC1" lane="1" speed="0" destination="3" length="30">
+                <VehicleUserData key="comment" value="car 8" />
+            </BoundaryCondition>
+            <BoundaryCondition time="2013-02-01T00:01:30" label="ACC1" lane="1" speed="0" destination="4" length="20" />
+            <BoundaryCondition time="2013-02-01T00:01:40" label="ACC2" lane="1" speed="5" destination="10" length="10" />
+            <BoundaryCondition time="2013-02-01T00:01:50" label="ACC2" lane="3" speed="5" destination="4" length="5" />
+        </BoundaryConditions>
+    </RoadMicroscopicBoundaryConditions>
+</MovsimMicroscopicBoundaryConditions>
+
