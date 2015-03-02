@@ -20,10 +20,11 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-public class XmlHelpers {
+public final class XmlHelpers {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(XmlHelpers.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlHelpers.class);
+
 
     /**
      * Writes the internal xml after validation to file.
@@ -42,7 +43,7 @@ public class XmlHelpers {
         outputter.setFormat(format);
         outputter.setFormat(format);
         try {
-            logger.info("  write internal xml after validation to file \"" + outFilename + "\"");
+            LOG.info("  write internal xml after validation to file \"" + outFilename + "\"");
             outputter.output(localDoc, writer);
         } catch (final Exception e) {
             e.printStackTrace();
@@ -65,7 +66,7 @@ public class XmlHelpers {
             public Object run() {
 
                 try {
-                    logger.debug("validate input ... ");
+                    LOG.debug("validate input ... ");
                     final XMLReader myXMLReader = XMLReaderFactory.createXMLReader();
                     myXMLReader.setFeature("http://xml.org/sax/features/validation", true);
                     final DefaultHandler handler = new MyErrorHandler();
@@ -86,10 +87,10 @@ public class XmlHelpers {
 
                     myXMLReader.parse(inputSource);
                 } catch (final SAXException e) {
-                    logger.error(e.getMessage());
+                    LOG.error(e.getMessage());
                     // isValid = false;
                 } catch (final Exception e) {
-                    logger.error(e.getMessage());
+                    LOG.error(e.getMessage());
                     // isValid = false;
                 }
 
@@ -105,7 +106,7 @@ public class XmlHelpers {
                  */
                 @Override
                 public void warning(SAXParseException e) throws SAXException {
-                    logger.warn(getInfo(e));
+                    LOG.warn(getInfo(e));
                 }
 
                 /*
@@ -115,7 +116,7 @@ public class XmlHelpers {
                  */
                 @Override
                 public void error(SAXParseException e) throws SAXException {
-                    logger.error(getInfo(e));
+                    LOG.error(getInfo(e));
                     System.exit(-1);
                     // isValid = false;
                 }
@@ -127,7 +128,7 @@ public class XmlHelpers {
                  */
                 @Override
                 public void fatalError(SAXParseException e) throws SAXException {
-                    logger.error(getInfo(e));
+                    LOG.error(getInfo(e));
                     System.exit(-1);
                     // isValid = false;
                 }

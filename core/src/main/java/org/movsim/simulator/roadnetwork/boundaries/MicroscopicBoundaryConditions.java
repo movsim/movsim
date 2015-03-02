@@ -9,7 +9,7 @@ import javax.annotation.CheckForNull;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
 import org.movsim.scenario.boundary.autogen.MovsimMicroscopicBoundaryConditions;
 import org.movsim.scenario.boundary.autogen.RoadMicroscopicBoundaryConditionsType;
-import org.movsim.xml.MovsimMicroBoundaryConditionsLoader;
+import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class MicroscopicBoundaryConditions {
         Preconditions.checkArgument(file.exists(), "micro boundary conditions file " + file + " not found");
         roadToBoundaryConditions = new HashMap<>();
 
-        MovsimMicroscopicBoundaryConditions input = MovsimMicroBoundaryConditionsLoader.unmarshall(file);
+        MovsimMicroscopicBoundaryConditions input = InputLoader.unmarshallMicroBoundaryConditions(file);
         LOG.info("loaded initial conditions from file={}", file);
 
         this.timeFormat = input.getTimeFormat();

@@ -25,6 +25,7 @@
  */
 package org.movsim.consumption;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +44,7 @@ import org.movsim.consumption.offline.OutputWriter;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.logging.Logger;
-import org.movsim.xml.MovsimInputLoader;
+import org.movsim.xml.InputLoader;
 
 import com.google.common.base.Preconditions;
 
@@ -63,7 +64,8 @@ public class ConsumptionMain {
         // ConsumptionCommandLine.parse(ProjectMetaData.getInstance(), args);
         MovsimCommandLine.parse(args);
 
-        Movsim inputData = MovsimInputLoader.unmarshall(ProjectMetaData.getInstance().getInputFile());
+        File xmlInputFile = ProjectMetaData.getInstance().getInputFile();
+        Movsim inputData = InputLoader.unmarshallMovsim(xmlInputFile);
 
         if (!inputData.isSetConsumption()) {
             System.err.println("no consumption element configured in input file");

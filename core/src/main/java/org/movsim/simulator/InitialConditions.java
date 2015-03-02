@@ -20,7 +20,7 @@ import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Tables;
 import org.movsim.utilities.Units;
-import org.movsim.xml.MovsimInitialConditionsLoader;
+import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class InitialConditions {
         Preconditions.checkArgument(file.exists(), "initial conditions file " + file + " not found");
         alreadyHandled = new HashSet<>();
         
-        movsimInitialConditions = MovsimInitialConditionsLoader.unmarshall(file);
+        movsimInitialConditions = InputLoader.unmarshallInitialConditions(file);
 
         LOG.info("loaded initial conditions from file={}", file);
         LOG.info("unmarshalled initial conditions for {} roads", movsimInitialConditions.getRoadInitialConditions().size());

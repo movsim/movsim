@@ -58,7 +58,7 @@ import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleFactory;
 import org.movsim.utilities.MyRandom;
-import org.movsim.xml.MovsimInputLoader;
+import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -76,7 +76,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private String projectName;
 
-    private Movsim inputData;
+    private Movsim movsimInput;
 
     private VehicleFactory vehicleFactory;
 
@@ -118,25 +118,25 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // TODO temporary handling of Variable Message Sign until added to XML
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
-        inputData = MovsimInputLoader.unmarshall(projectMetaData.getInputFile());
+        movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
 
         timeOffsetMillis = 0;
-        if (inputData.getScenario().getSimulation().isSetTimeOffset()) {
-            DateTime dateTime = LocalDateTime.parse(inputData.getScenario().getSimulation().getTimeOffset(),
+        if (movsimInput.getScenario().getSimulation().isSetTimeOffset()) {
+            DateTime dateTime = LocalDateTime.parse(movsimInput.getScenario().getSimulation().getTimeOffset(),
                     DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZ")).toDateTime(DateTimeZone.UTC);
             timeOffsetMillis = dateTime.getMillis();
             LOG.info("global time offset set={} --> {} milliseconds.", dateTime, timeOffsetMillis);
             ProjectMetaData.getInstance().setTimeOffsetMillis(timeOffsetMillis);
         }
-        projectMetaData.setXodrNetworkFilename(inputData.getScenario().getNetworkFilename()); // TODO
+        projectMetaData.setXodrNetworkFilename(movsimInput.getScenario().getNetworkFilename()); // TODO
 
-        Simulation simulationInput = inputData.getScenario().getSimulation();
+        Simulation simulationInput = movsimInput.getScenario().getSimulation();
 
         parseOpenDriveXml(roadNetwork, projectMetaData);
-        routing = new Routing(inputData.getScenario().getRoutes(), roadNetwork);
+        routing = new Routing(movsimInput.getScenario().getRoutes(), roadNetwork);
 
-        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
-                inputData.getConsumption(), routing);
+        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), movsimInput.getVehiclePrototypes(),
+                movsimInput.getConsumption(), routing);
 
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
@@ -154,15 +154,15 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         defaultTrafficComposition = new TrafficCompositionGenerator(simulationInput.getTrafficComposition(),
                 vehicleFactory);
 
-        trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights(), roadNetwork);
+        trafficLights = new TrafficLights(movsimInput.getScenario().getTrafficLights(), roadNetwork);
 
-        regulators = new Regulators(inputData.getScenario().getRegulators(), roadNetwork);
+        regulators = new Regulators(movsimInput.getScenario().getRegulators(), roadNetwork);
 
         checkTrafficLightBeingInitialized();
 
         MicroscopicBoundaryConditions microBoundaryConditions = null;
-        if (inputData.getScenario().isSetMicroBoundaryConditionsFilename()) {
-            String filename = inputData.getScenario().getMicroBoundaryConditionsFilename();
+        if (movsimInput.getScenario().isSetMicroBoundaryConditionsFilename()) {
+            String filename = movsimInput.getScenario().getMicroBoundaryConditionsFilename();
             File microBCFile = projectMetaData.getFile(filename);
             microBoundaryConditions = new MicroscopicBoundaryConditions(microBCFile);
         }
@@ -171,8 +171,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // set its input data accordingly
         matchRoadSegmentsAndRoadInput(simulationInput.getRoad(), microBoundaryConditions);
 
-        if (inputData.getScenario().isSetInitialConditionsFilename()) {
-            String filename = inputData.getScenario().getInitialConditionsFilename();
+        if (movsimInput.getScenario().isSetInitialConditionsFilename()) {
+            String filename = movsimInput.getScenario().getInitialConditionsFilename();
             File icFile = projectMetaData.getFile(filename);
             InitialConditions initialConditions = new InitialConditions(icFile);
             initialConditions.setInitialConditions(roadNetwork, defaultTrafficComposition);
@@ -378,9 +378,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     public void reset() {
         simulationRunnable.reset();
-        if (inputData.getScenario().isSetOutputConfiguration()) {
+        if (movsimInput.getScenario().isSetOutputConfiguration()) {
             simOutput = new SimulationOutput(simulationRunnable.timeStep(),
-                    projectMetaData.isInstantaneousFileOutput(), inputData.getScenario().getOutputConfiguration(),
+                    projectMetaData.isInstantaneousFileOutput(), movsimInput.getScenario().getOutputConfiguration(),
                     roadNetwork, routing, vehicleFactory);
         }
         obstacleCount = roadNetwork.obstacleCount();
