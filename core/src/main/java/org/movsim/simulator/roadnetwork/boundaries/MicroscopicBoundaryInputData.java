@@ -10,6 +10,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionType;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
 import org.movsim.scenario.boundary.autogen.VehicleUserDataType;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -23,16 +24,14 @@ public class MicroscopicBoundaryInputData {
     private static final Logger LOG = LoggerFactory.getLogger(MicroscopicBoundaryInputData.class);
 
     private final BoundaryConditionsType boundaryConditions;
-    private final int maxLane;
     private final long timeOffsetMillis;
     private final String timeFormat;
     private final Routing routing;
 
-    public MicroscopicBoundaryInputData(BoundaryConditionsType boundaryConditions, int laneCount, String timeFormat,
+    public MicroscopicBoundaryInputData(BoundaryConditionsType boundaryConditions, String timeFormat,
             long timeOffsetMillis, Routing routing) {
         this.boundaryConditions = Preconditions.checkNotNull(boundaryConditions);
         this.routing = Preconditions.checkNotNull(routing);
-        this.maxLane = laneCount;
         this.timeFormat = timeFormat;
         this.timeOffsetMillis = timeOffsetMillis;
     }
@@ -102,19 +101,21 @@ public class MicroscopicBoundaryInputData {
             vehicle.setRoute(route);
         }
 
-        // TODO lane assignment
-//        if (config.isSetColumnLane()) {
-//            int lane = Integer.parseInt(dataline[config.getColumnLane() - 1]);
-//            if (lane > maxLane) {
-//                LOG.warn("Parsed lane={} not available on road with maxLane={}. ", lane);
-//                lane = maxLane;
-//            }
-//            if (lane < Lanes.MOST_INNER_LANE) {
-//                LOG.warn("Parsed lane={} not available on road with minLane={}. ", Lanes.MOST_INNER_LANE);
-//                lane = Lanes.MOST_INNER_LANE;
-//            }
-//            record.setLane(lane);
-//        }
+        if (record.isSetLane()) {
+            int lane = record.getLane();
+            int laneCount = trafficSource.roadSegment.laneCount();
+            if (lane > trafficSource.roadSegment.laneCount()) {
+                LOG.warn("input lane={} not available on road={}, set to laneCount=" + laneCount, lane,
+                        trafficSource.roadSegment.userId());
+                lane = laneCount;
+            }
+            if (lane < Lanes.MOST_INNER_LANE) {
+                LOG.warn("input lane={} not available on road={}, set lane to lane=" + Lanes.MOST_INNER_LANE, lane,
+                        trafficSource.roadSegment.userId());
+                lane = Lanes.MOST_INNER_LANE;
+            }
+            record.setLane(lane);
+        }
 
         if (!record.getVehicleUserData().isEmpty()) {
             for (VehicleUserDataType vehUserData : record.getVehicleUserData()) {

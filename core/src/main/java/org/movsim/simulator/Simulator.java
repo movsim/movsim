@@ -298,11 +298,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 BoundaryConditionsType boundaryConditions = microBoundaryConditions.getBoundaryConditions(roadSegment
                         .userId());
                 MicroscopicBoundaryInputData inputData = new MicroscopicBoundaryInputData(boundaryConditions,
-                        roadSegment.laneCount(), microBoundaryConditions.getTimeFormat(), timeOffsetMillis, routing);
+                        microBoundaryConditions.getTimeFormat(), timeOffsetMillis, routing);
                 trafficSource = new TrafficSourceMicro(composition, roadSegment);
                 addVehiclesToSource((TrafficSourceMicro) trafficSource, inputData);
             } else {
-                throw new IllegalStateException("no micro nor macro boundary condition data provided for traffic source on roadSegment="+roadSegment.userId());
+                throw new IllegalStateException(
+                        "no micro nor macro boundary condition data provided for traffic source on roadSegment="
+                                + roadSegment.userId());
             }
 
             if (trafficSource != null) {
