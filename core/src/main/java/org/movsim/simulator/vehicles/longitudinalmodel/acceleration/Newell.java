@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 class Newell extends LongitudinalModelBase {
 
     /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(Newell.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Newell.class);
 
     /** The simulation timepstep as parameter */
     private final double dt;

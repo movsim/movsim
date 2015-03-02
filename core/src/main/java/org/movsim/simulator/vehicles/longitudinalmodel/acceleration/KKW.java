@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 class KKW extends LongitudinalModelBase {
 
     /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(KKW.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KKW.class);
 
     private final IModelParameterKKW param;
 
