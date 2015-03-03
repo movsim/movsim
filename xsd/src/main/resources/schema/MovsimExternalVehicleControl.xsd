@@ -49,8 +49,6 @@
       		    <xs:element name="VehicleUserData" type="VehicleUserDataType" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element name="VehicleSpeedData" type="VehicleSpeedDataType" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attribute name="route" type="xs:string" use="optional" />
-            <xs:attribute name="destination" type="xs:string"  use="optional" />
             <xs:attribute name="length" type="nonNegativeDouble" use="optional" />
             <xs:attribute name="lane" type="nonNegativeInteger" default="1" />
         </xs:complexType>

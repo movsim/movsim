@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimExternalVehicleControl>
+    <ExternalVehicleControl length="10" lane="1">
+        <VehicleSpeedData time="30" speed="0" />
+        <VehicleSpeedData time="90" speed="30" />
+        <VehicleSpeedData time="120" speed="30" />
+        <VehicleSpeedData time="140" speed="0" />
+    </ExternalVehicleControl>
+</MovsimExternalVehicleControl>
+
