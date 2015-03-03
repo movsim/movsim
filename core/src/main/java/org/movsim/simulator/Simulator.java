@@ -11,7 +11,10 @@
  */
 package org.movsim.simulator;
 
+import generated.MovsimExternalVehicleControl;
+
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +40,7 @@ import org.movsim.output.FileTrafficSinkData;
 import org.movsim.output.FileTrafficSourceData;
 import org.movsim.output.SimulationOutput;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
+import org.movsim.scenario.boundary.autogen.MovsimMicroscopicBoundaryConditions;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
@@ -54,6 +58,7 @@ import org.movsim.simulator.roadnetwork.controller.TrafficLights;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.roadnetwork.regulator.Regulators;
 import org.movsim.simulator.roadnetwork.routing.Routing;
+import org.movsim.simulator.vehicles.ExternalVehiclesController;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleFactory;
@@ -91,6 +96,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private final RoadNetwork roadNetwork;
 
     private Routing routing;
+    
+    private ExternalVehiclesController externalVehicleController;
 
     private final SimulationRunnable simulationRunnable;
 
@@ -158,6 +165,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         regulators = new Regulators(movsimInput.getScenario().getRegulators(), roadNetwork);
 
+        initExternalVehicleController();
+        roadNetwork.setExternalVehicleController(externalVehicleController);
+        
         checkTrafficLightBeingInitialized();
 
         MicroscopicBoundaryConditions microBoundaryConditions = null;
@@ -180,6 +190,18 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         reset();
         startTimeMillis = System.currentTimeMillis();
+    }
+
+    private void initExternalVehicleController() {
+        externalVehicleController = new ExternalVehiclesController();
+        if (movsimInput.getScenario().isSetExternalVehicleControlFilename()) {
+            String filename = movsimInput.getScenario().getExternalVehicleControlFilename();
+            File file = projectMetaData.getFile(filename);
+            Preconditions.checkArgument(file.exists(), "external vehicle control file " + file + " not found");
+            MovsimExternalVehicleControl input = InputLoader.unmarshallExternalVehicleControl(file);
+            LOG.info("loaded external vehicle control from file={}", file);
+            externalVehicleController.setInput(input);
+        }
     }
 
     public Iterable<String> getVehiclePrototypeLabels() {
@@ -458,6 +480,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         trafficLights.timeStep(dt, simulationTime, iterationCount);
         regulators.timeStep(dt, simulationTime, iterationCount);
         roadNetwork.timeStep(dt, simulationTime, iterationCount);
+        
         if (simOutput != null) {
             simOutput.timeStep(dt, simulationTime, iterationCount);
         }

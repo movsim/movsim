@@ -33,8 +33,11 @@ import javax.annotation.CheckForNull;
 
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.vehicles.ExternalVehiclesController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Iterable collection of the road segments in the road network.
@@ -49,6 +52,8 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     private boolean isWithCrashExit;
     private boolean hasVariableMessageSign;
+    
+    private ExternalVehiclesController externalVehicleController;
 
     /**
      * Sets the name of the road network.
@@ -205,6 +210,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         LOG.debug("called timeStep: time={}, timestep={}", simulationTime, dt);
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.updateRoadConditions(dt, simulationTime, iterationCount);
+            if(externalVehicleController != null){
+                externalVehicleController.addRemoveVehicles(simulationTime, roadSegment);
+            }
         }
 
         // Note: must do lane changes before vehicle positions are updated (or after outFlow) to ensure
@@ -216,8 +224,11 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.updateVehicleAccelerations(dt, simulationTime, iterationCount);
         }
-
+        
         for (final RoadSegment roadSegment : roadSegments) {
+            if(externalVehicleController != null){
+                externalVehicleController.setVehicleSpeeds(simulationTime, roadSegment);
+            }
             roadSegment.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         }
 
@@ -417,6 +428,11 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
             instantaneousConsumption += roadSegment.instantaneousConsumptionLitersPerSecond();
         }
         return instantaneousConsumption;
+    }
+
+    public void setExternalVehicleController(ExternalVehiclesController externalVehicleController) {
+        this.externalVehicleController = Preconditions.checkNotNull(externalVehicleController);
+        
     }
 
 }

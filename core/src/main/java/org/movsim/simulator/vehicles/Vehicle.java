@@ -787,7 +787,16 @@ public class Vehicle {
                 speed = 0;
                 acc = 0;
             }
-        } else {
+        } else if (type == Type.EXTERNAL_CONTROL){
+            if (speed < 0) {
+                LOG.error("external speed set to negative value={}, reset to 0", speed);
+                speed = 0;
+            }
+            final double advance = speed * dt;
+            frontPosition += advance;
+            totalTravelDistance += advance;
+        }
+        else{
             // continuous microscopic models and iterated maps
             if (speed < 0) {
                 speed = 0;
@@ -999,7 +1008,11 @@ public class Vehicle {
         /**
          * Standard vehicle.
          */
-        VEHICLE
+        VEHICLE,
+        /**
+         * Externally controlled vehicle.
+         */
+        EXTERNAL_CONTROL
     }
 
     private Type type = Type.VEHICLE;
