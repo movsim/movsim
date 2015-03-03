@@ -999,11 +999,7 @@ public class Vehicle {
         /**
          * Standard vehicle.
          */
-        VEHICLE,
-        /**
-         * The vehicle is a floating car, used to gather data about traffic conditions.
-         */
-        FLOATING_CAR
+        VEHICLE
     }
 
     private Type type = Type.VEHICLE;
