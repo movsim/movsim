@@ -3,10 +3,6 @@ package org.movsim.simulator.roadnetwork.boundaries;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionType;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
 import org.movsim.scenario.boundary.autogen.VehicleUserDataType;
@@ -14,6 +10,7 @@ import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.TimeUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,24 +40,13 @@ public class MicroscopicBoundaryInputData {
         LOG.info("number of vehicleBoundaryCondition entries=" + size);
         for (BoundaryConditionType boundaryCondition : boundaryConditions.getBoundaryCondition()) {
             Vehicle vehicle = createVehicle(boundaryCondition, trafficSource);
-            long time = convertTimeToSeconds(boundaryCondition.getTime());
+            // round to seconds
+            long time = Math.round(TimeUtilities.convertToSeconds(boundaryCondition.getTime(), timeFormat, timeOffsetMillis));
             Preconditions.checkArgument(!vehicles.containsKey(time), "time=" + time
                     + " already used as micro boundary condition");
             vehicles.put(time, vehicle);
         }
         return vehicles;
-    }
-
-    private long convertTimeToSeconds(String time) {
-        if (timeFormat.isEmpty()) {
-            return (long) Double.parseDouble(time);
-        }
-        DateTime dateTime = LocalDateTime.parse(time, DateTimeFormat.forPattern(timeFormat)).toDateTime(
-                DateTimeZone.UTC);
-
-        long timeInSeconds = (dateTime.getMillis() - timeOffsetMillis) / 1000L;
-        LOG.debug("time={} --> dateTime={} --> seconds with offset=" + timeInSeconds, time, dateTime);
-        return timeInSeconds;
     }
 
     private Vehicle createVehicle(BoundaryConditionType record, TrafficSourceMicro trafficSource) {
