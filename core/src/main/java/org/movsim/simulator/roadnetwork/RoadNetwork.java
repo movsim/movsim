@@ -208,11 +208,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         // onto the next road segment.
 
         LOG.debug("called timeStep: time={}, timestep={}", simulationTime, dt);
+        externalVehicleController.addRemoveVehicles(simulationTime, this);
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.updateRoadConditions(dt, simulationTime, iterationCount);
-            if(externalVehicleController != null){
-                externalVehicleController.addRemoveVehicles(simulationTime, roadSegment);
-            }
         }
 
         // Note: must do lane changes before vehicle positions are updated (or after outFlow) to ensure
@@ -226,9 +224,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         
         for (final RoadSegment roadSegment : roadSegments) {
-            if(externalVehicleController != null){
-                externalVehicleController.setVehicleSpeeds(simulationTime, roadSegment);
-            }
+            externalVehicleController.setVehicleSpeeds(simulationTime, roadSegment);
             roadSegment.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         }
 

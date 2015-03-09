@@ -14,7 +14,6 @@ package org.movsim.simulator;
 import generated.MovsimExternalVehicleControl;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,6 @@ import org.movsim.output.FileTrafficSinkData;
 import org.movsim.output.FileTrafficSourceData;
 import org.movsim.output.SimulationOutput;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
-import org.movsim.scenario.boundary.autogen.MovsimMicroscopicBoundaryConditions;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
@@ -97,8 +95,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private Routing routing;
     
-    private ExternalVehiclesController externalVehicleController;
-
     private final SimulationRunnable simulationRunnable;
 
     private int obstacleCount;
@@ -165,7 +161,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         regulators = new Regulators(movsimInput.getScenario().getRegulators(), roadNetwork);
 
-        initExternalVehicleController();
+        ExternalVehiclesController externalVehicleController = createExternalVehicleController();
         roadNetwork.setExternalVehicleController(externalVehicleController);
         
         checkTrafficLightBeingInitialized();
@@ -192,8 +188,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         startTimeMillis = System.currentTimeMillis();
     }
 
-    private void initExternalVehicleController() {
-        externalVehicleController = new ExternalVehiclesController();
+    private ExternalVehiclesController createExternalVehicleController() {
+        ExternalVehiclesController externalVehicleController = new ExternalVehiclesController();
         if (movsimInput.getScenario().isSetExternalVehicleControlFilename()) {
             String filename = movsimInput.getScenario().getExternalVehicleControlFilename();
             File file = projectMetaData.getFile(filename);
@@ -202,6 +198,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             LOG.info("loaded external vehicle control from file={}", file);
             externalVehicleController.setInput(input);
         }
+        return externalVehicleController;
     }
 
     public Iterable<String> getVehiclePrototypeLabels() {
