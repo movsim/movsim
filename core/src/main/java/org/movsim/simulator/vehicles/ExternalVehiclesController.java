@@ -9,12 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.utilities.LinearInterpolatedFunction;
 import org.movsim.utilities.TimeUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +34,7 @@ public class ExternalVehiclesController {
     /** time-sorted map of vehicles to remove */
     private final SortedMap<Double, List<Vehicle>> externalVehiclesToRemove = new TreeMap<>();
 
-    private final Map<Vehicle, List<SpeedDataType>> controlledVehicles = new HashMap<>();
+    private final Map<Vehicle, LinearInterpolatedFunction> controlledVehicles = new HashMap<>();
 
     private String timeFormat;
 
@@ -43,17 +46,21 @@ public class ExternalVehiclesController {
 
     /**
      * sets the speeds of externally controlled vehicles in whole road network
+     * 
      * @param simulationTime
      * @param roadSegment
      */
     public void setSpeeds(double simulationTime) {
-        for (Vehicle veh : controlledVehicles.keySet()) {
-            veh.setSpeed(5);
+        for (Entry<Vehicle, LinearInterpolatedFunction> entry : controlledVehicles.entrySet()) {
+            double currentSpeed = entry.getValue().value(simulationTime);
+            Vehicle vehicle = entry.getKey();
+            vehicle.setSpeed(currentSpeed);
         }
     }
 
     /**
      * adds and removes externally controlled vehicles as configured in the simulation input.
+     * 
      * @param simulationTime
      * @param roadNetwork
      */
@@ -78,8 +85,8 @@ public class ExternalVehiclesController {
             Double firstKey = externalVehicleInputsToAdd.firstKey();
             List<ExternalVehicleType> externalVehicles = externalVehicleInputsToAdd.remove(firstKey);
             addVehiclesToRoadSegments(externalVehicles, roadNetwork);
-            LOG.debug("added {} external vehicles to roadNetwork, removed entries for time={}", externalVehicles.size(),
-                    firstKey);
+            LOG.debug("added {} external vehicles to roadNetwork, removed entries for time={}",
+                    externalVehicles.size(), firstKey);
         }
     }
 
@@ -124,9 +131,11 @@ public class ExternalVehiclesController {
             Vehicle vehicle = createVehicle(vehicleInput);
             String roadId = vehicleInput.getRoadId();
             RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
-            Preconditions.checkNotNull(roadSegment, "cannot find roadSegment with id=" + roadId + " for external vehicle");
+            Preconditions.checkNotNull(roadSegment, "cannot find roadSegment with id=" + roadId
+                    + " for external vehicle");
             roadSegment.addVehicle(vehicle);
-            controlledVehicles.put(vehicle, vehicleInput.getSpeedData());
+            LinearInterpolatedFunction speedProfile = createSpeedProfile(vehicleInput.getSpeedData());
+            controlledVehicles.put(vehicle, speedProfile);
             LOG.info("added externally controlled vehicle={} to roadSegment={}", vehicle, roadSegment);
 
             // and add vehicle to removal container
@@ -138,9 +147,23 @@ public class ExternalVehiclesController {
         }
     }
 
+    private LinearInterpolatedFunction createSpeedProfile(List<SpeedDataType> speedData) {
+        int size = speedData.size();
+        double[] times = new double[size];
+        double[] speeds = new double[size];
+        for (int i = 0; i < size; i++) {
+            SpeedDataType dataPoint = speedData.get(i);
+            times[i] = TimeUtilities.convertToSeconds(dataPoint.getTime(), timeFormat);
+            speeds[i] = dataPoint.getSpeed();
+        }
+
+        return new LinearInterpolatedFunction(times, speeds);
+    }
+
     private Vehicle createVehicle(ExternalVehicleType data) {
         double initialSpeed = data.getSpeedData().get(0).getSpeed();
-        Vehicle vehicle = new Vehicle(data.getPosition(), initialSpeed, data.getLane(), data.getLength(), data.getWidth());
+        Vehicle vehicle = new Vehicle(data.getPosition(), initialSpeed, data.getLane(), data.getLength(),
+                data.getWidth());
         vehicle.setType(Vehicle.Type.EXTERNAL_CONTROL);
         for (VehicleUserDataType userData : data.getVehicleUserData()) {
             vehicle.getUserData().put(userData.getKey(), userData.getValue());
