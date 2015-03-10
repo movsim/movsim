@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MovsimExternalVehicleControl>
-    <ExternalVehicle road_id="1" position="2000" lane="1" length="10" width="5">
+    <ExternalVehicle road_id="1" position="1000" lane="1" length="10" width="5">
 		<VehicleUserData key="comment" value="user comment for external maneuver ...." />
-        <SpeedData time="30" speed="0" />
+        <SpeedData time="55" speed="0" />
         <SpeedData time="90" speed="30" />
         <SpeedData time="120" speed="30" />
         <SpeedData time="140" speed="0" />
+        <SpeedData time="240" speed="0" />
     </ExternalVehicle>
 </MovsimExternalVehicleControl>
 
