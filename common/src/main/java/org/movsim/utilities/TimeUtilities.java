@@ -18,18 +18,16 @@ public final class TimeUtilities {
     public static double convertToSeconds(String time, String timeFormat) {
         return convertToSeconds(time, timeFormat, 0L);
     }
-    
+
     public static double convertToSeconds(String time, String timeFormat, long timeOffsetMillis) {
         if (timeFormat.isEmpty()) {
-            return (long) Double.parseDouble(time);
+            return Double.parseDouble(time) - timeOffsetMillis / 1000.;
         }
 
-        DateTime dateTime = LocalDateTime.parse(time, DateTimeFormat.forPattern(timeFormat)).toDateTime(
-                DateTimeZone.UTC);
+        DateTime dateTime = LocalDateTime.parse(time, DateTimeFormat.forPattern(timeFormat)).toDateTime(DateTimeZone.UTC);
 
         double timeInSeconds = (dateTime.getMillis() - timeOffsetMillis) / 1000.;
         LOG.debug("time={} --> dateTime={} --> seconds with offset=" + timeInSeconds, time, dateTime);
         return timeInSeconds;
     }
-
 }
