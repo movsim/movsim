@@ -460,6 +460,7 @@
             <xs:attribute name="network_filename" type="xs:string" use="required" />
             <xs:attribute name="initial_conditions_filename" type="xs:string" />
             <xs:attribute name="micro_boundary_conditions_filename" type="xs:string" />
+            <xs:attribute name="external_vehicle_control_filename" type="xs:string" />
             <!--  TODO add external_control_filename -->
         </xs:complexType>
     </xs:element>

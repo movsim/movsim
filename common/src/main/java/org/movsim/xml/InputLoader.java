@@ -11,6 +11,8 @@
  */
 package org.movsim.xml;
 
+import generated.MovsimExternalVehicleControl;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -28,10 +30,11 @@ public final class InputLoader {
     private static final Logger LOG = LoggerFactory.getLogger(InputLoader.class);
 
     public enum XmlInput {
-        MOVSIM_XPRJ(Movsim.class, "/schema/MovsimScenario.xsd"), MICRO_BOUNDARY_CONDITIONS(
-                MovsimMicroscopicBoundaryConditions.class, "/schema/MovsimMicroscopicBoundaryConditions.xsd"), INITIAL_CONDITIONS(
-                MovsimInitialConditions.class, "/schema/MovsimInitialConditions.xsd"), XODR_ROADNETWORK(
-                org.movsim.network.autogen.opendrive.OpenDRIVE.class, "/schema/OpenDRIVE_1.3.xsd");
+        MOVSIM_XPRJ(Movsim.class, "/schema/MovsimScenario.xsd"), 
+        MICRO_BOUNDARY_CONDITIONS(MovsimMicroscopicBoundaryConditions.class, "/schema/MovsimMicroscopicBoundaryConditions.xsd"), 
+        INITIAL_CONDITIONS(MovsimInitialConditions.class, "/schema/MovsimInitialConditions.xsd"), 
+        EXTERNAL_VEHICLE_CONTROL(MovsimExternalVehicleControl.class, "/schema/MovsimExternalVehicleControl.xsd"), 
+        XODR_ROADNETWORK(org.movsim.network.autogen.opendrive.OpenDRIVE.class, "/schema/OpenDRIVE_1.3.xsd");
 
         private final Class<?> factory;
         private final String xmlSchema;
@@ -73,6 +76,16 @@ public final class InputLoader {
         FileUnmarshaller<MovsimMicroscopicBoundaryConditions> fileUnmarshaller = new FileUnmarshaller<>();
         XmlInput xsdResourcen = XmlInput.MICRO_BOUNDARY_CONDITIONS;
         return fileUnmarshaller.load(xmlFile, MovsimMicroscopicBoundaryConditions.class, xsdResourcen.factory,
+                xsdResourcen.getUrl());
+    }
+    
+    /**
+     * @throws IllegalStateException
+     */
+    public static MovsimExternalVehicleControl unmarshallExternalVehicleControl(File xmlFile) {
+        FileUnmarshaller<MovsimExternalVehicleControl> fileUnmarshaller = new FileUnmarshaller<>();
+        XmlInput xsdResourcen = XmlInput.EXTERNAL_VEHICLE_CONTROL;
+        return fileUnmarshaller.load(xmlFile, MovsimExternalVehicleControl.class, xsdResourcen.factory,
                 xsdResourcen.getUrl());
     }
 

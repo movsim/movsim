@@ -1,0 +1,5 @@
+# gnuplot command file
+
+ldm = "IDM"
+scenario = "external_control"
+load "external_control.gpl"
