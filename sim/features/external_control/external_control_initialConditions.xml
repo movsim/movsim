@@ -12,22 +12,6 @@
             <VehicleInitialCondition position="80" speed="0" />
             <VehicleInitialCondition position="90" speed="0" />
             <VehicleInitialCondition position="100" speed="0" />
-            <VehicleInitialCondition position="110" speed="0" />
-            <VehicleInitialCondition position="120" speed="0" />
-            <VehicleInitialCondition position="130" speed="0" />
-            <VehicleInitialCondition position="140" speed="0" />
-            <VehicleInitialCondition position="150" speed="0" />
-            <VehicleInitialCondition position="160" speed="0" />
-            <VehicleInitialCondition position="170" speed="0" />
-            <VehicleInitialCondition position="180" speed="0" />
-            <VehicleInitialCondition position="190" speed="0" />
-            <VehicleInitialCondition position="200" speed="0" />
-            <VehicleInitialCondition position="210" speed="0" />
-            <VehicleInitialCondition position="220" speed="0" />
-            <VehicleInitialCondition position="230" speed="0" />
-            <VehicleInitialCondition position="240" speed="0" />
-            <VehicleInitialCondition position="250" speed="0" />
-            <VehicleInitialCondition position="260" speed="0" />
         </MicroscopicInitialConditions>
     </RoadInitialConditions>
 </MovsimInitialConditions>
