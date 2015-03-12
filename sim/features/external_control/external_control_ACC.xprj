@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Arne Kesting 2015 -->
+<Movsim>
+    <VehiclePrototypes write_fund_diagrams="true">
+        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="40" T="1.5" s0="2" s1="0" delta="4" a="1" b="1.5" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="external_control.xodr" initial_conditions_filename="external_control_initialConditions.xml" external_vehicle_control_filename="external_control_externalVehicles.xml">
+        <Simulation timestep="0.2" duration="600" seed="42">
+            <TrafficComposition>
+                <VehicleType label="ACC1" fraction="1" />
+            </TrafficComposition>
+        </Simulation>
+        <Routes>
+            <Route label="main">
+                <Road id="1" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <FloatingCarOutput n_timestep="1" route="main" random_fraction="1" />
+            <Trajectories dt="1" route="main" />
+        </OutputConfiguration>
+    </Scenario>
+</Movsim>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimMicroscopicBoundaryConditions time_format="HH:mm:ss">
+    <RoadMicroscopicBoundaryConditions id="1">
+        <BoundaryConditions>
+            <BoundaryCondition time="00:00:10" label="ACC1" lane="1" speed="30">
+                <VehicleUserData key="comment" value="first car" />
+            </BoundaryCondition>
+            <BoundaryCondition time="00:00:30" label="ACC1" lane="1" speed="0">
+                <VehicleUserData key="comment" value="second car" />
+            </BoundaryCondition>
+            <BoundaryCondition time="00:01:00" label="ACC2" lane="1" speed="15">
+                <VehicleUserData key="comment" value="comment example" />
+            </BoundaryCondition>
+            <BoundaryCondition time="00:01:20" label="ACC2" lane="3" speed="15">
+                <VehicleUserData key="comment" value="lane does not exist" />
+            </BoundaryCondition>
+        </BoundaryConditions>
+    </RoadMicroscopicBoundaryConditions>
+</MovsimMicroscopicBoundaryConditions>
+

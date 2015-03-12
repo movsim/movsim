@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public final class ModelParameters {
 
     /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(ModelParameters.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ModelParameters.class);
 
     public static void test() {
         ModelParameterIDM modelParameterIDM = new ModelParameterIDM();

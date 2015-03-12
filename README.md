@@ -88,7 +88,7 @@ Alternatively, create an eclipse configuration from the commandline by typing `m
 
 You can then build and run either the _core_ or _viewer_ Java applications.
 
-We use the source code formatter _movsim/codestyle/eclipse_movsim_profile.xml_.
+We use the source code formatter _movsim/misc/codestyle/eclipse_movsim_profile.xml_.
  
 Demos
 -----

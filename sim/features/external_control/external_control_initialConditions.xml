@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimInitialConditions>
+    <RoadInitialConditions id="1">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10" speed="0" />
+            <VehicleInitialCondition position="20" speed="0" />
+            <VehicleInitialCondition position="30" speed="0" />
+            <VehicleInitialCondition position="40" speed="0" />
+            <VehicleInitialCondition position="50" speed="0" />
+            <VehicleInitialCondition position="60" speed="0" />
+            <VehicleInitialCondition position="70" speed="0" />
+            <VehicleInitialCondition position="80" speed="0" />
+            <VehicleInitialCondition position="90" speed="0" />
+            <VehicleInitialCondition position="100" speed="0" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+</MovsimInitialConditions>
+

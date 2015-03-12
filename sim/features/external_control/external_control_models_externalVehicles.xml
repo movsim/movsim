@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimExternalVehicleControl>
+    <ExternalVehicle road_id="1" position="1000" lane="1" length="10" width="5">
+        <SpeedData time="35" speed="0" />
+        <SpeedData time="40" speed="0" />
+        <SpeedData time="60" speed="25" />
+        <SpeedData time="100" speed="45" />
+        <SpeedData time="150" speed="0" />
+        <SpeedData time="160" speed="0" />
+    </ExternalVehicle>
+    <ExternalVehicle road_id="1" position="1000" lane="2" length="10" width="5">
+        <SpeedData time="35" speed="0" />
+        <SpeedData time="40" speed="0" />
+        <SpeedData time="60" speed="25" />
+        <SpeedData time="100" speed="45" />
+        <SpeedData time="150" speed="0" />
+        <SpeedData time="160" speed="0" />
+    </ExternalVehicle>
+    <ExternalVehicle road_id="2" position="1000" lane="1" length="10" width="5">
+        <SpeedData time="35" speed="0" />
+        <SpeedData time="40" speed="0" />
+        <SpeedData time="60" speed="25" />
+        <SpeedData time="100" speed="45" />
+        <SpeedData time="150" speed="0" />
+        <SpeedData time="160" speed="0" />
+    </ExternalVehicle>
+    <ExternalVehicle road_id="2" position="1000" lane="2" length="10" width="5">
+        <SpeedData time="35" speed="0" />
+        <SpeedData time="40" speed="0" />
+        <SpeedData time="60" speed="25" />
+        <SpeedData time="100" speed="45" />
+        <SpeedData time="150" speed="0" />
+        <SpeedData time="160" speed="0" />
+    </ExternalVehicle>
+</MovsimExternalVehicleControl>
+

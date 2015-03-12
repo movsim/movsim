@@ -38,7 +38,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.movsim.utilities.FileUtils;
-import org.movsim.xml.MovsimInputLoader;
+import org.movsim.xml.InputLoader;
 
 /**
  * MovSim console command line parser. Values from the command line are set to ProjectMetaData.
@@ -61,7 +61,7 @@ public class MovsimCommandLine {
     /**
      * Constructor.
      * 
-     * Intitializes logger and localization.
+     * Initializes logger and localization.
      * 
      * Parses command line and sets results in ProjectMetaData.
      * 
@@ -169,8 +169,9 @@ public class MovsimCommandLine {
      */
     private static void optionWriteXsd() {
         try {
-            MovsimInputLoader.writeXsdToFile();
+            InputLoader.writeXsdToFile();
         } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.exit(0);

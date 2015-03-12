@@ -1,26 +1,12 @@
 /*
- * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- * <movsim.org@gmail.com>
- * -----------------------------------------------------------------------------------------
- * 
- * This file is part of
- * 
- * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with MovSim. If not, see <http://www.gnu.org/licenses/>
- * or <http://www.movsim.org>.
- * 
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <movsim.org@gmail.com>
+ * ----------------------------------------------------------------------------------------- This file is part of MovSim - the
+ * multi-model open-source vehicular-traffic simulator. MovSim is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version. MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details. You should have received a copy of the GNU General Public License along with MovSim. If not, see
+ * <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * -----------------------------------------------------------------------------------------
  */
 package org.movsim.utilities;
@@ -31,15 +17,14 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class Tables. Various static table-related methods like interpolation, extrapolation
  */
-public class Tables {
+public final class Tables {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(Tables.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(Tables.class);
 
     private static final double TINY_VALUE = 1.e-10;
 
-    private Tables() {
-    }
+    private Tables() {}
 
     public static double intp(double[] tab, double x, double xmin, double xmax) {
         return intp(tab, tab.length, x, xmin, xmax);
@@ -57,7 +42,7 @@ public class Tables {
         } else if (i == n) {
             intp_value = xmax;
         } else {
-            logger.error("intp: index i = " + i + " (ir=" + ir + ") out of range\n");
+            LOG.error("intp: index i = " + i + " (ir=" + ir + ") out of range\n");
             System.exit(-1);
         }
         return intp_value;
@@ -68,10 +53,10 @@ public class Tables {
         final int ny = y_vals.length;
         final int n = Math.min(nx, ny);
         if (nx != ny) {
-            logger.debug("Warning: arrays of not equal length = {}, {} ", nx, ny);
+            LOG.debug("Warning: arrays of not equal length = {}, {} ", nx, ny);
         }
         if (nx == 0 || ny == 0) {
-            // logger.debug("cannot interpolate from arrays with zero length(s) = {}, {}. return 0 ",
+            // LOG.debug("cannot interpolate from arrays with zero length(s) = {}, {}. return 0 ",
             // nx, ny);
             return 0;
         }
@@ -93,10 +78,9 @@ public class Tables {
             intp_value = y_vals[i];
         } else {
             // linear interpolation
-            intp_value = y_vals[i - 1] + (y_vals[i] - y_vals[i - 1]) * (x - x_vals[i - 1])
-                    / (x_vals[i] - x_vals[i - 1]);
+            intp_value = y_vals[i - 1] + (y_vals[i] - y_vals[i - 1]) * (x - x_vals[i - 1]) / (x_vals[i] - x_vals[i - 1]);
         }
-        // logger.debug(" return = {}", intp_value);
+        // LOG.debug(" return = {}", intp_value);
         return (intp_value);
     }
 
@@ -140,10 +124,10 @@ public class Tables {
         final int ny = y_vals.length;
         final int n = Math.min(nx, ny);
         if (nx != ny) {
-            logger.debug("Warning: arrays of not equal length = {}, {} ", nx, ny);
+            LOG.debug("Warning: arrays of not equal length = {}, {} ", nx, ny);
         }
         if (nx == 0 || ny == 0) {
-            logger.debug("cannot interpolate from arrays with zero length(s) = {}, {} ", nx, ny);
+            LOG.debug("cannot interpolate from arrays with zero length(s) = {}, {} ", nx, ny);
             return 0;
         }
         int i = 0;

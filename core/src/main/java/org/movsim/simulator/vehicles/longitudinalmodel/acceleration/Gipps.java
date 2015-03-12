@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 class Gipps extends LongitudinalModelBase {
 
     /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(Gipps.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Gipps.class);
 
     private final IModelParameterGipps param;
 
