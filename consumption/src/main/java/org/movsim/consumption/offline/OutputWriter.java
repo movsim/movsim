@@ -30,6 +30,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.movsim.autogen.BatchData;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -41,11 +43,23 @@ public class OutputWriter {
     private char separator = ',';
     private static final char QUOTE_CHARACTER = CSVWriter.NO_QUOTE_CHARACTER;
     private final File output;
+    
+    private DateTimeFormatter dateTimeFormatter;
 
     public static OutputWriter create(BatchData batch, String outputPath) {
         File outputFile = new File(outputPath, batch.getOutputfile());
         char separator = batch.getSeparator().charAt(0);
-        return new OutputWriter(outputFile, separator);
+
+        OutputWriter outputWriter = new OutputWriter(outputFile, separator);
+        if (!batch.getConversions().getTime().equalsIgnoreCase("1")) {
+            DateTimeFormatter dtFormat = DateTimeFormat.forPattern(batch.getConversions().getTime());
+            outputWriter.setTimeFormat(dtFormat);
+        }
+        return outputWriter;
+    }
+
+    private void setTimeFormat(DateTimeFormatter dtFormat) {
+        this.dateTimeFormatter = dtFormat;
     }
 
     public static OutputWriter create(File outputFile) {
@@ -73,7 +87,7 @@ public class OutputWriter {
             if (!records.isEmpty()) {
                 writer.writeNext(records.get(0).csvHeader(String.valueOf(separator)));
                 for (ConsumptionDataRecord record : records) {
-                    writer.writeNext(record.toCsv(String.valueOf(separator)));
+                    writer.writeNext(record.toCsv(String.valueOf(separator), dateTimeFormatter));
                 }
             }
         } catch (IOException e) {
