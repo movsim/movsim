@@ -77,7 +77,9 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         this.cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle;
     }
 
-    // consumption rate (m^3/s) as function of frequency and output power
+    /**
+     * @return consumption rate (m^3/s) as function of frequency and output power
+     */
     private double calcConsumptionRate(double frequency, double mechPower) {
         final double indMoment = MomentsHelper.getMoment(mechPower, frequency)
                 + MomentsHelper.getModelLossMoment(frequency);
@@ -87,14 +89,18 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         return Math.max(0, dotCInLiterPerSecond / 1000.);
     }
 
-    // model output 1: specific consumption per power as function of moment
+    /**
+     * specific consumption per power as function of moment in kg/(Ws)
+     */
     public double cSpecific0ForMechMoment(double frequency, double mechMoment) {
         final double indMoment = mechMoment + MomentsHelper.getModelLossMoment(frequency);
         return (mechMoment <= 0 || mechMoment > getMaxMoment()) ? 0 : cSpecific0(frequency, indMoment,
                 minSpecificConsumption) * (indMoment / mechMoment);
     }
 
-    // model output 2: consumption rate (liter/s) as function of power
+    /**
+     * specific consumption in kg/(Ws)
+     */
     public double cSpecific0(double frequency, double indMoment, double minCSpec0) {
         return minCSpec0
                 + (cSpec0Idle - minCSpec0)

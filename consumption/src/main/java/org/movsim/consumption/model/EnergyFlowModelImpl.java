@@ -35,9 +35,9 @@ import com.google.common.base.Preconditions;
 class EnergyFlowModelImpl implements EnergyFlowModel {
 
     /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(EnergyFlowModelImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EnergyFlowModelImpl.class);
 
-    /** if cons(m^3/(Ws)) higher, point (f,pe) out of Bounds 900=3-4 times the minimum */
+    /** if cons(m^3/(Ws)) higher, point (f,pe) out of Bounds 900=3-4 times the minimum, in m^3/(Ws) */
     private final double LIMIT_SPEC_CONS = 900 * ConsumptionConstants.CONVERSION_GRAMM_PER_KWH_TO_SI;
 
     /** extremely high flow in motor regimes that cannot be reached. Set to 10000 KW */
@@ -123,11 +123,9 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
 
         // indicates that too high motor frequency
         if (withJante && (fMot > engineRotationModel.getMaxFrequency())) {
-            if (logger.isDebugEnabled()) {
-                logger.debug(String
+                LOG.info(String
                         .format("v_kmh=%f, acc=%f, gear=%d, motor frequency=%d/min too high -- > return fuelErrorConsumption: %.2f",
                                 (3.6 * v), acc, gearIndex + 1, (int) (fMot * 60), FUELFLOW_ERROR));
-            }
             fuelFlow = FUELFLOW_ERROR;
         }
 
@@ -135,9 +133,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
         if (withJante && (fMot < engineRotationModel.getMinFrequency())) {
             if (gearIndex == 0) {
                 fuelFlow = vehicle.electricPower() * LIMIT_SPEC_CONS;
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("v=%f, gear=%d, fuelFlow=%f %n", v, gearIndex + 1, fuelFlow));
-                }
+                LOG.info(String.format("v=%f, gear=%d, fuelFlow=%f %n", v, gearIndex + 1, fuelFlow));
             } else {
                 fuelFlow = FUELFLOW_ERROR;
             }

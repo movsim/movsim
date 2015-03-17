@@ -46,8 +46,7 @@ public class ConsumptionCalculation {
         ConsumptionDataRecord previous = null;
         for (ConsumptionDataRecord record : records) {
             FuelAndGear minFuelFlowResult = model.getMinFuelFlow(record.getSpeed(), record.getAcceleration(),
-                    record.getGrade(),
-                    true);
+                    record.getGrade(), true);
             double fuelFlowInLiterPerSecond = minFuelFlowResult.getFuelFlowInLiterPerSecond();
             if (fuelFlowInLiterPerSecond > 0.3) {
                 fuelFlowInLiterPerSecond = 0;

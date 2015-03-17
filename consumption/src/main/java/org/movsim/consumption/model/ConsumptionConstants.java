@@ -34,11 +34,11 @@ final class ConsumptionConstants {
     /** gravitation acceleration (m/s^2) */
     static final double GRAVITATION = 9.81;
 
-    /** 1.29 (kg/m^3) at 0 degrees celsius, 1014 hPa */
+    /** 1.29 (kg/m^3) at 0 degrees Celsius, 1014 hPa */
     static final double RHO_AIR = 1.29;
 
     /** density of gasoline (kg/m^3) */
-    static final double RHO_FUEL = 760; // diesel: 830
+    static final double RHO_FUEL = 830; // 760; // diesel: 830
 
     /** density of gasoline (kg/l) */
     static final double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.;
@@ -49,8 +49,8 @@ final class ConsumptionConstants {
     /** transforming factor g/kWh => kg/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
     static final double GRAMM_PER_KWH_TO_KG_PER_WS = 1 / 3.6e9;
 
-    /** conversion factor from g/kWh to m^3/kWh */
-    static final double CONVERSION_GRAMM_PER_KWH_TO_SI = 1. / RHO_FUEL * GRAMM_PER_KWH_TO_KG_PER_WS;
+    /** conversion factor from g/kWh to m^3/Ws */
+    static final double CONVERSION_GRAMM_PER_KWH_TO_SI = GRAMM_PER_KWH_TO_KG_PER_WS / RHO_FUEL;
 
     static final double CONVERSION_BAR_TO_PASCAL = 1e5;
 
