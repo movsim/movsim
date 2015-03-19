@@ -1,13 +1,21 @@
 package org.movsim.utilities;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Test;
 
 public class LinearInterpolatedFunctionTest {
 
+    @Test
+    public void testConstant(){
+        double[] x = new double[] { 1 };
+        double[] y = new double[] { 1 };
+        LinearInterpolatedFunction fct = new LinearInterpolatedFunction(x, y);
+        assertThat(fct.value(0), equalTo(y[0]));
+        assertThat(fct.value(100), equalTo(y[0]));
+    }
+    
     @Test
     public void testValues() {
         double[] x = new double[] { 1, 3, 5, 7 };

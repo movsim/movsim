@@ -133,7 +133,10 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="EngineConstantMap">
-        <xs:complexType />
+        <xs:complexType>
+			 <xs:attribute name="idle_cons_rate_linvh" type="nonNegativeDouble" default="0.6" />
+			 <xs:attribute name="cspec_min_g_per_kwh" type="nonNegativeDouble" default="212" />
+		</xs:complexType>
     </xs:element>
     <xs:element name="RotationModel">
         <xs:complexType>
