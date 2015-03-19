@@ -538,7 +538,7 @@
     </xs:complexType>
     <xs:element name="Inflow">
         <xs:annotation>
-            <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time (ie traffic flow q) and a defined traffic composition.</xs:documentation>
+            <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time and per lane (ie traffic flow q) and a defined traffic composition.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attribute name="t" type="nonNegativeDouble" use="required" />

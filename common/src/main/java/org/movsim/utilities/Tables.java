@@ -24,7 +24,9 @@ public final class Tables {
 
     private static final double TINY_VALUE = 1.e-10;
 
-    private Tables() {}
+    private Tables() {
+       throw new IllegalStateException("do not instanciate");
+    }
 
     public static double intp(double[] tab, double x, double xmin, double xmax) {
         return intp(tab, tab.length, x, xmin, xmax);
