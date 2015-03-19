@@ -1,7 +1,5 @@
 package org.movsim.simulator;
 
-import generated.SpeedDataType;
-
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -21,8 +19,6 @@ import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.LinearInterpolatedFunction;
-import org.movsim.utilities.Tables;
-import org.movsim.utilities.TimeUtilities;
 import org.movsim.utilities.Units;
 import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;

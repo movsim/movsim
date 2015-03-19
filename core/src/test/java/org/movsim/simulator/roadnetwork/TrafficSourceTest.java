@@ -38,9 +38,6 @@ import org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 
-/**
- *
- */
 public class TrafficSourceTest {
 
     private TrafficSourceMacro trafficSource;

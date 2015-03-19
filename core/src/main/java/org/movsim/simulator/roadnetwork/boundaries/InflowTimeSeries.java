@@ -28,12 +28,13 @@ public class InflowTimeSeries {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(InflowTimeSeries.class);
 
-    private LinearInterpolatedFunction flowFunction;
-    private LinearInterpolatedFunction speedFunction;
-
-    private double constantFlowPerLane = -1;
+    private final double constantFlowPerLane = 1000 * Units.INVH_TO_INVS;
 
     private final double constantInitSpeed = 80 / 3.6;
+
+    private LinearInterpolatedFunction flowFunction;
+
+    private LinearInterpolatedFunction speedFunction;
 
     /**
      * Instantiates a new inflow time series.
@@ -42,12 +43,14 @@ public class InflowTimeSeries {
      *            the inflow time series
      */
     public InflowTimeSeries(List<Inflow> inflow) {
-        generateTimeSeriesData(inflow);
+        LOG.info(" inflowDataPoint.size = {}", inflow.size());
+        if (!inflow.isEmpty()) {
+            generateTimeSeriesData(inflow);
+        }
     }
 
     private void generateTimeSeriesData(List<Inflow> inflow) {
         final int size = inflow.size();
-        LOG.info(" inflowDataPoint.size = {}", size);
         double[] timeValues = new double[size];
         double[] flowValues = new double[size];
         double[] speedValues = new double[size];
@@ -65,14 +68,14 @@ public class InflowTimeSeries {
     }
 
     public double getFlowPerLane(double time) {
-        if (constantFlowPerLane >= 0) {
+        if (flowFunction == null) {
             return constantFlowPerLane;
         }
         return flowFunction.value(time);
     }
 
     public double getSpeed(double time) {
-        if (constantFlowPerLane >= 0) {
+        if (flowFunction == null) {
             return constantInitSpeed;
         }
         return speedFunction.value(time);
