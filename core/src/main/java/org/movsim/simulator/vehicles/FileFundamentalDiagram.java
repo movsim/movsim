@@ -70,7 +70,7 @@ public class FileFundamentalDiagram extends FileOutputBase {
         for (int i = 0; i < count; i++) {
             final double rho = equilibriumProperties.getRho(i);
             final double s = equilibriumProperties.getNetDistance(rho);
-            final double vEq = equilibriumProperties.getVEq(i);
+            final double vEq = equilibriumProperties.getVEq(rho);
             writer.printf(outputFormat, Units.INVM_TO_INVKM * rho, s, Units.MS_TO_KMH * vEq, Units.INVS_TO_INVH * rho
                     * vEq);
         }

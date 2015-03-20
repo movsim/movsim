@@ -173,6 +173,15 @@ public abstract class LongitudinalModelBase {
     public double getDesiredSpeed() {
         return v0RandomizationFactor * getParameter().getV0();
     }
+    
+    public boolean hasDesiredSpeed(){
+        try {
+            getDesiredSpeed();
+            return true;
+        } catch (UnsupportedOperationException e) {
+            return false;
+        }
+    }
 
     /**
      * Returns the minimum gap in a standstill.
@@ -184,6 +193,15 @@ public abstract class LongitudinalModelBase {
      */
     public double getMinimumGap() {
         return getParameter().getS0();
+    }
+    
+    public boolean hasMinimumGap() {
+        try {
+            getMinimumGap();
+            return true;
+        } catch (UnsupportedOperationException e) {
+            return false;
+        }
     }
 
     protected abstract IModelParameter getParameter();

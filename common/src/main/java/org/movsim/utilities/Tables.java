@@ -22,8 +22,6 @@ public final class Tables {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(Tables.class);
 
-    private static final double TINY_VALUE = 1.e-10;
-
     private Tables() {
        throw new IllegalStateException("do not instanciate");
     }
@@ -48,45 +46,6 @@ public final class Tables {
             System.exit(-1);
         }
         return intp_value;
-    }
-
-    // TODO check implementation !!!
-    // extrapolate left-hand side values for use in speedlimit
-    public static double stepExtrapolation(double[] x_vals, double[] y_vals, double x) {
-        final int nx = x_vals.length;
-        final int ny = y_vals.length;
-        final int n = Math.min(nx, ny);
-        if (nx != ny) {
-            LOG.debug("Warning: arrays of not equal length = {}, {} ", nx, ny);
-        }
-        if (nx == 0 || ny == 0) {
-            LOG.debug("cannot interpolate from arrays with zero length(s) = {}, {} ", nx, ny);
-            return 0;
-        }
-        int i = 0;
-        double intp_value;
-
-        while ((x_vals[i] <= x) && (i < n - 1)) {
-            i++;
-        }
-
-        if (i == 0) { // extrapolation to "left" side
-            intp_value = y_vals[0];
-        } else if ((i == n - 1) && (x > x_vals[i])) {
-            // extrapol. to "right" side
-            intp_value = y_vals[n - 1];
-        } else {
-            // simple constant extrapolation from "left" side
-            intp_value = y_vals[i - 1];
-        }
-        // else { // linear interpolation
-        // intp_value = y_vals[i - 1] + (y_vals[i] - y_vals[i - 1]) * (x -
-        // x_vals[i - 1])
-        // / (x_vals[i] - x_vals[i - 1]);
-        // }
-
-        return (intp_value);
-
     }
 
 }

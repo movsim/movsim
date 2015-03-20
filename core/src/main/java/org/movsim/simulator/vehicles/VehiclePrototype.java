@@ -6,7 +6,7 @@ import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.Noise;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumPropertiesFactory;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumPropertiesImpl;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelFactory;
 
@@ -26,7 +26,8 @@ class VehiclePrototype {
         Preconditions.checkNotNull(configuration);
         this.configuration = configuration;
         this.simulationTimestep = simulationTimestep;
-        equiProperties = EquilibriumPropertiesFactory.create(getLength(), createAccelerationModel());
+        LongitudinalModelBase longModel = createAccelerationModel();
+        equiProperties = new EquilibriumPropertiesImpl(getLength(), longModel);
     }
 
     double getLength() {

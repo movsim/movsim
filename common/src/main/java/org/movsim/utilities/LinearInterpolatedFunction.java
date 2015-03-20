@@ -18,6 +18,12 @@ public class LinearInterpolatedFunction {
 
     private final XYDataPoint start;
     private final XYDataPoint end;
+    
+    private final int numberOfDataPoints;
+
+    public int getNumberOfDataPoints() {
+        return numberOfDataPoints;
+    }
 
     /**
      * @throws IllegalArgumentException
@@ -31,6 +37,8 @@ public class LinearInterpolatedFunction {
             LinearInterpolator linearInterpolator = new LinearInterpolator();
             splineFunction = linearInterpolator.interpolate(x, y);
         }
+        
+        numberOfDataPoints = x.length;
 
         start = new XYDataPoint(x[0], y[0]);
         end = new XYDataPoint(x[x.length - 1], y[y.length - 1]);
