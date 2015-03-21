@@ -50,7 +50,7 @@ import com.google.common.base.Preconditions;
 
 public class ConsumptionMain {
 
-    static final Map<String, EnergyFlowModel> consumptionModelPool = new HashMap<String, EnergyFlowModel>();
+    private static final Map<String, EnergyFlowModel> consumptionModelPool = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -61,15 +61,13 @@ public class ConsumptionMain {
 
         Logger.initializeLogger();
 
-        // ConsumptionCommandLine.parse(ProjectMetaData.getInstance(), args);
         MovsimCommandLine.parse(args);
 
         File xmlInputFile = ProjectMetaData.getInstance().getInputFile();
         Movsim inputData = InputLoader.unmarshallMovsim(xmlInputFile);
 
         if (!inputData.isSetConsumption()) {
-            System.err.println("no consumption element configured in input file");
-            System.exit(1);
+            throw new IllegalArgumentException("no consumption element configured in input file");
         }
 
         createConsumptionModels(inputData.getConsumption());
@@ -95,7 +93,8 @@ public class ConsumptionMain {
 
     private static void createConsumptionModels(Consumption movsimInput) {
         for (ConsumptionModel modelInput : movsimInput.getConsumptionModels().getConsumptionModel()) {
-            consumptionModelPool.put(modelInput.getLabel(), EnergyFlowModels.create(modelInput));
+            EnergyFlowModel energyFlowModel = EnergyFlowModels.create(modelInput);
+            consumptionModelPool.put(modelInput.getLabel(), energyFlowModel);
         }
     }
 

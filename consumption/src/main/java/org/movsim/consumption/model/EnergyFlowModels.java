@@ -33,7 +33,7 @@ import org.movsim.autogen.ConsumptionModel;
 public final class EnergyFlowModels {
 
     private EnergyFlowModels() {
-        // Suppresses default constructor, ensuring non-instantiability.
+        throw new IllegalStateException("do no invoke");
     }
 
     public static EnergyFlowModel create(ConsumptionModel model) {
