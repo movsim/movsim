@@ -5,8 +5,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.Noise;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterPTM;
+import org.movsim.utilities.LinearInterpolatedFunction;
 import org.movsim.utilities.ProbabilityUtils;
-import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 class PTM extends LongitudinalModelBase {
 
     /** The Constant LOG. */
-    private static final Logger LOG = LoggerFactory.getLogger(IDM.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PTM.class);
 
     private final IModelParameterPTM param;
 
@@ -25,9 +25,11 @@ class PTM extends LongitudinalModelBase {
 
     private Noise wienerProcess;
 
-    final int NTABMAX = 100;
-    double[] uPTatab; // [NTABMAX]; // tabulated d(U_PT)/da
-    double[] uPTaatab; // [NTABMAX]; // tabulated d^2(U_PT)/da^2
+    private static final int NTABMAX = 100;
+    /** tabulated d(U_PT)/da function */
+    private LinearInterpolatedFunction uPTaFunction;
+    /** tabulated d^2(U_PT)/da^2 */
+    private LinearInterpolatedFunction uPaaFunction;
 
     // double atab[101][inout.NYMAX];
     // int n=101;
@@ -71,16 +73,18 @@ class PTM extends LongitudinalModelBase {
     private double get_uPTa(double a) {
         double wm = param.getWeightMinus();
         double bMax = param.getBMax();
-        return (a <= -bMax) ? wm * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta) : (a < bMax) ? Tables
-                .intp(uPTatab, a, -bMax, bMax) : (wm + dw) * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta);
+
+        double uPT = Math.min(bMax, Math.max(-bMax, uPTaFunction.value(a)));
+        return (a <= -bMax) ? wm * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta) : (a < bMax) ? uPT
+                : (wm + dw) * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta);
     }
 
     private double get_uPTaa(double a) {
         double bmax = param.getBMax();
+        double aPT = Math.min(bmax, Math.max(-bmax, uPaaFunction.value(a)));
         return (a <= -bmax) ? -param.getWeightMinus() * 2 * delta * (1 - 2 * delta)
-                * Math.pow(a / param.getA0(), -2 * delta - 1) : (a < bmax) ? Tables.intp(uPTaatab, NTABMAX, a, -bmax,
-                bmax) : -(param.getWeightMinus() + dw) * 2 * delta * (1 - 2 * delta)
-                * Math.pow(a / param.getA0(), -2 * delta - 1);
+                * Math.pow(a / param.getA0(), -2 * delta - 1) : (a < bmax) ? aPT : -(param.getWeightMinus() + dw) * 2
+                * delta * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta - 1);
     }
 
     @Override
@@ -230,9 +234,12 @@ class PTM extends LongitudinalModelBase {
     }
 
     private void initTables() {
+        double[] uPTatab = new double[NTABMAX]; // tabulated d(U_PT)/da
+        double[] uPTaatab = new double[NTABMAX]; // tabulated d^2(U_PT)/da^2
+        double[] acc = new double[NTABMAX];
         // in File Constructor: Initialize Tables of d(U_PT)/da and d^2(U_PT)/da^2
         for (int i = 0; i < NTABMAX; i++) {
-            double a = param.getBMax() * (-1 + 2 * i / ((double) (NTABMAX - 1)));
+            final double a = param.getBMax() * (-1 + 2 * i / ((double) (NTABMAX - 1)));
             double x = a / param.getA0();
             double lorenz = 1 / (1 + x * x);
             double g = x * Math.pow(lorenz, delta);
@@ -242,10 +249,14 @@ class PTM extends LongitudinalModelBase {
             double prefactor = param.getWeightMinus() + 0.5 * dw * (1 + Math.tanh(x));
             double cosh2 = Math.pow(Math.cosh(x), 2);
 
+            acc[i] = a;
             uPTatab[i] = 1 / param.getA0() * (prefactor * gx + 0.5 * dw * g / cosh2);
             uPTaatab[i] = 1 / (param.getA0() * param.getA0())
                     * (prefactor * gxx + dw / cosh2 * (gx - Math.tanh(x) * g));
         }
+
+        this.uPTaFunction = new LinearInterpolatedFunction(acc, uPTatab);
+        this.uPaaFunction = new LinearInterpolatedFunction(acc, uPTaatab);
     }
 
     // sprintf(testfileName,"%s.acctab_s_v",fname);
