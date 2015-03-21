@@ -47,19 +47,19 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
     /** The maximum density */
     private final double rhoMax;
 
-    /** The flow maximum */
+    /** The maximum equilibrium flow */
     double qMax = 0;
 
     /** The density at maximum flow */
     double rhoQMax = 0;
 
-    private LinearInterpolatedFunction vEqFunction;
+    private final LinearInterpolatedFunction vEqFunction;
 
     public EquilibriumPropertiesImpl(double vehicleLength, LongitudinalModelBase model) {
         this.rhoMax = 1.0 / vehicleLength;
 
         if (model.hasDesiredSpeed()) {
-            calcEquilibrium(model);
+            vEqFunction = calcEquilibriumSpeedFunction(model);
             calcRhoQMax();
         } else {
             double[] xDummy = new double[] { 0 };
@@ -111,7 +111,7 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
      * arbitrary vehicle.
      * 
      */
-    private void calcEquilibrium(LongitudinalModelBase model) {
+    private LinearInterpolatedFunction calcEquilibriumSpeedFunction(LongitudinalModelBase model) {
         LOG.info("calc equilibrium speed as function of density for model={}", model.modelName());
         if (!model.hasDesiredSpeed()) {
             throw new IllegalArgumentException("longitudinal model " + model.modelName()
@@ -130,7 +130,7 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
             dtMin = 0.1 * parameter.getTau();
         }
 
-        final double[] vEqTab = new double[NRHO];
+        double[] vEqTab = new double[NRHO];
         double[] rhoTab = new double[NRHO];
 
         vEqTab[0] = v0; // start with rho=0
@@ -155,7 +155,7 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
             rhoTab[ir] = rho;
         }
 
-        vEqFunction = new LinearInterpolatedFunction(rhoTab, vEqTab);
+        return new LinearInterpolatedFunction(rhoTab, vEqTab);
     }
 
     // calculate Qmax, and abscissa rhoQmax from veqtab
