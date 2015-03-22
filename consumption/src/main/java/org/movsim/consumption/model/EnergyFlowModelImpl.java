@@ -60,8 +60,14 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
         vehicle = new VehicleAttributes(modelInput.getVehicleData());
         carPowerModel = new InstantaneousPowerModelImpl(vehicle);
         engineRotationModel = new EngineRotationModel(modelInput.getRotationModel());
-        
-        engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(), engineRotationModel);
+        if(modelInput.isSetEngineCombustionMap()){
+            engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(), engineRotationModel);
+        }
+        else if(modelInput.isSetEngineConstantMap()){
+            engineModel = new EngineConstantMapImpl(modelInput.getEngineConstantMap());
+        }else{
+            throw new IllegalArgumentException("no engine efficiency mapping provided");
+        }
 
         if (modelInput.isOutput()) {
             writeOutput(keyLabel);

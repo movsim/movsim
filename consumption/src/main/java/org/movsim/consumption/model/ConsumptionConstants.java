@@ -54,4 +54,10 @@ final class ConsumptionConstants {
 
     static final double CONVERSION_BAR_TO_PASCAL = 1e5;
 
+    static final double HOUR_TO_SECOND = 1 / 3600.;
+
+    static final double KW_TO_W = 1000.;
+
+    static final double LITER_TO_MILLILITER = 1 / 1000.;
+
 }
