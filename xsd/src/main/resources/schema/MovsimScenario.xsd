@@ -133,7 +133,11 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="EngineConstantMap">
-        <xs:complexType />
+        <xs:complexType>
+			 <xs:attribute name="max_power_kW" type="nonNegativeDouble" default="90" />
+			 <xs:attribute name="idle_cons_rate_linvh" type="nonNegativeDouble" default="0.6" />
+			 <xs:attribute name="cspec_min_g_per_kwh" type="nonNegativeDouble" default="212" />
+		</xs:complexType>
     </xs:element>
     <xs:element name="RotationModel">
         <xs:complexType>
@@ -535,7 +539,7 @@
     </xs:complexType>
     <xs:element name="Inflow">
         <xs:annotation>
-            <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time (ie traffic flow q) and a defined traffic composition.</xs:documentation>
+            <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time and per lane (ie traffic flow q) and a defined traffic composition.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attribute name="t" type="nonNegativeDouble" use="required" />

@@ -1,6 +1,6 @@
 #!bin/sh
 
-models="ACC IDM IDMM GIPPS OVM_FVDM NSM KKW"
+models="ACC IDM IDMM GIPPS OVM_FVDM KRAUSS NEWELL NSM KKW CCS"
 
 for ldm in ${models}
 do

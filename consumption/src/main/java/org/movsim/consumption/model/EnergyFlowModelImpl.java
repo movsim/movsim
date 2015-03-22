@@ -25,6 +25,7 @@
  */
 package org.movsim.consumption.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.movsim.autogen.ConsumptionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,10 +56,18 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
 
     EnergyFlowModelImpl(String keyLabel, ConsumptionModel modelInput) {
         Preconditions.checkNotNull(modelInput);
+        Preconditions.checkArgument(!StringUtils.isBlank(keyLabel));
         vehicle = new VehicleAttributes(modelInput.getVehicleData());
         carPowerModel = new InstantaneousPowerModelImpl(vehicle);
         engineRotationModel = new EngineRotationModel(modelInput.getRotationModel());
-        engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(), engineRotationModel);
+        if(modelInput.isSetEngineCombustionMap()){
+            engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(), engineRotationModel);
+        }
+        else if(modelInput.isSetEngineConstantMap()){
+            engineModel = new EngineConstantMapImpl(modelInput.getEngineConstantMap());
+        }else{
+            throw new IllegalArgumentException("no engine efficiency mapping provided");
+        }
 
         if (modelInput.isOutput()) {
             writeOutput(keyLabel);

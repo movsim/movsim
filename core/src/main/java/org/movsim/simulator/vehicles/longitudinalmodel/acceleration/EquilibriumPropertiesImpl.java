@@ -25,136 +25,151 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.utilities.Tables;
+import org.movsim.autogen.ModelParameterOVMFVDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
+import org.movsim.utilities.LinearInterpolatedFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * The Class EquilibriumPropertiesImpl.
  */
-class EquilibriumPropertiesImpl implements EquilibriumProperties {
+public class EquilibriumPropertiesImpl implements EquilibriumProperties {
 
     /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(EquilibriumPropertiesImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EquilibriumPropertiesImpl.class);
 
-    /** The Constant NRHO. */
-    final static int NRHO = 51; // time critical
+    /** Discretization steps for tabulated function. Time-critical. */
+    private static final int NRHO = 51;
 
-    /** The rho max. */
-    protected final double rhoMax;
+    /** The maximum density */
+    private final double rhoMax;
 
-    /** The length. */
-    final double length;
+    /** The maximum equilibrium flow */
+    double qMax = 0;
 
-    /** The q max. */
-    double qMax;
+    /** The density at maximum flow */
+    double rhoQMax = 0;
 
-    /** The rho q max. */
-    double rhoQMax;
+    private final LinearInterpolatedFunction vEqFunction;
 
-    /** The v eq tab. */
-    protected double[] vEqTab;
+    public EquilibriumPropertiesImpl(double vehicleLength, LongitudinalModelBase model) {
+        this.rhoMax = 1.0 / vehicleLength;
 
-    /**
-     * Constructor.
-     * 
-     * @param length
-     *            the length
-     */
-    EquilibriumPropertiesImpl(double length) {
-        this.length = length;
-        vEqTab = new double[NRHO];
-        rhoMax = 1.0 / length;
+        if (model.hasDesiredSpeed()) {
+            vEqFunction = calcEquilibriumSpeedFunction(model);
+            calcRhoQMax();
+        } else {
+            double[] xDummy = new double[] { 0 };
+            vEqFunction = new LinearInterpolatedFunction(xDummy, xDummy);
+        }
     }
 
-    /**
-     * Gets the q max.
-     * 
-     * @return the q max
-     */
     @Override
     public double getQMax() {
         return qMax;
     }
 
-    /**
-     * Gets the rho max.
-     * 
-     * @return the rho max
-     */
     @Override
     public double getRhoMax() {
         return rhoMax;
     }
 
-    /**
-     * Gets the rho q max.
-     * 
-     * @return the rho q max
-     */
     @Override
     public double getRhoQMax() {
         return rhoQMax;
     }
 
-    /**
-     * Gets the net distance.
-     * 
-     * @param rho
-     *            the rho
-     * @return the net distance
-     */
     @Override
     public double getNetDistance(double rho) {
-        return rho != 0.0 ? (1.0 / rho - 1.0 / rhoMax) : 0.0;
+        return rho != 0.0 ? (1. / rho - 1. / rhoMax) : 0;
     }
 
-    // calculate Qmax, and abszissa rhoQmax from veqtab (necessary for BC)
-    /**
-     * Calc rho q max.
-     */
-    protected void calcRhoQMax() {
-        int ir = 1;
-        qMax = -1.;
-        while (vEqTab[ir] * rhoMax * ir / vEqTab.length > qMax) {
-            qMax = vEqTab[ir] * rhoMax * ir / vEqTab.length;
-            ir++;
-        }
-        rhoQMax = rhoMax * ir / vEqTab.length;
-        logger.debug("rhoQMax = {} = {}/km", rhoQMax, rhoQMax * 1000);
-    }
-
-    /**
-     * Gets the v eq.
-     * 
-     * @param rho
-     *            the rho
-     * @return the v eq
-     */
     @Override
     public double getVEq(double rho) {
-        return Tables.intp(vEqTab, Math.min(rho, rhoMax), 0, rhoMax);
+        // return Tables.intp(vEqTab, Math.min(rho, rhoMax), 0, rhoMax);
+        return vEqFunction.value(rho);
     }
 
-    /**
-     * Gets the rho.
-     * 
-     * @param i
-     *            the i
-     * @return the rho
-     */
     @Override
     public double getRho(int i) {
-        return rhoMax * i / (vEqTab.length - 1);
-    }
-
-    @Override
-    public double getVEq(int i) {
-        return vEqTab[i];
+        return rhoMax * i / (NRHO - 1.);
     }
 
     @Override
     public int getVEqCount() {
-        return vEqTab.length;
+        return vEqFunction.getNumberOfDataPoints();
     }
+
+    /**
+     * Calculates equilibrium velocity {@literal vEq} as a function of the density {@literal rho}.
+     * 
+     * <p>
+     * Finds equilibrium velocities with simple relaxation method: Model for homogeneous traffic solved for the velocity v_it of one
+     * arbitrary vehicle.
+     * 
+     */
+    private LinearInterpolatedFunction calcEquilibriumSpeedFunction(LongitudinalModelBase model) {
+        LOG.info("calc equilibrium speed as function of density for model={}", model.modelName());
+        if (!model.hasDesiredSpeed()) {
+            throw new IllegalArgumentException("longitudinal model " + model.modelName()
+                    + " has no desired speed; vEq(rho) cannot be calculated ");
+        }
+
+        double v0 = model.getDesiredSpeed();
+        double vIteration = v0; // variable of the relaxation equation
+        final int itMax = 100; // number of iteration steps in each relaxation
+        double dtMax = 2; // iteration time step (in s) changes from
+        double dtMin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
+
+        if (model.modelName == ModelName.OVM_FVDM) {
+            ModelParameterOVMFVDM parameter = (ModelParameterOVMFVDM) model.getParameter();
+            dtMax = 0.3 * parameter.getTau();
+            dtMin = 0.1 * parameter.getTau();
+        }
+
+        double[] vEqTab = new double[NRHO];
+        double[] rhoTab = new double[NRHO];
+
+        vEqTab[0] = v0; // start with rho=0
+        rhoTab[0] = 0;
+        for (int ir = 1; ir < vEqTab.length; ir++) {
+            // final double rho = rhoMax * ir / vEqTab.length;
+            final double rho = getRho(ir);
+            final double s = getNetDistance(rho);
+            // start iteration with equilibrium velocity for the previous localDensity
+            vIteration = vEqTab[ir - 1];
+            for (int it = 1; it <= itMax; it++) {
+                final double acc = model.calcAccSimple(s, vIteration, 0.);
+                // interation step in [dtmin, dtmax]
+                final double dtLocal = dtMax * vIteration / v0 + dtMin;
+                // actual relaxation
+                vIteration += dtLocal * acc;
+                if ((vIteration < 0) || (model.hasMinimumGap() && s < model.getMinimumGap())) {
+                    vIteration = 0;
+                }
+            }
+            vEqTab[ir] = vIteration;
+            rhoTab[ir] = rho;
+        }
+
+        return new LinearInterpolatedFunction(rhoTab, vEqTab);
+    }
+
+    // calculate Qmax, and abscissa rhoQmax from veqtab
+    private void calcRhoQMax() {
+        Preconditions.checkNotNull(vEqFunction, "first calc equlibrium funcion vEq");
+        final double incr = rhoMax / (vEqFunction.getNumberOfDataPoints() - 1);
+        qMax = -1.;
+        double rho = 0;
+        while (vEqFunction.value(rho) * rho > qMax) {
+            qMax = vEqFunction.value(rho) * rho;
+            rho += incr;
+        }
+        rhoQMax = rho - incr;
+        LOG.info("rhoQMax = {}/km, qMax={}/h", rhoQMax * 1000, qMax * 3600);
+    }
+
 }

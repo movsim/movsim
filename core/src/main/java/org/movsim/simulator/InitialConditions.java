@@ -18,7 +18,7 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.Tables;
+import org.movsim.utilities.LinearInterpolatedFunction;
 import org.movsim.utilities.Units;
 import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
@@ -40,11 +40,12 @@ public class InitialConditions {
         this.file = Preconditions.checkNotNull(file);
         Preconditions.checkArgument(file.exists(), "initial conditions file " + file + " not found");
         alreadyHandled = new HashSet<>();
-        
+
         movsimInitialConditions = InputLoader.unmarshallInitialConditions(file);
 
         LOG.info("loaded initial conditions from file={}", file);
-        LOG.info("unmarshalled initial conditions for {} roads", movsimInitialConditions.getRoadInitialConditions().size());
+        LOG.info("unmarshalled initial conditions for {} roads", movsimInitialConditions.getRoadInitialConditions()
+                .size());
     }
 
     public void setInitialConditions(RoadNetwork roadNetwork, TrafficCompositionGenerator defaultComposition) {
@@ -54,24 +55,26 @@ public class InitialConditions {
 
             if (roadSegment == null) {
                 // TODO improve error reporting LOG.error
-                throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId +
-                        " not defined in road network");
+                throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId
+                        + " not defined in road network");
             }
 
             if (alreadyHandled.contains(roadId)) {
-                throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId +
-                        " defined twice in input file");
+                throw new IllegalArgumentException("wrong input in " + file + " : road with user Id " + roadId
+                        + " defined twice in input file");
             }
 
             alreadyHandled.add(roadId);
-            
+
             TrafficCompositionGenerator trafficComposition = roadSegment.hasTrafficComposition() ? roadSegment
                     .getTrafficComposition() : defaultComposition;
 
             if (roadIC.isSetMacroscopicInitialConditions()) {
-                setMacroscopicInitialConditions(roadSegment, roadIC.getMacroscopicInitialConditions(), trafficComposition);
+                setMacroscopicInitialConditions(roadSegment, roadIC.getMacroscopicInitialConditions(),
+                        trafficComposition);
             } else if (roadIC.isSetMicroscopicInitialConditions()) {
-                setMicroscopicInitialConditions(roadSegment, roadIC.getMicroscopicInitialConditions(), trafficComposition);
+                setMicroscopicInitialConditions(roadSegment, roadIC.getMicroscopicInitialConditions(),
+                        trafficComposition);
             } else {
                 LOG.warn("no initial conditions defined for roadSegment={}", roadSegment.userId());
             }
@@ -82,12 +85,13 @@ public class InitialConditions {
      * Determine vehicle positions on all relevant lanes while considering minimum gaps to avoid accidents. Gaps are left at the
      * beginning and the end of the road segment on purpose. However, the consistency check is not complete and other segments
      * are not considered.
+     * 
      * @param roadSegment
      * @param macroInitialConditions
      * @param trafficComposition
      */
-    private void setMacroscopicInitialConditions(RoadSegment roadSegment, MacroscopicInitialConditionsType macroInitialConditions,
-            TrafficCompositionGenerator trafficComposition) {
+    private void setMacroscopicInitialConditions(RoadSegment roadSegment,
+            MacroscopicInitialConditionsType macroInitialConditions, TrafficCompositionGenerator trafficComposition) {
 
         LOG.info("set macro initial conditions: generate vehicles from macro-localDensity ");
         final InitialConditionsMacro icMacro = new InitialConditionsMacro(macroInitialConditions.getMacroCondition());
@@ -103,16 +107,17 @@ public class InitialConditions {
                 final TestVehicle testVehicle = trafficComposition.getTestVehicle();
 
                 final double rhoLocal = icMacro.rho(position);
-                double speedInit =
-                        icMacro.hasUserDefinedSpeeds() ? icMacro.vInit(position) : testVehicle.getEquilibriumSpeed(rhoLocal);
+                double speedInit = icMacro.hasUserDefinedSpeeds() ? icMacro.vInit(position) : testVehicle
+                        .getEquilibriumSpeed(rhoLocal);
                 if (LOG.isDebugEnabled() && !icMacro.hasUserDefinedSpeeds()) {
                     LOG.debug("use equilibrium speed={} in macroscopic initial conditions.", speedInit);
                 }
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(String.format(
-                            "macroscopic init conditions from input: roadId=%s, x=%.3f, rho(x)=%.3f/km, speed=%.2fkm/h",
-                            roadSegment.id(), position, Units.INVM_TO_INVKM * rhoLocal, Units.MS_TO_KMH * speedInit));
+                    LOG.debug(String
+                            .format("macroscopic init conditions from input: roadId=%s, x=%.3f, rho(x)=%.3f/km, speed=%.2fkm/h",
+                                    roadSegment.id(), position, Units.INVM_TO_INVKM * rhoLocal, Units.MS_TO_KMH
+                                            * speedInit));
                 }
 
                 if (rhoLocal <= 0) {
@@ -135,11 +140,12 @@ public class InitialConditions {
                     break;
                 }
                 final Vehicle leader = laneSegment.rearVehicle();
-                final double gapToLeader =
-                        (leader == null) ? MovsimConstants.GAP_INFINITY : leader.getRearPosition() - position;
+                final double gapToLeader = (leader == null) ? MovsimConstants.GAP_INFINITY : leader.getRearPosition()
+                        - position;
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(String.format("meanDistance=%.3f, minimumGap=%.2f, posDecrement=%.3f, gapToLeader=%.3f\n",
+                    LOG.debug(String.format(
+                            "meanDistance=%.3f, minimumGap=%.2f, posDecrement=%.3f, gapToLeader=%.3f\n",
                             meanDistanceInLane, minimumGap, posDecrement, gapToLeader));
                 }
 
@@ -147,7 +153,8 @@ public class InitialConditions {
                     veh.setFrontPosition(position);
                     veh.setSpeed(speedInit);
                     veh.setLane(laneSegment.lane());
-                    LOG.debug("add vehicle from macroscopic initial conditions at pos={} with speed={}.", position, speedInit);
+                    LOG.debug("add vehicle from macroscopic initial conditions at pos={} with speed={}.", position,
+                            speedInit);
                     roadSegment.addVehicle(veh);
                 } else {
                     LOG.debug("cannot add vehicle due to gap constraints at pos={} with speed={}.", position, speedInit);
@@ -157,73 +164,73 @@ public class InitialConditions {
         }
     }
 
-    private void setMicroscopicInitialConditions(RoadSegment roadSegment, MicroscopicInitialConditionsType initialMicroConditions,
-            TrafficCompositionGenerator trafficComposition) {
+    private void setMicroscopicInitialConditions(RoadSegment roadSegment,
+            MicroscopicInitialConditionsType initialMicroConditions, TrafficCompositionGenerator trafficComposition) {
         LOG.debug(("set microscopic initial conditions"));
 
         int vehicleNumber = 1;
         for (final VehicleInitialConditionType ic : initialMicroConditions.getVehicleInitialCondition()) {
             // TODO counter
-            final Vehicle veh =
-                    ic.isSetLabel() ? trafficComposition.createVehicle(ic.getLabel()) : trafficComposition.createVehicle();
+            final Vehicle veh = ic.isSetLabel() ? trafficComposition.createVehicle(ic.getLabel()) : trafficComposition
+                    .createVehicle();
             veh.setVehNumber(vehicleNumber++);
             // test-wise:
             veh.setFrontPosition(Math.round(ic.getPosition() / veh.physicalQuantities().getxScale()));
             veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
             final int lane = ic.getLane();
             if (lane < Lanes.MOST_INNER_LANE || lane > roadSegment.laneCount()) {
-                throw new IllegalArgumentException("lane=" + lane + " given in initial condition does not exist for road=" +
-                        roadSegment.id() + " which has a laneCount of " + roadSegment.laneCount());
+                throw new IllegalArgumentException("lane=" + lane
+                        + " given in initial condition does not exist for road=" + roadSegment.id()
+                        + " which has a laneCount of " + roadSegment.laneCount());
             }
             veh.setLane(lane);
             roadSegment.addVehicle(veh);
-            LOG.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f", veh.getLabel(),
-                    veh.lane(), veh.getFrontPosition(), veh.getSpeed()));
+            LOG.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
+                    veh.getLabel(), veh.lane(), veh.getFrontPosition(), veh.getSpeed()));
             if (veh.getLongitudinalModel().isCA()) {
-                LOG.info(String.format("and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh
-                        .physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
+                LOG.info(String.format("and for the CA in physical quantities: front position at x=%.2f, speed=%.2f",
+                        veh.physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
             }
         }
     }
 
     private static class InitialConditionsMacro {
 
-        /** the positions along the road segment in m */
-        private double[] pos;
-
         /** The density profile in 1/m */
-        private double[] rho;
+        private LinearInterpolatedFunction rhoFct;
 
         /** the speeds along the road segment in m/s. Only initialized when initial speeds are provided. */
-        private double[] speed;
+        private LinearInterpolatedFunction speedFct;
 
         /**
          * Instantiates a new initial conditions macro.
          */
         public InitialConditionsMacro(List<MacroConditionType> macroConditions) {
+            createFunctions(macroConditions);
+        }
 
+        private void createFunctions(List<MacroConditionType> macroConditions) {
             final int size = macroConditions.size();
-
-            pos = new double[size];
-            rho = new double[size];
-            if (useUserDefinedSpeeds(macroConditions)) {
-                speed = new double[size];
-            }
-            // case speed = 0 --> set vehicle ast equilibrium speed
-
-            // generateMacroFields: rho guaranteed to be > RHOMIN, v to be < VMAX
+            double[] positions = new double[size];
+            double[] densities = new double[size];
+            double[] speeds = new double[size];
 
             for (int i = 0; i < size; i++) {
                 MacroConditionType localMacroIC = macroConditions.get(i);
                 final double rhoLocal = localMacroIC.getDensityPerKm() * Units.INVKM_TO_INVM;
                 if (rhoLocal > MovsimConstants.SMALL_VALUE) {
-                    pos[i] = localMacroIC.getPosition();
-                    rho[i] = rhoLocal;
-                    if (hasUserDefinedSpeeds()) {
-                        speed[i] = Math.min(localMacroIC.getSpeed(), MovsimConstants.MAX_VEHICLE_SPEED);
-                        LOG.debug("speed={}", speed[i]);
+                    positions[i] = localMacroIC.getPosition();
+                    densities[i] = rhoLocal;
+                    if (useUserDefinedSpeeds(macroConditions)) {
+                        speeds[i] = Math.min(localMacroIC.getSpeed(), MovsimConstants.MAX_VEHICLE_SPEED);
+                        LOG.debug("speed={}", speeds[i]);
                     }
                 }
+            }
+
+            rhoFct = new LinearInterpolatedFunction(positions, densities);
+            if (useUserDefinedSpeeds(macroConditions)) {
+                speedFct = new LinearInterpolatedFunction(positions, speeds);
             }
         }
 
@@ -245,26 +252,17 @@ public class InitialConditions {
         }
 
         public boolean hasUserDefinedSpeeds() {
-            return speed != null;
+            return speedFct != null;
         }
 
-        /**
-         * initial speed.
-         * @param x the x
-         * @return the double
-         */
         public double vInit(double x) {
-            Preconditions.checkNotNull(speed, "expected usage of equilibrium speeds, check with hasUserDefinedSpeeds");
-            return Tables.intpextp(pos, speed, x);
+            Preconditions.checkNotNull(speedFct,
+                    "expected usage of equilibrium speeds, check with hasUserDefinedSpeeds");
+            return speedFct.value(x);
         }
 
-        /**
-         * Density
-         * @param x the x
-         * @return the double
-         */
         public double rho(double x) {
-            return Tables.intpextp(pos, rho, x);
+            return rhoFct.value(x);
         }
     }
 }

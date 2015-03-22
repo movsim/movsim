@@ -31,12 +31,6 @@ import com.google.common.base.Preconditions;
 
 class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
-    private static final double HOUR_TO_SECOND = 1 / 3600.;
-
-    private static final double KW_TO_W = 1000.;
-
-    private static final double LITER_TO_MILLILITER = 1 / 1000.;
-
     /** idling consumption rate (liter/s) */
     private final double idleConsumptionRate; //
 
@@ -64,11 +58,11 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
             EngineRotationModel engineRotationModel) {
         Preconditions.checkNotNull(engineRotationModel);
 
-        this.maxPower = engineCombustionMap.getMaxPowerKW() * KW_TO_W;
-        this.idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * HOUR_TO_SECOND;
+        this.maxPower = engineCombustionMap.getMaxPowerKW() * ConsumptionConstants.KW_TO_W;
+        this.idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * ConsumptionConstants.HOUR_TO_SECOND;
         this.minSpecificConsumption = engineCombustionMap.getCspecMinGPerKwh()
                 * ConsumptionConstants.GRAMM_PER_KWH_TO_KG_PER_WS;
-        this.cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
+        this.cylinderVolume = engineCombustionMap.getCylinderVolL() * ConsumptionConstants.LITER_TO_MILLILITER;
         this.minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
         this.maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
         this.idleMoment = MomentsHelper.getModelLossMoment(engineRotationModel.getIdleFrequency());
