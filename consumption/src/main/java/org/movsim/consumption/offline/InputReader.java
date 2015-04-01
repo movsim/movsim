@@ -111,7 +111,7 @@ public class InputReader {
     private void addNormalizedTime() {
         if (!records.isEmpty()) {
             final double startTime = records.get(0).getTime();
-            System.out.println("add normalized time with startTime=" + startTime);
+            LOG.info("add normalized time with startTime={}", startTime);
             for (ConsumptionDataRecord record : records) {
                 record.setNormalizedTime(record.getTime() - startTime);
             }
@@ -165,7 +165,7 @@ public class InputReader {
             } catch (NumberFormatException e) {
                 LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
             } catch (IllegalArgumentException e) {
-                LOG.info("cannot parse data. Ignore line=", Arrays.toString(line));
+                LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
             }
         }
 

@@ -29,10 +29,14 @@ import java.util.List;
 
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.consumption.model.EnergyFlowModel.FuelAndGear;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
 public class ConsumptionCalculation {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(ConsumptionCalculation.class);
 
     private final EnergyFlowModel model;
 
@@ -50,7 +54,7 @@ public class ConsumptionCalculation {
             double fuelFlowInLiterPerSecond = minFuelFlowResult.getFuelFlowInLiterPerSecond();
             if (fuelFlowInLiterPerSecond > 0.3) {
                 fuelFlowInLiterPerSecond = 0;
-                System.out.println("  !!! Ignore unrealistic consumption, set to 0. Inputdata=" + record.toString());
+                LOG.info("!!! Ignore unrealistic consumption, set to 0. Inputdata={}",  record.toString());
             }
             record.setConsumptionRate(fuelFlowInLiterPerSecond);
             record.setGear(minFuelFlowResult.getGear());
