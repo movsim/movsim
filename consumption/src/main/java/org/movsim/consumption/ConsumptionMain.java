@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.movsim.autogen.BatchData;
 import org.movsim.autogen.Consumption;
 import org.movsim.autogen.ConsumptionModel;
@@ -45,34 +48,34 @@ import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.logging.Logger;
 import org.movsim.xml.InputLoader;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
 public class ConsumptionMain {
 
-    private static final Map<String, EnergyFlowModel> consumptionModelPool = new HashMap<>();
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ConsumptionMain.class);
 
-    public static void main(String[] args) {
+    private final Map<String, EnergyFlowModel> consumptionModelPool = new HashMap<>();
 
-        Locale.setDefault(Locale.US);
+    private Movsim inputData;
 
-        System.out
-                .println("Movsim Energy-Flow Model (Consumption). (c) Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden, see: www.movsim.org");
+    private ConsumptionMain() {
+        init();
+    }
 
-        Logger.initializeLogger();
-
-        MovsimCommandLine.parse(args);
-
+    private void init() {
         File xmlInputFile = ProjectMetaData.getInstance().getInputFile();
-        Movsim inputData = InputLoader.unmarshallMovsim(xmlInputFile);
-
+        this.inputData = InputLoader.unmarshallMovsim(xmlInputFile);
         if (!inputData.isSetConsumption()) {
             throw new IllegalArgumentException("no consumption element configured in input file");
         }
-
         createConsumptionModels(inputData.getConsumption());
+    }
 
-        System.out.println("size of batches = " + inputData.getConsumption().getBatchJobs().getBatchData().size());
+    private void run() {
+        int batchSize = inputData.getConsumption().getBatchJobs().getBatchData().size();
+        LOG.info("size of batches={}", batchSize);
         for (BatchData batch : inputData.getConsumption().getBatchJobs().getBatchData()) {
             InputReader reader = InputReader.create(batch);
             List<ConsumptionDataRecord> records = reader.getRecords();
@@ -83,19 +86,48 @@ public class ConsumptionMain {
 
             calculation.process(records);
 
-            OutputWriter writer = OutputWriter.create(batch, ProjectMetaData.getInstance().getOutputPath());
+            OutputWriter writer = createWriter(batch, ProjectMetaData.getInstance().getOutputPath());
             writer.write(records);
         }
-
-        System.out.println(inputData.getConsumption().getBatchJobs().getBatchData().size() + " batches done.");
-
+        LOG.info("{} batches done.", batchSize);
     }
 
-    private static void createConsumptionModels(Consumption movsimInput) {
+    public static void main(String[] args) {
+        Locale.setDefault(Locale.US);
+        System.out
+                .println("Movsim Energy-Flow Model (Consumption). (c) Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden, see: www.movsim.org");
+        Logger.initializeLogger();
+        MovsimCommandLine.parse(args);
+
+        ConsumptionMain consumptionMain = new ConsumptionMain();
+        consumptionMain.run();
+    }
+
+    private void createConsumptionModels(Consumption movsimInput) {
         for (ConsumptionModel modelInput : movsimInput.getConsumptionModels().getConsumptionModel()) {
             EnergyFlowModel energyFlowModel = EnergyFlowModels.create(modelInput);
             consumptionModelPool.put(modelInput.getLabel(), energyFlowModel);
         }
+    }
+
+    private OutputWriter createWriter(BatchData batch, String outputPath) {
+        String outputFilename = getOutputFilename(batch);
+        File outputFile = new File(outputPath, outputFilename);
+        char separator = batch.getSeparator().charAt(0);
+
+        OutputWriter outputWriter = new OutputWriter(outputFile, separator);
+        if (!batch.getConversions().getTime().equalsIgnoreCase("1")) {
+            DateTimeFormatter dtFormat = DateTimeFormat.forPattern(batch.getConversions().getTime());
+            outputWriter.setTimeFormat(dtFormat);
+        }
+        return outputWriter;
+    }
+
+    private String getOutputFilename(BatchData batch) {
+        if (batch.isSetOutputfile()) {
+            return batch.getOutputfile();
+        }
+        return FilenameUtils.getBaseName(batch.getInputfile()) + "_" + batch.getModel() + ".csv";
     }
 
 }

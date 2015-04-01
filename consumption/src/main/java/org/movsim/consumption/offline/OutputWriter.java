@@ -30,9 +30,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.movsim.autogen.BatchData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -40,44 +40,27 @@ import com.google.common.base.Preconditions;
 
 public class OutputWriter {
 
-    private char separator = ',';
+    private static final Logger LOG = LoggerFactory.getLogger(OutputWriter.class);
+    
     private static final char QUOTE_CHARACTER = CSVWriter.NO_QUOTE_CHARACTER;
+
+    private final char separator;
+    
     private final File output;
     
     private DateTimeFormatter dateTimeFormatter;
 
-    public static OutputWriter create(BatchData batch, String outputPath) {
-        File outputFile = new File(outputPath, batch.getOutputfile());
-        char separator = batch.getSeparator().charAt(0);
-
-        OutputWriter outputWriter = new OutputWriter(outputFile, separator);
-        if (!batch.getConversions().getTime().equalsIgnoreCase("1")) {
-            DateTimeFormatter dtFormat = DateTimeFormat.forPattern(batch.getConversions().getTime());
-            outputWriter.setTimeFormat(dtFormat);
-        }
-        return outputWriter;
-    }
-
-    private void setTimeFormat(DateTimeFormatter dtFormat) {
-        this.dateTimeFormatter = dtFormat;
-    }
-
-    public static OutputWriter create(File outputFile) {
-        return new OutputWriter(outputFile);
-    }
-    
-    private OutputWriter(File output) {
-        Preconditions.checkNotNull(output);
-        if (output.exists()) {
-            System.out.println("overwrites " + output.getAbsolutePath());
-        }
-        System.out.println("writes output to " + output.getAbsolutePath());
-        this.output = output;
-    }
-
     public OutputWriter(File outputFile, char separator) {
-        this(outputFile);
         this.separator = separator;
+        this.output = Preconditions.checkNotNull(outputFile);
+        if (output.exists()) {
+            LOG.info("overwrites {}", output.getAbsolutePath());
+        }
+        LOG.info("writes output to {}", output.getAbsolutePath());
+    }
+
+    public void setTimeFormat(DateTimeFormatter dtFormat) {
+        this.dateTimeFormatter = Preconditions.checkNotNull(dtFormat);
     }
 
     public void write(List<ConsumptionDataRecord> records) {
@@ -97,7 +80,7 @@ public class OutputWriter {
                 try {
                     writer.close();
                 } catch (IOException e) {
-                    // ignore
+                    LOG.error(e.getMessage());
                 }
             }
         }
