@@ -34,7 +34,7 @@ public class EngineConstantMapImpl implements EngineEfficienyModel {
 
     @Override
     public double getFuelFlow(double frequency, double power) {
-        return power*constConsumptionRate;
+        return Math.max(0, power*constConsumptionRate);
     }
 
     @Override
