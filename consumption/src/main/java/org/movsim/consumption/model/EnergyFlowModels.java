@@ -27,9 +27,6 @@ package org.movsim.consumption.model;
 
 import org.movsim.autogen.ConsumptionModel;
 
-/**
- * TODO javadoc for central creation of models
- */
 public final class EnergyFlowModels {
 
     private EnergyFlowModels() {

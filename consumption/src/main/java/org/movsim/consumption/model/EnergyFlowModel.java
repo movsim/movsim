@@ -25,7 +25,6 @@
  */
 package org.movsim.consumption.model;
 
-
 /**
  * TODO javadoc for central API interface
  * 
@@ -35,43 +34,11 @@ public interface EnergyFlowModel {
     double getInstConsumption100km(double v, double acc, int gear, boolean withJante);
 
     double getFuelFlow(double v, double acc, double grade, int gearIndex, boolean withJante);
-    
+
     FuelAndGear getMinFuelFlow(double v, double acc, double grade, boolean withJante);
 
     double getFuelFlowInLiterPerS(double v, double acc);
-    
+
     double getFuelFlowInLiterPerS(double v, double acc, double grade);
 
-    public static class FuelAndGear {
-        private final double fuelFlow;
-        private final int gear;
-
-        public FuelAndGear(double fuelFlow, int gear) {
-            this.fuelFlow = fuelFlow;
-            this.gear = gear;
-        }
-
-        /**
-         * @return the fuel flow in m^3/s
-         */
-        public double getFuelFlow() {
-            return fuelFlow;
-        }
-
-        /**
-         * @return the fuel flow in liter/s
-         */
-        public double getFuelFlowInLiterPerSecond() {
-            // conversion from m^3/s to liter/s
-            return 1000 * fuelFlow;
-        }
-
-        /**
-         * @return the optimal gear
-         */
-        public int getGear() {
-            return gear;
-        }
-
-    }
 }

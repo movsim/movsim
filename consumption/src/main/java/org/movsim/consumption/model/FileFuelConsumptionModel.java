@@ -2,7 +2,7 @@ package org.movsim.consumption.model;
 
 import java.util.Locale;
 
-import org.movsim.consumption.model.EnergyFlowModel.FuelAndGear;
+import org.movsim.autogen.VehicleData;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
 
@@ -32,12 +32,12 @@ class FileFuelConsumptionModel extends FileOutputBase {
         this.fuelConsumption = fuelConsumption;
     }
 
-    public void writeZeroAccelerationTest(VehicleAttributes vehicleAttributes, InstantaneousPowerModel instPowerModel,
+    public void writeZeroAccelerationTest(VehicleData vehicleAttributes, InstantaneousPowerModel instPowerModel,
             EngineRotationModel engineRotationModel) {
         writer = createWriter(String.format(extensionFormatZeroAcceleration, keyLabel));
         writer.printf(outputHeadingZeroAcceleration);
         writer.flush();
-        writer.printf("# veh mass = %.1f%n", vehicleAttributes.mass());
+        writer.printf("# veh mass = %.1f%n", vehicleAttributes.getMass());
         writer.printf("# number of gears = %d%n", engineRotationModel.getNumberOfGears());
         writer.printf("# v[m/s], accFreeWheeling[m/s^2], fuelFlow[l/h], gear, c100[l/100km]%n");
         final double vMax = 200 / 3.6;
@@ -56,7 +56,7 @@ class FileFuelConsumptionModel extends FileOutputBase {
         writer.close();
     }
 
-    public void writeJante(int gearTest, VehicleAttributes vehicle, InstantaneousPowerModel carPowerModel) {
+    public void writeJante(int gearTest, VehicleData vehicle, InstantaneousPowerModel carPowerModel) {
         writer = createWriter(String.format(extensionFormatJante, keyLabel));
         writer.printf(outputHeadingJante);
         writer.flush();
@@ -77,7 +77,7 @@ class FileFuelConsumptionModel extends FileOutputBase {
                 final double v = v_kmh / 3.6;
                 final double acc = 0.01 * (int) (100 * (accmin + iacc * dacc));
                 final double forceMech = carPowerModel.getMechanicalPower(v, acc, 0);
-                final double powMechEl = Math.max(v * forceMech + vehicle.electricPower(), 0.);
+                final double powMechEl = Math.max(v * forceMech + vehicle.getElectricPower(), 0.);
                 double fuelFlow = 100000;
                 int gear = gearTest;
                 if (determineOptimalGear) {
@@ -99,7 +99,7 @@ class FileFuelConsumptionModel extends FileOutputBase {
         writer.close();
     }
 
-    public void writeJanteOptimalGear(VehicleAttributes vehicle, InstantaneousPowerModel carPowerModel) {
+    public void writeJanteOptimalGear(VehicleData vehicle, InstantaneousPowerModel carPowerModel) {
         writeJante(0, vehicle, carPowerModel);
     }
 
@@ -111,7 +111,7 @@ class FileFuelConsumptionModel extends FileOutputBase {
 
         // fstr.printf("# power in idle mode = %f kW%n", 0.001*powIdle);
         writer.printf("# c_spec0 in idle mode = %f kg/kWh = %f Liter/kWh %n", 3.6e6 * engineModel.cSpec0Idle, 3.6e6
-                / ConsumptionConstants.RHO_FUEL_PER_LITER * engineModel.cSpec0Idle);
+                / engineModel.getFuelDensityPerLiter() * engineModel.cSpec0Idle);
 
         final int N_FREQ = 40;
         final double df = (engineRotationModel.getMaxFrequency() - engineRotationModel.getMinFrequency())

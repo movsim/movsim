@@ -34,23 +34,8 @@ final class ConsumptionConstants {
     /** gravitation acceleration (m/s^2) */
     static final double GRAVITATION = 9.81;
 
-    /** 1.29 (kg/m^3) at 0 degrees Celsius, 1014 hPa */
+    /** density of air, 1.29 kg/m^3 at 0 degrees Celsius, 1014 hPa */
     static final double RHO_AIR = 1.29;
-
-    /** density of gasoline (kg/m^3) */
-    static final double RHO_FUEL = 830; // 760; // diesel: 830
-
-    /** density of gasoline (kg/l) */
-    static final double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.;
-
-    /** caloric density of gasoline: 44 MJ/kg (--> 0.76*44 JM/liter) */
-    // static final double CALORIC_DENSITY = 44e6;
-
-    /** transforming factor g/kWh => kg/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
-    static final double GRAMM_PER_KWH_TO_KG_PER_WS = 1 / 3.6e9;
-
-    /** conversion factor from g/kWh to m^3/Ws */
-    static final double CONVERSION_GRAMM_PER_KWH_TO_SI = GRAMM_PER_KWH_TO_KG_PER_WS / RHO_FUEL;
 
     static final double CONVERSION_BAR_TO_PASCAL = 1e5;
 
@@ -59,5 +44,29 @@ final class ConsumptionConstants {
     static final double KW_TO_W = 1000.;
 
     static final double LITER_TO_MILLILITER = 1 / 1000.;
+
+    /**
+     * @param fuelDensity
+     *            in SI units (kg/m^3)
+     * @return the fuel density in kg/l
+     */
+    public static double getFuelDensityPerLiter(double fuelDensity) {
+        return fuelDensity / 1000;
+    }
+
+    /** transforming factor g/kWh => kg/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
+    static final double GRAMM_PER_KWH_TO_KG_PER_WS = 1 / 3.6e9;
+
+    /** conversion factor for converting from liters to m^3 */
+    static final double LITER_TO_CUBICMETER = 1 / 1000.;
+
+    /**
+     * @param fuelDensity
+     *            in kg/m^3
+     * @return the conversion factor from g/kWh to m^3/Ws
+     */
+    public static double conversionFactorGrammPerEnergyToVolumePerEnergy(double fuelDensity) {
+        return GRAMM_PER_KWH_TO_KG_PER_WS / fuelDensity;
+    }
 
 }

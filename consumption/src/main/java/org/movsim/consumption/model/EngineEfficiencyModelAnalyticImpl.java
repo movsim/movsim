@@ -26,13 +26,14 @@
 package org.movsim.consumption.model;
 
 import org.movsim.autogen.EngineCombustionMap;
+import org.movsim.autogen.VehicleData;
 
 import com.google.common.base.Preconditions;
 
 class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     /** idling consumption rate (liter/s) */
-    private final double idleConsumptionRate; //
+    private final double idleConsumptionRate;
 
     /** max. effective mechanical engine power in Watt (W) */
     private final double maxPower;
@@ -54,8 +55,11 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     /** in kg/(Ws) */
     private final double minSpecificConsumption;
 
+    /** density in kg/l */
+    private final double fuelDensityPerLiter;
+
     public EngineEfficiencyModelAnalyticImpl(EngineCombustionMap engineCombustionMap,
-            EngineRotationModel engineRotationModel) {
+            EngineRotationModel engineRotationModel, VehicleData vehicleData) {
         Preconditions.checkNotNull(engineRotationModel);
 
         this.maxPower = engineCombustionMap.getMaxPowerKW() * ConsumptionConstants.KW_TO_W;
@@ -68,7 +72,8 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         this.idleMoment = MomentsHelper.getModelLossMoment(engineRotationModel.getIdleFrequency());
 
         double powerIdle = MomentsHelper.getLossPower(engineRotationModel.getIdleFrequency());
-        this.cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle;
+        this.fuelDensityPerLiter = ConsumptionConstants.getFuelDensityPerLiter(vehicleData.getFuelDensity());
+        this.cSpec0Idle = idleConsumptionRate * fuelDensityPerLiter / powerIdle;
     }
 
     /**
@@ -78,7 +83,7 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         final double indMoment = MomentsHelper.getMoment(mechPower, frequency)
                 + MomentsHelper.getModelLossMoment(frequency);
         final double totalPower = mechPower + MomentsHelper.getLossPower(frequency);
-        final double dotCInLiterPerSecond = 1. / ConsumptionConstants.RHO_FUEL_PER_LITER * totalPower
+        final double dotCInLiterPerSecond = 1. / fuelDensityPerLiter * totalPower
                 * cSpecific0(frequency, indMoment, minSpecificConsumption);
         return Math.max(0, dotCInLiterPerSecond / 1000.);
     }
@@ -110,17 +115,16 @@ class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     }
 
     @Override
-    public double getIdleConsumptionRate() {
-        return idleConsumptionRate;
-    }
-
-    @Override
     public double getMaxPower() {
         return maxPower;
     }
 
     public double getMaxMoment() {
         return cylinderVolume * maxEffPressure / (4 * Math.PI);
+    }
+
+    public double getFuelDensityPerLiter() {
+        return fuelDensityPerLiter;
     }
 
 }

@@ -114,12 +114,20 @@
     </xs:element>
     <xs:element name="VehicleData">
         <xs:complexType>
+			<!-- mass of vehicle (kg) -->
             <xs:attribute name="mass" type="nonNegativeDouble" default="1500" />
+            <!-- front area of vehicle (m^2) -->
             <xs:attribute name="cross_section_surface" type="nonNegativeDouble" default="2.2" />
+            <!-- hydrodynamical cd-value (dimensionless) -->
             <xs:attribute name="cd_value" type="nonNegativeDouble" default="0.32" />
+            <!--  power for electrical consumption (W) -->
             <xs:attribute name="electric_power" type="nonNegativeDouble" default="2000" />
+            <!-- constant friction coefficient (dimensionless) -->
             <xs:attribute name="const_friction" type="nonNegativeDouble" default="0.0145" />
+            <!--  friction coefficient proportial to v (s/m) -->
             <xs:attribute name="v_friction" type="nonNegativeDouble" default="0" />
+            <!-- fuel desity in kg/m^3, gasoline about 760, diesel 830 -->
+            <xs:attribute name="fuel_density" type="nonNegativeDouble" default="760" />
         </xs:complexType>
     </xs:element>
     <xs:element name="EngineCombustionMap">
