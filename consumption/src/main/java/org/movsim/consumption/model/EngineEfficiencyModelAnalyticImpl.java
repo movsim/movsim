@@ -30,7 +30,7 @@ import org.movsim.autogen.VehicleData;
 
 import com.google.common.base.Preconditions;
 
-class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
+class EngineEfficiencyModelAnalyticImpl implements EngineEfficiencyModel {
 
     /** idling consumption rate (liter/s) */
     private final double idleConsumptionRate;

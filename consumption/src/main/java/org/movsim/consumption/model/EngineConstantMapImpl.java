@@ -5,7 +5,7 @@ import org.movsim.autogen.VehicleData;
 
 import com.google.common.base.Preconditions;
 
-public class EngineConstantMapImpl implements EngineEfficienyModel {
+public class EngineConstantMapImpl implements EngineEfficiencyModel {
 
     /** constant value in kg/(Ws) */
     private final double minSpecificConsumption;

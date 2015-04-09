@@ -25,7 +25,7 @@
  */
 package org.movsim.consumption.model;
 
-interface EngineEfficienyModel {
+interface EngineEfficiencyModel {
 
     /**
      * @return returns fuel flow in m^3/s
