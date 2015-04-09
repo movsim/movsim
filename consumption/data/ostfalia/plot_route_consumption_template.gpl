@@ -25,7 +25,7 @@ outputFileEnding=".eps"
 
 gpsInput="-GPS"
 canInput="-CAN"
-modelOutput="-MODEL_".consumptionModelName
+modelOutput="-GPS_".consumptionModelName
 specCons=".specCons_"
 
 # input files
