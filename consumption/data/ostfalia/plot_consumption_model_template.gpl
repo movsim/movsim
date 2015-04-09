@@ -104,11 +104,11 @@ set palette defined ( 0 "#dd00ff",  13 "#9933ff", 20 "#6666ff", 30 "#00eeee",\
 #########################################
 #set term post eps enhanced color solid "Helvetica" 20
 
-set xlabel "V [km/h]"
+set xlabel "speed [km/h]"
 set xrange [10:140]
 
-set ylabel "acc [m/s^{2}]"
-set yrange [-1:1]
+set ylabel "acceleration [m/s^{2}]"
+set yrange [-1:2]
 
 set title "C100 [liters/100 km] for model ".consumptionModelName
 set zrange [0:20]

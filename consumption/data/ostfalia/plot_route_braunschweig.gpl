@@ -5,9 +5,12 @@ baseName = "route-Braunschweig"
 consumptionModelName="AudiA3"
 load "plot_route_consumption_template.gpl"
 
-consumptionModelName="CarGasoline"
+consumptionModelName="AudiA3const"
 load "plot_route_consumption_template.gpl"
 
+consumptionModelName="CarGasoline"
+#load "plot_route_consumption_template.gpl"
+
 consumptionModelName="CarDiesel"
-load "plot_route_consumption_template.gpl"
+#load "plot_route_consumption_template.gpl"
 
