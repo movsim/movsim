@@ -48,7 +48,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
 
     private final InstantaneousPowerModel carPowerModel;
 
-    private final EngineEfficienyModel engineModel;
+    private final EngineEfficiencyModel engineEfficiencyModel;
 
     private final EngineRotationModel engineRotationModel;
 
@@ -67,10 +67,10 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
                 .conversionFactorGrammPerEnergyToVolumePerEnergy(fuelDensity);
         fuelFlowError = POW_ERROR * limitSpecificConsumption;
         if (modelInput.isSetEngineCombustionMap()) {
-            engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(),
+            engineEfficiencyModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(),
                     engineRotationModel, vehicleData);
         } else if (modelInput.isSetEngineConstantMap()) {
-            engineModel = new EngineConstantMapImpl(modelInput.getEngineConstantMap(), vehicleData);
+            engineEfficiencyModel = new EngineConstantMapImpl(modelInput.getEngineConstantMap(), vehicleData);
         } else {
             throw new IllegalArgumentException("no engine efficiency mapping provided");
         }
@@ -126,13 +126,13 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
         double fuelFlow = fuelFlowError;
 
         if (engineRotationModel.isFrequencyPossible(v, gearIndex) || gearIndex == 0) {
-            fuelFlow = engineModel.getFuelFlow(fMot, powMechEl);
+            fuelFlow = engineEfficiencyModel.getFuelFlow(fMot, powMechEl);
         }
 
         // check if motor regime can be reached; otherwise increase fuelFlow prohibitively
 
         // indicates that too high power required
-        if (powMech > engineModel.getMaxPower()) {
+        if (powMech > engineEfficiencyModel.getMaxPower()) {
             fuelFlow = fuelFlowError;
         }
 
@@ -207,27 +207,19 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
         return getMinFuelFlow(v, acc, grade, true).getFuelFlowInLiterPerSecond();
     }
 
-    // TODO draw out
+    // TODO Output needs to be refactored!
     private void writeOutput(String keyLabel) {
         final FileFuelConsumptionModel fileOutput = new FileFuelConsumptionModel(keyLabel, this);
-
         fileOutput.writeJanteOptimalGear(vehicleData, carPowerModel);
-
         fileOutput.writeZeroAccelerationTest(vehicleData, carPowerModel, engineRotationModel);
 
-        if (engineModel instanceof EngineEfficiencyModelAnalyticImpl) {
-            fileOutput.writeSpecificConsumption(engineRotationModel, (EngineEfficiencyModelAnalyticImpl) engineModel);
-        } else if (engineModel instanceof EngineConstantMapImpl) {
-            // TODO fileOutput.writeSpecificConsumption(engineRotationModel, (EngineConstantMapImpl) engineModel);
+        // TODO design writer in a more object-oriented way
+        if (engineEfficiencyModel instanceof EngineEfficiencyModelAnalyticImpl) {
+            fileOutput.writeSpecificConsumption(engineRotationModel, (EngineEfficiencyModelAnalyticImpl) engineEfficiencyModel);
+        } else if (engineEfficiencyModel instanceof EngineConstantMapImpl) {
+            fileOutput.writeSpecificConsumption(engineRotationModel, (EngineConstantMapImpl) engineEfficiencyModel);
         }
 
-        // jante output per gear
-        // for (int gearIndex = 0; gearIndex < engineRotationModel.getMaxGearIndex(); gearIndex++) {
-        // final int gear = gearIndex + 1;
-        // final String strGear = new Integer(gear).toString();
-        // final String filename = projectName + ".Jante" + strGear;
-        // writeJanteDataFields(gear, filename);
-        // }
     }
 
 }

@@ -5,9 +5,9 @@ import org.movsim.autogen.VehicleData;
 
 import com.google.common.base.Preconditions;
 
-public class EngineConstantMapImpl implements EngineEfficienyModel {
+public class EngineConstantMapImpl implements EngineEfficiencyModel {
 
-    /** in kg/(Ws) */
+    /** constant value in kg/(Ws) */
     private final double minSpecificConsumption;
 
     /** consumption rate (m^3/s) */
@@ -18,6 +18,9 @@ public class EngineConstantMapImpl implements EngineEfficienyModel {
 
     private final double idleConsumptionRate; // TODO not yet used
 
+    /** density in kg/l */
+    private final double fuelDensityPerLiter;
+
     public EngineConstantMapImpl(EngineConstantMap engineMap, VehicleData vehicleData) {
         Preconditions.checkNotNull(engineMap);
         this.maxPower = engineMap.getMaxPowerKW() * ConsumptionConstants.KW_TO_W;
@@ -26,6 +29,7 @@ public class EngineConstantMapImpl implements EngineEfficienyModel {
         double fuelDensity = 1. / ConsumptionConstants.LITER_TO_CUBICMETER
                 * ConsumptionConstants.getFuelDensityPerLiter(vehicleData.getFuelDensity());
         this.constConsumptionRate = minSpecificConsumption / fuelDensity;
+        this.fuelDensityPerLiter = ConsumptionConstants.getFuelDensityPerLiter(vehicleData.getFuelDensity());
     }
 
     @Override
@@ -36,6 +40,17 @@ public class EngineConstantMapImpl implements EngineEfficienyModel {
     @Override
     public double getMaxPower() {
         return maxPower;
+    }
+
+    /**
+     * @return constant specific consumption in kg/(Ws)
+     */
+    double getMinSpecificConsumption() {
+        return minSpecificConsumption;
+    }
+
+    public double getFuelDensityPerLiter() {
+        return fuelDensityPerLiter;
     }
 
 }

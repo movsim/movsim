@@ -110,8 +110,10 @@ class FileFuelConsumptionModel extends FileOutputBase {
         writer.flush();
 
         // fstr.printf("# power in idle mode = %f kW%n", 0.001*powIdle);
-        writer.printf("# c_spec0 in idle mode = %f kg/kWh = %f Liter/kWh %n", 3.6e6 * engineModel.cSpec0Idle, 3.6e6
-                / engineModel.getFuelDensityPerLiter() * engineModel.cSpec0Idle);
+        writer.printf("# c_spec0 in idle mode = %f kg/kWh = %f Liter/kWh %n", engineModel.cSpec0Idle
+                / ConsumptionConstants.KILOGRAMM_PER_KWH_TO_KG_PER_WS,
+                engineModel.cSpec0Idle / engineModel.getFuelDensityPerLiter()
+                        / ConsumptionConstants.KILOGRAMM_PER_KWH_TO_KG_PER_WS);
 
         final int N_FREQ = 40;
         final double df = (engineRotationModel.getMaxFrequency() - engineRotationModel.getMinFrequency())
@@ -134,6 +136,39 @@ class FileFuelConsumptionModel extends FileOutputBase {
             writer.println(); // gnuplot block
         }
         writer.close();
+    }
+
+    public void writeSpecificConsumption(EngineRotationModel engineRotationModel, EngineConstantMapImpl engineModel) {
+        writer = createWriter(String.format(extensionFormatSpecificConsumption, keyLabel));
+        writer.printf(outputHeadingSpecificConsumption);
+        writer.flush();
+
+        writer.printf("# specific consumption = %f kg/kWh = %f Liter/kWh %n", engineModel.getMinSpecificConsumption()
+                / ConsumptionConstants.KILOGRAMM_PER_KWH_TO_KG_PER_WS, engineModel.getMinSpecificConsumption()
+                / engineModel.getFuelDensityPerLiter() / ConsumptionConstants.KILOGRAMM_PER_KWH_TO_KG_PER_WS);
+
+        final int N_FREQ = 40;
+        final double df = (engineRotationModel.getMaxFrequency() - engineRotationModel.getMinFrequency())
+                / (N_FREQ - 1);
+        final int N_POW = 80;
+        final double powMin = -20000; // range
+        final double dPow = (engineModel.getMaxPower() - powMin) / (N_POW - 1);
+
+        for (int i = 0; i < N_FREQ; i++) {
+            final double f = engineRotationModel.getMinFrequency() + i * df;
+            for (int j = 0; j <= N_POW; j++) {
+                final double pow = powMin + j * dPow;
+                final double dotC = engineModel.getFuelFlow(f, pow);
+                final double indMoment = MomentsHelper.getMoment(pow, f);
+                final double cSpec = engineModel.getMinSpecificConsumption();
+                // factor 3.6e6 for converting from m^3/s to liter/h
+                writer.printf(Locale.US, "%.1f, %.3f, %.9f, %.9f, %.9f%n", f * 60, pow / 1000., 3.6e6 * dotC,
+                        indMoment, cSpec * 3.6e9);
+            }
+            writer.println(); // gnuplot block
+        }
+        writer.close();
+
     }
 
 }

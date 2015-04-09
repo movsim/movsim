@@ -25,13 +25,16 @@
  */
 package org.movsim.consumption.model;
 
-interface EngineEfficienyModel {
+interface EngineEfficiencyModel {
 
     /**
-     * @return returns fuel flow in m^3/s
+     * @return fuel flow in m^3/s
      */
     double getFuelFlow(double frequency, double power);
 
+    /**
+     * @return maximum engine power in W
+     */
     double getMaxPower();
 
 }

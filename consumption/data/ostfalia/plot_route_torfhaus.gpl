@@ -10,17 +10,10 @@ consumptionModelName="AudiA3const"
 load "plot_route_consumption_template.gpl"
 
 consumptionModelName="CarGasoline"
-load "plot_route_consumption_template.gpl"
+#load "plot_route_consumption_template.gpl"
 
 consumptionModelName="CarDiesel"
-load "plot_route_consumption_template.gpl"
+#load "plot_route_consumption_template.gpl"
 
-consumptionModelName="AudiA3Gasoline"
-consumptionModel="AudiA3_Gasoline"
-load "plot_route_consumption_template.gpl"
-
-consumptionModelName="AudiA3HeavierAndLarger"
-consumptionModel="AudiA3_HeavierAndLarger"
-load "plot_route_consumption_template.gpl"
 
 
