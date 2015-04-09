@@ -207,27 +207,19 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
         return getMinFuelFlow(v, acc, grade, true).getFuelFlowInLiterPerSecond();
     }
 
-    // TODO draw out
+    // TODO Output needs to be refactored!
     private void writeOutput(String keyLabel) {
         final FileFuelConsumptionModel fileOutput = new FileFuelConsumptionModel(keyLabel, this);
-
         fileOutput.writeJanteOptimalGear(vehicleData, carPowerModel);
-
         fileOutput.writeZeroAccelerationTest(vehicleData, carPowerModel, engineRotationModel);
 
+        // TODO design writer in a more object-oriented way
         if (engineModel instanceof EngineEfficiencyModelAnalyticImpl) {
             fileOutput.writeSpecificConsumption(engineRotationModel, (EngineEfficiencyModelAnalyticImpl) engineModel);
         } else if (engineModel instanceof EngineConstantMapImpl) {
-            // TODO fileOutput.writeSpecificConsumption(engineRotationModel, (EngineConstantMapImpl) engineModel);
+            fileOutput.writeSpecificConsumption(engineRotationModel, (EngineConstantMapImpl) engineModel);
         }
 
-        // jante output per gear
-        // for (int gearIndex = 0; gearIndex < engineRotationModel.getMaxGearIndex(); gearIndex++) {
-        // final int gear = gearIndex + 1;
-        // final String strGear = new Integer(gear).toString();
-        // final String filename = projectName + ".Jante" + strGear;
-        // writeJanteDataFields(gear, filename);
-        // }
     }
 
 }
