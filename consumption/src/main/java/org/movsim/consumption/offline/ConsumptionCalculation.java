@@ -28,7 +28,7 @@ package org.movsim.consumption.offline;
 import java.util.List;
 
 import org.movsim.consumption.model.EnergyFlowModel;
-import org.movsim.consumption.model.EnergyFlowModel.FuelAndGear;
+import org.movsim.consumption.model.FuelAndGear;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

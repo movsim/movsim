@@ -6,6 +6,9 @@ baseName = "route-Seesen"
 consumptionModelName="AudiA3"
 load "plot_route_consumption_template.gpl"
 
+consumptionModelName="AudiA3const"
+load "plot_route_consumption_template.gpl"
+
 consumptionModelName="CarGasoline"
 load "plot_route_consumption_template.gpl"
 

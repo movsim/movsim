@@ -27,24 +27,24 @@ package org.movsim.consumption.model;
 
 import org.apache.commons.lang3.StringUtils;
 import org.movsim.autogen.ConsumptionModel;
+import org.movsim.autogen.VehicleData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-// TODO Fix output after refactoring
 class EnergyFlowModelImpl implements EnergyFlowModel {
 
     /** The Constant logger. */
     private static final Logger LOG = LoggerFactory.getLogger(EnergyFlowModelImpl.class);
 
     /** if cons(m^3/(Ws)) higher, point (f,pe) out of Bounds 900=3-4 times the minimum, in m^3/(Ws) */
-    private final double LIMIT_SPEC_CONS = 900 * ConsumptionConstants.CONVERSION_GRAMM_PER_KWH_TO_SI;
+    private final double limitSpecificConsumption;
 
     /** extremely high flow in motor regimes that cannot be reached. Set to 10000 KW */
     private final double POW_ERROR = 1e7;
 
-    private final double FUELFLOW_ERROR = POW_ERROR * LIMIT_SPEC_CONS;
+    private final double fuelFlowError;
 
     private final InstantaneousPowerModel carPowerModel;
 
@@ -52,20 +52,26 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
 
     private final EngineRotationModel engineRotationModel;
 
-    private final VehicleAttributes vehicle;
+    private final VehicleData vehicleData;
 
     EnergyFlowModelImpl(String keyLabel, ConsumptionModel modelInput) {
         Preconditions.checkNotNull(modelInput);
         Preconditions.checkArgument(!StringUtils.isBlank(keyLabel));
-        vehicle = new VehicleAttributes(modelInput.getVehicleData());
-        carPowerModel = new InstantaneousPowerModelImpl(vehicle);
+        vehicleData = modelInput.getVehicleData();
+        carPowerModel = new InstantaneousPowerModelImpl(vehicleData);
         engineRotationModel = new EngineRotationModel(modelInput.getRotationModel());
-        if(modelInput.isSetEngineCombustionMap()){
-            engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(), engineRotationModel);
-        }
-        else if(modelInput.isSetEngineConstantMap()){
-            engineModel = new EngineConstantMapImpl(modelInput.getEngineConstantMap());
-        }else{
+
+        // limit values, dependent on fuel density
+        double fuelDensity = vehicleData.getFuelDensity();
+        limitSpecificConsumption = 900 * ConsumptionConstants
+                .conversionFactorGrammPerEnergyToVolumePerEnergy(fuelDensity);
+        fuelFlowError = POW_ERROR * limitSpecificConsumption;
+        if (modelInput.isSetEngineCombustionMap()) {
+            engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(),
+                    engineRotationModel, vehicleData);
+        } else if (modelInput.isSetEngineConstantMap()) {
+            engineModel = new EngineConstantMapImpl(modelInput.getEngineConstantMap(), vehicleData);
+        } else {
             throw new IllegalArgumentException("no engine efficiency mapping provided");
         }
 
@@ -75,7 +81,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
     }
 
     double fuelflowError() {
-        return FUELFLOW_ERROR;
+        return fuelFlowError;
     }
 
     /**
@@ -113,11 +119,11 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
         // resulting in idle fuel consumption from engine specification
         // modeling assumption becomes invalid if lot of standstills are considered
         // electric consumption is active and no electric energy is provided by generator
-        final double elecPower = (v < 1) ? 0 : vehicle.electricPower();
+        final double elecPower = (v < 1) ? 0 : vehicleData.getElectricPower();
 
         final double powMechEl = powMech + elecPower;// can be <0
 
-        double fuelFlow = FUELFLOW_ERROR;
+        double fuelFlow = fuelFlowError;
 
         if (engineRotationModel.isFrequencyPossible(v, gearIndex) || gearIndex == 0) {
             fuelFlow = engineModel.getFuelFlow(fMot, powMechEl);
@@ -127,24 +133,24 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
 
         // indicates that too high power required
         if (powMech > engineModel.getMaxPower()) {
-            fuelFlow = FUELFLOW_ERROR;
+            fuelFlow = fuelFlowError;
         }
 
         // indicates that too high motor frequency
         if (withJante && (fMot > engineRotationModel.getMaxFrequency())) {
-                LOG.info(String
-                        .format("v_kmh=%f, acc=%f, gear=%d, motor frequency=%d/min too high -- > return fuelErrorConsumption: %.2f",
-                                (3.6 * v), acc, gearIndex + 1, (int) (fMot * 60), FUELFLOW_ERROR));
-            fuelFlow = FUELFLOW_ERROR;
+            LOG.info(String
+                    .format("v_kmh=%f, acc=%f, gear=%d, motor frequency=%d/min too high -- > return fuelErrorConsumption: %.2f",
+                            (3.6 * v), acc, gearIndex + 1, (int) (fMot * 60), fuelFlowError));
+            fuelFlow = fuelFlowError;
         }
 
         // indicates too low motor frequency
         if (withJante && (fMot < engineRotationModel.getMinFrequency())) {
             if (gearIndex == 0) {
-                fuelFlow = vehicle.electricPower() * LIMIT_SPEC_CONS;
+                fuelFlow = vehicleData.getElectricPower() * limitSpecificConsumption;
                 LOG.info(String.format("v=%f, gear=%d, fuelFlow=%f %n", v, gearIndex + 1, fuelFlow));
             } else {
-                fuelFlow = FUELFLOW_ERROR;
+                fuelFlow = fuelFlowError;
             }
         }
 
@@ -165,7 +171,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
     @Override
     public FuelAndGear getMinFuelFlow(double v, double acc, double grade, boolean withJante) {
         int gear = 1;
-        double fuelFlow = FUELFLOW_ERROR;
+        double fuelFlow = fuelFlowError;
         for (int testGearIndex = engineRotationModel.getMaxGearIndex(); testGearIndex >= 0; testGearIndex--) {
             final double fuelFlowGear = getFuelFlow(v, acc, grade, testGearIndex, withJante);
             if (fuelFlowGear < fuelFlow) {
@@ -205,12 +211,14 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
     private void writeOutput(String keyLabel) {
         final FileFuelConsumptionModel fileOutput = new FileFuelConsumptionModel(keyLabel, this);
 
-        fileOutput.writeJanteOptimalGear(vehicle, carPowerModel);
+        fileOutput.writeJanteOptimalGear(vehicleData, carPowerModel);
 
-        fileOutput.writeZeroAccelerationTest(vehicle, carPowerModel, engineRotationModel);
+        fileOutput.writeZeroAccelerationTest(vehicleData, carPowerModel, engineRotationModel);
 
-        if(engineModel instanceof EngineEfficiencyModelAnalyticImpl){
+        if (engineModel instanceof EngineEfficiencyModelAnalyticImpl) {
             fileOutput.writeSpecificConsumption(engineRotationModel, (EngineEfficiencyModelAnalyticImpl) engineModel);
+        } else if (engineModel instanceof EngineConstantMapImpl) {
+            // TODO fileOutput.writeSpecificConsumption(engineRotationModel, (EngineConstantMapImpl) engineModel);
         }
 
         // jante output per gear
