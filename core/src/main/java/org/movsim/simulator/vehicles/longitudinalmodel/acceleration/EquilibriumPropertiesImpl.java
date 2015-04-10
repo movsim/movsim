@@ -38,6 +38,8 @@ import com.google.common.base.Preconditions;
  */
 public class EquilibriumPropertiesImpl implements EquilibriumProperties {
 
+    private static final double TINY_VALUE = 0.0001;
+
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(EquilibriumPropertiesImpl.class);
 
@@ -56,7 +58,10 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
     private final LinearInterpolatedFunction vEqFunction;
 
     public EquilibriumPropertiesImpl(double vehicleLength, LongitudinalModelBase model) {
-        this.rhoMax = 1.0 / vehicleLength;
+        this.rhoMax = 1.0 / Math.max(vehicleLength, TINY_VALUE);
+        if (vehicleLength < TINY_VALUE) {
+            LOG.warn("vehicle length is artifically small={}, asume finite length {}", vehicleLength, TINY_VALUE);
+        }
 
         if (model.hasDesiredSpeed()) {
             vEqFunction = calcEquilibriumSpeedFunction(model);
@@ -119,6 +124,10 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
         }
 
         double v0 = model.getDesiredSpeed();
+        if (v0 < TINY_VALUE) {
+            LOG.warn("desired speed is artifically small for model={}, assume finite value={}", model.modelName(),
+                    TINY_VALUE);
+        }
         double vIteration = v0; // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         double dtMax = 2; // iteration time step (in s) changes from
@@ -144,7 +153,7 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.calcAccSimple(s, vIteration, 0.);
                 // interation step in [dtmin, dtmax]
-                final double dtLocal = dtMax * vIteration / v0 + dtMin;
+                final double dtLocal = dtMax * vIteration / Math.max(v0, TINY_VALUE) + dtMin;
                 // actual relaxation
                 vIteration += dtLocal * acc;
                 if ((vIteration < 0) || (model.hasMinimumGap() && s < model.getMinimumGap())) {
