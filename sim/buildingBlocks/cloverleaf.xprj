@@ -10,7 +10,7 @@
                 <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
-        <!-- trucks -->
+        <!-- trucks taking the exits -->
         <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="9">
             <AccelerationModelType>
                 <ModelParameterACC v0="25" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" coolness="1" />
@@ -36,8 +36,8 @@
             </TrafficComposition>
             <Road id="1">
                 <TrafficComposition>
-                    <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
-                    <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="north" />
+                    <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
+                    <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="north" />
                     <VehicleType label="ACC3" fraction="0.1" relative_v0_randomization="0.2" route_label="north2" />
                 </TrafficComposition>
                 <TrafficSource logging="false">
@@ -46,8 +46,8 @@
             </Road>
             <Road id="10">
                 <TrafficComposition>
-                    <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
-                    <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="south" />
+                    <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
+                    <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="south" />
                     <VehicleType label="ACC3" fraction="0.1" relative_v0_randomization="0.2" route_label="south2" />
                 </TrafficComposition>
                 <TrafficSource>
@@ -56,8 +56,8 @@
             </Road>
             <Road id="19">
                 <TrafficComposition>
-                    <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
-                    <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="east" />
+                    <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
+                    <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="east" />
                     <VehicleType label="ACC3" fraction="0.1" relative_v0_randomization="0.2" route_label="east2" />
                 </TrafficComposition>
                 <TrafficSource>
@@ -66,8 +66,8 @@
             </Road>
             <Road id="28">
                 <TrafficComposition>
-                    <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
-                    <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="west" />
+                    <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
+                    <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="west" />
                     <VehicleType label="ACC3" fraction="0.1" relative_v0_randomization="0.2" route_label="west2" />
                 </TrafficComposition>
                 <TrafficSource>
@@ -76,12 +76,14 @@
             </Road>
         </Simulation>
         <Routes>
-            <Route label="east">
-                <Road id="19" />
-                <Road id="20" />
-                <Road id="39" />
+            <!-- source south in direction north, take first exit in direction north -->
+            <Route label="north">
+                <Road id="1" />
+                <Road id="2" />
+                <Road id="37" />
             </Route>
-            <Route label="east2">
+            <!-- take second exit in direction north -->
+            <Route label="north2">
                 <Road id="1" />
                 <Road id="2" />
                 <Road id="3" />
@@ -90,33 +92,7 @@
                 <Road id="6" />
                 <Road id="41" />
             </Route>
-            <Route label="north">
-                <Road id="1" />
-                <Road id="2" />
-                <Road id="37" />
-            </Route>
-            <Route label="north2">
-                <Road id="19" />
-                <Road id="20" />
-                <Road id="21" />
-                <Road id="22" />
-                <Road id="23" />
-                <Road id="24" />
-                <Road id="43" />
-            </Route>
-            <Route label="west">
-                <Road id="28" />
-                <Road id="29" />
-                <Road id="40" />
-            </Route>
-            <Route label="west2">
-                <Road id="29" />
-                <Road id="30" />
-                <Road id="31" />
-                <Road id="32" />
-                <Road id="33" />
-                <Road id="44" />
-            </Route>
+            <!-- source north in driving direction south -->
             <Route label="south">
                 <Road id="10" />
                 <Road id="11" />
@@ -130,6 +106,36 @@
                 <Road id="14" />
                 <Road id="15" />
                 <Road id="42" />
+            </Route>
+            <!-- source west direction east -->
+            <Route label="west">
+                <Road id="28" />
+                <Road id="29" />
+                <Road id="40" />
+            </Route>
+            <Route label="west2">
+                <Road id="28" />
+                <Road id="29" />
+                <Road id="30" />
+                <Road id="31" />
+                <Road id="32" />
+                <Road id="33" />
+                <Road id="44" />
+            </Route>
+            <!-- source east direction west -->
+            <Route label="east">
+                <Road id="19" />
+                <Road id="20" />
+                <Road id="39" />
+            </Route>
+            <Route label="east2">
+                <Road id="19" />
+                <Road id="20" />
+                <Road id="21" />
+                <Road id="22" />
+                <Road id="23" />
+                <Road id="24" />
+                <Road id="43" />
             </Route>
         </Routes>
     </Scenario>
