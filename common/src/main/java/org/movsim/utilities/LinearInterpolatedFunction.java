@@ -1,7 +1,11 @@
 package org.movsim.utilities;
 
+import java.util.Arrays;
+
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -13,6 +17,10 @@ import com.google.common.base.Preconditions;
  * In case of only one data point no splineFunction is created.
  */
 public class LinearInterpolatedFunction {
+    
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(LinearInterpolatedFunction.class);
+
 
     private PolynomialSplineFunction splineFunction;
 
@@ -35,6 +43,10 @@ public class LinearInterpolatedFunction {
 
         if (x.length > 1) {
             LinearInterpolator linearInterpolator = new LinearInterpolator();
+            if(LOG.isDebugEnabled()){
+                LOG.debug("x={}", Arrays.toString(x));
+                LOG.debug("y={}", Arrays.toString(y));
+            }
             splineFunction = linearInterpolator.interpolate(x, y);
         }
         
