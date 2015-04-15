@@ -53,6 +53,8 @@ public final class ProjectMetaData {
 
     private boolean writeDotFile = false;
 
+    private boolean scanMode = false;
+
     private long timeOffsetMillis = 0;
 
     /**
@@ -303,5 +305,13 @@ public final class ProjectMetaData {
         Preconditions.checkNotNull(filename);
         Preconditions.checkArgument(!filename.isEmpty(), "filename=" + filename);
         return new File(getPathToProjectFile() + filename);
+    }
+    
+    public void setScanMode(boolean scanMode) {
+        this.scanMode = scanMode;
+    }
+
+    public boolean isScanMode() {
+        return scanMode;
     }
 }

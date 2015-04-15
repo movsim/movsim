@@ -39,8 +39,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     private boolean isWithCrashExit;
 
-    private boolean hasVariableMessageSign;
-
     private ExternalVehiclesController externalVehicleController;
 
     /**
@@ -89,11 +87,15 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
+<<<<<<< HEAD
      * Clear the road network so that it is empty and ready to accept new RoadSegments, Vehicles, sources, sinks and junctions.
+=======
+     * Clear the road network so that it is empty and ready to accept new RoadSegmentUtils, Vehicles, sources, sinks and
+     * junctions.
+>>>>>>> alternatives
      */
     public void clear() {
         name = null;
-        hasVariableMessageSign = false;
         // LaneChangeModel.resetCount();
         // LongitudinalDriverModel.resetNextId();
         RoadSegment.resetNextId();
@@ -110,8 +112,14 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
+<<<<<<< HEAD
      * Returns the number of RoadSegments in the road network.
      * @return the number of RoadSegments in the road network
+=======
+     * Returns the number of RoadSegmentUtils in the road network.
+     * 
+     * @return the number of RoadSegmentUtils in the road network
+>>>>>>> alternatives
      */
     public final int size() {
         return roadSegments.size();
@@ -184,6 +192,10 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
             roadSegment.updateRoadConditions(dt, simulationTime, iterationCount);
         }
 
+        for (RoadSegment roadSegment : roadSegments) {
+            roadSegment.makeDynamicRoutingDecisions(dt, simulationTime, iterationCount);
+        }
+
         // Note: must do lane changes before vehicle positions are updated (or after outFlow) to ensure
         // the vehicle's roadSegmentId is correctly set
         for (final RoadSegment roadSegment : roadSegments) {
@@ -217,14 +229,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         this.isWithCrashExit = isWithCrashExit;
     }
 
-    public void setHasVariableMessageSign(boolean hasVariableMessageSign) {
-        this.hasVariableMessageSign = hasVariableMessageSign;
-    }
-
-    public boolean hasVariableMessageSign() {
-        return hasVariableMessageSign;
-    }
-
     /**
      * Returns the number of vehicles on this road network.
      * @return the number of vehicles on this road network
@@ -256,7 +260,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public double vehiclesMeanSpeed() {
         double averageSpeed = 0;
         for (final RoadSegment roadSegment : roadSegments) {
-            averageSpeed += roadSegment.meanSpeed();
+            averageSpeed += roadSegment.meanSpeedOfVehicles();
         }
         return averageSpeed / roadSegments.size();
     }
@@ -299,12 +303,22 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * Returns the number of vehicles on route.
      * @return the number of vehicles on given route.
      */
-    public static int vehicleCount(Route route) {
+    public int vehicleCount(Route route) {
         int vehicleCount = 0;
         for (final RoadSegment roadSegment : route) {
             vehicleCount += roadSegment.getVehicleCount();
         }
         return vehicleCount;
+    }
+    
+    public int totalVehiclesRemoved() {
+        int totalVehiclesRemoved = 0;
+        for (RoadSegment roadSegment : roadSegments) {
+            if (roadSegment.sink() != null) {
+                totalVehiclesRemoved += roadSegment.sink().totalVehiclesRemoved();
+            }
+        }
+        return totalVehiclesRemoved;
     }
 
     /**
@@ -314,31 +328,13 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public double totalVehicleTravelTime() {
         double totalVehicleTravelTime = 0.0;
         for (RoadSegment roadSegment : roadSegments) {
-            totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
+            // TODO hidden vehicles are wrongly taken into account
+            // totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
             if (roadSegment.sink() != null) {
                 totalVehicleTravelTime += roadSegment.sink().totalVehicleTravelTime();
             }
         }
         return totalVehicleTravelTime;
-    }
-
-    public static double totalVehicleTravelTime(Route route) {
-        double totalVehicleTravelTime = 0.0;
-        for (final RoadSegment roadSegment : route) {
-            totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
-            if (roadSegment.sink() != null) {
-                totalVehicleTravelTime += roadSegment.sink().totalVehicleTravelTime();
-            }
-        }
-        return totalVehicleTravelTime;
-    }
-
-    public static double instantaneousTravelTime(Route route) {
-        double instantaneousTravelTime = 0;
-        for (final RoadSegment roadSegment : route) {
-            instantaneousTravelTime += roadSegment.instantaneousTravelTime();
-        }
-        return instantaneousTravelTime;
     }
 
     /**
@@ -348,17 +344,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public double totalVehicleTravelDistance() {
         double totalVehicleTravelDistance = 0.0;
         for (RoadSegment roadSegment : roadSegments) {
-            totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
-            if (roadSegment.sink() != null) {
-                totalVehicleTravelDistance += roadSegment.sink().totalVehicleTravelDistance();
-            }
-        }
-        return totalVehicleTravelDistance;
-    }
-
-    public static double totalVehicleTravelDistance(Route route) {
-        double totalVehicleTravelDistance = 0.0;
-        for (final RoadSegment roadSegment : route) {
             totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
             if (roadSegment.sink() != null) {
                 totalVehicleTravelDistance += roadSegment.sink().totalVehicleTravelDistance();
@@ -380,14 +365,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
             }
         }
         return totalVehicleFuelUsedLiters;
-    }
-
-    public static double instantaneousFuelUsedLiters(Route route) {
-        double instantaneousConsumption = 0;
-        for (final RoadSegment roadSegment : route) {
-            instantaneousConsumption += roadSegment.instantaneousConsumptionLitersPerSecond();
-        }
-        return instantaneousConsumption;
     }
 
     public void setExternalVehicleController(ExternalVehiclesController externalVehicleController) {

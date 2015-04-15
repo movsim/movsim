@@ -10,9 +10,9 @@ public enum ShutdownHooks implements SimulationShutDown {
     private final List<SimulationShutDown> callbacks = new ArrayList<>();
 
     public void addCallback(final SimulationShutDown callback) {
-        if (callback != null) {
-            callbacks.add(callback);
-        }
+	if (callback != null) {
+	    callbacks.add(callback);
+	}
     }
 
     @Override
@@ -21,6 +21,10 @@ public enum ShutdownHooks implements SimulationShutDown {
         for (final SimulationShutDown shutDownCallback : callbacks) {
             shutDownCallback.onShutDown();
         }
+    }
+
+    public void clear() {
+	callbacks.clear();
     }
 
 }

@@ -76,12 +76,12 @@ class NSM extends LongitudinalModelBase {
         final double dv = me.getRelSpeed(frontVehicle);
 
         // consider external speedlimit
-        final double localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit()
+        final double localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit()
                 / me.physicalQuantities().getvScale());
         if (logger.isDebugEnabled()) {
             if (localV0 < getDesiredSpeed()) {
                 logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n",
-                        getDesiredSpeed(), localV0, me.getSpeedlimit(), me.physicalQuantities().getvScale()));
+                        getDesiredSpeed(), localV0, me.getEffectiveSpeedlimit(), me.physicalQuantities().getvScale()));
             }
         }
 

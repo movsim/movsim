@@ -78,7 +78,7 @@ public class SpeedLimit extends RoadObjectController {
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         for (Vehicle vehicle : signalPoint.passedVehicles()) {
             vehicle.setSpeedlimit(speedLimitValue);
-            LOG.debug("pos={} --> speedlimit in km/h={}", position, 3.6 * speedLimitValue);
+            LOG.debug("pos={} --> speedlimit in km/h={}", position, Units.MS_TO_KMH * speedLimitValue);
         }
     }
 

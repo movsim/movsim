@@ -138,10 +138,14 @@ public class TrafficSink implements SimulationTimeStep {
         return totalVehicleFuelUsedLiters;
     }
 
+    public final int totalVehiclesRemoved() {
+        return totalVehiclesRemoved;
+    }
+
     public void recordRemovedVehicle(Vehicle vehicle) {
         totalVehicleTravelDistance += vehicle.totalTravelDistance();
         totalVehicleTravelTime += vehicle.totalTravelTime();
-        totalVehicleFuelUsedLiters += vehicle.totalFuelUsedLiters();
+        totalVehicleFuelUsedLiters += vehicle.getEnergyModel().totalFuelUsedLiters();
         ++totalVehiclesRemoved;
         if (recordDataCallback != null) {
             recordDataCallback.recordData(simulationTime, totalVehiclesRemoved, vehicle);

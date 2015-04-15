@@ -94,6 +94,8 @@ public class MovsimCommandLine {
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
         options.addOption("d", "write_dot", false, "writes a 'dot' network file for further analysis of the xodr");
+	options.addOption("s", "simulation scanning mode", false,
+	        "invokes the simulator repeatedly in a loop (needs to be programmed by user)");
 
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
@@ -132,6 +134,9 @@ public class MovsimCommandLine {
         if (cmdline.hasOption("d")) {
             ProjectMetaData.getInstance().setWriteDotFile(true);
         }
+	if (cmdline.hasOption("s")) {
+	    ProjectMetaData.getInstance().setScanMode(true);
+	}
         requiredOptionOutputPath(cmdline);
         requiredOptionSimulation(cmdline);
     }

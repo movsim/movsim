@@ -1,0 +1,69 @@
+# gnuplot command file
+
+# parameterised startStop command file
+# invoke using -e option to set parameters, eg:
+# gnuplot -e "lang='de'" routingDecisions.gpl
+
+#set datafile separator ","
+
+# parameters
+if (!exists("inputPath")) inputPath = "./"
+if (!exists("outputPath")) outputPath = "./"
+if (!exists("baseFile")) baseFile = "routing_scan"
+print "basefile=".baseFile
+
+# variables
+vehicle = "Equipped"
+serviceprovider = "wiseGuy"
+
+# input files
+totalttFile = baseFile.".totalAvgTravelTime.csv"
+
+# output files
+totaltraveltimeOutput = outputPath.baseFile.".totalAvgTravelTime.eps"
+
+########  Line Styles  ###################################
+
+set style line 1 linetype 1 linewidth 7 pointtype 7 pointsize 1.5 lc rgb "#000000"
+set style line 2 linetype 7 linewidth 3 pointtype 5 pointsize 1.5 lc rgb "#dd0000"
+set style line 3 linetype 1 linewidth 7 pointtype 9 pointsize 1.5 lc rgb "#ff8800"
+set style line 4 linetype 3 linewidth 3 pointtype 11 pointsize 1.5 lc rgb "#00aa44"
+set style line 5 linetype 5 linewidth 7 pointtype 13 pointsize 1.5 lc rgb "#220099"
+
+min(x,y)=(x<y) ? x : y
+
+set term post eps enhanced color dash "Helvetica" 24
+set nogrid
+########################################################
+set size 1,1
+set key box
+set nokey
+set ticslevel 0
+set nogrid
+
+######### total travel times  ##########################
+unset contour
+set contour surface 
+unset clabel
+
+set cntrparam bspline 
+set cntrparam levels 25   
+#set cntrparam levels incr -10,1,-2          # min, increment, max
+
+set palette defined ( 0 "#ff00ff", 8 "blue", 20 "green", 35 "yellow", 60 "orange", 100 "red") 
+set autoscale cbmin
+set autoscale fix
+#set cbrange [*:*] 
+
+
+set pm3d; set pm3d map
+
+set style line 99 lt 7 lw 0 linecolor rgb "#000000" # beliebige Farben:Schwarz
+set title "Average total traveltime (s)"
+set xlabel "Equipment Level (%)"
+set ylabel "Uncertainty (min)"
+
+set out totaltraveltimeOutput
+print "file=".totalttFile
+splot totalttFile using ($1*100):($2/60.):($3) with lines linestyle 99
+

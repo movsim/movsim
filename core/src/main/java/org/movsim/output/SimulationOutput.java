@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.movsim.autogen.ConsumptionCalculation;
 import org.movsim.autogen.FloatingCarOutput;
 import org.movsim.autogen.OutputConfiguration;
@@ -42,6 +44,8 @@ import org.movsim.output.route.FileTrajectories;
 import org.movsim.output.route.SpatioTemporal;
 import org.movsim.output.route.TravelTimeOnRoute;
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.simulator.observer.ServiceProvider;
+import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
@@ -69,16 +73,20 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private final Map<Route, TravelTimeOnRoute> travelTimeOnRoutes = new HashMap<>();
 
+    private final ServiceProviders serviceProviders;
+    
     private final RoadNetwork roadNetwork;
 
     private final Routing routing;
 
     public SimulationOutput(double simulationTimestep, boolean writeOutput, OutputConfiguration outputConfiguration,
-            RoadNetwork roadNetwork, Routing routing, VehicleFactory vehicleFactory) {
+            RoadNetwork roadNetwork, Routing routing, VehicleFactory vehicleFactory,
+            @Nullable ServiceProviders serviceProviders) {
 
         Preconditions.checkNotNull(outputConfiguration);
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
         this.routing = Preconditions.checkNotNull(routing);
+        this.serviceProviders = serviceProviders;
 
         initFloatingCars(writeOutput, outputConfiguration);
         initConsumption(writeOutput, simulationTimestep, outputConfiguration);
@@ -165,6 +173,12 @@ public class SimulationOutput implements SimulationTimeStep {
             consumption.timeStep(dt, simulationTime, iterationCount);
         }
 
+        if (serviceProviders != null) {
+            for (final ServiceProvider serviceProvider : serviceProviders) {
+                serviceProvider.timeStep(dt, simulationTime, iterationCount);
+            }
+        }
+        
     }
 
 }

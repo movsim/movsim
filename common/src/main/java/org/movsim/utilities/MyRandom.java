@@ -45,8 +45,8 @@ public final class MyRandom {
     }
 
     /**
-     * Next double.
-     * @return the double
+     * @return the next pseudo-random, uniformly distributed {@code double} value between {@code 0.0} and {@code 1.0} from the
+     *         random number generator's sequence
      */
     public static double nextDouble() {
         return rand.nextDouble();
@@ -54,6 +54,7 @@ public final class MyRandom {
 
     /**
      * returns a realization of a uniformly distributed random variable in [-1, 1]
+     * 
      * @return a uniformly distributed realization in [-1, 1]
      */
     public static double getUniformDistribution() {

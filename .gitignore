@@ -1,6 +1,11 @@
-/.settings
-**/.settings/
-/.classpath
+# ignore Eclipse stuff
+.project
+.settings
+*/.project
+*/.settings/
+*/.classpath
+*/test-output
+*/.gitignore
 target/
 bin/
 figs/
@@ -19,5 +24,4 @@ Thumbs.db
 *.log.*
 *.eps
 *~
-/.project
 *.dot
