@@ -18,7 +18,7 @@ import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.LocalizationStrings;
-import org.movsim.xml.MovsimInputLoader;
+import org.movsim.xml.InputLoader;
 
 public class Applet extends JApplet {
     private static final long serialVersionUID = 1L;
@@ -45,13 +45,13 @@ public class Applet extends JApplet {
         if (scenario == null) {
             scenario = DEFAULT_SCENARIO;
         }
-        final String scenarioPath = scenario.substring(0, scenario.lastIndexOf("/")+1);
+        final String scenarioPath = scenario.substring(0, scenario.lastIndexOf("/") + 1);
         projectMetaData.setPathToProjectXmlFile(scenarioPath);
-        final String scenarioName = scenario.substring(scenario.lastIndexOf("/")+1);
+        final String scenarioName = scenario.substring(scenario.lastIndexOf("/") + 1);
         projectMetaData.setProjectName(scenarioName);
 
-	Movsim inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
-	final Simulator simulator = new Simulator(inputData);
+        Movsim movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
+        final Simulator simulator = new Simulator(movsimInput);
         initLookAndFeel();
 
         final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);

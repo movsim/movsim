@@ -50,7 +50,7 @@
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="1800" v="20" />
                     <Inflow t="5400" q_per_hour="1800" v="20" />
-                    <Inflow t="5400" q_per_hour="0" v="20" />
+                    <Inflow t="5401" q_per_hour="0" v="20" />
                 </TrafficSource>
                 <!-- increase inflow performance at source -->
                 <FlowConservingInhomogeneities>

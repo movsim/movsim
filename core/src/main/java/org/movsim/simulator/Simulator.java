@@ -11,6 +11,8 @@
  */
 package org.movsim.simulator;
 
+import generated.MovsimExternalVehicleControl;
+
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +38,7 @@ import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.FileTrafficSinkData;
 import org.movsim.output.FileTrafficSourceData;
 import org.movsim.output.SimulationOutput;
+import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
 import org.movsim.shutdown.ShutdownHooks;
 import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.LaneSegment;

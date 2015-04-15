@@ -35,7 +35,7 @@ import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.logging.Logger;
 import org.movsim.simulator.Simulator;
-import org.movsim.xml.MovsimInputLoader;
+import org.movsim.xml.InputLoader;
 import org.xml.sax.SAXException;
 
 /**
@@ -72,12 +72,12 @@ public class MovsimCoreMain {
         // LogFileAppender.initialize(projectMetaData);
 
         // unmarshall movsim configuration file
-        final Movsim inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
+        Movsim movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
         if (projectMetaData.isScanMode()) {
             System.out.println("scanning mode");
-            SimulationScan.invokeSimulationScan(inputData);
+            SimulationScan.invokeSimulationScan(movsimInput);
         } else {
-            invokeSingleSimulation(inputData);
+            invokeSingleSimulation(movsimInput);
         }
     }
 
