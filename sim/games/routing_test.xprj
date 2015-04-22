@@ -47,7 +47,7 @@
                 <VehicleType label="NonEquipped" fraction="0" relative_v0_randomization="0.0" />
             </TrafficComposition>
             <Road id="1">
-                <TrafficSource logging="false">
+                <TrafficSource logging="true">
                     <Inflow t="0" q_per_hour="1800" v="20" />
                     <Inflow t="5400" q_per_hour="1800" v="20" />
                     <Inflow t="5401" q_per_hour="0" v="20" />
