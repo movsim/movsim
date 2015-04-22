@@ -125,8 +125,8 @@ public class IDM extends LongitudinalModelBase {
         final double localT = alphaT * param.getT();
         // consider external speedlimit
         final double localV0;
-        if (me.getSpeedlimit() != 0.0) {
-            localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        if (me.getEffectiveSpeedlimit() != 0.0) {
+            localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
         } else {
             localV0 = alphaV0 * getDesiredSpeed();
         }

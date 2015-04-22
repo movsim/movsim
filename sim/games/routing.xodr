@@ -245,7 +245,7 @@
                 <userData code="valueKMH" value="80" />
             </object>
             <object type="speedlimit" orientation="+" s="250" name="second speedlimit">
-                <userData code="valueKMH" value="30" />
+                <userData code="valueKMH" value="50" />
             </object>
             <object type="speedlimit" orientation="+" s="400" validLength="210" name="third speedlimit">
                 <userData code="valueKMH" value="80" />

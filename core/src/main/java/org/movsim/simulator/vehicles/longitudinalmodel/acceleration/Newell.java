@@ -60,7 +60,7 @@ class Newell extends LongitudinalModelBase {
         // TODO check modeling of parameter dt=T (dt is the constant update time and cannot be changed)
         final double dtLocal = alphaT * dt;
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
 
         // actual Newell formula
         return acc(s, v, dv, dtLocal, v0Local);

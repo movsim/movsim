@@ -117,7 +117,8 @@ class FileFloatingCars extends FileOutputBase {
                 physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
                 physicalQuantities.getRelSpeed(frontVeh),
                 physicalQuantities.getxScale() * veh.getDistanceToTrafficlight(),
-                1000 * veh.getActualFuelFlowLiterPerS(), frontVeh == null ? -1 : frontVeh.getVehNumber(),
+                1000 * veh.getEnergyModel().getActualFuelFlowLiterPerS(),
+                frontVeh == null ? -1 : frontVeh.getVehNumber(),
                 veh.getSlope());
         writer.flush();
     }

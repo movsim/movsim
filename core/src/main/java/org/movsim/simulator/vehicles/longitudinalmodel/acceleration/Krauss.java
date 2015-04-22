@@ -75,7 +75,7 @@ class Krauss extends LongitudinalModelBase {
         final double dv = me.getRelSpeed(frontVehicle);
 
         final double localT = alphaT * T;
-        final double localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
 
         return acc(s, v, dv, localT, localV0);
     }

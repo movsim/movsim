@@ -27,6 +27,7 @@ package org.movsim.output.route;
 
 import org.movsim.autogen.TravelTimes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadNetworkUtils;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.utilities.ExponentialMovingAverage;
 import org.slf4j.Logger;
@@ -65,11 +66,14 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        numberOfVehicles = RoadNetwork.vehicleCount(route) - roadNetwork.obstacleCount(route);
+        numberOfVehicles = Math.max(0, RoadNetworkUtils.vehicleCount(route) - roadNetwork.obstacleCount(route));
 
-        instantaneousTravelTime = RoadNetwork.instantaneousTravelTime(route);
+        instantaneousTravelTime = RoadNetworkUtils.instantaneousTravelTime(route);
 
-        totalTravelTime += instantaneousTravelTime;
+        // TODO check quantity
+        // totalTravelTime += numberOfVehicles * instantaneousTravelTime;
+        // totalTravelTime += instantaneousTravelTime;
+        totalTravelTime += dt * numberOfVehicles;
 
         meanSpeed = route.getLength() / instantaneousTravelTime;
 

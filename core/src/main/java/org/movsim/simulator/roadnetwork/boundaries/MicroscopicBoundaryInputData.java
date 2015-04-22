@@ -57,7 +57,7 @@ public class MicroscopicBoundaryInputData {
         }
 
         if (record.isSetLength()) {
-            vehicle.setLength(record.getLength());
+            vehicle.getDimensions().setLength(record.getLength());
         }
 
         Route route = null;

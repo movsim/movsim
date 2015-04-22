@@ -80,15 +80,15 @@
                     <Inflow t="50" q_per_hour="1500" v="24" />
                     <Inflow t="60" q_per_hour="2000" v="24" />
                     <Inflow t="100" q_per_hour="2000" v="24" />
-                    <Inflow t="100" q_per_hour="200" v="24" />
+                    <Inflow t="101" q_per_hour="200" v="24" />
                     <Inflow t="110" q_per_hour="200" v="24" />
                     <Inflow t="120" q_per_hour="2000" v="24" />
                     <Inflow t="150" q_per_hour="2000" v="24" />
-                    <Inflow t="150" q_per_hour="200" v="24" />
+                    <Inflow t="151" q_per_hour="200" v="24" />
                     <Inflow t="170" q_per_hour="200" v="24" />
                     <Inflow t="180" q_per_hour="1500" v="24" />
                     <Inflow t="210" q_per_hour="1500" v="24" />
-                    <Inflow t="210" q_per_hour="0" v="24" />
+                    <Inflow t="211" q_per_hour="0" v="24" />
                 </TrafficSource>
             </Road>
             <Road id="37">

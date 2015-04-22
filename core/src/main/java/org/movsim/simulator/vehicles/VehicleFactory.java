@@ -8,9 +8,12 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import org.movsim.autogen.Consumption;
+import org.movsim.autogen.PersonalNavigationDeviceType;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.autogen.VehiclePrototypes;
 import org.movsim.consumption.model.EnergyFlowModelFactory;
+import org.movsim.simulator.observer.ServiceProvider;
+import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
@@ -30,10 +33,13 @@ public final class VehicleFactory {
 
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
+    private final ServiceProviders serviceProviders;
+
     public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes,
-            @Nullable Consumption consumption, Routing routing) {
+            @Nullable Consumption consumption, Routing routing, @Nullable ServiceProviders serviceProviders) {
         Preconditions.checkNotNull(vehPrototypes);
         this.routing = Preconditions.checkNotNull(routing);
+        this.serviceProviders = serviceProviders;
 
         if (consumption != null) {
             fuelModelFactory.add(consumption.getConsumptionModels());
@@ -59,8 +65,25 @@ public final class VehicleFactory {
         vehicle.setRoute(route);
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());
-        vehicle.setFuelModel(prototype.getEnergyFlowModel());
+        vehicle.getEnergyModel().setModel(prototype.getEnergyFlowModel());
+
+        if (prototype.getConfiguration().isSetPersonalNavigationDevice()) {
+            // TODO potential conflicts between prescribed route and dynamic routing decisions...
+            setServiceProvider(prototype, vehicle);
+        }
         return vehicle;
+    }
+
+    private void setServiceProvider(VehiclePrototype prototype, Vehicle vehicle) {
+        PersonalNavigationDeviceType personalNavigationDevice = prototype.getConfiguration().getPersonalNavigationDevice();
+        String providerName = personalNavigationDevice.getServiceProvider();
+        ServiceProvider provider = serviceProviders.get(providerName);
+        if (provider == null) {
+            throw new IllegalArgumentException("service provider \"" + providerName + "\" for vehicle not configured.");
+        }
+        vehicle.routingDecisions().setServiceProvider(provider);
+        vehicle.routingDecisions().setUncertainty(personalNavigationDevice.getUncertainty());
+        vehicle.routingDecisions().setReroutingThreshold(personalNavigationDevice.getReroutingThreshold());
     }
 
     // route is determined via the traffic composition
@@ -88,7 +111,9 @@ public final class VehicleFactory {
                 }
                 vehiclePrototype.setEnergyFlowModel(fuelModelFactory.get(consumptionModelName));
             }
+
             vehiclePrototypes.put(typeConfig.getLabel(), vehiclePrototype);
+
         }
     }
 

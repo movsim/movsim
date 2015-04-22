@@ -84,4 +84,5 @@ class VehiclePrototype {
     void setEnergyFlowModel(EnergyFlowModel energyFlowModel) {
         this.energyFlowModel = energyFlowModel;
     }
+
 }

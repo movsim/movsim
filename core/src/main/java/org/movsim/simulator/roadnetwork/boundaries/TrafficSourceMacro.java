@@ -23,6 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
+
 package org.movsim.simulator.roadnetwork.boundaries;
 
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -91,7 +92,6 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
      * <p>
      * Try entering new vehicle.
      * </p>
-     * 
      * <p>
      * If the inflow is near capacity, it is crucial to avoid initial perturbations as much as possible. Otherwise, one would activate an
      * "inflow bottleneck", and less vehicles can be entered as one would like to. The crux is that vehicles can be introduced only at times
@@ -124,8 +124,8 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         final double netGapToLeader = leader.getRearPosition();
         final double gapAtQMax = 1. / testVehicle.getRhoQMax();
 
-        // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
-        double minRequiredGap = 0.8 * gapAtQMax;
+        // minimal distance set to 70% of 1/rho at flow maximum in fundamental diagram
+        double minRequiredGap = 0.7 * gapAtQMax;
         if (testVehicle.getLongitudinalModel().isCA()) {
             minRequiredGap = leader.getSpeed();
         }

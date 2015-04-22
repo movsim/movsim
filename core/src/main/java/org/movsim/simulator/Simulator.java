@@ -39,8 +39,13 @@ import org.movsim.output.FileTrafficSinkData;
 import org.movsim.output.FileTrafficSourceData;
 import org.movsim.output.SimulationOutput;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
+import org.movsim.shutdown.ShutdownHooks;
+import org.movsim.simulator.observer.ServiceProviders;
+import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadTypeSpeeds;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.boundaries.MicroscopicBoundaryConditions;
@@ -89,6 +94,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private Regulators regulators;
 
+    private ServiceProviders serviceProviders;
+
     private SimulationOutput simOutput;
 
     private final RoadNetwork roadNetwork;
@@ -104,11 +111,18 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * Constructor.
      * 
+     * @param inputData
+     * 
      * @throws SAXException
      * @throws JAXBException
      */
-    public Simulator() {
+    public Simulator(Movsim inputData) {
         this.projectMetaData = ProjectMetaData.getInstance();
+        ShutdownHooks.INSTANCE.clear(); // TODO move to better place
+        this.movsimInput = Preconditions.checkNotNull(inputData);
+        if (movsimInput.isSetRoadTypeSpeedMappings()) {
+            RoadTypeSpeeds.INSTANCE.init(inputData.getRoadTypeSpeedMappings());
+        }
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);
@@ -118,9 +132,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011-2013)");
 
         projectName = projectMetaData.getProjectName();
-        // TODO temporary handling of Variable Message Sign until added to XML
-        roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
-
         movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
 
         timeOffsetMillis = 0;
@@ -129,6 +140,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                     DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZ")).toDateTime(DateTimeZone.UTC);
             timeOffsetMillis = dateTime.getMillis();
             LOG.info("global time offset set={} --> {} milliseconds.", dateTime, timeOffsetMillis);
+            ProjectMetaData.getInstance();
             ProjectMetaData.getInstance().setTimeOffsetMillis(timeOffsetMillis);
         }
         projectMetaData.setXodrNetworkFilename(movsimInput.getScenario().getNetworkFilename()); // TODO
@@ -138,8 +150,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         parseOpenDriveXml(roadNetwork, projectMetaData);
         routing = new Routing(movsimInput.getScenario().getRoutes(), roadNetwork);
 
+        if (movsimInput.isSetServiceProviders()) {
+            serviceProviders = new ServiceProviders(movsimInput.getServiceProviders(), routing, roadNetwork);
+        }
+        
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), movsimInput.getVehiclePrototypes(),
-                movsimInput.getConsumption(), routing);
+                movsimInput.getConsumption(), routing, serviceProviders);
 
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
@@ -210,7 +226,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     public ProjectMetaData getProjectMetaData() {
-        return projectMetaData;
+        return ProjectMetaData.getInstance();
     }
 
     public RoadNetwork getRoadNetwork() {
@@ -232,8 +248,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();
-        projectMetaData.setProjectName(scenario);
-        projectMetaData.setPathToProjectXmlFile(path);
+        ProjectMetaData.getInstance().setProjectName(scenario);
+        ProjectMetaData.getInstance().setPathToProjectXmlFile(path);
         initialize();
     }
 
@@ -271,7 +287,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * Parse the OpenDrive (.xodr) file to load the network topology and road layout.
      * 
-     * @param projectMetaData
+     * @param ProjectMetaData
+     *            .getInstance()
      * @return
      * @throws SAXException
      * @throws JAXBException
@@ -402,7 +419,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (movsimInput.getScenario().isSetOutputConfiguration()) {
             simOutput = new SimulationOutput(simulationRunnable.timeStep(),
                     projectMetaData.isInstantaneousFileOutput(), movsimInput.getScenario().getOutputConfiguration(),
-                    roadNetwork, routing, vehicleFactory);
+                    roadNetwork, routing, vehicleFactory, serviceProviders);
         }
         obstacleCount = roadNetwork.obstacleCount();
     }
@@ -435,6 +452,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 simulationTime, simulationTime / 3600., projectName));
 
         regulators.simulationCompleted(simulationTime);
+
+        LOG.info("total traveltime={} seconds", (int) roadNetwork.totalVehicleTravelTime());
+        LOG.info("total distance traveled={} meters", (int) roadNetwork.totalVehicleTravelDistance());
 
         long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         if (LOG.isInfoEnabled()) {
@@ -477,7 +497,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         trafficLights.timeStep(dt, simulationTime, iterationCount);
         regulators.timeStep(dt, simulationTime, iterationCount);
         roadNetwork.timeStep(dt, simulationTime, iterationCount);
-        
+
         if (simOutput != null) {
             simOutput.timeStep(dt, simulationTime, iterationCount);
         }

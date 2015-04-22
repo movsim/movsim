@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Optimized drawing of RoadSegments based on the type of their RoadMapping
+ * Optimized drawing of RoadSegmentUtils based on the type of their RoadMapping
  */
 public final class PaintRoadMapping {
 

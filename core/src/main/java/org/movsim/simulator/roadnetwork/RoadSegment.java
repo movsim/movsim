@@ -15,13 +15,13 @@ package org.movsim.simulator.roadnetwork;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 
 import javax.annotation.CheckForNull;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.movsim.roadmappings.RoadMapping;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
@@ -44,6 +44,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 /**
  * <p>
@@ -51,7 +52,7 @@ import com.google.common.collect.Iterators;
  * may be created by combining two road segments running in opposite directions.
  * </p>
  * <p>
- * RoadSegments may be combined to form a road network.
+ * RoadSegmentUtils may be combined to form a road network.
  * </p>
  * <p>
  * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road segment and
@@ -139,6 +140,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /** simple ramp (source) with dropping mechanism */
     private SimpleRamp simpleRamp;
+
+    /** dynamic ff speed, considering speed limits. */
+    private double meanFreeFlowSpeed = -1;
+
+    /** static freeflow speed as maximum speed that is allowed. */
+    private double freeFlowSpeed = RoadTypeSpeeds.INSTANCE.getDefaultFreeFlowSpeed();
 
     public static class TestCar {
         public double s = 0.0; // distance
@@ -550,10 +557,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return vehicleFuelUsedLiters;
     }
 
-    public double meanSpeed() {
+    public double meanSpeedOfVehicles() {
         double sumSpeed = 0;
         int vehCount = 0;
-        for (final LaneSegment laneSegment : laneSegments) {
+        for (LaneSegment laneSegment : laneSegments) {
             for (Vehicle veh : laneSegment) {
                 if (veh.type() == Vehicle.Type.OBSTACLE) {
                     continue;
@@ -562,16 +569,74 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                 ++vehCount;
             }
         }
-        return (vehCount > 0) ? sumSpeed / vehCount : MovsimConstants.FREE_SPEED;
+        return (vehCount > 0) ? sumSpeed / vehCount : getHarmonicMeanFreeflowSpeed();
+    }
+
+    private double getHarmonicMeanFreeflowSpeed() {
+        if (meanFreeFlowSpeed < 0) {
+            // evaluate lazy here
+            double sumInvers = 0;
+            double currentPosition = 0;
+            double speedLimitPosition = 0;
+            double currentSpeedLimit = freeFlowSpeed;
+
+            // tricky
+            for (SpeedLimit speedLimit : speedLimits()) {
+                speedLimitPosition = speedLimit.position();
+                sumInvers += (1. / currentSpeedLimit) * (speedLimitPosition - currentPosition);
+                currentSpeedLimit = Math.min(speedLimit.getSpeedLimit(), freeFlowSpeed);
+                currentPosition = speedLimitPosition;
+            }
+
+            sumInvers += (1. / currentSpeedLimit) * (roadLength - speedLimitPosition);
+            meanFreeFlowSpeed = 1. / (sumInvers / roadLength);
+        }
+        return meanFreeFlowSpeed;
+    }
+
+    private double getSpeedLimit(double position) {
+        double speedLimit = getFreeFlowSpeed();
+        for (SpeedLimit sl : speedLimits()) {
+            if (position < sl.position()) {
+                return speedLimit;
+            }
+            speedLimit = sl.getSpeedLimit();
+        }
+        return speedLimit;
     }
 
     /**
      * Returns the instantaneous travel time defined by the road element length and current mean speed of all vehicles. An adhoc
      * free speed is assumed in case of an empty road.
-     * @return instantantaneous travel time with adhoc assumed travel time if road is empty
+     * 
+     * @return instantaneous travel time with adhoc assumed travel time if road is empty
      */
     public double instantaneousTravelTime() {
-        return roadLength / meanSpeed();
+        final double dx = 100; // TODO refactor
+        double position = 0;
+        double totalTravelTime = 0;
+        // TODO hack here, depends on order of vehicles
+        LinkedList<Vehicle> vehicles = Lists.newLinkedList();
+        Iterators.addAll(vehicles, iterator());
+        while (position < roadLength) {
+            double end = Math.min(position + dx, roadLength);
+            double maxRoadSpeed = freeFlowSpeed; // FIXME consider speedlimits
+            totalTravelTime += travelTimeInRange(position, end, maxRoadSpeed, vehicles);
+            position += dx;
+        }
+        return totalTravelTime;
+    }
+
+    private static double travelTimeInRange(double begin, double end, double maxRoadSpeed, LinkedList<Vehicle> vehicles) {
+        int count = 0;
+        double sumSpeed = 0;
+        while (!vehicles.isEmpty() && vehicles.getLast().getFrontPosition() < end) {
+            Vehicle veh = vehicles.removeLast();
+            sumSpeed += veh.getSpeed();
+            count++;
+        }
+        double avgSpeed = (count == 0) ? maxRoadSpeed : sumSpeed / count;
+        return (end - begin) / avgSpeed;
     }
 
     /**
@@ -642,7 +707,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      */
     public void addObstacle(Vehicle obstacle) {
         assert obstacle.type() == Vehicle.Type.OBSTACLE;
-        obstacle.setRoadSegment(id, roadLength);
+        obstacle.setRoadSegment(this);
         addVehicle(obstacle);
     }
 
@@ -651,7 +716,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
-        vehicle.setRoadSegment(id, roadLength);
+        vehicle.setRoadSegment(this);
         laneSegments[vehicle.lane() - 1].addVehicle(vehicle);
     }
 
@@ -660,7 +725,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @param vehicle
      */
     public void appendVehicle(Vehicle vehicle) {
-        vehicle.setRoadSegment(id, roadLength);
+        vehicle.setRoadSegment(this);
         laneSegments[vehicle.lane() - 1].appendVehicle(vehicle);
     }
 
@@ -699,6 +764,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         updateSignalPointsBeforeOutflowCalled = false;
     }
 
+    // TOO SLOW FOR GENERAL PURPOSE
     public Iterator<Vehicle> vehiclesWithinRange(double begin, double end) {
         return Iterators.filter(iterator(), new VehicleWithinRange(begin, end));
     }
@@ -720,6 +786,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @param iterationCount the number of iterations that have been executed
      */
     public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
+
         if (!hasPeer() && laneCount < 2) {
             // need at least 2 lanes or a peerRoad for lane changing
             return;
@@ -756,6 +823,14 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             }
         }
         checkFinishingOvertaking(dt);
+    }
+
+    public void makeDynamicRoutingDecisions(double dt, double simulationTime, long iterationCount) {
+        for (LaneSegment laneSegment : laneSegments) {
+            for (Vehicle vehicle : laneSegment) {
+                vehicle.routingDecisions().considerRouteAlternatives(simulationTime, this);
+            }
+        }
     }
 
     private void initOvertakingLane() {
@@ -1199,6 +1274,14 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     public boolean hasTrafficComposition() {
         return trafficComposition != null;
+    }
+
+    public double getFreeFlowSpeed() {
+        return freeFlowSpeed;
+    }
+
+    public void setFreeFlowSpeed(double freeFlowSpeed) {
+        this.freeFlowSpeed = freeFlowSpeed;
     }
 
 }
