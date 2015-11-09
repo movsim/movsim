@@ -26,7 +26,7 @@
 package org.movsim.simulator.vehicles;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
 import org.movsim.utilities.Units;
 

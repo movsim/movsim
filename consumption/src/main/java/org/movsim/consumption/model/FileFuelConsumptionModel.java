@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.movsim.autogen.VehicleData;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 
 // TODO refactoring of fuel consumption code base and corresponding file output
 class FileFuelConsumptionModel extends FileOutputBase {

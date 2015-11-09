@@ -27,7 +27,7 @@ package org.movsim.output;
 
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.TrafficLightController;
 import org.movsim.simulator.roadnetwork.controller.TrafficLightRecordDataCallback;

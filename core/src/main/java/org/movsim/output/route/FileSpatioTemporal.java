@@ -26,7 +26,7 @@
 package org.movsim.output.route;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 
 /**
  * The Class FileSpatioTemporal.

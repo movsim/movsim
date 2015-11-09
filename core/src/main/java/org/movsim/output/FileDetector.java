@@ -26,7 +26,7 @@
 package org.movsim.output;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.controller.LoopDetector;
 import org.movsim.utilities.Units;

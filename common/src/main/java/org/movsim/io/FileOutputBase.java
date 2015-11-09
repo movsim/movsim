@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.fileoutput;
+package org.movsim.io;
 
 import java.io.File;
 import java.io.PrintWriter;

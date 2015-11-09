@@ -27,7 +27,7 @@ package org.movsim.output.route;
 
 import org.movsim.autogen.Trajectories;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;

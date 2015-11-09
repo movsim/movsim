@@ -1,7 +1,7 @@
 package org.movsim.simulator.observer;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.SimulationTimeStep;
 
 import com.google.common.base.Preconditions;
