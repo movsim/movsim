@@ -46,8 +46,8 @@ import com.google.common.base.Preconditions;
  * A vehicle has a size, given by its length and width.
  * </p>
  * <p>
- * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's position is given by the position
- * of the front of the vehicle on the road segment and also by the vehicle's lane.
+ * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's position is given by the position of the front
+ * of the vehicle on the road segment and also by the vehicle's lane.
  * </p>
  * <p>
  * A vehicle possesses two intelligence modules:
@@ -209,6 +209,7 @@ public class Vehicle {
 
     /**
      * Returns the id of the last vehicle created.
+     * 
      * @return the id of the last vehicle created
      */
     public static long lastIdSet() {
@@ -216,13 +217,8 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * Returns the number of vehicles that have been created. Used for instrumentation.
-=======
-     * Returns the number of vehicles that have been created. Used for
-     * instrumentation.
      * 
->>>>>>> alternatives
      * @return the number of vehicles that have been created
      */
     public static long count() {
@@ -288,6 +284,7 @@ public class Vehicle {
 
     /**
      * Copy constructor.
+     * 
      * @param source
      */
     public Vehicle(Vehicle source) {
@@ -337,7 +334,9 @@ public class Vehicle {
 
     /**
      * Sets this vehicle's color.
-     * @param color RGB integer color value
+     * 
+     * @param color
+     *            RGB integer color value
      */
     public final void setColor(int color) {
         this.color = color;
@@ -345,6 +344,7 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's color.
+     * 
      * @return vehicle's color, as an RGB integer
      */
     public final int color() {
@@ -352,16 +352,9 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * Sets this vehicle's color object cache value. Primarily of use by AWT which rather inefficiently uses objects rather than
      * integers to represent color values. Note that an object is cached so Vehicle.java has no dependency on AWT.
-=======
-     * Sets this vehicle's color object cache value. Primarily of use by AWT
-     * which rather inefficiently uses objects rather than integers to represent
-     * color values. Note that an object is cached so Vehicle.java has no
-     * dependency on AWT.
      * 
->>>>>>> alternatives
      * @param colorObject
      */
     public final void setColorObject(Object colorObject) {
@@ -369,13 +362,8 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * Returns the previously cached object associated with this vehicle's color.
-=======
-     * Returns the previously cached object associated with this vehicle's
-     * color.
      * 
->>>>>>> alternatives
      * @return vehicle's previously cached color object
      */
     public final Object colorObject() {
@@ -384,6 +372,7 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's length.
+     * 
      * @return vehicle's length, in meters
      */
     public final double getLength() {
@@ -391,13 +380,8 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * Returns the vehicle's physical length plus the dynamic contribution from a model's minimum gap.
-=======
-     * Returns the vehicle's physical length plus the dynamic contribution from
-     * a model's minimum gap.
      * 
->>>>>>> alternatives
      * @return the effective length of a vehicle in a standstill
      */
     public double getEffectiveLength() {
@@ -406,6 +390,7 @@ public class Vehicle {
 
     /**
      * Returns position of the front of this vehicle.
+     * 
      * @return position of the front of this vehicle
      */
     public final double getFrontPosition() {
@@ -414,7 +399,9 @@ public class Vehicle {
 
     /**
      * Sets the front position of this vehicle.
-     * @param frontPosition new front position
+     * 
+     * @param frontPosition
+     *            new front position
      */
     public final void setFrontPosition(double frontPosition) {
         this.frontPosition = frontPosition;
@@ -422,6 +409,7 @@ public class Vehicle {
 
     /**
      * Returns the position of the mid-point of this vehicle.
+     * 
      * @return position of the mid-point of this vehicle
      */
     public final double getMidPosition() {
@@ -430,7 +418,9 @@ public class Vehicle {
 
     /**
      * Sets the rear position of this vehicle.
-     * @param rearPosition new rear position
+     * 
+     * @param rearPosition
+     *            new rear position
      */
     public final void setRearPosition(double rearPosition) {
         this.frontPosition = rearPosition + getLength();
@@ -438,6 +428,7 @@ public class Vehicle {
 
     /**
      * Returns the position of the rear of this vehicle.
+     * 
      * @return position of the rear of this vehicle
      */
     public final double getRearPosition() {
@@ -454,6 +445,7 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's speed. in m/s
+     * 
      * @return this vehicle's speed, in m/s
      */
     public final double getSpeed() {
@@ -462,13 +454,9 @@ public class Vehicle {
 
     /**
      * Sets the speed. in m/s
-<<<<<<< HEAD
-     * @param speed in m/s the new speed in m/s
-=======
      * 
      * @param speed
      *            in m/s the new speed in m/s
->>>>>>> alternatives
      */
     public final void setSpeed(double speed) {
         this.speed = speed;
@@ -492,6 +480,7 @@ public class Vehicle {
 
     /**
      * externally given speedlimit
+     * 
      * @param speedlimit
      */
     public final void setSpeedlimit(double speedlimit) {
@@ -512,14 +501,9 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * Returns the actual acceleration. This is the acceleration calculated by the LDM moderated by other factors, such as
      * traffic lights
-=======
-     * Returns the actual acceleration. This is the acceleration calculated by
-     * the LDM moderated by other factors, such as traffic lights
      * 
->>>>>>> alternatives
      * @return the vehicle acceleration
      */
     public double getAcc() {
@@ -536,6 +520,7 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's id.
+     * 
      * @return vehicle's id
      */
     public final long getId() {
@@ -551,16 +536,10 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * returns the net distance (from front bumper to rear bumper) to the front vehicle, returns infinity gap if front vehicle
      * is null.
-=======
-     * returns the net distance (from front bumper to rear bumper) to the front
-     * vehicle, returns infinity gap if front vehicle is null.
      * 
->>>>>>> alternatives
      * @param frontVehicle
-     * @return
      */
     public double getNetDistance(Vehicle frontVehicle) {
         if (frontVehicle == null) {
@@ -570,15 +549,9 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * returns the brut distance (net distance plus vehicle length of front vehicle) to the front vehicle, returns infinity gap
      * if front vehicle is null.
-=======
-     * returns the brut distance (net distance plus vehicle length of front
-     * vehicle) to the front vehicle, returns infinity gap if front vehicle is
-     * null.
      * 
->>>>>>> alternatives
      * @param frontVehicle
      * @return
      */
@@ -590,14 +563,9 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * returns the net distance (from rear bumper to front bumper) to the rear vehicle, returns infinity gap if front vehicle is
      * null.
-=======
-     * returns the net distance (from rear bumper to front bumper) to the rear
-     * vehicle, returns infinity gap if front vehicle is null.
      * 
->>>>>>> alternatives
      * @param rearVehicle
      * @return
      */
@@ -615,7 +583,8 @@ public class Vehicle {
         return speed - frontVehicle.getSpeed();
     }
 
-    public void updateAcceleration(double dt, RoadSegment roadSegment, LaneSegment laneSegment, LaneSegment leftLaneSegment) {
+    public void updateAcceleration(double dt, RoadSegment roadSegment, LaneSegment laneSegment,
+            LaneSegment leftLaneSegment) {
 
         accOld = acc;
         // acceleration noise:
@@ -657,20 +626,12 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * Moderates this vehicle's acceleration according to factors other than the LDM. For example, the presence of traffic
      * lights, motorway exits or tactical considerations (say, the desire to make a lane change). Due to basic safety reasons it
      * is crucial to use the minimum acceleration.
-     * @param acc acceleration as calculated by LDM
-=======
-     * Moderates this vehicle's acceleration according to factors other than the
-     * LDM. For example, the presence of traffic lights, motorway exits or
-     * tactical considerations (say, the desire to make a lane change). Due to
-     * basic safety reasons it is crucial to use the minimum acceleration.
      * 
      * @param acc
      *            acceleration as calculated by LDM
->>>>>>> alternatives
      * @param roadSegment
      * @return moderated acceleration
      */
@@ -698,6 +659,7 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's acceleration considering the exit.
+     * 
      * @param roadSegment
      * @return acceleration considering exit
      */
@@ -713,8 +675,8 @@ public class Vehicle {
         // (1) vehicle is on roadsegment with exit lane
         if (roadSegment.id() == exitRoadSegmentId) {
             LaneSegment firstExitLaneSegment = roadSegment.laneSegment(roadSegment.trafficLaneMax() + Lanes.TO_RIGHT);
-            assert firstExitLaneSegment != null && firstExitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment=" +
-                    firstExitLaneSegment;
+            assert firstExitLaneSegment != null && firstExitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment="
+                    + firstExitLaneSegment;
             Vehicle frontVehicle = firstExitLaneSegment.frontVehicle(this);
             accToVehicleInExitLane = longitudinalModel.calcAcc(this, frontVehicle);
             accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -maxDeceleration);
@@ -730,10 +692,10 @@ public class Vehicle {
         // (2) exit lane is one roadSegment ahead but cannot be reached via sink connection
         RoadSegment sinkRoadSegmentWithExit = roadSegment.sinkRoadSegmentPerId(exitRoadSegmentId);
         if (sinkRoadSegmentWithExit != null) {
-            LaneSegment exitLaneSegment =
-                    sinkRoadSegmentWithExit.laneSegment(sinkRoadSegmentWithExit.trafficLaneMax() + Lanes.TO_RIGHT);
-            assert exitLaneSegment != null && exitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment=" +
-                    exitLaneSegment;
+            LaneSegment exitLaneSegment = sinkRoadSegmentWithExit.laneSegment(sinkRoadSegmentWithExit.trafficLaneMax()
+                    + Lanes.TO_RIGHT);
+            assert exitLaneSegment != null && exitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment="
+                    + exitLaneSegment;
             Vehicle frontVehicle = exitLaneSegment.rearVehicle();
             if (frontVehicle != null) {
                 double s = roadSegment.roadLength() - this.getFrontPosition() + frontVehicle.getRearPosition();
@@ -759,8 +721,8 @@ public class Vehicle {
         return calcAccModel(laneSegment, leftLaneSegment, 1.0, 1.0, 1.0);
     }
 
-    private double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaTLocal, double alphaV0Local,
-            double alphaALocal) {
+    private double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaTLocal,
+            double alphaV0Local, double alphaALocal) {
         if (longitudinalModel == null) {
             return 0.0;
         }
@@ -768,9 +730,8 @@ public class Vehicle {
         double acc;
 
         if (laneChangeModel != null && laneChangeModel.isInitialized() && laneChangeModel.withEuropeanRules()) {
-            acc =
-                    longitudinalModel.calcAccEur(laneChangeModel.vCritEurRules(), this, laneSegment, leftLaneSegment,
-                            alphaTLocal, alphaV0Local, alphaALocal);
+            acc = longitudinalModel.calcAccEur(laneChangeModel.vCritEurRules(), this, laneSegment, leftLaneSegment,
+                    alphaTLocal, alphaV0Local, alphaALocal);
         } else {
             acc = longitudinalModel.calcAcc(this, laneSegment, alphaTLocal, alphaV0Local, alphaALocal);
         }
@@ -779,16 +740,10 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * Update position and speed. Case distinction between cellular automata, Newell and continuos models/iterated maps
-     * @param dt delta-t, simulation time interval, seconds
-=======
-     * Update position and speed. Case distinction between cellular automata,
-     * Newell and continuos models/iterated maps
      * 
      * @param dt
      *            delta-t, simulation time interval, seconds
->>>>>>> alternatives
      */
     public void updatePositionAndSpeed(double dt) {
         totalTravelTime += dt;
@@ -872,8 +827,8 @@ public class Vehicle {
 
     public boolean considerOvertakingViaPeer(double dt, RoadSegment roadSegment) {
         LaneChangeDecision lcDecision = LaneChangeDecision.NONE;
-        if (!roadSegment.hasPeer() || roadSegment.laneCount() > 1 || lane() != Lanes.MOST_INNER_LANE ||
-                laneChangeModel == null || !laneChangeModel.isInitialized() || inProcessOfLaneChange()) {
+        if (!roadSegment.hasPeer() || roadSegment.laneCount() > 1 || lane() != Lanes.MOST_INNER_LANE
+                || laneChangeModel == null || !laneChangeModel.isInitialized() || inProcessOfLaneChange()) {
             return false;
         }
         lcDecision = laneChangeModel.makeDecisionForOvertaking(roadSegment);
@@ -937,7 +892,9 @@ public class Vehicle {
 
     /**
      * Sets the target lane.
-     * @param targetLane the new target lane
+     * 
+     * @param targetLane
+     *            the new target lane
      */
     private void setTargetLane(int targetLane) {
         assert targetLane >= Lanes.MOST_INNER_LANE || targetLane == Lanes.OVERTAKING;
@@ -961,7 +918,9 @@ public class Vehicle {
 
     /**
      * Update lane changing delay.
-     * @param dt the dt
+     * 
+     * @param dt
+     *            the dt
      */
     public void updateLaneChangeDelay(double dt) {
         tLaneChangeDelay += dt;
@@ -1029,12 +988,7 @@ public class Vehicle {
          */
         VEHICLE,
         /**
-<<<<<<< HEAD
          * Externally controlled vehicle.
-=======
-         * The vehicle is a floating car, used to gather data about traffic
-         * conditions.
->>>>>>> alternatives
          */
         EXTERNAL_CONTROL
     }
@@ -1043,6 +997,7 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's type.
+     * 
      * @return vehicle's type
      */
     public final Vehicle.Type type() {
@@ -1051,6 +1006,7 @@ public class Vehicle {
 
     /**
      * Sets this vehicle's type.
+     * 
      * @param type
      */
     public final void setType(Vehicle.Type type) {
@@ -1062,10 +1018,10 @@ public class Vehicle {
      * Called when vehicle changes road segments (and possibly also lanes) at a link or junction.
      * </p>
      * <p>
-     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and
-     * <code>timeAtWhichLastChangedLanes</code> are used to interpolate this vehicle's lateral position and so give the
-     * appearance of a smooth lane change.
+     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and <code>timeAtWhichLastChangedLanes</code> are
+     * used to interpolate this vehicle's lateral position and so give the appearance of a smooth lane change.
      * </p>
+     * 
      * @param newLane
      * @param exitPos
      */
@@ -1084,13 +1040,8 @@ public class Vehicle {
     }
 
     /**
-<<<<<<< HEAD
      * Sets the road segment properties for this vehicle. Invoked after a vehicle has moved onto a new road segment.
-=======
-     * Sets the road segment properties for this vehicle. Invoked after a
-     * vehicle has moved onto a new road segment.
      * 
->>>>>>> alternatives
      * @param roadSegmentId
      * @param roadSegmentLength
      */
@@ -1143,6 +1094,7 @@ public class Vehicle {
 
     /**
      * Returns the id of the first road segment occupied by this vehicle.
+     * 
      * @return id of the first road segment occupied by this vehicle
      */
     public final int originRoadSegmentId() {
@@ -1151,6 +1103,7 @@ public class Vehicle {
 
     /**
      * Returns the id of the road segment currently occupied by this vehicle.
+     * 
      * @return id of the road segment currently occupied by this vehicle
      */
     public final int roadSegmentId() {
@@ -1159,6 +1112,7 @@ public class Vehicle {
 
     /**
      * Returns the id of the road segment in which this vehicle wishes to exit.
+     * 
      * @return id of exit road segment
      */
     public final int exitRoadSegmentId() {
@@ -1174,6 +1128,7 @@ public class Vehicle {
 
     /**
      * Returns the total distance this vehicle has traveled.
+     * 
      * @return total travel distance
      */
     public final double totalTravelDistance() {
@@ -1182,6 +1137,7 @@ public class Vehicle {
 
     /**
      * Returns the total time this vehicle has been on the road network.
+     * 
      * @return total travel time
      * @return
      */
@@ -1206,8 +1162,8 @@ public class Vehicle {
         return "Vehicle [id=" + id + ", label=" + label + ", length=" + df.format(getLength()) + ", frontPosition="
                 + df.format(frontPosition) + ", frontPositionOld=" + df.format(frontPositionOld) + ", speed="
                 + df.format(speed) + ", accModel=" + df.format(accModel) + ", acc=" + df.format(acc) + ", accOld="
-                + df.format(accOld) + ", vehNumber=" + vehNumber + ", lane=" + lane + ", brakeLightOn="
-                + brakeLightOn + "]";
+                + df.format(accOld) + ", vehNumber=" + vehNumber + ", lane=" + lane + ", brakeLightOn=" + brakeLightOn
+                + "]";
     }
 
     /** returns a constant random number between 0 and 1 */
