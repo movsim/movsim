@@ -41,8 +41,6 @@ import org.movsim.output.SimulationOutput;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
 import org.movsim.shutdown.ShutdownHooks;
 import org.movsim.simulator.observer.ServiceProviders;
-import org.movsim.simulator.roadnetwork.LaneSegment;
-import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.RoadTypeSpeeds;
@@ -101,7 +99,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private final RoadNetwork roadNetwork;
 
     private Routing routing;
-    
+
     private final SimulationRunnable simulationRunnable;
 
     private int obstacleCount;
@@ -153,7 +151,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (movsimInput.isSetServiceProviders()) {
             serviceProviders = new ServiceProviders(movsimInput.getServiceProviders(), routing, roadNetwork);
         }
-        
+
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), movsimInput.getVehiclePrototypes(),
                 movsimInput.getConsumption(), routing, serviceProviders);
 
@@ -179,7 +177,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         ExternalVehiclesController externalVehicleController = createExternalVehicleController();
         roadNetwork.setExternalVehicleController(externalVehicleController);
-        
+
         checkTrafficLightBeingInitialized();
 
         MicroscopicBoundaryConditions microBoundaryConditions = null;
