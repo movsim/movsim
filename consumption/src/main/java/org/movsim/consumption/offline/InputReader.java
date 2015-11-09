@@ -26,19 +26,15 @@
 package org.movsim.consumption.offline;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.autogen.BatchData;
+import org.movsim.io.CsvReaderUtil;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -76,7 +72,7 @@ public class InputReader {
     }
 
     private void process(File inputFile) {
-        List<String[]> inputDataLines = readData(inputFile);
+        List<String[]> inputDataLines = CsvReaderUtil.readData(inputFile, separator);
 
         if (inputDataLines == null || inputDataLines.isEmpty()) {
             LOG.warn("no input read");
@@ -172,31 +168,5 @@ public class InputReader {
         LOG.info("parsed={} from={} input lines", records.size(), input.size());
     }
 
-    private List<String[]> readData(File file) {
-        LOG.info("using input file={}", file.getAbsolutePath());
-        List<String[]> myEntries = Lists.newArrayList();
-
-        // see http://opencsv.sourceforge.net/#how-to-read
-        CSVReader reader = null;
-        try {
-            reader = new CSVReader(new FileReader(file), separator);
-            myEntries = reader.readAll();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-        }
-        return myEntries;
-    }
 
 }
