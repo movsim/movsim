@@ -5,8 +5,6 @@ MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
 
 http://www.movsim.org
 
-Demonstration: www.verkehrsdynamik.de 
-
 
 Description
 -----------
@@ -41,7 +39,7 @@ To build the MovSim core with Maven, type `mvn install` from the MovSim `core/` 
 
 MovSim core can be run directly from the command-line. To see the MovSim options, invoke the target by typing e.g.:
 
-    java -jar target/MovsimCore-1.5.0-SNAPSHOT-jar-with-dependencies.jar -h
+    java -jar target/MovsimCore-1.6.0-SNAPSHOT-jar-with-dependencies.jar -h
 
 There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim). The `runmovsim` script can be used to run the simulator and gnuplot for plot these scenarios, for example:
 
@@ -69,7 +67,7 @@ For commercial use, please contact the copyright holders at movsim@akesting.de
 Copyright
 ---------
 
-MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
+MovSim is Copyright (C) 2010-2015 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
 MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
 

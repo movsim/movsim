@@ -42,32 +42,31 @@ Features:
 - detailed physics-based model for fuel consumption and emissions
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
 
-MovSim has several main components: 
+MovSim has several submodules/components: 
 
 * The _core_ contains the main MovSim library and a console application that can run a traffic simulation and produce _.csv_ output for further processing or graphical display.
 * The _viewer_ displays an animated traffic simulation.
 * The _consumption_ comprises a physics-based fuel consumption model which can also be fed by csv data.
+* The _xsd_ module comprises the xsd schema resources for the xml bindung (JAXB) 
+* The _common_ provides general functionality for all submodules.
 
 
 ## Installation
 ---------------
 
-Install the [git](http://git-scm.com/download) version control system.
-
-Download this repository:
+Install the [git](http://git-scm.com/download) version control system and clone the repository via ssh
 
     git clone git@github.com:movsim/movsim.git
     
-or
+or via https (to prevent firewall problems)
        
     git clone https://github.com/movsim/movsim.git
               
-Install [Java](http://www.java.com/en/download/manual.jsp), if you do not already have it. You need at least version 7
-of Java (JRE 1.7).
+[Java](http://www.java.com/en/download/manual.jsp) is required at least in version 7 (JRE 1.7).
 
-Install [Apache Maven] (http://maven.apache.org/download.html). Maven is the software build and management tool that is used to build MovSim.
+[Apache Maven] (http://maven.apache.org/download.html) is the software build and management tool for MovSim.
 
-MovSim produces output that can be plotted using _gnuplot_. If you wish to use this output to produce graphs, install [gnuplot](http://www.gnuplot.info/).
+MovSim produces csv/text-based output that can be plotted using [gnuplot](http://www.gnuplot.info/) or other tools. 
 
 
 ## Usage
@@ -81,17 +80,19 @@ To run the movsim _core_ or _viewer_ see their respective readme files: [core](h
 ## Eclipse
 ----------
 
-MovSim can readily be built and run from within the Eclipse IDE. To use Eclipse:
-
-Install the [Eclipse IDE for Java Developers](http://www.eclipse.org/downloads/), if you do not already have it.
-
-From with the Eclipse IDE install the m2e(Maven Integration for Eclipse) plugin (from the _Help_ menu in Eclipse select _Eclipse Marketplace..._ and in the resulting enter `maven` in the _Find_ box and then install the plugin).
+MovSim can be built and run from within the [Eclipse IDE](http://www.eclipse.org/downloads/) with the m2e(Maven Integration for Eclipse) plugin.
 
 Import the project into Eclipse from the _File >> Import_ menu item. In the resulting Select dialog, choose the _General >> Existing Projects into Workspace_ option. In the resulting dialog select the `movsim/core` directory and import. Repeat for the `movsim/viewer` directory.
 
 You can then build and run either the _core_ or _viewer_ Java applications.
 
 We use the source code formatter _movsim/misc/codestyle/eclipse_movsim_profile.xml_.
+
+## Development
+--------------
+
+We follow the naming conventions of the [Git Flow Model](http://nvie.com/posts/a-successful-git-branching-model/). Please checkout the branch *develop* to start with the latest source code. 
+
  
 ## Demos
 --------
@@ -118,7 +119,7 @@ For commercial use, please contact the copyright holders at movsim.org@gmail.com
 ## Copyright and License
 ------------------------
 
-MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
+MovSim is Copyright (C) 2010-2015 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
 MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
 

@@ -5,8 +5,6 @@ MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
 
 http://www.movsim.org
 
-Demonstration: www.verkehrsdynamik.de 
-
 
 Description
 -----------
@@ -28,7 +26,7 @@ To build the MovSim viewer with Maven, type `mvn install` from the MovSim viewer
 
 The MovSim viewer can be started directly from the command-line. To see the MovSim options, type e.g.:
 
-    java -jar viewer/target/MovsimViewer-1.5.0-SNAPSHOT-jar-with-dependencies.jar -h
+    java -jar viewer/target/MovsimViewer-1.6.0-SNAPSHOT-jar-with-dependencies.jar -h
 
 
 Commercial use
@@ -40,7 +38,7 @@ For commercial use, please contact the copyright holders at movsim.org@gmail.com
 Copyright
 ---------
 
-MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
+MovSim is Copyright (C) 2010-2015 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
 MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
 
