@@ -5,10 +5,9 @@ Movsim == **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator
 
 Movsim's Homepage: [http://www.movsim.org](http://www.movsim.org)
 
-Current build status for branch Master and Bidirectional: 
+Current build status for branch *Master*: [![Build Status Master](https://api.travis-ci.org/movsim/movsim.png?branch=master)](https://travis-ci.org/movsim/movsim)
 
-[![Build Status Master](https://api.travis-ci.org/movsim/movsim.png?branch=master)](https://travis-ci.org/movsim/movsim)
-[![Build Status Bidirectional](https://api.travis-ci.org/movsim/movsim.png?branch=bidirectional)](https://travis-ci.org/movsim/movsim)
+Current build status for branch *develop*: [![Build Status Bidirectional](https://api.travis-ci.org/movsim/movsim.png?branch=develop)](https://travis-ci.org/movsim/movsim)
 
 Quick links to this file:
 
@@ -107,10 +106,8 @@ There are a number of simulation scenarios defined in the [_sim_ directory](http
 
 * (Routing game) www.movsim.org
 
-* (Android client) Android App
 
-
-## Commercial use
+## Commercial Use
 ------------------
 
 For commercial use, please contact the copyright holders at movsim.org@gmail.com.
