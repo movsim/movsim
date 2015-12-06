@@ -37,6 +37,10 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
+    <RoadTypeSpeedMappings>
+        <RoadTypeSpeedMapping road_type="motorway" default_speed_kmh="108" />
+        <RoadTypeSpeedMapping road_type="town" default_speed_kmh="70" />
+    </RoadTypeSpeedMappings>
     <Scenario network_filename="city_example.xodr">
         <Simulation timestep="0.2" duration="1200" seed="42" crash_exit="true">
             <TrafficComposition>
@@ -57,7 +61,7 @@
                 </Detectors>
             </Road>
             <Road id="4" />
-            <Road id="5">
+            <Road id="6">
                 <TrafficSource logging="true">
                     <Inflow t="0" q_per_hour="200" v="20" />
                 </TrafficSource>
@@ -114,6 +118,8 @@
             <!--  start_time="0" end_time="120" -->
             <TravelTimes route="main" dt="0" tauEMA="40" />
             <TravelTimes route="onramp" dt="0" />
+            <IndividualTravelTimes route="main" />
+            <IndividualTravelTimes route="onramp" />
             <ConsumptionCalculation route="main" tauEMA="30" />
             <ConsumptionCalculation route="onramp" />
         </OutputConfiguration>

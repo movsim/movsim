@@ -43,6 +43,9 @@
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
+    <RoadTypeSpeedMappings>
+        <RoadTypeSpeedMapping road_type="motorway" default_speed_kmh="130" />
+    </RoadTypeSpeedMappings>
     <Scenario network_filename="onramp_example.xodr">
         <!-- simulation scenario configuration -->
         <Simulation timestep="0.2" duration="3600" seed="42" crash_exit="true">
@@ -62,7 +65,7 @@
                     <CrossSection position="200" />
                 </Detectors>
             </Road>
-            <Road id="5">
+            <Road id="6">
                 <TrafficSource logging="true">
                     <Inflow t="0" q_per_hour="520" v="20" />
                 </TrafficSource>
@@ -92,6 +95,8 @@
             <!--  start_time="0" end_time="120" -->
             <TravelTimes route="main" dt="0" tauEMA="40" />
             <TravelTimes route="onramp" dt="0" />
+            <IndividualTravelTimes route="main" />
+            <IndividualTravelTimes route="onramp" />
             <ConsumptionCalculation route="main" tauEMA="30" />
             <ConsumptionCalculation route="onramp" />
         </OutputConfiguration>

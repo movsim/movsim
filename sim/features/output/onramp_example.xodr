@@ -14,12 +14,16 @@
             <laneSection s="0.0">
                 <right>
                     <lane id="-1" type="driving" level="0">
+                        <link>
+                            <successor id="-1" />
+                        </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                        <!-- <link>                             <successor id="-1" />                         </link> -->
                     </lane>
                     <lane id="-2" type="driving" level="0">
+                        <link>
+                            <successor id="-2" />
+                        </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                        <!--                          <link>                             <successor id="-2" />                         </link> -->
                     </lane>
                 </right>
             </laneSection>
@@ -30,6 +34,7 @@
             <predecessor elementType="road" elementId="1" contactPoint="end" />
             <successor elementType="road" elementId="3" contactPoint="start" />
         </link>
+        <type type="motorway" />
         <planView>
             <geometry s="0.0" x="2000.0" y="300.0" hdg="0.0" length="8000.0">
                 <line />
@@ -39,9 +44,15 @@
             <laneSection s="0.0">
                 <right>
                     <lane id="-1" type="driving" level="0">
+                        <link>
+                            <successor id="-1" />
+                        </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                     <lane id="-2" type="driving" level="0">
+                        <link>
+                            <successor id="-2" />
+                        </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                 </right>
@@ -54,6 +65,7 @@
             <predecessor elementType="junction" elementId="15" contactPoint="end" />
             <successor elementType="road" elementId="4" contactPoint="start" />
         </link>
+        <type type="motorway" />
         <planView>
             <geometry s="0.0" x="10000.0" y="300.0" hdg="0.0" length="300.0">
                 <line />
@@ -85,6 +97,7 @@
         <link>
             <predecessor elementType="road" elementId="3" contactPoint="end" />
         </link>
+        <type type="motorway" />
         <planView>
             <geometry s="0.0" x="10300.0" y="300.0" hdg="0.0" length="3700.0">
                 <line />
@@ -112,10 +125,35 @@
     <!-- merging road element -->
     <road name="R5" length="1013" id="5" junction="-1">
         <link>
+            <predecessor elementType="road" elementId="6" contactPoint="end" />
             <successor elementType="junction" elementId="15" contactPoint="start" />
         </link>
+        <type type="motorway" />
         <planView>
             <geometry s="0.0" x="9000" y="118.5" hdg="0.16" length="1013">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R6" length="500" id="6" junction="-1">
+        <link>
+            <successor elementType="junction" elementId="5" contactPoint="start" />
+        </link>
+        <type type="motorway" />
+        <planView>
+            <geometry s="0.0" x="8500" y="118.5" hdg="0.0" length="500">
                 <line />
             </geometry>
         </planView>
