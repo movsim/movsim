@@ -5,6 +5,7 @@
         <link>
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
+        <type type="town" />
         <planView>
             <geometry s="0.0" x="0.0" y="300.0" hdg="0.0" length="1000.0">
                 <line />
@@ -28,6 +29,7 @@
             <predecessor elementType="road" elementId="1" contactPoint="end" />
             <successor elementType="road" elementId="3" contactPoint="start" />
         </link>
+        <type type="town" />
         <planView>
             <geometry s="0.0" x="1000.0" y="300.0" hdg="0.0" length="2000.0">
                 <line />
@@ -52,6 +54,7 @@
             <predecessor elementType="junction" elementId="15" contactPoint="end" />
             <successor elementType="road" elementId="4" contactPoint="start" />
         </link>
+        <type type="town" />
         <planView>
             <geometry s="0.0" x="3000.0" y="300.0" hdg="0.0" length="500.0">
                 <line />
@@ -77,6 +80,7 @@
         <link>
             <predecessor elementType="road" elementId="3" contactPoint="end" />
         </link>
+        <type type="town" />
         <planView>
             <geometry s="0.0" x="3500.0" y="300.0" hdg="0.0" length="2500.0">
                 <line />
@@ -101,10 +105,12 @@
     <!-- merging road element -->
     <road name="R5" length="1011.2" id="5" junction="-1">
         <link>
+            <predecessor elementType="road" elementId="6" contactPoint="end" />
             <successor elementType="junction" elementId="15" contactPoint="start" />
         </link>
+        <type type="town" />
         <planView>
-            <geometry s="0.0" x="2000" y="476.5" hdg="0.16" length="1011.2">
+            <geometry s="0.0" x="2000" y="130" hdg="0.16" length="1011.2">
                 <line />
             </geometry>
         </planView>
@@ -118,13 +124,34 @@
             </laneSection>
         </lanes>
     </road>
-    
-	<!-- id maps to movsim controllerGroupID -->
+    <road name="R6" length="400" id="6" junction="-1">
+        <link>
+            <successor elementType="road" elementId="5" contactPoint="start" />
+        </link>
+        <type type="town" />
+        <planView>
+            <geometry s="0.0" x="1600" y="130" hdg="0.0" length="400">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!-- id maps to movsim controllerGroupID -->
     <controller id="group1">
-		<control signalId="tl_r2" type="first" />
-		<control signalId="tl_r4" type="second" />
+        <control signalId="tl_r2" type="first" />
+        <control signalId="tl_r4" type="second" />
     </controller>
-    
     <!-- connector of merging and main road -->
     <junction name="" id="15">
         <connection id="0" incomingRoad="2" connectingRoad="3" contactPoint="start">

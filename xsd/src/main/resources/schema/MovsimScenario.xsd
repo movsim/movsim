@@ -788,6 +788,7 @@
                 <xs:element ref="SpatioTemporalConfiguration" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="Trajectories" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="TravelTimes" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="IndividualTravelTimes" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="ConsumptionCalculation" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
@@ -832,6 +833,11 @@
             <xs:attribute name="route" type="xs:string" use="required" />
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
             <xs:attribute name="tauEMA" type="nonNegativeDouble" default="20" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="IndividualTravelTimes">
+        <xs:complexType>
+            <xs:attribute name="route" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
     <xs:element name="ConsumptionCalculation">

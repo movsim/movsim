@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 
 import org.movsim.autogen.ConsumptionCalculation;
 import org.movsim.autogen.FloatingCarOutput;
+import org.movsim.autogen.IndividualTravelTimes;
 import org.movsim.autogen.OutputConfiguration;
 import org.movsim.autogen.SpatioTemporalConfiguration;
 import org.movsim.autogen.Trajectories;
@@ -41,6 +42,7 @@ import org.movsim.autogen.TravelTimes;
 import org.movsim.output.floatingcars.FloatingCars;
 import org.movsim.output.route.ConsumptionOnRoute;
 import org.movsim.output.route.FileTrajectories;
+import org.movsim.output.route.IndividualTravelTimesOnRoute;
 import org.movsim.output.route.SpatioTemporal;
 import org.movsim.output.route.TravelTimeOnRoute;
 import org.movsim.simulator.SimulationTimeStep;
@@ -73,8 +75,10 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private final Map<Route, TravelTimeOnRoute> travelTimeOnRoutes = new HashMap<>();
 
+    private final Map<Route, IndividualTravelTimesOnRoute> individualTravelTimeOnRoutes = new HashMap<>();
+
     private final ServiceProviders serviceProviders;
-    
+
     private final RoadNetwork roadNetwork;
 
     private final Routing routing;
@@ -91,6 +95,7 @@ public class SimulationOutput implements SimulationTimeStep {
         initFloatingCars(writeOutput, outputConfiguration);
         initConsumption(writeOutput, simulationTimestep, outputConfiguration);
         initTravelTimes(writeOutput, simulationTimestep, outputConfiguration);
+        initIndividualTravelTimes(writeOutput, simulationTimestep, outputConfiguration);
         initSpatioTemporalOutput(writeOutput, outputConfiguration);
         initTrajectories(writeOutput, outputConfiguration);
 
@@ -114,9 +119,19 @@ public class SimulationOutput implements SimulationTimeStep {
             final OutputConfiguration outputConfiguration) {
         for (final TravelTimes travelTimeInput : outputConfiguration.getTravelTimes()) {
             final Route route = getCheckedRoute(travelTimeInput.getRoute());
-            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput,
-                    roadNetwork, route, writeOutput);
+            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput, roadNetwork,
+                    route, writeOutput);
             travelTimeOnRoutes.put(route, travelTime);
+        }
+    }
+
+    private void initIndividualTravelTimes(boolean writeOutput, double simulationTimestep,
+            OutputConfiguration outputConfiguration) {
+        for (IndividualTravelTimes input : outputConfiguration.getIndividualTravelTimes()) {
+            Route route = getCheckedRoute(input.getRoute());
+            IndividualTravelTimesOnRoute travelTimes = new IndividualTravelTimesOnRoute(simulationTimestep, roadNetwork,
+                    route, writeOutput);
+            individualTravelTimeOnRoutes.put(route, travelTimes);
         }
     }
 
@@ -169,6 +184,10 @@ public class SimulationOutput implements SimulationTimeStep {
             travelTime.timeStep(dt, simulationTime, iterationCount);
         }
 
+        for (final IndividualTravelTimesOnRoute indivTravelTimes : individualTravelTimeOnRoutes.values()) {
+            indivTravelTimes.timeStep(dt, simulationTime, iterationCount);
+        }
+
         for (final ConsumptionOnRoute consumption : consumptionOnRoutes.values()) {
             consumption.timeStep(dt, simulationTime, iterationCount);
         }
@@ -178,7 +197,7 @@ public class SimulationOutput implements SimulationTimeStep {
                 serviceProvider.timeStep(dt, simulationTime, iterationCount);
             }
         }
-        
+
     }
 
 }

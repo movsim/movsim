@@ -26,6 +26,8 @@ rampSourceFile = inputPath.baseFile.".source.road_5.csv"
 trajectoriesFile = inputPath.baseFile.".traj.route_onramp.csv"
 ttFile= inputPath.baseFile.".tt.route_main.csv"
 ttFileRamp=inputPath.baseFile.".tt.route_onramp.csv"
+indivttFile= inputPath.baseFile.".tt_individual.route_main.csv"
+indivttFileRamp= inputPath.baseFile.".tt_individual.route_onramp.csv"
 consumptionFile= inputPath.baseFile.".consumption.route_main.csv"
 consumptionFileRamp=inputPath.baseFile.".consumption.route_onramp.csv"
 
@@ -43,6 +45,7 @@ v2dallOutputRamp = outputPath.baseFile.".v2d_all_ramp.eps"
 a2dallOutput = outputPath.baseFile.".a2d_all.eps"
 trajectoriesOutput = outputPath.baseFile.".trajectories.eps"
 traveltimeOutput = outputPath.baseFile.".traveltime.eps"
+indivtraveltimeOutput = outputPath.baseFile.".traveltime_individual.eps"
 consumptionOutput = outputPath.baseFile.".consumption.eps"
 cumTraveltimeOutput = outputPath.baseFile.".cumTraveltime.eps"
 cumConsumptionOutput = outputPath.baseFile.".cumConsumption.eps"
@@ -67,7 +70,8 @@ positionLabel = "Position (km)"
 entranceDistanceLabel = "Distance from entrance (km)"
 enteredVehicleLabel = "Number of entered vehicles"
 colorboxLabel = "V (km/h)"
-traveltimeLabel = "Inst. Link Traveltime (min)"
+traveltimeLabel = "Inst. Link Traveltime (s)"
+indivtraveltimeLabel = "Individual realized traveltime (s)"
 consumptionLabel = "Inst. Consumption (liters/s)"
 cumTraveltimeLabel = "Cumulated Traveltime (h)"
 cumConsumptionLabel = "Cumulated Consumption (liters)"
@@ -121,7 +125,19 @@ plot\
  ttFile using ($1/60):($5) title "main route" with lines linestyle 1,\
  ttFileRamp using ($1/60):($5) title "onramp route" with lines linestyle 3
  
+######################################
+# individual (realized) travel times
+######################################
 
+set auto x
+set auto y
+set xlabel timeMinuteLabel
+set ylabel indivtraveltimeLabel
+set out indivtraveltimeOutput
+plot\
+ indivttFile using ($1/60.0):3 title "main route: individual tt" with points linestyle 2,\
+ indivttFileRamp using ($1/60.0):3 title "onramp route: individual tt" with points linestyle 3
+ 
 ######################################
 # consumption 
 ######################################
