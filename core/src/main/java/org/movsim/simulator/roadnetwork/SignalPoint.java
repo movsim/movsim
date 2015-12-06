@@ -27,8 +27,8 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.movsim.simulator.roadnetwork.predicates.VehiclePassedPosition;
@@ -46,7 +46,7 @@ public class SignalPoint {
 
     protected double simulationTime;
 
-    protected Set<Vehicle> vehiclesPassed = new HashSet<>(); // to assure uniqueness of entries
+    protected Set<Vehicle> vehiclesPassed = new LinkedHashSet<>(); // to assure uniqueness of entries
 
     // TODO roadSegment not needed as reference, just check here for correct position
     public SignalPoint(double position, RoadSegment roadSegment) {
