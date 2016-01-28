@@ -136,7 +136,7 @@
                             </schemaIncludes>
                             <bindingIncludes>
                                 <bindingInclude>globalBinding.xjc</bindingInclude>
-                                <bindingInclude>movsimExternalVehicleControl.xjc</bindingInclude>
+                                <bindingInclude>movsimExternalVehicleControlBinding.xjc</bindingInclude>
                             </bindingIncludes>
                         </configuration>
                     </execution>
