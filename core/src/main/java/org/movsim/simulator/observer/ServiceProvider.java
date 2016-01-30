@@ -19,6 +19,8 @@ public class ServiceProvider implements SimulationTimeStep {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceProvider.class);
 
+    private static final double GRID_LENGTH_TRAVELTIME_ESTIMATION = 100;
+
     private final String label;
 
     private final double serverUpdateInterval;
@@ -70,8 +72,9 @@ public class ServiceProvider implements SimulationTimeStep {
     public static void updateRouteAlternatives(Iterable<RouteAlternative> alternatives, double uncertainty) {
         LogitRouteDecisionMaking.calcProbabilities(alternatives, uncertainty);
     }
-    
-    public static RouteAlternative selectMostProbableAlternative(Iterable<RouteAlternative> alternatives, double random) {
+
+    public static RouteAlternative selectMostProbableAlternative(Iterable<RouteAlternative> alternatives,
+            double random) {
         return LogitRouteDecisionMaking.selectMostProbableAlternative(alternatives, random);
     }
 
@@ -112,7 +115,8 @@ public class ServiceProvider implements SimulationTimeStep {
                 traveltimeError = noise.getTimeError();
             }
             // traveltime is the metric for disutility
-            double traveltime = traveltimeError + RoadNetworkUtils.instantaneousTravelTime(alternative.getRoute());
+            double traveltime = traveltimeError + RoadNetworkUtils.instantaneousTravelTimeOnGrid(alternative.getRoute(),
+                    GRID_LENGTH_TRAVELTIME_ESTIMATION);
             alternative.setTravelTimeError(traveltimeError);
             if (serverUpdate) {
                 alternative.setDisutility(traveltime);

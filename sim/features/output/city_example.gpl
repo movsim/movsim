@@ -24,8 +24,10 @@ detFile(n) = sprintf(inputPath.baseFile.".det.road_1.x_%d.csv",n)
 roadSourceFile = inputPath.baseFile.".source.road_1.csv"
 rampSourceFile = inputPath.baseFile.".source.road_5.csv"
 trajectoriesFile = inputPath.baseFile.".traj.route_onramp.csv"
-ttFile= inputPath.baseFile.".tt.route_main.csv"
-ttFileRamp=inputPath.baseFile.".tt.route_onramp.csv"
+ttGridFile= inputPath.baseFile.".tt_grid.route_main.csv"
+ttGridFileRamp=inputPath.baseFile.".tt_grid.route_onramp.csv"
+ttMeanFile= inputPath.baseFile.".tt_mean.route_main.csv"
+ttMeanFileRamp=inputPath.baseFile.".tt_mean.route_onramp.csv"
 indivittFile= inputPath.baseFile.".tt_individual.route_main.csv"
 indivittFileRamp= inputPath.baseFile.".tt_individual.route_onramp.csv"
 consumptionFile= inputPath.baseFile.".consumption.route_main.csv"
@@ -44,10 +46,12 @@ v2dallOutput = outputPath.baseFile.".v2d_all_main.eps"
 v2dallOutputRamp = outputPath.baseFile.".v2d_all_ramp.eps"
 a2dallOutput = outputPath.baseFile.".a2d_all.eps"
 trajectoriesOutput = outputPath.baseFile.".trajectories.eps"
-traveltimeOutput = outputPath.baseFile.".traveltime.eps"
+traveltimeGridOutput = outputPath.baseFile.".traveltime_grid.eps"
+traveltimeMeanOutput = outputPath.baseFile.".traveltime_mean.eps"
 indivitraveltimeOutput = outputPath.baseFile.".traveltime_individual.eps"
 consumptionOutput = outputPath.baseFile.".consumption.eps"
-cumTraveltimeOutput = outputPath.baseFile.".cumTraveltime.eps"
+cumTraveltimeGridOutput = outputPath.baseFile.".cumTraveltime_grid.eps"
+cumTraveltimeMeanOutput = outputPath.baseFile.".cumTraveltime_mean.eps"
 cumConsumptionOutput = outputPath.baseFile.".cumConsumption.eps"
 
 
@@ -110,20 +114,35 @@ set auto y
 set xlabel timeMinuteLabel
 
 set ylabel traveltimeLabel
-set out traveltimeOutput
+
+set out traveltimeGridOutput
 plot\
- ttFile using ($1/60.0):2 title "main route" with lines linestyle 1,\
- ttFileRamp using ($1/60.0):2 title "onramp route" with lines linestyle 3,\
- ttFile using ($1/60.0):($3) title "EMA" with lines linestyle 2,\
- ttFileRamp using ($1/60.0):($3) title "EMA" with lines linestyle 4,\
- ttFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
- ttFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
+ ttGridFile using ($1/60.0):2 title "main route" with lines linestyle 1,\
+ ttGridFileRamp using ($1/60.0):2 title "onramp route" with lines linestyle 3,\
+ ttGridFile using ($1/60.0):($3) title "EMA" with lines linestyle 2,\
+ ttGridFileRamp using ($1/60.0):($3) title "EMA" with lines linestyle 4,\
+ ttGridFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
+ ttGridFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
+ 
+set out traveltimeMeanOutput
+plot\
+ ttMeanFile using ($1/60.0):2 title "main route" with lines linestyle 1,\
+ ttMeanFileRamp using ($1/60.0):2 title "onramp route" with lines linestyle 3,\
+ ttMeanFile using ($1/60.0):($3) title "EMA" with lines linestyle 2,\
+ ttMeanFileRamp using ($1/60.0):($3) title "EMA" with lines linestyle 4,\
+ ttMeanFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
+ ttMeanFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
  
 set ylabel cumTraveltimeLabel
-set out cumTraveltimeOutput
+set out cumTraveltimeGridOutput
 plot\
- ttFile using ($1/60):($5) title "main route" with lines linestyle 1,\
- ttFileRamp using ($1/60):($5) title "onramp route" with lines linestyle 3
+ ttGridFile using ($1/60):($5) title "main route" with lines linestyle 1,\
+ ttGridFileRamp using ($1/60):($5) title "onramp route" with lines linestyle 3
+
+set out cumTraveltimeMeanOutput
+plot\
+ ttMeanFile using ($1/60):($5) title "main route" with lines linestyle 1,\
+ ttMeanFileRamp using ($1/60):($5) title "onramp route" with lines linestyle 3
  
 
 ######################################
