@@ -11,8 +11,6 @@
  */
 package org.movsim.xml;
 
-import generated.MovsimExternalVehicleControl;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -21,6 +19,7 @@ import org.movsim.autogen.Movsim;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.scenario.boundary.autogen.MovsimMicroscopicBoundaryConditions;
 import org.movsim.scenario.initial.autogen.MovsimInitialConditions;
+import org.movsim.scenario.vehicle.autogen.MovsimExternalVehicleControl;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +29,15 @@ public final class InputLoader {
     private static final Logger LOG = LoggerFactory.getLogger(InputLoader.class);
 
     public enum XmlInput {
-        MOVSIM_XPRJ(Movsim.class, "/schema/MovsimScenario.xsd"), 
-        MICRO_BOUNDARY_CONDITIONS(MovsimMicroscopicBoundaryConditions.class, "/schema/MovsimMicroscopicBoundaryConditions.xsd"), 
-        INITIAL_CONDITIONS(MovsimInitialConditions.class, "/schema/MovsimInitialConditions.xsd"), 
-        EXTERNAL_VEHICLE_CONTROL(MovsimExternalVehicleControl.class, "/schema/MovsimExternalVehicleControl.xsd"), 
+        MOVSIM_XPRJ(Movsim.class, "/schema/MovsimScenario.xsd"),
+
+        MICRO_BOUNDARY_CONDITIONS(MovsimMicroscopicBoundaryConditions.class,
+                "/schema/MovsimMicroscopicBoundaryConditions.xsd"),
+
+        INITIAL_CONDITIONS(MovsimInitialConditions.class, "/schema/MovsimInitialConditions.xsd"),
+
+        EXTERNAL_VEHICLE_CONTROL(MovsimExternalVehicleControl.class, "/schema/MovsimExternalVehicleControl.xsd"),
+
         XODR_ROADNETWORK(org.movsim.network.autogen.opendrive.OpenDRIVE.class, "/schema/OpenDRIVE_1.3.xsd");
 
         private final Class<?> factory;
@@ -78,7 +82,7 @@ public final class InputLoader {
         return fileUnmarshaller.load(xmlFile, MovsimMicroscopicBoundaryConditions.class, xsdResourcen.factory,
                 xsdResourcen.getUrl());
     }
-    
+
     /**
      * @throws IllegalStateException
      */

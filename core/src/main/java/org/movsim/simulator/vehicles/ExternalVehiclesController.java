@@ -1,10 +1,5 @@
 package org.movsim.simulator.vehicles;
 
-import generated.ExternalVehicleType;
-import generated.MovsimExternalVehicleControl;
-import generated.SpeedDataType;
-import generated.VehicleUserDataType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +8,10 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.movsim.scenario.vehicle.autogen.ExternalVehicleType;
+import org.movsim.scenario.vehicle.autogen.MovsimExternalVehicleControl;
+import org.movsim.scenario.vehicle.autogen.SpeedDataType;
+import org.movsim.scenario.vehicle.autogen.VehicleUserDataType;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -84,8 +83,8 @@ public class ExternalVehiclesController {
             Double firstKey = externalVehicleInputsToAdd.firstKey();
             List<ExternalVehicleType> externalVehicles = externalVehicleInputsToAdd.remove(firstKey);
             addVehiclesToRoadSegments(externalVehicles, roadNetwork);
-            LOG.debug("added {} external vehicles to roadNetwork, removed entries for time={}",
-                    externalVehicles.size(), firstKey);
+            LOG.debug("added {} external vehicles to roadNetwork, removed entries for time={}", externalVehicles.size(),
+                    firstKey);
         }
     }
 
@@ -130,8 +129,8 @@ public class ExternalVehiclesController {
             Vehicle vehicle = createVehicle(vehicleInput);
             String roadId = vehicleInput.getRoadId();
             RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
-            Preconditions.checkNotNull(roadSegment, "cannot find roadSegment with id=" + roadId
-                    + " for external vehicle");
+            Preconditions.checkNotNull(roadSegment,
+                    "cannot find roadSegment with id=" + roadId + " for external vehicle");
             roadSegment.addVehicle(vehicle);
             LinearInterpolatedFunction speedProfile = createSpeedProfile(vehicleInput.getSpeedData());
             controlledVehicles.put(vehicle, speedProfile);

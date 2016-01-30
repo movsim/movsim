@@ -11,8 +11,6 @@
  */
 package org.movsim.simulator;
 
-import generated.MovsimExternalVehicleControl;
-
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +37,7 @@ import org.movsim.output.FileTrafficSinkData;
 import org.movsim.output.FileTrafficSourceData;
 import org.movsim.output.SimulationOutput;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
+import org.movsim.scenario.vehicle.autogen.MovsimExternalVehicleControl;
 import org.movsim.shutdown.ShutdownHooks;
 import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -251,7 +250,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         initialize();
     }
 
-    private void matchRoadSegmentsAndRoadInput(List<Road> roads, MicroscopicBoundaryConditions microBoundaryConditions) {
+    private void matchRoadSegmentsAndRoadInput(List<Road> roads,
+            MicroscopicBoundaryConditions microBoundaryConditions) {
         for (Road roadInput : roads) {
             LOG.info("roadInput.getId()={}", roadInput.getId());
             RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(roadInput.getId()),
@@ -329,8 +329,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 trafficSource = new TrafficSourceMacro(composition, roadSegment, inflowTimeSeries);
             } else if (microBoundaryConditions != null) {
                 // microscopic boundary conditions
-                BoundaryConditionsType boundaryConditions = microBoundaryConditions.getBoundaryConditions(roadSegment
-                        .userId());
+                BoundaryConditionsType boundaryConditions = microBoundaryConditions
+                        .getBoundaryConditions(roadSegment.userId());
                 MicroscopicBoundaryInputData inputData = new MicroscopicBoundaryInputData(boundaryConditions,
                         microBoundaryConditions.getTimeFormat(), timeOffsetMillis, routing);
                 trafficSource = new TrafficSourceMicro(composition, roadSegment);
@@ -415,9 +415,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     public void reset() {
         simulationRunnable.reset();
         if (movsimInput.getScenario().isSetOutputConfiguration()) {
-            simOutput = new SimulationOutput(simulationRunnable.timeStep(),
-                    projectMetaData.isInstantaneousFileOutput(), movsimInput.getScenario().getOutputConfiguration(),
-                    roadNetwork, routing, vehicleFactory, serviceProviders);
+            simOutput = new SimulationOutput(simulationRunnable.timeStep(), projectMetaData.isInstantaneousFileOutput(),
+                    movsimInput.getScenario().getOutputConfiguration(), roadNetwork, routing, vehicleFactory,
+                    serviceProviders);
         }
         obstacleCount = roadNetwork.obstacleCount();
     }
@@ -459,7 +459,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             LOG.info(String.format(
                     "time elapsed=%d milliseconds --> simulation time warp = %.2f, time per 1000 update steps=%.3fs",
                     elapsedTimeMillis, simulationTime / TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis),
-                    (1000. * TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) / simulationRunnable.iterationCount())));
+                    (1000. * TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis)
+                            / simulationRunnable.iterationCount())));
             LOG.info("remaining vehicles in simulation after completion:\n {}", showAllVehicles());
         }
     }
