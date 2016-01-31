@@ -8,12 +8,42 @@ public final class RoadNetworkUtils {
         throw new IllegalStateException("do not instanciate");
     }
 
-    public static double instantaneousTravelTime(Route route) {
+    public enum TravelTimeType {
+        GRID, MEAN;
+    }
+
+    public static double instantaneousTravelTime(Route route, TravelTimeType type) {
+        final double gridLength = 200;
+        switch (type) {
+        case GRID:
+            return instantaneousTravelTimeOnGrid(route, gridLength);
+        case MEAN:
+            return instantaneousTravelTimeFromMeanSpeed(route);
+        default:
+            return 0;
+        }
+    }
+
+    /**
+     * @return the estimated instanteous travel time evaluated on grid-segments.
+     */
+    public static double instantaneousTravelTimeOnGrid(Route route, double gridLength) {
         double instantaneousTravelTime = 0;
         for (RoadSegment roadSegment : route) {
-            instantaneousTravelTime += roadSegment.instantaneousTravelTime();
+            instantaneousTravelTime += roadSegment.instantaneousTravelTimeOnGrid(gridLength);
         }
         return instantaneousTravelTime;
+    }
+
+    /**
+     * @return the estimated instanteous travel time based on mean speeds from vehicles.
+     */
+    public static double instantaneousTravelTimeFromMeanSpeed(Route route) {
+        double instantaneousTravelTimeFromMeanSpeed = 0;
+        for (RoadSegment roadSegment : route) {
+            instantaneousTravelTimeFromMeanSpeed += roadSegment.instantaneousTravelTimeFromMeanSpeed();
+        }
+        return instantaneousTravelTimeFromMeanSpeed;
     }
 
     /**
@@ -47,6 +77,5 @@ public final class RoadNetworkUtils {
         }
         return instantaneousConsumption;
     }
-
 
 }
