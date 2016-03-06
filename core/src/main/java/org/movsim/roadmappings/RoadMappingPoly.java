@@ -44,11 +44,6 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         return roadMappings.iterator();
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     */
     public RoadMappingPoly(LaneGeometries laneGeometries) {
         super(laneGeometries, 0, 0);
     }
@@ -56,11 +51,6 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     /**
      * Constructor, adds an initial line.
      * 
-     * @param laneCount
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
      */
     public RoadMappingPoly(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
         super(laneGeometries, x0, y0);

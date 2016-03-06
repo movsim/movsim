@@ -36,15 +36,12 @@ package org.movsim.simulator.roadnetwork;
  * </p>
  * Lanes numbering is independent of whether traffic drives on the right or the left, indeed references to "right lanes"
  * and "left lanes" is conscientiously eschewed.
- * <p>
- * </p>
  */
 public final class Lanes {
 
     private Lanes() {
         // private constructor
     }
-
 
     // from inner to outer lanes
     public static final int LANE1 = 1;

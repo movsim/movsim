@@ -9,12 +9,10 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter;
  * </p>
  * 
  * <p>
- * The model also comprises parameters for the <i>desired speed</i> and the <i>minimum gap</i> (see
- * {@link IModelParameter}.
+ * The model also comprises parameters for the <i>desired speed</i> and the <i>minimum gap</i>.
  * </p>
  * 
  */
-// TODO improve documentation
 public interface IModelParameterACC extends IModelParameter {
 
     /**

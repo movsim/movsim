@@ -44,9 +44,6 @@ public class ExternalVehiclesController {
 
     /**
      * sets the speeds of externally controlled vehicles in whole road network
-     * 
-     * @param simulationTime
-     * @param roadSegment
      */
     public void setSpeeds(double simulationTime) {
         for (Entry<Vehicle, LinearInterpolatedFunction> entry : controlledVehicles.entrySet()) {

@@ -154,20 +154,23 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * </p>
      * <p>
      * The steps themselves are grouped into two main blocks and an auxillary block:
-     * <ol type="a">
-     * <li>Longitudinal update:</li>
-     * <ol type="i">
+     * <ul>
+     * <li>Longitudinal update:
+     * <ol>
      * <li>Calculate accelerations</li>
      * <li>update speeds
      * <li>update positions
      * </ol>
-     * <li>Discrete Decision update:</li>
-     * <ol type="i">
+     * </li>
+     * <li>Discrete Decision update:
+     * <ol>
      * <li>Determine decisions (whether to change lanes, decide to cruise/stop at a traffic light, etc.)</li>
      * <li>perform decisions (do the lane changes, cruising/stopping at traffic light, etc.)</li>
      * </ol>
-     * <li>Do the related bookkeeping (update of inflow and outflow at boundaries) and update virtual detectors</li> </ol>
-     * </p>
+     * </li>
+     * <li>Do the related bookkeeping (update of inflow and outflow at boundaries) and update virtual detectors</li>
+     * </ul>
+     * 
      * <p>
      * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order (i),(ii),(iii).
      * </p>

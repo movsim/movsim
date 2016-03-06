@@ -49,9 +49,6 @@ public class FileOutputBase implements SimulationShutDown {
     protected String filename;
     protected PrintWriter writer;
 
-    /**
-     * Constructor, sets the path and base filename.
-     */
     public FileOutputBase(String path, String baseFilename) {
         this.path = path;
         this.baseFilename = baseFilename;

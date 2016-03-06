@@ -53,7 +53,7 @@ import com.google.common.base.Preconditions;
  * Vehicles are sorted in order of decreasing position:
  * </p>
  * <p>
- * V[n+1].pos < V[n].pos < V[n-1].pos ... < V[1].pos < V[0].pos
+ * V[n+1].pos &lt; V[n].pos &lt; V[n-1].pos ... &lt; V[1].pos &lt; V[0].pos
  * </p>
  */
 public class LaneSegment implements Iterable<Vehicle> {
@@ -462,11 +462,11 @@ public class LaneSegment implements Iterable<Vehicle> {
             Vehicle sourceFrontVehicle = null;
             LaneSegment source = sourceLaneSegment;
             double accumDistance = 0;
-            do{
+            do {
                 accumDistance += source.roadLength();
                 sourceFrontVehicle = source.frontVehicle();
                 source = source.sourceLaneSegment();
-            }while (sourceFrontVehicle == null && source != null);
+            } while (sourceFrontVehicle == null && source != null);
             if (sourceFrontVehicle != null) {
                 // return a copy of the front vehicle on the source road segment, with its
                 // position set relative to the current road segment
@@ -533,8 +533,8 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Finds the vehicle immediately in front of the given position. That is a vehicle such that vehicle.position() >
-     * vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to be in the rear.
+     * Finds the vehicle immediately in front of the given position. That is a vehicle such that vehicle.position() strictly greater than
+     * vehicePos. The vehicle whose position equals vehiclePos is deemed to be in the rear.
      * 
      * @param vehiclePos
      * 
@@ -561,7 +561,7 @@ public class LaneSegment implements Iterable<Vehicle> {
             double accumDistance = roadLength();
             do {
                 sinkRearVehicle = sink.rearVehicle();
-                if(sinkRearVehicle == null){
+                if (sinkRearVehicle == null) {
                     accumDistance += sink.roadLength();
                 }
                 sink = sink.sinkLaneSegment();
@@ -576,7 +576,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         return null;
     }
-    
+
     /**
      * Returns the vehicle in front of the given vehicle.
      * 

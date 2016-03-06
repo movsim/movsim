@@ -25,14 +25,11 @@
  */
 package org.movsim.simulator.roadnetwork;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.movsim.autogen.Inflow;
 import org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro;
@@ -63,53 +60,4 @@ public class TrafficSourceTest {
     public void tearDown() throws Exception {
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#TrafficSource(org.movsim.simulator.vehicles.VehicleGeneratorOld, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries)}
-     */
-    @Test
-    public final void testTrafficSource() {
-        assertNotNull(trafficSource);
-    }
-
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#setRecorder(org.movsim.simulator.roadnetwork.TrafficSourceMacro.RecordDataCallback)}
-     */
-    @Test
-    public final void testSetRecorder() {
-        // fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#getEnteringVehCounter()}
-     */
-    @Test
-    public final void testGetEnteringVehCounter() {
-        // fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#timeStep(double, double, long)}.
-     */
-    @Test
-    public final void testTimeStep() {
-        // fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#setFlowPerLane(double)}.
-     */
-    @Test
-    public final void testSetFlowPerLane() {
-        // fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#getFlowPerLane(double)}.
-     */
-    @Test
-    public final void testGetFlowPerLane() {
-        // fail("Not yet implemented");
-    }
 }

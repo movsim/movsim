@@ -39,8 +39,6 @@ public class InflowTimeSeries {
     /**
      * Instantiates a new inflow time series.
      * 
-     * @param inflowTimeSeries
-     *            the inflow time series
      */
     public InflowTimeSeries(List<Inflow> inflow) {
         LOG.info(" inflowDataPoint.size = {}", inflow.size());

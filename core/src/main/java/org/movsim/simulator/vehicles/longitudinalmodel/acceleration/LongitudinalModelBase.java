@@ -60,13 +60,18 @@ public abstract class LongitudinalModelBase {
     public enum ModelName {
         IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"), ACC(ModelCategory.TIME_CONTINUOUS_MODEL,
                 "Adaptive-Cruise-Control-Model"), OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL,
-                "Optimal-Velocity-Model / Full-Velocity-Difference-Model"), GIPPS(
-                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Gipps-Model"), NEWELL(
-                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"), KRAUSS(
-                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
-                "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
-                "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model"), PTM(
-                ModelCategory.TIME_CONTINUOUS_MODEL, "Prospect-Theory Model");
+                        "Optimal-Velocity-Model / Full-Velocity-Difference-Model"), GIPPS(
+                                ModelCategory.ITERATED_COUPLED_MAP_MODEL,
+                                "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL,
+                                        "Newell-Model"), KRAUSS(ModelCategory.ITERATED_COUPLED_MAP_MODEL,
+                                                "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
+                                                        "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(
+                                                                ModelCategory.CELLULAR_AUTOMATON,
+                                                                "Kerner-Klenov-Wolf-Model"), CCS(
+                                                                        ModelCategory.TIME_CONTINUOUS_MODEL,
+                                                                        "Cross-Country-Skiing-Model"), PTM(
+                                                                                ModelCategory.TIME_CONTINUOUS_MODEL,
+                                                                                "Prospect-Theory Model");
 
         private final ModelCategory modelCategory;
 
@@ -101,16 +106,6 @@ public abstract class LongitudinalModelBase {
     private final double scalingLength;
     protected double v0RandomizationFactor = 1;
 
-    // protected long id;
-
-    /**
-     * Constructor.
-     * 
-     * @param modelName
-     *            the model name
-     * @param parameters
-     *            the parameters
-     */
     protected LongitudinalModelBase(ModelName modelName) {
         this.modelName = modelName;
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
@@ -165,7 +160,7 @@ public abstract class LongitudinalModelBase {
      * Returns the desired speed.
      * 
      * <br>
-     * Overwrite {@link setRelativeRandomizationV0} if model is not able to handle such randomization. <br>
+     * Overwrite {@code setRelativeRandomizationV0} if model is not able to handle such randomization. <br>
      * Remark: CCS is the only model without a desired speed, so that this method cannot be final :(
      * 
      * @return the desired speed (m/s)
@@ -173,8 +168,8 @@ public abstract class LongitudinalModelBase {
     public double getDesiredSpeed() {
         return v0RandomizationFactor * getParameter().getV0();
     }
-    
-    public boolean hasDesiredSpeed(){
+
+    public boolean hasDesiredSpeed() {
         try {
             getDesiredSpeed();
             return true;
@@ -194,7 +189,7 @@ public abstract class LongitudinalModelBase {
     public double getMinimumGap() {
         return getParameter().getS0();
     }
-    
+
     public boolean hasMinimumGap() {
         try {
             getMinimumGap();

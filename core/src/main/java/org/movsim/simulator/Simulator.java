@@ -110,8 +110,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * 
      * @param inputData
      * 
-     * @throws SAXException
-     * @throws JAXBException
      */
     public Simulator(Movsim inputData) {
         this.projectMetaData = ProjectMetaData.getInstance();
@@ -241,7 +239,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param path
      * @throws JAXBException
      * @throws SAXException
-     * @throws ParserConfigurationException
      */
     public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();

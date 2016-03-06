@@ -37,10 +37,6 @@ import org.movsim.roadmappings.RoadMapping;
 @SuppressWarnings("static-method")
 public class LinkTest {
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addLanePair(int, org.movsim.simulator.roadnetwork.RoadSegment, int, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddLanePair() {
         final int laneCount = 1;
@@ -57,10 +53,6 @@ public class LinkTest {
         assertEquals(Lanes.LANE1, r2.sourceLane(Lanes.LANE1));
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addJoin(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddJoin() {
         final int laneCount = 2;
@@ -79,10 +71,6 @@ public class LinkTest {
         assertEquals(Lanes.LANE2, r2.sourceLane(Lanes.LANE2));
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addOffsetJoin(int, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddOffsetJoin() {
         final int laneCount = 2;
@@ -116,10 +104,6 @@ public class LinkTest {
         assertEquals(Lanes.LANE2, r3.sourceLane(Lanes.LANE2));
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addMerge(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddMerge() {
         final int laneCount = 2;
@@ -144,12 +128,8 @@ public class LinkTest {
         assertEquals(Lanes.LANE2, r1.sourceLane(Lanes.LANE2));
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addFork(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddFork() {
-        //fail("Not yet implemented"); //$NON-NLS-1$
+        // fail("Not yet implemented"); //$NON-NLS-1$
     }
 }

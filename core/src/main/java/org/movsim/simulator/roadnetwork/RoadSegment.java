@@ -697,7 +697,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * In each lane vehicles are sorted in order of decreasing position:
      * </p>
      * <p>
-     * V[n+1].pos < V[n].pos < V[n-1].pos ... < V[1].pos < V[0].pos
+     * V[n+1].pos &lt; V[n].pos &lt; V[n-1].pos ... &lt; V[1].pos &lt; V[0].pos
      * </p>
      * 
      * @param lane
@@ -1063,7 +1063,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
-     * vehicle.position() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to be in
+     * vehicle.position() &gt; vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to be in
      * the rear.
      * 
      * @param lane

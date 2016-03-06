@@ -98,9 +98,6 @@ public class RoadSegmentTest {
         return param;
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#resetNextId()}
-     */
     @Test
     public final void testResetNextId() {
         final double roadLength = 1000.0;
@@ -115,9 +112,6 @@ public class RoadSegmentTest {
         assertEquals(RoadSegment.INITIAL_ID, roadSegment.id());
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(double, int)}
-     */
     @Test
     public final void testRoadSegmentDoubleInt() {
         final double roadLength = 1000.0;
@@ -130,9 +124,6 @@ public class RoadSegmentTest {
         assertEquals(null, roadSegment.sink());
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(org.movsim.roadmappings.RoadMapping)}
-     */
     @Test
     public final void testRoadSegmentRoadMapping() {
         final int laneCount = 1;
@@ -145,132 +136,6 @@ public class RoadSegmentTest {
         assertEquals(null, r.sink());
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#addDefaultSink()}
-     */
-    @Test
-    public final void testSetDefaultSink() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#id()}
-     */
-    @Test
-    public final void testId() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#roadMapping()}
-     */
-    @Test
-    public final void testRoadMapping() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#trafficSource()}
-     */
-    @Test
-    public final void testGetTrafficSource() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#setTrafficSource(org.movsim.simulator.roadnetwork.TrafficSourceMacro)}
-     */
-    @Test
-    public final void testSetTrafficSource() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#sink()}
-     */
-    @Test
-    public final void testSink() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSink(org.movsim.simulator.roadnetwork.TrafficSink)}
-     */
-    @Test
-    public final void testSetSink() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#trafficLaneMin()}
-     */
-    @Test
-    public final void testTrafficLaneMin() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#trafficLaneMax()}
-     */
-    @Test
-    public final void testTrafficLaneMax() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#sourceRoadSegment(int)}
-     */
-    @Test
-    public final void testSourceRoadSegment() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#setSourceLaneSegmentForLane(org.movsim.simulator.roadnetwork.LaneSegment, int)}
-     */
-    @Test
-    public final void testSetSourceLaneSegmentForLane() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#sourceLane(int)}
-     */
-    @Test
-    public final void testSourceLane() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#sinkRoadSegment(int)}
-     */
-    @Test
-    public final void testSinkRoadSegment() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#setSinkLaneSegmentForLane(org.movsim.simulator.roadnetwork.LaneSegment, int)}
-     */
-    @Test
-    public final void testSetSinkLaneSegmentForLane() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#sinkLane(int)}
-     */
-    @Test
-    public final void testSinkLane() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#roadLength()}
-     */
     @Test
     public final void testRoadLength() {
         final int laneCount = 1;
@@ -280,9 +145,6 @@ public class RoadSegmentTest {
         assertEquals(1234.5, r.roadLength(), delta);
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#laneCount()}
-     */
     @Test
     public final void testLaneCount() {
         final double roadLength = 1000.0;
@@ -296,9 +158,6 @@ public class RoadSegmentTest {
         assertEquals(4, r.laneCount());
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#clearVehicles()}
-     */
     @Test
     public final void testClearVehicles() {
         final double roadLength = 1000.0;
@@ -320,9 +179,6 @@ public class RoadSegmentTest {
         assertEquals(0, roadSegment.getVehicleCount(Lanes.LANE2));
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#getVehicleCount()}
-     */
     @Test
     public final void testVehicleCount() {
         final double roadLength = 1000.0;
@@ -338,25 +194,6 @@ public class RoadSegmentTest {
         assertEquals(0, roadSegment.getVehicleCount());
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#getVehicle(int, int)}
-     */
-    @Test
-    public final void testGetVehicle() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#addVehicle(org.movsim.simulator.vehicles.Vehicle)}
-     */
-    @Test
-    public final void testAddObstacle() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#addVehicle(org.movsim.simulator.vehicles.Vehicle)}
-     */
     @Test
     public final void testAddVehicleVehicle() {
         RoadSegment.resetNextId();
@@ -397,9 +234,6 @@ public class RoadSegmentTest {
         assertEquals(v2, v);
     }
 
-    /**
-     * Test method for org.mjbudden.traffic.RoadSegment#rearVehicleOnLane(int)
-     */
     @Test
     public final void testRearVehicleOnLane() {
         RoadSegment.resetNextId();
@@ -421,9 +255,6 @@ public class RoadSegmentTest {
         assertEquals(v1.getId(), vehicle.getId());
     }
 
-    /**
-     * Test method for org.mjbudden.traffic.RoadSegment#rearVehicle(int, double)
-     */
     @Test
     public final void testRearVehicle() {
         RoadSegment.resetNextId();
@@ -485,9 +316,6 @@ public class RoadSegmentTest {
         assertEquals(null, rV);
     }
 
-    /**
-     * Test method for org.mjbudden.traffic.RoadSegment#frontVehicle(int, double)
-     */
     @Test
     public final void testRearVehicleJoin() {
         RoadSegment.resetNextId();
@@ -544,9 +372,6 @@ public class RoadSegmentTest {
         assertEquals(null, rV);
     }
 
-    /**
-     * Test method for org.mjbudden.traffic.RoadSegment#rearVehicle(int, double)
-     */
     @Test
     public final void testRearVehicleOffsetJoin() {
         // test rear vehicle when there is an offset join, for example a join
@@ -601,9 +426,6 @@ public class RoadSegmentTest {
         assertEquals(y0.getId(), rV.getId());
     }
 
-    /**
-     * Test method for org.mjbudden.traffic.RoadSegment#rearVehicle(int, double)
-     */
     @Test
     public final void testRearVehicleMerge() {
         // test rear vehicle when there is an offset join, for example a join
@@ -670,7 +492,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#frontVehicleOnLane(int)} Vehicles are sorted in order of
-     * decreasing position: start end V(n+1).pos < V(n).pos < V(n-1).pos ... < V(1).pos < V(0).pos
+     * decreasing position: start end V(n+1).pos &lt; V(n).pos &lt; V(n-1).pos ... &lt; V(1).pos &lt; V(0).pos
      * 
      * The front vehicle is the one nearest the start of the road.
      */

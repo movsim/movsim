@@ -41,7 +41,6 @@ public class LongitudinalModelFactory {
      * @param vehLength
      * @param longitudinalModelType
      * @param simulationTimestep
-     * @return
      */
     public static LongitudinalModelBase create(double vehLength, AccelerationModelType longitudinalModelType,
             double simulationTimestep) {

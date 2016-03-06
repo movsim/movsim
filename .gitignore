@@ -6,7 +6,8 @@
 */.classpath
 */test-output
 */.gitignore
-target/
+**/target/
+**/doc/
 bin/
 figs/
 csv/

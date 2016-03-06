@@ -71,13 +71,6 @@ public abstract class RoadMapping {
 
     protected final PolygonFloat lineFloat = new PolygonFloat(2);
 
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     * @param x0
-     * @param y0
-     */
     protected RoadMapping(LaneGeometries laneGeometries, double x0, double y0) {
         this.x0 = x0;
         this.y0 = y0;
@@ -415,8 +408,8 @@ public abstract class RoadMapping {
 
     @Override
     public String toString() {
-        return "RoadMapping [LaneGeometries=" + laneGeometries + ", roadLength=" + roadLength + ", posTheta="
-                + posTheta + ", x0=" + x0 + ", y0=" + y0 + "]";
+        return "RoadMapping [LaneGeometries=" + laneGeometries + ", roadLength=" + roadLength + ", posTheta=" + posTheta
+                + ", x0=" + x0 + ", y0=" + y0 + "]";
     }
 
     /**

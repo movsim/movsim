@@ -55,7 +55,6 @@ import com.google.common.base.Preconditions;
  * <li>a LongitudinalModel which determines its acceleration in the direction of travel.</li>
  * <li>a LaneChangeModel which determines when it changes lanes.</li>
  * </ul>
- * </p>
  * <p>
  * Vehicles are quite frequently created and destroyed, so by design they have few allocated properties.
  * </p>
@@ -675,16 +674,16 @@ public class Vehicle {
         // (1) vehicle is on roadsegment with exit lane
         if (roadSegment.id() == exitRoadSegmentId) {
             LaneSegment firstExitLaneSegment = roadSegment.laneSegment(roadSegment.trafficLaneMax() + Lanes.TO_RIGHT);
-            assert firstExitLaneSegment != null && firstExitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment="
-                    + firstExitLaneSegment;
+            assert firstExitLaneSegment != null
+                    && firstExitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment=" + firstExitLaneSegment;
             Vehicle frontVehicle = firstExitLaneSegment.frontVehicle(this);
             accToVehicleInExitLane = longitudinalModel.calcAcc(this, frontVehicle);
             accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -maxDeceleration);
             if (LOG.isDebugEnabled()) {
-                LOG.debug(String
-                        .format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, calcAcc=%.2f, accLimit=%.2f",
-                                exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
-                                longitudinalModel.calcAcc(this, frontVehicle), accToVehicleInExitLane));
+                LOG.debug(String.format(
+                        "considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, calcAcc=%.2f, accLimit=%.2f",
+                        exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
+                        longitudinalModel.calcAcc(this, frontVehicle), accToVehicleInExitLane));
             }
             return accToVehicleInExitLane;
         }
@@ -692,8 +691,8 @@ public class Vehicle {
         // (2) exit lane is one roadSegment ahead but cannot be reached via sink connection
         RoadSegment sinkRoadSegmentWithExit = roadSegment.sinkRoadSegmentPerId(exitRoadSegmentId);
         if (sinkRoadSegmentWithExit != null) {
-            LaneSegment exitLaneSegment = sinkRoadSegmentWithExit.laneSegment(sinkRoadSegmentWithExit.trafficLaneMax()
-                    + Lanes.TO_RIGHT);
+            LaneSegment exitLaneSegment = sinkRoadSegmentWithExit
+                    .laneSegment(sinkRoadSegmentWithExit.trafficLaneMax() + Lanes.TO_RIGHT);
             assert exitLaneSegment != null && exitLaneSegment.type() == Lanes.Type.EXIT : "no exitLaneSegment="
                     + exitLaneSegment;
             Vehicle frontVehicle = exitLaneSegment.rearVehicle();
@@ -703,10 +702,10 @@ public class Vehicle {
                 accToVehicleInExitLane = longitudinalModel.calcAccSimple(s, getSpeed(), dv);
                 accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -maxDeceleration);
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(String
-                            .format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
-                                    exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
-                                    accToVehicleInExitLane));
+                    LOG.debug(String.format(
+                            "considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
+                            exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
+                            accToVehicleInExitLane));
                 }
                 return accToVehicleInExitLane;
             }
@@ -1041,9 +1040,6 @@ public class Vehicle {
 
     /**
      * Sets the road segment properties for this vehicle. Invoked after a vehicle has moved onto a new road segment.
-     * 
-     * @param roadSegmentId
-     * @param roadSegmentLength
      */
     public final void setRoadSegment(RoadSegment roadSegment) {
         this.roadSegment = Preconditions.checkNotNull(roadSegment);

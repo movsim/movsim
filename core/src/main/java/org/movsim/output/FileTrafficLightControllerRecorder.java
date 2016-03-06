@@ -42,14 +42,6 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
     private static final String extensionFormat = ".controllerGroup_%s.firstSignal_%s.csv";
     private final int nTimestep;
 
-    /**
-     * Constructor.
-     * 
-     * @param nTimestep
-     *            the n'th timestep
-     * @param trafficLights
-     *            the traffic lights
-     */
     public FileTrafficLightControllerRecorder(TrafficLightController controller, int nTimestep) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         Preconditions.checkArgument(!controller.groupId().isEmpty());
