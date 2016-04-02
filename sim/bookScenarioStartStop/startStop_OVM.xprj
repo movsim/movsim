@@ -4,7 +4,7 @@
     <VehiclePrototypes write_fund_diagrams="true">
         <VehiclePrototypeConfiguration label="OVM1" length="8" maximum_deceleration="20">
             <AccelerationModelType>
-                <ModelParameterOVM_FVDM v0="15" tau="0.65" s0="0 " transition_width="8" beta="1.5" gamma="0" optimal_speed_function="bando" />
+                <ModelParameterOVM_FVDM v0="15" tau="0.65" s0="2 " transition_width="8" beta="1.5" gamma="0" optimal_speed_function="bando" />
             </AccelerationModelType>
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>

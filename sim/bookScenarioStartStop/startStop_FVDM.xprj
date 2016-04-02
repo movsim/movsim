@@ -5,13 +5,13 @@
         <!-- optimal_speed_functions: 0=fullVD orig, 1=fullVD secBased, 2=threePhase -->
         <VehiclePrototypeConfiguration label="FVDM1" length="8" maximum_deceleration="100">
             <AccelerationModelType>
-                <ModelParameterOVM_FVDM v0="15" tau="5" s0="0" transition_width="8" beta="1.5" gamma="0.6" optimal_speed_function="bando" />
+                <ModelParameterOVM_FVDM v0="15" tau="5" s0="2" transition_width="8" beta="1.5" gamma="0.6" optimal_speed_function="bando" />
             </AccelerationModelType>
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
         <VehiclePrototypeConfiguration label="Obstacle" length="8" maximum_deceleration="20">
             <AccelerationModelType>
-                <ModelParameterOVM_FVDM v0="0" tau="5" s0="2" transition_width="8" beta="1.5" gamma="0.6" optimal_speed_function="bando" />
+                <ModelParameterOVM_FVDM v0="0" tau="5" s0="0" transition_width="8" beta="1.5" gamma="0.6" optimal_speed_function="bando" />
             </AccelerationModelType>
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
