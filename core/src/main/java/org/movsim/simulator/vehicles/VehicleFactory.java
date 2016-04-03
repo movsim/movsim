@@ -35,8 +35,8 @@ public final class VehicleFactory {
 
     private final ServiceProviders serviceProviders;
 
-    public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes,
-            @Nullable Consumption consumption, Routing routing, @Nullable ServiceProviders serviceProviders) {
+    public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes, @Nullable Consumption consumption,
+            Routing routing, @Nullable ServiceProviders serviceProviders) {
         Preconditions.checkNotNull(vehPrototypes);
         this.routing = Preconditions.checkNotNull(routing);
         this.serviceProviders = serviceProviders;
@@ -48,6 +48,9 @@ public final class VehicleFactory {
         initialize(simulationTimestep, vehPrototypes.getVehiclePrototypeConfiguration(), consumption);
         if (vehPrototypes.isSetWriteFundDiagrams() && vehPrototypes.isWriteFundDiagrams()) {
             writeFundamentalDiagrams(simulationTimestep);
+        }
+        if (vehPrototypes.isSetWriteAccFunctions() && vehPrototypes.isWriteAccFunctions()) {
+            writeAccelerationFunctions(simulationTimestep);
         }
     }
 
@@ -75,7 +78,8 @@ public final class VehicleFactory {
     }
 
     private void setServiceProvider(VehiclePrototype prototype, Vehicle vehicle) {
-        PersonalNavigationDeviceType personalNavigationDevice = prototype.getConfiguration().getPersonalNavigationDevice();
+        PersonalNavigationDeviceType personalNavigationDevice = prototype.getConfiguration()
+                .getPersonalNavigationDevice();
         String providerName = personalNavigationDevice.getServiceProvider();
         ServiceProvider provider = serviceProviders.get(providerName);
         if (provider == null) {
@@ -106,8 +110,8 @@ public final class VehicleFactory {
             if (typeConfig.isSetConsumptionModelName()) {
                 String consumptionModelName = typeConfig.getConsumptionModelName();
                 if (!fuelModelFactory.hasModel(consumptionModelName)) {
-                    throw new IllegalArgumentException("cannot find vehicle's consumption model with label=\""
-                            + consumptionModelName);
+                    throw new IllegalArgumentException(
+                            "cannot find vehicle's consumption model with label=\"" + consumptionModelName);
                 }
                 vehiclePrototype.setEnergyFlowModel(fuelModelFactory.get(consumptionModelName));
             }
@@ -139,6 +143,17 @@ public final class VehicleFactory {
                 FileFundamentalDiagram.writeToFile(simulationTimestep, vehiclePrototype);
             }
         }
+    }
+    
+    private void writeAccelerationFunctions(double simulationTimestep) {
+        final String ignoreLabel = "Obstacle"; // quick hack TODO remove hack
+        LOG.info("write acceleration function but ignore label {}.", ignoreLabel);
+        for (VehiclePrototype vehiclePrototype : vehiclePrototypes.values()) {
+            if (!ignoreLabel.equalsIgnoreCase(vehiclePrototype.getLabel())) {
+                FileAccelerationFunctions.writeToFile(simulationTimestep, vehiclePrototype);
+            }
+        }
+
     }
 
 }

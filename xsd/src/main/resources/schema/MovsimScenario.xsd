@@ -171,6 +171,7 @@
                 <xs:element ref="VehiclePrototypeConfiguration" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:attribute name="write_fund_diagrams" type="xs:boolean" default="false" />
+            <xs:attribute name="write_acc_functions" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
     <xs:element name="VehiclePrototypeConfiguration">
