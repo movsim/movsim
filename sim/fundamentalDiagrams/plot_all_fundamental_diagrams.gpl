@@ -8,4 +8,3 @@ do
  gnuplot -e "ldm='$ldm'" fund_diagrams.gpl
  gv fund_diagrams.fund_${ldm}.eps &
 done;
-
