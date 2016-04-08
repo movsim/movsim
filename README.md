@@ -61,7 +61,7 @@ or via https (to prevent firewall problems)
        
     git clone https://github.com/movsim/movsim.git
               
-[Java](http://www.java.com/en/download/manual.jsp) is required at least in version 7 (JRE 1.7).
+[Java](http://openjdk.java.net/install/index.html) is required at least in version 7 (JRE 1.7).
 
 [Apache Maven] (http://maven.apache.org/download.html) is the software build and management tool for MovSim.
 
@@ -96,35 +96,28 @@ We follow the naming conventions of the [Git Flow Model](http://nvie.com/posts/a
 ## Demos
 --------
 
-There are a number of simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim).
-
-* Applet demos on the website www.movsim.org
-
-* (MovSim v1.0) www.verkehrsdynamik.de/simulation.shtml
-
-* (MovSim v1.2) www.movsim.org/app.shtml
-
-* (Routing game) www.movsim.org
+There are a number of simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/develop/sim).
 
 
-## Commercial Use
-------------------
+##Commercial use
+--------------
 
-For commercial use, please contact the copyright holders at movsim.org@gmail.com.
+For commercial use, please contact the copyright holders at movsim@akesting.de
 
 
 ## Copyright and License
 ------------------------
 
-MovSim is Copyright (C) 2010-2015 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
+MovSim is Copyright (C) 2010-2016 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
-MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
+MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/develop/COPYING).
+
+For general questions use the contact at movsim.org@gmail.com.
 
 ## References 
 -------------
 
-[1] M. Treiber and A. Kesting. Traffic Flow Dynamics, Data, Models and Simulation. 
-    Springer 2013. [Link](http://www.springer.com/physics/complexity/book/978-3-642-32459-8)
+[1] M. Treiber and A. Kesting. [Traffic Flow Dynamics, Data, Models and Simulation](http://www.traffic-flow-dynamics.org). Springer 2013. [Link](http://www.springer.com/physics/complexity/book/978-3-642-32459-8)
 
 [2] A. Kesting, M. Treiber, and D. Helbing. General lane-changing model MOBIL for car-following models. 
     Transportation Research Record, 86-94 (2007). [Paper](http://www.akesting.de/download/MOBIL_TRR_2007.pdf)

@@ -16,7 +16,7 @@ The `viewer` submodule provides a simple GUI interface for visualization.
 Installation
 ------------
 
-For installation see the [README.md](https://github.com/movsim/movsim/blob/master/README.md) in the main MovSim directory.
+For installation see the [README.md](https://github.com/movsim/movsim/blob/develop/README.md) in the main MovSim directory.
 
 
 Usage
@@ -32,13 +32,13 @@ The MovSim viewer can be started directly from the command-line. To see the MovS
 Commercial use
 --------------
 
-For commercial use, please contact the copyright holders at movsim.org@gmail.com
+For commercial use, please contact the copyright holders at movsim@akesting.de
 
 
 Copyright
 ---------
 
-MovSim is Copyright (C) 2010-2015 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
+MovSim is Copyright (C) 2010-2016 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
 MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
 
