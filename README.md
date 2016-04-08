@@ -12,6 +12,7 @@ Current build status for branch *develop*: [![Build Status Bidirectional](https:
 Quick links to this file:
 
 * [Description](#description)
+* [Documentation](#documentation)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Demos](#demos)
@@ -49,6 +50,13 @@ MovSim has several submodules/components:
 * The _xsd_ module comprises the xsd schema resources for the xml bindung (JAXB) 
 * The _common_ provides general functionality for all submodules.
 
+## Documentation
+----------------
+
+A mathematical description of the models as well as the basic concepts can be found in the book [Traffic Flow Dynamics](http://www.traffic-flow-dynamics.org) by Treiber/Kesting. A good starting point is the free chapter about [Car-Following Models based on Driving Strategies](http://traffic-flow-dynamics.org/res/SampleChapter11.pdf).
+
+Documentation by example can be found in the [_sim_ directory](https://github.com/movsim/movsim/tree/develop/sim).
+
 
 ## Installation
 ---------------
@@ -73,7 +81,7 @@ MovSim produces csv/text-based output that can be plotted using [gnuplot](http:/
 
 To build MovSim, type `mvn install` from the main MovSim directory.
 
-To run the movsim _core_ or _viewer_ see their respective readme files: [core](https://github.com/movsim/movsim/blob/master/core/README.md) and [viewer](https://github.com/movsim/movsim/blob/master/viewer/README.md).
+To run the movsim _core_ or _viewer_ see their respective readme files: [core](https://github.com/movsim/movsim/blob/develop/core/README.md) and [viewer](https://github.com/movsim/movsim/blob/develop/viewer/README.md).
 
 
 ## Eclipse
