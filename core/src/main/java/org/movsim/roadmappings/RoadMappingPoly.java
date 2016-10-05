@@ -2,25 +2,25 @@
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
  * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
- * 
+ *
  * This file is part of
- * 
+ *
  * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
+ *
  * MovSim is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * MovSim is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with MovSim. If not, see <http://www.gnu.org/licenses/>
  * or <http://www.movsim.org>.
- * 
+ *
  * -----------------------------------------------------------------------------------------
  */
 
@@ -50,7 +50,7 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
 
     /**
      * Constructor, adds an initial line.
-     * 
+     *
      */
     public RoadMappingPoly(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
         super(laneGeometries, x0, y0);
@@ -157,6 +157,10 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         roadMappings.add(roadMapping);
     }
 
+    public void addSpiral(Geometry geometry) {
+        addSpiral(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(), geometry.getSpiral().getCurvStart(), geometry.getSpiral().getCurvEnd());
+    }
+
     public void addPoly3(double s, double x0, double y0, double theta, double length, double a, double b, double c,
             double d) {
         final RoadMappingBezier roadMapping = new RoadMappingBezier(this.laneGeometries, s, x0, y0, theta, length, a,
@@ -173,7 +177,7 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         } else if (roadGeometry.geometryType() == GeometryType.POLY3) {
             throw new IllegalArgumentException("POLY3 geometry not yet supported");
         } else if (roadGeometry.geometryType() == GeometryType.SPIRAL) {
-            throw new IllegalArgumentException("SPIRAL geometry not yet supported");
+          addSpiral(roadGeometry.geometry());
         } else {
             throw new IllegalArgumentException("Unknown geometry");
         }
