@@ -2,25 +2,25 @@
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
  * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
- * 
+ *
  * This file is part of
- * 
+ *
  * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
+ *
  * MovSim is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * MovSim is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with MovSim. If not, see <http://www.gnu.org/licenses/>
  * or <http://www.movsim.org>.
- * 
+ *
  * -----------------------------------------------------------------------------------------
  */
 
@@ -34,6 +34,11 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -71,7 +76,7 @@ import org.xml.sax.SAXException;
  * <p>
  * TrafficCanvas class.
  * </p>
- * 
+ *
  * <p>
  * Handles:
  * <ul>
@@ -88,7 +93,7 @@ import org.xml.sax.SAXException;
  * <p>
  * Actual road networks and traffic scenarios should be set up in a subclass.
  * </p>
- * 
+ *
  */
 public class TrafficCanvas extends SimulationCanvasBase implements SimulationRunnable.UpdateDrawingCallback,
         SimulationRunnable.HandleExceptionCallback {
@@ -103,12 +108,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Callbacks from this TrafficCanvas to the application UI.
-     * 
+     *
      */
     public interface StatusControlCallbacks {
         /**
          * Callback to get the UI to display a status message.
-         * 
+         *
          * @param message
          *            the status message
          */
@@ -141,6 +146,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private boolean drawSlopes;
     private boolean drawFlowConservingBottlenecks;
     private boolean drawNotifyObjects;
+
+    private BufferedImage backgroundPicture;
 
     // brake light handling
     private Color brakeLightColor = Color.RED;
@@ -203,7 +210,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Returns the traffic canvas controller.
-     * 
+     *
      * @return the traffic canvas controller
      */
     public TrafficCanvasController controller() {
@@ -221,6 +228,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
         final int hexRadix = 16;
         setBackgroundColor(new Color(Integer.parseInt(properties.getProperty("backgroundColor"), hexRadix)));
+        setBackgroundPicturePath(properties.getProperty("backgroundPicturePath"));
         roadColor = new Color(Integer.parseInt(properties.getProperty("roadColor"), hexRadix));
         roadEdgeColor = new Color(Integer.parseInt(properties.getProperty("roadEdgeColor"), hexRadix));
         roadLineColor = new Color(Integer.parseInt(properties.getProperty("roadLineColor"), hexRadix));
@@ -274,7 +282,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Sets up the given traffic scenario.
-     * 
+     *
      * @param scenario
      * @throws SAXException
      * @throws JAXBException
@@ -302,11 +310,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             LOG.info("set color for vehicle label={}", vehicleTypeLabel);
             labelColors.put(vehicleTypeLabel, color);
         }
+        backgroundPicture = null;
+        if(backgroundPicturePath !=null)
+        try {
+          backgroundPicture = ImageIO.read(new File(backgroundPicturePath));
+        } catch (Exception e) {
+        }
     }
 
     /**
      * Sets the status callback functions.
-     * 
+     *
      * @param statusCallbacks
      */
     public void setStatusControlCallbacks(StatusControlCallbacks statusCallbacks) {
@@ -315,7 +329,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Sets the (locale dependent) message strings.
-     * 
+     *
      * @param popupString
      *            popup window format string for vehicle that leaves road segment at a specific exit
      * @param popupStringExitEndRoad
@@ -421,7 +435,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Returns the color of the vehicle. The color may depend on the vehicle's properties, such as its velocity.
-     * 
+     *
      * @param vehicle
      * @param simulationTime
      */
@@ -491,7 +505,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * Draws the foreground: everything that moves each timestep. For the traffic simulation that means draw all the vehicles:<br />
      * For each roadSection, draw all the vehicles in the roadSection, positioning them using the roadMapping for that roadSection.
      * </p>
-     * 
+     *
      * <p>
      * This method is synchronized with the <code>SimulationRunnable.run()</code> method, so that vehicles are not updated, added or removed
      * while they are being drawn.
@@ -500,7 +514,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * tm The abstract method paintAfterVehiclesMoved is called after the vehicles have been moved, to allow any further required drawing on
      * the canvas.
      * </p>
-     * 
+     *
      * @param g
      */
     @Override
@@ -559,11 +573,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     /**
      * Draws the background: everything that does not move each timestep. The background consists of the road segments and the sources and
      * sinks, if they are visible.
-     * 
+     *
      * @param g
      */
     @Override
     protected void drawBackground(Graphics2D g) {
+
+        if(backgroundPicture != null)
+          g.drawImage(backgroundPicture, 0, -(int) (backgroundPicture.getHeight() ), (int) (backgroundPicture.getWidth()*1.01 ), 0, 0, 0, backgroundPicture.getWidth(), backgroundPicture.getHeight(), null);
 
         drawRoadSegmentsAndLines(g);
 
@@ -598,7 +615,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Draws each road segment in the road network.
-     * 
+     *
      * @param g
      */
     private void drawRoadSegmentsAndLines(Graphics2D g) {
@@ -615,7 +632,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Draws the road lines and road edges.
-     * 
+     *
      * @param g
      */
     private void drawRoadSegmentLines(Graphics2D g, RoadMapping roadMapping) {
@@ -689,7 +706,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Draws the ids for the road sections, sources and sinks.
-     * 
+     *
      * @param g
      */
     private void drawRoadSectionIds(Graphics2D g) {
@@ -778,7 +795,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Draws the sources.
-     * 
+     *
      * @param g
      */
     private void drawSources(Graphics2D g) {
@@ -792,7 +809,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Draws the sinks.
-     * 
+     *
      * @param g
      */
     private void drawSinks(Graphics2D g) {
