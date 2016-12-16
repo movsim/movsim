@@ -27,7 +27,6 @@ import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.Noise;
 import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
 import org.movsim.utilities.Colors;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
@@ -752,10 +751,9 @@ public class Vehicle {
             final int advance = (int) (frontPosition + dt * speed + 0.5);
             totalTravelDistance += (advance - frontPosition);
             frontPosition = advance;
-        } else if (longitudinalModel != null && (longitudinalModel.modelName() == ModelName.NEWELL)) {
-            // Newell position update: Different to continuous microscopic
-            // models and iterated maps.
-            // See chapter 10.7 english book version
+        } else if (longitudinalModel != null && (longitudinalModel.isIteratedMap())) {
+            // Newell, Gipps and Krauss model: modified first-order positional update (simple Euler scheme)
+            // See chapter 10.8 of "Traffic Flow Dynamics" book
             if (speed < 0) {
                 speed = 0;
             }
