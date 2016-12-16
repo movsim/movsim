@@ -7,7 +7,7 @@ cleanmovsim
 
 for ldm in ${startStop}
 do
-  input="startStop_$ldm.xml"
+  input="startStop_$ldm"
   echo "input = $input"
   runmovsim -f $input
   gnuplot "startStop_$ldm.gpl"

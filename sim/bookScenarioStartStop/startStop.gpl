@@ -21,12 +21,12 @@ if (!exists("lang")) lang = "en"
 # variables
 baseFile = "startStop_".ldm
 vehicle = ldm."1"
-c0 = 1
+c0 = 27
 
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
 if (ldm eq "IDM_w_noise") fundFile = inputPath.baseFile.".fund_IDM1.csv"
-carFile(n) = sprintf(inputPath.baseFile.".car.route_main.%06d.csv",c0+n)
+carFile(n) = sprintf(inputPath.baseFile.".car.route_main.%06d.csv",c0-n)
 carLsaFile(n) = sprintf(inputPath.baseFile."LSA.car%d.csv",c0+n)
 trajectoriesFile = inputPath.baseFile.".traj.route_main.csv"
 
@@ -144,7 +144,7 @@ set ytics 10
 print "carFile(1)=", carFile(1)," c0=",c0
 
 set out distanceOutput
-if(c0 == 1) plot\
+plot\
   carFile(1)  using 1:9 title car(1)  with lines linestyle 1,\
   carFile(5)  using 1:9 title car(5)  with lines linestyle 2,\
   carFile(10) using 1:9 title car(10) with lines linestyle 3,\

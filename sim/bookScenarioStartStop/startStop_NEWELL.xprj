@@ -30,11 +30,11 @@
         </Routes>
         <OutputConfiguration>
             <FloatingCarOutput n_timestep="5" route="main">
-                <FloatingCar number="2" />
-                <FloatingCar number="6" />
-                <FloatingCar number="11" />
-                <FloatingCar number="16" />
-                <FloatingCar number="21" />
+                <FloatingCar number="7" />
+                <FloatingCar number="12" />
+                <FloatingCar number="17" />
+                <FloatingCar number="22" />
+                <FloatingCar number="26" />  <!-- most downstram vehicle approaching obstacle -->
             </FloatingCarOutput>
             <Trajectories dt="1" route="main" />
         </OutputConfiguration>

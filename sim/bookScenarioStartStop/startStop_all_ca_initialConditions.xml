@@ -92,6 +92,7 @@
             <VehicleInitialCondition position="230" speed="0" label="KKW1" />
             <VehicleInitialCondition position="240" speed="0" label="KKW1" />
             <VehicleInitialCondition position="250" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="260" speed="0" label="KKW1" />
             <VehicleInitialCondition position="1000" speed="0" label="ObstacleKKW" />
         </MicroscopicInitialConditions>
     </RoadInitialConditions>

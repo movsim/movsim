@@ -4,7 +4,8 @@
     <VehiclePrototypes write_fund_diagrams="true">
         <VehiclePrototypeConfiguration label="ACC1" length="8" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="1.5" b="1.5" coolness="1" />
+				<!-- these parameters are used for plotting Fig 11.10 in the book  -->
+                <ModelParameterACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="1.5" b="1.5" coolness="0.99" />
             </AccelerationModelType>
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
@@ -30,11 +31,11 @@
         </Routes>
         <OutputConfiguration>
             <FloatingCarOutput n_timestep="5" route="main">
-                <FloatingCar number="2" />
-                <FloatingCar number="6" />
-                <FloatingCar number="11" />
-                <FloatingCar number="16" />
-                <FloatingCar number="21" />
+                <FloatingCar number="7" />
+                <FloatingCar number="12" />
+                <FloatingCar number="17" />
+                <FloatingCar number="22" />
+                <FloatingCar number="26" />  <!-- most downstram vehicle approaching obstacle -->
             </FloatingCarOutput>
             <Trajectories dt="1" start_time="0" end_time="120" route="main" />
         </OutputConfiguration>

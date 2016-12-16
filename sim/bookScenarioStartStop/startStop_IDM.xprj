@@ -4,7 +4,7 @@
     <VehiclePrototypes write_fund_diagrams="true">
         <VehiclePrototypeConfiguration label="IDM1" length="8" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterIDM v0="15" T="1" s0="2" a="1.5" b="1.5" />
+                <ModelParameterIDM v0="15" T="1" s0="2" delta="4" a="1.0" b="1.5" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
         <VehiclePrototypeConfiguration label="Obstacle" length="8" maximum_deceleration="9">
@@ -28,11 +28,11 @@
         </Routes>
         <OutputConfiguration>
             <FloatingCarOutput n_timestep="5" route="main">
-                <FloatingCar number="2" />
-                <FloatingCar number="6" />
-                <FloatingCar number="11" />
-                <FloatingCar number="16" />
-                <FloatingCar number="21" />
+                <FloatingCar number="7" />
+                <FloatingCar number="12" />
+                <FloatingCar number="17" />
+                <FloatingCar number="22" />
+                <FloatingCar number="26" />
             </FloatingCarOutput>
             <Trajectories dt="1" route="main" />
         </OutputConfiguration>

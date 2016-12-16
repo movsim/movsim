@@ -19,45 +19,12 @@
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="startStop.xodr" initial_conditions_filename="startStop_initialConditions_BARL.xml">
+    <Scenario network_filename="startStop.xodr" initial_conditions_filename="startStop_initialConditions_NSM.xml">
         <Simulation timestep="1" duration="360" seed="42">
             <TrafficComposition>
                 <VehicleType label="BARL1" fraction="1" />
                 <VehicleType label="Obstacle" fraction="0" />
             </TrafficComposition>
-            <Road id="1">
-                <InitialConditions>
-                    <!-- in physical quantities (meter and m/s) -->
-                    <MicroIC position="7.5" speed="0" label="BARL1" />
-                    <MicroIC position="15.0" speed="0" label="BARL1" />
-                    <MicroIC position="22.5" speed="0" label="BARL1" />
-                    <MicroIC position="30.0" speed="0" label="BARL1" />
-                    <MicroIC position="37.5" speed="0" label="BARL1" />
-                    <MicroIC position="45.0" speed="0" label="BARL1" />
-                    <MicroIC position="52.5" speed="0" label="BARL1" />
-                    <MicroIC position="60.0" speed="0" label="BARL1" />
-                    <MicroIC position="67.5" speed="0" label="BARL1" />
-                    <MicroIC position="75.0" speed="0" label="BARL1" />
-                    <MicroIC position="82.5" speed="0" label="BARL1" />
-                    <MicroIC position="90.0" speed="0" label="BARL1" />
-                    <MicroIC position="97.5" speed="0" label="BARL1" />
-                    <MicroIC position="105.0" speed="0" label="BARL1" />
-                    <MicroIC position="112.5" speed="0" label="BARL1" />
-                    <MicroIC position="120.0" speed="0" label="BARL1" />
-                    <MicroIC position="127.5" speed="0" label="BARL1" />
-                    <MicroIC position="135.0" speed="0" label="BARL1" />
-                    <MicroIC position="142.5" speed="0" label="BARL1" />
-                    <MicroIC position="150.0" speed="0" label="BARL1" />
-                    <MicroIC position="157.5" speed="0" label="BARL1" />
-                    <MicroIC position="165.0" speed="0" label="BARL1" />
-                    <MicroIC position="172.5" speed="0" label="BARL1" />
-                    <MicroIC position="180.0" speed="0" label="BARL1" />
-                    <MicroIC position="187.5" speed="0" label="BARL1" />
-                    <MicroIC position="195.0" speed="0" label="BARL1" />
-                    <!-- obstacle shifts floating car numbers -->
-                    <MicroIC position="750" speed="0" label="Obstacle" />
-                </InitialConditions>
-            </Road>
         </Simulation>
         <Routes>
             <Route label="main">
@@ -66,12 +33,11 @@
         </Routes>
         <OutputConfiguration>
             <FloatingCarOutput n_timestep="1" route="main">
-                <!-- FloatingCar 1 is obstacle -->
-                <FloatingCar number="2" />
-                <FloatingCar number="6" />
-                <FloatingCar number="11" />
-                <FloatingCar number="16" />
-                <FloatingCar number="21" />
+                <FloatingCar number="7" />
+                <FloatingCar number="12" />
+                <FloatingCar number="17" />
+                <FloatingCar number="22" />
+                <FloatingCar number="26" />  <!-- most downstram vehicle approaching obstacle -->
             </FloatingCarOutput>
             <Trajectories dt="1" route="main" />
         </OutputConfiguration>
