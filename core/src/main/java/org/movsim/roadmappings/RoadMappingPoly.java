@@ -31,11 +31,15 @@ import java.util.Iterator;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.movsim.roadmappings.RoadGeometry.GeometryType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappingUtils.
  */
 public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RoadMappingPoly.class);
 
     protected final ArrayList<RoadMapping> roadMappings = new ArrayList<>();
 
@@ -145,8 +149,8 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     }
 
     public void addArc(Geometry geometry) {
-        addArc(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(), geometry
-                .getArc().getCurvature());
+        addArc(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(),
+                geometry.getArc().getCurvature());
     }
 
     public void addSpiral(double s, double x0, double y0, double theta, double length, double startCurvature,
@@ -158,13 +162,13 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     }
 
     public void addSpiral(Geometry geometry) {
-        addSpiral(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(), geometry.getSpiral().getCurvStart(), geometry.getSpiral().getCurvEnd());
+        addSpiral(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(),
+                geometry.getSpiral().getCurvStart(), geometry.getSpiral().getCurvEnd());
     }
 
     public void addPoly3(double s, double x0, double y0, double theta, double length, double a, double b, double c,
             double d) {
-        final RoadMappingBezier roadMapping = new RoadMappingBezier(this.laneGeometries, s, x0, y0, theta, length, a,
-                b, c, d);
+        RoadMappingBezier roadMapping = new RoadMappingBezier(laneGeometries, s, x0, y0, theta, length, a, b, c, d);
         roadLength += length;
         roadMappings.add(roadMapping);
     }
@@ -177,7 +181,8 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         } else if (roadGeometry.geometryType() == GeometryType.POLY3) {
             throw new IllegalArgumentException("POLY3 geometry not yet supported");
         } else if (roadGeometry.geometryType() == GeometryType.SPIRAL) {
-          addSpiral(roadGeometry.geometry());
+            LOG.warn("SPIRAL geometry not yet fully supported but approximated by an arc");
+            addSpiral(roadGeometry.geometry());
         } else {
             throw new IllegalArgumentException("Unknown geometry");
         }
