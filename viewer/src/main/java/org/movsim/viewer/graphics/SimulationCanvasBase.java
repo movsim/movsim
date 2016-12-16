@@ -53,8 +53,6 @@ import org.movsim.simulator.SimulationRunnable;
  * That is the base class handles the "policy free" aspects of the view. Other aspects of the view (colors, setting up the simulation,
  * drawing the foreground and background) are deferred to a subclass.
  * </p>
- *
- *
  */
 public abstract class SimulationCanvasBase extends Canvas {
 
@@ -73,9 +71,9 @@ public abstract class SimulationCanvasBase extends Canvas {
     protected boolean backgroundChanged;
     // default background color
     protected Color backgroundColor;
-    // default background picture
+    // optional background picture
     protected String backgroundPicturePath;
-  // scale factor pixels/m, smaller value means a smaller looking view
+    // scale factor pixels/m, smaller value means a smaller looking view
     double scale;
     int xOffset = 0;
     int yOffset = 0;
@@ -316,13 +314,10 @@ public abstract class SimulationCanvasBase extends Canvas {
         this.backgroundColor = backgroundColor;
     }
 
-    public String getBackgroundPicturePath() {
-        return backgroundPicturePath;
-    }
-
     public void setBackgroundPicturePath(String backgroundPicturePath) {
         this.backgroundPicturePath = backgroundPicturePath;
     }
+
     /**
      * Function to be overridden for subclass state change handling.
      */
