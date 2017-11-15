@@ -1,5 +1,4 @@
 # MovSim 
----------
 
 Movsim == **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator
 
@@ -20,13 +19,14 @@ Quick links to this file:
 
 
 ## Description
---------------
 
-MovSim is a microscopic lane-based traffic simulator with xml-based configuration and csv text output. The simulator implements various car-following models and provides reference implementations for the models described in the textbook [Traffic Flow Dynamics](http://www.traffic-flow-dynamics.org). MovSim aims at modeling and simulating all basic traffic situations and discrete decision like lane changes, reacting to a traffic light, yielding and overtaking on rural roads in a generic way and therefore applicable to the implemented models. Lane changes are modeled with the general [MOBIL strategy](http://www.akesting.de/download/MOBIL_TRR_2007.pdf) based on longitudinal accelerations which is extendable to other decisions. 
+MovSim is a microscopic lane-based traffic simulator with xml-based configuration and csv text output. The simulator implements various car-following models and provides reference implementations for the models described in the textbook [Traffic Flow Dynamics](http://www.traffic-flow-dynamics.org).
 
-MovSim can be run from commandline or with a graphical user interface including visualization. Several output quantities can be written to file for further analysis. MovSim also provides a physics-based fuel-consumption model to calculate consumption on an individual or collective level. 
+MovSim aims at modeling and simulating all basic traffic situations and discrete decision like lane changes, reacting to a traffic light, yielding and overtaking on rural roads. Lane changes are modeled with the general [MOBIL strategy](http://www.akesting.de/download/MOBIL_TRR_2007.pdf) based on longitudinal accelerations which is applicable to other discrete decisions as well. 
 
-Features:
+MovSim can be run from commandline or with a graphical user interface including visualization. Several output quantities can be written to file for further in-depth analysis. MovSim also provides a physics-based fuel-consumption model to calculate consumption on an individual or collective level. 
+
+### Features:
 
 - multi-lane simulator including onramps, offramps, "flow-conserving bottlenecks" and traffic-lights
 - multiple models of different model classes (car-following models, coupled-map models and cellular automata)
@@ -44,9 +44,9 @@ Features:
   * Memory model [Paper](https://arxiv.org/abs/cond-mat/0304337)
   * Noise model [Paper](https://arxiv.org/abs/1708.06952) and [Paper](https://arxiv.org/abs/physics/0508222)
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
-- road network description by OpenDrive standard [opendrive.org](/http://www.opendrive.org)
+- road network description by the [opendrive.org](/http://www.opendrive.org) standard 
 
-MovSim has several submodules/components: 
+### Submodule Components: 
 
 * The _core_ contains the main MovSim library and a console application that can run a traffic simulation and produce _.csv_ output for further processing or graphical display.
 * The _viewer_ displays an animated traffic simulation.
@@ -62,7 +62,6 @@ Documentation by example can be found in the [_sim_ directory](https://github.co
 
 
 ## Installation
----------------
 
 Install the [git](http://git-scm.com/download) version control system and clone the repository via ssh
 
@@ -80,7 +79,6 @@ MovSim produces csv/text-based output that can be plotted using [gnuplot](http:/
 
 
 ## Usage
---------
 
 To build MovSim, type `mvn install` from the main MovSim directory.
 
@@ -88,7 +86,6 @@ To run the movsim _core_ or _viewer_ see their respective readme files: [core](h
 
 
 ## Eclipse
-----------
 
 MovSim can be built and run from within the [Eclipse IDE](http://www.eclipse.org/downloads/) with the m2e(Maven Integration for Eclipse) plugin.
 
@@ -99,13 +96,11 @@ You can then build and run either the _core_ or _viewer_ Java applications.
 We use the source code formatter _movsim/misc/codestyle/eclipse_movsim_profile.xml_.
 
 ## Development
---------------
 
 We follow the naming conventions of the [Git Flow Model](http://nvie.com/posts/a-successful-git-branching-model/). Please checkout the branch *develop* to start with the latest source code. 
 
  
 ## Demos
---------
 
 There are a number of simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/develop/sim).
 
@@ -113,13 +108,10 @@ Movsim can not only used for simulating road traffic but has been used to model 
 
 
 ## Commercial use
---------------
 
 For commercial use, please contact the copyright holders at movsim@akesting.de
 
-
 ## Copyright and License
-------------------------
 
 MovSim is Copyright (C) 2010-2016 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
@@ -128,7 +120,6 @@ MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/d
 For general questions use the contact at movsim.org@gmail.com.
 
 ## References 
--------------
 
 [1] M. Treiber and A. Kesting. [Traffic Flow Dynamics, Data, Models and Simulation](http://www.traffic-flow-dynamics.org). Springer 2013. [Link](http://www.springer.com/physics/complexity/book/978-3-642-32459-8)
 
