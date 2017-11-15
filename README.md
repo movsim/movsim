@@ -3,8 +3,6 @@
 
 Movsim == **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator
 
-Movsim's Homepage: [http://www.movsim.org](http://www.movsim.org)
-
 Current build status for branch *Master*: [![Build Status Master](https://api.travis-ci.org/movsim/movsim.png?branch=master)](https://travis-ci.org/movsim/movsim)
 
 Current build status for branch *develop*: [![Build Status Bidirectional](https://api.travis-ci.org/movsim/movsim.png?branch=develop)](https://travis-ci.org/movsim/movsim)
@@ -24,23 +22,29 @@ Quick links to this file:
 ## Description
 --------------
 
-MovSim is a microscopic traffic simulator with xml-based configuration and csv text output.
+MovSim is a microscopic lane-based traffic simulator with xml-based configuration and csv text output. The simulator implements various car-following models and provides reference implementations for the models described in the textbook [Traffic Flow Dynamics](http://www.traffic-flow-dynamics.org). MovSim aims at modeling and simulating all basic traffic situations and discrete decision like lane changes, reacting to a traffic light, yielding and overtaking on rural roads in a generic way and therefore applicable to the implemented models. Lane changes are modeled with the general [MOBIL strategy](http://www.akesting.de/download/MOBIL_TRR_2007.pdf) based on longitudinal accelerations which is extendable to other decisions. 
+
+MovSim can be run from commandline or with a graphical user interface including visualization. Several output quantities can be written to file for further analysis. MovSim also provides a physics-based fuel-consumption model to calculate consumption on an individual or collective level. 
 
 Features:
 
 - multi-lane simulator including onramps, offramps, "flow-conserving bottlenecks" and traffic-lights
 - multiple models of different model classes (car-following models, coupled-map models and cellular automata)
-  * Intelligent Driver Model (IDM) [Wikipedia](http://en.wikipedia.org/wiki/Intelligent_driver_model)
-  * Enhanced IDM/Adaptive Cruise Control Model [Preprint] (http://arxiv.org/abs/0912.3613)
+  * Intelligent Driver Model (IDM) [Paper](https://arxiv.org/abs/cond-mat/0002177), [Wikipedia](http://en.wikipedia.org/wiki/Intelligent_driver_model)
+  * Enhanced IDM/Adaptive Cruise Control Model [Preprint](http://arxiv.org/abs/0912.3613)
   * Optimal Velocity or Bando Model 
   * Velocity Difference Model 
-  * Gipps Model [Wikipedia] (http://en.wikipedia.org/wiki/Gipps%27_Model)
+  * Gipps Model [Wikipedia](http://en.wikipedia.org/wiki/Gipps%27_Model)
   * Krauss Model
-  * Nagel-Schreckenberg Cellular Automaton [Wikipedia] (http://en.wikipedia.org/wiki/Nagel-Schreckenberg_model)
+  * Nagel-Schreckenberg Cellular Automaton [Wikipedia](http://en.wikipedia.org/wiki/Nagel-Schreckenberg_model)
   * Kerner-Klenov-Wolf Cellular Automaton
 - general lane-changing model MOBIL [Paper](http://www.akesting.de/download/MOBIL_TRR_2007.pdf)
-- detailed physics-based model for fuel consumption and emissions
+- detailed physics-based model for fuel consumption and emissions [Paper](http://www.akesting.de/download/How_Much_does_Traffic_Congestion_Increase_Fuel_Con.pdf) and [Book](http://www.traffic-flow-dynamics.org)
+- drivers' behavioral models
+  * Memory model [Paper](https://arxiv.org/abs/cond-mat/0304337)
+  * Noise model [Paper](https://arxiv.org/abs/1708.06952) and [Paper](https://arxiv.org/abs/physics/0508222)
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
+- road network description by OpenDrive standard [opendrive.org](/http://www.opendrive.org)
 
 MovSim has several submodules/components: 
 
@@ -51,9 +55,8 @@ MovSim has several submodules/components:
 * The _common_ provides general functionality for all submodules.
 
 ## Documentation
-----------------
 
-A mathematical description of the models as well as the basic concepts can be found in the book [Traffic Flow Dynamics](http://www.traffic-flow-dynamics.org) by Treiber/Kesting. A good starting point is the free chapter about [Car-Following Models based on Driving Strategies](http://traffic-flow-dynamics.org/res/SampleChapter11.pdf).
+A mathematical description of the models as well as the basic simulation and evaluation concepts can be found in the book [Traffic Flow Dynamics](http://www.traffic-flow-dynamics.org) by Treiber/Kesting. A good starting point is the free chapter about [Car-Following Models based on Driving Strategies](http://traffic-flow-dynamics.org/res/SampleChapter11.pdf).
 
 Documentation by example can be found in the [_sim_ directory](https://github.com/movsim/movsim/tree/develop/sim).
 
@@ -106,8 +109,10 @@ We follow the naming conventions of the [Git Flow Model](http://nvie.com/posts/a
 
 There are a number of simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/develop/sim).
 
+Movsim can not only used for simulating road traffic but has been used to model a cross-country skiing race [Youtube](https://www.youtube.com/watch?v=qmzTEjOKSdw).
 
-##Commercial use
+
+## Commercial use
 --------------
 
 For commercial use, please contact the copyright holders at movsim@akesting.de
