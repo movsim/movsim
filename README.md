@@ -41,8 +41,8 @@ MovSim can be run from commandline or with a graphical user interface including 
 - general lane-changing model MOBIL [Paper](http://www.akesting.de/download/MOBIL_TRR_2007.pdf)
 - detailed physics-based model for fuel consumption and emissions [Paper](http://www.akesting.de/download/How_Much_does_Traffic_Congestion_Increase_Fuel_Con.pdf) and [Book](http://www.traffic-flow-dynamics.org)
 - drivers' behavioral models
-  * Memory model [Paper](https://arxiv.org/abs/cond-mat/0304337)
-  * Noise model [Paper](https://arxiv.org/abs/1708.06952) and [Paper](https://arxiv.org/abs/physics/0508222)
+  * Memory model, see [Paper](https://arxiv.org/abs/cond-mat/0304337)
+  * Noise model, see [Paper1](https://arxiv.org/abs/1708.06952) and [Paper2](https://arxiv.org/abs/physics/0508222)
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
 - road network description by the [opendrive.org](/http://www.opendrive.org) standard 
 
@@ -121,7 +121,7 @@ For general questions use the contact at movsim.org@gmail.com.
 
 ## References 
 
-[1] M. Treiber and A. Kesting. [Traffic Flow Dynamics, Data, Models and Simulation](http://www.traffic-flow-dynamics.org). Springer 2013. [Link](http://www.springer.com/physics/complexity/book/978-3-642-32459-8)
+[1] M. Treiber and A. Kesting. [Traffic Flow Dynamics, Data, Models and Simulation](http://www.traffic-flow-dynamics.org). [Springer](http://www.springer.com/physics/complexity/book/978-3-642-32459-8) 2013. 
 
 [2] A. Kesting, M. Treiber, and D. Helbing. General lane-changing model MOBIL for car-following models. 
     Transportation Research Record, 86-94 (2007). [Paper](http://www.akesting.de/download/MOBIL_TRR_2007.pdf)
