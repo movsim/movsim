@@ -44,7 +44,7 @@ MovSim can be run from commandline or with a graphical user interface including 
   * Memory model, see [Paper](https://arxiv.org/abs/cond-mat/0304337)
   * Noise model, see [Paper1](https://arxiv.org/abs/1708.06952) and [Paper2](https://arxiv.org/abs/physics/0508222)
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
-- road network description by the [opendrive.org](/http://www.opendrive.org) standard 
+- road network description by the [opendrive.org](http://www.opendrive.org) standard
 
 ### Submodule Components: 
 
