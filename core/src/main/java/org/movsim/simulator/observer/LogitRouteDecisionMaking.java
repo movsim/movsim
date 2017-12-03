@@ -23,7 +23,7 @@ class LogitRouteDecisionMaking {
                 return alternative;
             }
         }
-        Preconditions.checkState(false, "probabilities not sumed correctly: random=" + random + ", sumProb=" + sumProb);
+        Preconditions.checkState(false, "probabilities not summed correctly: random=" + random + ", sumProb=" + sumProb);
         return null;
     }
 
@@ -53,7 +53,6 @@ class LogitRouteDecisionMaking {
             if (hasTooLargeExponent(beta, alternative, alternatives)) {
                 // probability of 0 as trivial result
                 alternative.setProbability(0);
-
             } else {
                 double probAlternative = calcProbability(beta, alternative, alternatives);
                 alternative.setProbability(probAlternative);

@@ -40,19 +40,29 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
 
     private static final double TINY_VALUE = 0.0001;
 
-    /** The Constant LOG. */
+    /**
+     * The Constant LOG.
+     */
     private static final Logger LOG = LoggerFactory.getLogger(EquilibriumPropertiesImpl.class);
 
-    /** Discretization steps for tabulated function. Time-critical. */
+    /**
+     * Discretization steps for tabulated function. Time-critical.
+     */
     private static final int NRHO = 51;
 
-    /** The maximum density */
+    /**
+     * The maximum density
+     */
     private final double rhoMax;
 
-    /** The maximum equilibrium flow */
+    /**
+     * The maximum equilibrium flow
+     */
     double qMax = 0;
 
-    /** The density at maximum flow */
+    /**
+     * The density at maximum flow
+     */
     double rhoQMax = 0;
 
     private final LinearInterpolatedFunction vEqFunction;
@@ -67,7 +77,7 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
             vEqFunction = calcEquilibriumSpeedFunction(model);
             calcRhoQMax();
         } else {
-            double[] xDummy = new double[] { 0 };
+            double[] xDummy = new double[]{0};
             vEqFunction = new LinearInterpolatedFunction(xDummy, xDummy);
         }
     }
@@ -110,11 +120,10 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
 
     /**
      * Calculates equilibrium velocity {@literal vEq} as a function of the density {@literal rho}.
-     * 
+     * <p>
      * <p>
      * Finds equilibrium velocities with simple relaxation method: Model for homogeneous traffic solved for the velocity v_it of one
      * arbitrary vehicle.
-     * 
      */
     private LinearInterpolatedFunction calcEquilibriumSpeedFunction(LongitudinalModelBase model) {
         LOG.info("calc equilibrium speed as function of density for model={}", model.modelName());
@@ -145,14 +154,13 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
         vEqTab[0] = v0; // start with rho=0
         rhoTab[0] = 0;
         for (int ir = 1; ir < vEqTab.length; ir++) {
-            // final double rho = rhoMax * ir / vEqTab.length;
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
             // start iteration with equilibrium velocity for the previous localDensity
             vIteration = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.calcAccSimple(s, vIteration, 0.);
-                // interation step in [dtmin, dtmax]
+                // integration step in [dtmin, dtmax]
                 final double dtLocal = dtMax * vIteration / Math.max(v0, TINY_VALUE) + dtMin;
                 // actual relaxation
                 vIteration += dtLocal * acc;

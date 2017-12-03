@@ -103,7 +103,7 @@ public final class VehicleFactory {
             @Nullable Consumption consumption) {
         for (VehiclePrototypeConfiguration typeConfig : configurations) {
             if (vehiclePrototypes.containsKey(typeConfig.getLabel())) {
-                throw new IllegalArgumentException("ambigous vehicle prototype definition: prototype with label=\""
+                throw new IllegalArgumentException("ambiguous vehicle prototype definition: prototype with label=\""
                         + typeConfig.getLabel() + "\" already exists.");
             }
             VehiclePrototype vehiclePrototype = new VehiclePrototype(simulationTimestep, typeConfig);
