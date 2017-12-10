@@ -40,10 +40,7 @@ import com.google.common.base.Preconditions;
  * The Class MOBIL.
  * 
  * <p>
- * Paper for reference:
- * </p>
- * <p>
- * <a href="http://pubsindex.trb.org/view.aspx?id=801029"> M. Treiber, A. Kesting, D. Helbing, General Lanes-Changing Model MOBIL for
+ * Paper for reference: <a href="http://pubsindex.trb.org/view.aspx?id=801029"> A. Kesting, M. Treiber, D. Helbing, General Lanes-Changing Model MOBIL for
  * Car-Following Models. Transportation Research Record, Volume 1999, Pages 86-94 (2007).</a>
  * </p>
  */
@@ -57,7 +54,7 @@ public class MOBIL {
     private ModelParameterMOBIL param;
 
     /**
-     * Instantiates a new MOBIL.
+     * Instantiates a new MOBIL model
      * 
      * @param vehicle
      *            the vehicle
