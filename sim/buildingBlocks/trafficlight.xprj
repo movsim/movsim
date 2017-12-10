@@ -46,7 +46,7 @@
                 <Phase duration="35">
                     <TrafficLightState type="firstLight" status="Green" />
                 </Phase>
-                <Phase duration="3">
+                <Phase duration="5">
                     <TrafficLightState type="firstLight" status="GreenRed" />
                 </Phase>
                 <Phase duration="40">
