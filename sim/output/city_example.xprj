@@ -18,6 +18,7 @@
             </ConsumptionModel>
         </ConsumptionModels>
     </Consumption>
+
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9" consumption_model_name="carConsumption">
             <AccelerationModelType>

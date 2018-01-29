@@ -20,4 +20,8 @@ Thumbs.db
 *.eps
 *~
 /.project
+README_compileRun
+README_floatcars
+int
+*_highscore.txt
 

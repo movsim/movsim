@@ -63,6 +63,7 @@
                 <FloatingCar number="6" />
                 <FloatingCar number="11" />
                 <FloatingCar number="16" />
+                <FloatingCar number="3" />
                 <FloatingCar number="21" />
             </FloatingCarOutput>
             <Trajectories dt="1" route="main" />

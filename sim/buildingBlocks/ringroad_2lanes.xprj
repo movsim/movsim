@@ -30,8 +30,13 @@
             </TrafficComposition>
             <Road id="43">
                 <InitialConditions>
-                    <MacroIC position="1" density_per_km="30" />
+                    <MacroIC position="1" density_per_km="40" />
                 </InitialConditions>
+
+		<Detectors sample_interval="30" logging="true">
+                    <CrossSection position="100" />
+                </Detectors>
+ 
             </Road>
         </Simulation>
     </Scenario>
