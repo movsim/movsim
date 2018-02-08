@@ -26,7 +26,7 @@
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
     <Scenario network_filename="onramp.xodr">
-        <Simulation timestep="0.2" seed="42" crash_exit="false">
+        <Simulation timestep="0.2">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.1" />
                 <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.1" />

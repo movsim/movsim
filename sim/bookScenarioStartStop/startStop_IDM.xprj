@@ -7,7 +7,8 @@
                 <ModelParameterIDM v0="15" T="1" s0="2" a="1.0" b="1.5" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
-        <VehiclePrototypeConfiguration label="Obstacle" length="8" maximum_deceleration="9">
+        <VehiclePrototypeConfiguration label="Obstacle" length="8"
+				       width="10" maximum_deceleration="9">
             <AccelerationModelType>
                 <ModelParameterIDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
             </AccelerationModelType>

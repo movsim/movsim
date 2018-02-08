@@ -46,7 +46,7 @@
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="startStop_all_continous.xodr">
+    <Scenario network_filename="startStop_all_continuous.xodr">
         <Simulation timestep="0.2" duration="780" seed="42">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="1" />
@@ -85,7 +85,7 @@
                     <MicroIC position="250" speed="0" />
                     <MicroIC position="260" speed="0" />
                     <!-- obstacle shifts floating car numbers -->
-                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                    <MicroIC position="1200" speed="0" label="Obstacle" />
                 </InitialConditions>
             </Road>
             <!-- ############################ -->
@@ -122,7 +122,7 @@
                     <MicroIC position="250" speed="0" />
                     <MicroIC position="260" speed="0" />
                     <!-- obstacle shifts floating car numbers -->
-                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                    <MicroIC position="1200" speed="0" label="Obstacle" />
                 </InitialConditions>
             </Road>
             <!-- ############################ -->
@@ -159,7 +159,7 @@
                     <MicroIC position="250" speed="0" />
                     <MicroIC position="260" speed="0" />
                     <!-- obstacle shifts floating car numbers -->
-                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                    <MicroIC position="1200" speed="0" label="Obstacle" />
                 </InitialConditions>
             </Road>
             <!-- ############################ -->
@@ -196,7 +196,7 @@
                     <MicroIC position="250" speed="0" />
                     <MicroIC position="260" speed="0" />
                     <!-- obstacle shifts floating car numbers -->
-                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                    <MicroIC position="1200" speed="0" label="Obstacle" />
                 </InitialConditions>
             </Road>
             <!-- ############################ -->
@@ -233,7 +233,7 @@
                     <MicroIC position="250" speed="0" />
                     <MicroIC position="260" speed="0" />
                     <!-- obstacle shifts floating car numbers -->
-                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                    <MicroIC position="1200" speed="0" label="Obstacle" />
                 </InitialConditions>
             </Road>
             <!-- ############################ -->
@@ -270,7 +270,7 @@
                     <MicroIC position="250" speed="0" />
                     <MicroIC position="260" speed="0" />
                     <!-- obstacle shifts floating car numbers -->
-                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                    <MicroIC position="1200" speed="0" label="Obstacle" />
                 </InitialConditions>
             </Road>
             <!-- ############################ -->
@@ -307,7 +307,7 @@
                     <MicroIC position="250" speed="0" />
                     <MicroIC position="260" speed="0" />
                     <!-- obstacle shifts floating car numbers -->
-                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                    <MicroIC position="1200" speed="0" label="Obstacle" />
                 </InitialConditions>
             </Road>
         </Simulation>
