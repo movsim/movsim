@@ -24,4 +24,6 @@ README_compileRun
 README_floatcars
 int
 *_highscore.txt
+log
+log4j.properties
 

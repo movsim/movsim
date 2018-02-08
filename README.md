@@ -73,6 +73,13 @@ To build MovSim, type `mvn install` from the main MovSim directory.
 To run the movsim _core_ or _viewer_ see their respective readme files: [core](https://github.com/movsim/movsim/blob/master/core/README.md) and [viewer](https://github.com/movsim/movsim/blob/master/viewer/README.md).
 
 
+Information on creating new projects
+------------------------------------
+
+The different elements of the main .xprj, .xodr, and .properties files
+of a simulation project are now explained in README_xprj
+
+
 Eclipse
 -------
 
