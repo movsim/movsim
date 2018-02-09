@@ -121,7 +121,8 @@ this is the <AccelerationModelType> block. The specification consists of the mod
 and the corresponding parameters, e.g., for the ACC model (an IDM
 derivative, see www.traffic-simulation.de):
 
- ``` <AccelerationModelType>
+ ```xml
+ <AccelerationModelType>
      <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4"
                          a="1.2" b="2.0" coolness="1" />
   </AccelerationModelType>
