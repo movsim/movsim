@@ -26,14 +26,17 @@ How to run these projects at a linux command-line?
 Assume a bash shell with a working directory that of this README
 file. Give following commands:
 
+```bash
 runViewer="java -jar $PWD/viewer/target/MovsimViewer-1.6.0-SNAPSHOT-jar-with-dependencies.jar"
+```
 
 examples:
 
-- $runViewer -f sim/buildingBlocks/trafficlight.xprj
+```bash
+$runViewer -f sim/buildingBlocks/trafficlight.xprj
 
-- $runViewer -f sim/buildingBlocks/offramp.xprj
-
+$runViewer -f sim/buildingBlocks/offramp.xprj
+```
 
 Which input files are absolutely necessary?
 ------------------------------------------
@@ -63,17 +66,14 @@ Which input files are optional?
 
   Often, the screen-size settings, the scale [pixels/m], and the
   initial offsets [m] are changed, e.g., by the entries
-  
-  xPixSizeWindow=1000
-  
-  yPixSizeWindow=500
-  
-  initialScale=0.9
-  
-  xOffset=-300
-  
-  yOffset=-100
 
+```
+  xPixSizeWindow=1000
+  yPixSizeWindow=500
+  initialScale=0.9
+  xOffset=-300
+  yOffset=-100
+```
 
 - log4j.properties?
 
