@@ -136,10 +136,12 @@ derivative, see www.traffic-simulation.de):
 ```
 
 - Examples of all the possible 14 models can be found in
-  ./sim/bookScenarioStartStop/*.xprj ,   particularly
-  
+  *./sim/bookScenarioStartStop/,   particularly
+
+```
   ./sim/bookScenarioStartStop/startStop_all_continuous.xprj
   ./sim/bookScenarioStartStop/startStop_all_ca.xprj
+```
 
 - Some ModelParameter types are for several models, e.g.,
   *ModelParameterOVM_FVDM*
@@ -188,7 +190,7 @@ block inside of the <VehiclePrototypeConfiguration> block, e.g.,
   <LaneChangeModelType /> for these cases
 
 
-introducing acceleration noise
+Introducing acceleration noise
 ------------------------------
 
 Example:
@@ -196,10 +198,7 @@ Example:
 ```xml
 <NoiseParameter tau="5" fluct_strength="0.1" />
 ```
-inside
-```xml
-<VehiclePrototypeConfiguration>
-```
+inside the *VehiclePrototypeConfiguration* block
 
 - defines for this vehicle type acceleration noise of amplitude
   fluct_strength and a persistence (correlation) time *tau*:
@@ -209,11 +208,11 @@ inside
 
 - for *tau* to infty, the noise becomes a vehicle-individual permanent acceleration
   bias, roughly comparable with defining heterogeneous  model
-  parameters by the relative_v0_randomization attribute of *VehicleType*
+  parameters by the *relative_v0_randomization* attribute of *VehicleType*
   inside *TrafficComposition*
 
 
-defining the network 
+Defining the network 
 --------------------
 
 in the Scenario block just below the toplevel MovSim block, a link is
@@ -258,30 +257,30 @@ Opendrive format, e.g.,
   counts is the length inside the block *planView* which is inside *.xodr*'s *road* 
 
 
-defining the top-level simulation attributes
+Defining the top-level simulation attributes
 --------------------------------------------
 
-in the attributes of the <Simulation> block inside the <Scenario>
+These are the attributes of the *Simulation* block inside the *Scenario*
 block, e.g.,
 
 ```xml
 <Simulation timestep="0.2" duration="1200" seed="42" crash_exit="true">
 ```
 
-- timestep is the only mandatory attribute. For time-continuous
+- *timestep* is the only mandatory attribute. For time-continuous
   models, 0.1-0.2 [seconds] are good values, for cellular automata,
   and the Newell and Gipps models, the time step is a parameter and
-  typically timestep="1"
+  typically *timestep="1"*
 
-- duration in seconds. default: infinity
+- *duration* in seconds. default: infinity
 
-- seed is only relevant if there are stochastic elements. Without
+- *seed* is only relevant if there are stochastic elements. Without
   specification, the seed is determined dynamically by the starting
   time. Use a defined seed to get reproducible result and no seed
   specification when several trajectory realisations should be
   obtained by several simulation runs
 
-- crash_exit is typically set to "true" (default) for testing and to "false"
+- *crash_exit* is typically set to "true" (default) for testing and to "false"
   for public demos. WARNING: unlike the JavaScript simulator at
   traffic-simulator.de, MovSim is very easily confused by crashes with
   the consequence that sometimes vehicles do no longer recognize their
@@ -291,7 +290,7 @@ block, e.g.,
   developers!) 
 
 
-defining the percentages of the vehicle-driver types: block *TrafficComposition*
+Defining the percentages of the vehicle-driver types: block *TrafficComposition*
 -------------------------------------------------------------------------
 
 The *TrafficComposition* block can be placed inside the
@@ -333,7 +332,7 @@ The *TrafficComposition* block can be placed inside the
   microscopic initial conditions override the *TrafficComposition* 
 
 
-defining initial and boundary conditions, including traffic demand: *Road*
+Defining initial and boundary conditions, including traffic demand: *Road*
 --------------------------------------------------------------------------
 
 General form of the *Road* block inside the *Simulation* block:
@@ -360,7 +359,9 @@ General form of the *Road* block inside the *Simulation* block:
          <MicroIC position="10" speed="0" />
           ...
      </InitialConditions> 
-
+```
+or
+```xml
      <InitialConditions>
          <MacroIC position="10" density_per_km="100" speed="0" />
      </InitialConditions>
@@ -370,7 +371,7 @@ General form of the *Road* block inside the *Simulation* block:
   roads with sources, i.e., no *predecessor* elements in .xodr's
   *road* block with the fitting id. It specifies a time-dependent
   inflow (linearly interpolated, constantly extrapolated). The
-  composition is given by the global or road'specific *TrafficCOmposition*:
+  composition is given by the global or road'specific *TrafficComposition*:
 
  ```xml
      <TrafficSource logging="false">
