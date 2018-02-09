@@ -110,7 +110,7 @@ general syntax:
 </VehiclePrototypes>
 ```
 
-- Examples, e.g., in the ./sim/buildingBlocks/*.xodr files
+- Examples, e.g., in the .xodr files of *./sim/buildingBlocks/*
 
 - There is an optional width attribute in
   VehiclePrototypeConfiguration. It may be used to make obstacles look
@@ -177,7 +177,7 @@ block inside of the <VehiclePrototypeConfiguration> block, e.g.,
 			   right_bias_acceleration="0.05" politeness="0.0" />
   </LaneChangeModelType>
 
-- example project e.g., sim/buildingBlocks/onramp.xprj
+- example project e.g., *sim/buildingBlocks/onramp.xprj*
 
 - at present (feb18), only the MOBIL lane changing model is
   implemented but it is quite flexible (see www.traffic-simulation.de)
@@ -191,19 +191,26 @@ block inside of the <VehiclePrototypeConfiguration> block, e.g.,
 introducing acceleration noise
 ------------------------------
 
-<NoiseParameter tau="5" fluct_strength="0.1" /> inside
+Example:
+
+```xml
+<NoiseParameter tau="5" fluct_strength="0.1" />
+```
+inside
+```xml
 <VehiclePrototypeConfiguration>
+```
 
 - defines for this vehicle type acceleration noise of amplitude
-  fluct_strength and a persistence (correlation) time tau:
+  fluct_strength and a persistence (correlation) time *tau*:
   
-- the stochastic acceleration A=fluct_strength*W(tau)
-  where W(tau) is a standard Wiener process
+- the stochastic acceleration *A=fluct_strength* *W(tau)*
+  where *W(tau)* is a standard Wiener process
 
-- for tau to infty the noise becomes a vehicle-individual permanent acceleration
+- for *tau* to infty, the noise becomes a vehicle-individual permanent acceleration
   bias, roughly comparable with defining heterogeneous  model
-  parameters by the relative_v0_randomization attribute of
-  TrafficComposition.VehicleType 
+  parameters by the relative_v0_randomization attribute of *VehicleType*
+  inside *TrafficComposition*
 
 
 defining the network 
@@ -213,33 +220,42 @@ in the Scenario block just below the toplevel MovSim block, a link is
 given to the file containing the network specification in the
 Opendrive format, e.g.,
 
+```xml
   <Scenario network_filename="onramp.xodr">
      <Simulation ...>
          ...
      </Simulation>
   </Scenario>
+```
 
-- the top-level block of the .xodr files is always <OpenDRIVE>
-  ... </OpenDRIVE>
-  
-- several .xprj projects can link to the same network .xodr file,
+- the top-level block of the .xodr files is always
+
+```xml
+<OpenDRIVE>
+  ...
+</OpenDRIVE>
+ ```
+ 
+- several *.xprj* projects can link to the same network *.xodr* file,
   e.g., when simulating a network with several car-following/lane
   changing models, different traffic flows etc
 
-- the road id's of the <road> blocks of the .xodr file must be consistent with the Road
-  id's in the <Simulation> blocks, e.g.,
+- the road id's of the *road* blocks of the *.xodr* file must be consistent with the Road
+  id's in the *Simulation* blocks, e.g.,
   
+  ```xml
   <road name="R1" length="1200.0" id="1" junction="-1"> ... ,
   <Road id="1"> ...
+  ```
   
-  inside the <OpenDrive> block of the .xodr file and the <Simulation>
-  block of the .xprj file, respectively.
+  inside the *OpenDrive* block of the *.xodr* file and the *Simulation*
+  block of the *.xprj* file, respectively.
 
 - not the complete Opendrive specifications is implemented, e.g., no
   Clothoides (linear changes of the curvature)
 
-- the <road> length="len_m" attribute length often irrelevant; what
-  counts is the length inside <planView> which is inside  <road> 
+- the *road*'s length attribute is often irrelevant; what
+  counts is the length inside the block *planView* which is inside *.xodr*'s *road* 
 
 
 defining the top-level simulation attributes
@@ -248,7 +264,9 @@ defining the top-level simulation attributes
 in the attributes of the <Simulation> block inside the <Scenario>
 block, e.g.,
 
+```xml
 <Simulation timestep="0.2" duration="1200" seed="42" crash_exit="true">
+```
 
 - timestep is the only mandatory attribute. For time-continuous
   models, 0.1-0.2 [seconds] are good values, for cellular automata,
@@ -268,30 +286,32 @@ block, e.g.,
   traffic-simulator.de, MovSim is very easily confused by crashes with
   the consequence that sometimes vehicles do no longer recognize their
   leaders and just "drive through". Sometimes, ignoring crashes works,
-  though (sim/vasa/vasa_CCS.xprj). Probably solvable by doing a
+  though (*sim/vasa/vasa_CCS.xprj*). Probably solvable by doing a
   quicksort of the vehicle positions after every timestep (go for it,
   developers!) 
 
 
-defining the percentages of the vehicle-driver types: <TrafficComposition>
+defining the percentages of the vehicle-driver types: block *TrafficComposition*
 -------------------------------------------------------------------------
 
-The <TrafficComposition> block can be placed inside the
-<Simulation> block, and optionally also inside <Road> blocks
+The *TrafficComposition* block can be placed inside the
+*Simulation* block, and optionally also inside *Road* blocks
 
 - typical specification:
+```xml
   <TrafficComposition>
       <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.1" />
       <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.1" />
   </TrafficComposition>
+```
 
 - the labels must correspond to the labels given in the
-  <VehiclePrototypeConfiguration> block
+  *VehiclePrototypeConfiguration* block
 
 - the percentages are interpreted liberally: if the sum is below 1,
   the percentage of the last type will be increased such that it is 1,
   if the sum is above 1, the percentage of the last type with initial
-  cumulated percentage<1 will be reduced accordingly, and all further
+  cumulated percentage < 1 will be reduced accordingly, and all further
   types will be ignored. 
 
 - besides a percentage, also distributed parameters (heterogeneous
@@ -302,37 +322,40 @@ The <TrafficComposition> block can be placed inside the
 - the traffic composition applies to the initial condition (unless
   microICs are specified) and the external inflows (sources)
 
-- a <TrafficComposition> block just below  <Simulation> applies for all
-  roads of the network. It may be overridden for certain roads by <TrafficComposition>
-  blocks inside <Road> blocks, for an example, see
+- a *TrafficComposition* block just below  *Simulation* applies for all
+  roads of the network. It may be overridden for certain roads by *TrafficComposition*
+  blocks inside *Road* blocks, for an example, see
   sim/buildingBlocks/onramp.xprj
 
 - of course, the traffic flow dynamics may lead to different
   compositions over time, particularly if a road-specific composition
   is specified for a road without an external source. Furthermore,
-  microscopic initial conditions override the <TrafficComposition> 
+  microscopic initial conditions override the *TrafficComposition* 
 
 
-defining initial and boundary conditions, including traffic demand: <Road>
+defining initial and boundary conditions, including traffic demand: *Road*
 --------------------------------------------------------------------------
 
-General form of the <Road> block inside the <Simulation> block:
+General form of the *Road* block inside the *Simulation* block:
 
+```xml
   <Road id="idString">
      <TrafficComposition> ... </TrafficComposition>
      <InitialConditions> ... </InitialConditions>
      <TrafficSource> ... </TrafficSource
   </Road>
+```
 
 - as already said, the .xprj's Road id (not label!) must agree with
   the .xodr's road id (not name!)
 
-- <TrafficComposition> is optional if global composition is to be
+- *TrafficComposition* is optional if global composition is to be
   overridden
 
-- <InitialConditions> can be micro or macro or missing (then start
+- *InitialConditions* can be micro or macro or missing (then start
   with empty road):
 
+```xml
      <InitialConditions>
          <MicroIC position="10" speed="0" />
           ...
@@ -341,20 +364,23 @@ General form of the <Road> block inside the <Simulation> block:
      <InitialConditions>
          <MacroIC position="10" density_per_km="100" speed="0" />
      </InitialConditions>
+```
 
 - the TrafficSource is always macroscopic and only allowed for
-  roads with sources, i.e., no <predecessor> elements in .xodr's
-  <road> block with the fitting id. It specifies a time-dependent
+  roads with sources, i.e., no *predecessor* elements in .xodr's
+  *road* block with the fitting id. It specifies a time-dependent
   inflow (linearly interpolated, constantly extrapolated). The
-  composition is given by the global or road'specific <TrafficCOmposition>:
+  composition is given by the global or road'specific *TrafficCOmposition*:
 
-      <TrafficSource logging="false">
+ ```xml
+     <TrafficSource logging="false">
           <Inflow t="0" q_per_hour="1200" />
           <Inflow t="600" q_per_hour="1600" />
       </TrafficSource>
+```
 
 - not all roads of the .xodr network need a traffic specification
-  <Road> in .xprj: If a road has no open inflowing end (a <predecessor>
+  *Road* in .xprj: If a road has no open inflowing end (a *predecessor*
   exists in .xodr) or has zero
   inflow, and has zero initial density, nothing needs to be specified. The
   dynamics and the network takes care of the filling with vehicles
@@ -364,22 +390,22 @@ General form of the <Road> block inside the <Simulation> block:
 Routes
 ------
 
-These are given by the optional block <Routes>  inside <Scenario>
+These are given by the optional block *Routes*  inside *Scenario*
 
 
 - This can be used to implement traffic demands given by an OD matrix,
   where each OD element uses a given (shortest) route 
 
-- see,  e.g,. sim/output/city_example.xprj
+- see,  e.g,. *sim/output/city_example.xprj*
 
 
 Traffic lights
 ---------------
 
-These are given by the optional block <TrafficLights> inside
-<Scenario>
+These are given by the optional block *TrafficLights* inside
+*Scenario*
 
-- see, e.g,. sim/buildingBlocks/trafficlight.xprj
+- see, e.g,. *sim/buildingBlocks/trafficlight.xprj*
 
 - predefined cicles
 
@@ -389,14 +415,14 @@ These are given by the optional block <TrafficLights> inside
 Output specification
 --------------------
 
-Given by the optional <OutputConfiguration> block inside <Scenario>
+Given by the optional *OutputConfiguration* block inside *Scenario*
 
 - all output is written in the directory from which the simulation is
   run, not at the locations of the .xprj and .xodr files!
 
 - all output files names start with projectName and have as the last
   extension .csv (so can be easily removed since no input file has the
-  .csv ending)
+  *.csv* ending)
 
 
 Interaction
