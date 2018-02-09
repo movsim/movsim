@@ -28,9 +28,11 @@ file. Give following commands:
 
 runViewer="java -jar $PWD/viewer/target/MovsimViewer-1.6.0-SNAPSHOT-jar-with-dependencies.jar"
 
-$runViewer -f sim/buildingBlocks/trafficlight.xprj
-$runViewer -f sim/buildingBlocks/offramp.xprj
-etc ...
+examples:
+
+- $runViewer -f sim/buildingBlocks/trafficlight.xprj
+
+- $runViewer -f sim/buildingBlocks/offramp.xprj
 
 
 Which input files are absolutely necessary?
@@ -63,10 +65,15 @@ Which input files are optional?
   initial offsets [m] are changed, e.g., by the entries
   
   xPixSizeWindow=1000
+  
   yPixSizeWindow=500
+  
   initialScale=0.9
+  
   xOffset=-300
+  
   yOffset=-100
+
 
 - log4j.properties?
 
@@ -114,11 +121,11 @@ this is the <AccelerationModelType> block. The specification consists of the mod
 and the corresponding parameters, e.g., for the ACC model (an IDM
 derivative, see www.traffic-simulation.de):
 
-  <AccelerationModelType>
+ ``` <AccelerationModelType>
      <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4"
                          a="1.2" b="2.0" coolness="1" />
   </AccelerationModelType>
-
+```
 
 - Examples of all the possible 14 models can be found in
   ./sim/bookScenarioStartStop/*.xprj ,   particularly
