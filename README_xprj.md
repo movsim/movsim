@@ -84,15 +84,21 @@ Building new projects: Elements of the XML project specification
 ================================================================
 
 All movsim .xprj specification files have as top-level block
-<Movsim> ... </Movsim> (similar to the html <body> ... </body> block)
+```xml
+<Movsim> ... </Movsim>
+```
+(similar to the html body block)
 
-Inside, following blocks can be specified (some of them optional, see
+Inside MovSim, following blocks can be specified (some of them optional, see
 the examples)
 
 
-defining the types of the vehicle population, including obstacles:
+Defining the types of the vehicle population, including obstacles:
 ------------------------------------------------------------------
 
+general syntax:
+
+```xml
 <VehiclePrototypes>
      <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
          <AccelerationModelType> ... </AccelerationModelType>
@@ -102,6 +108,7 @@ defining the types of the vehicle population, including obstacles:
 
      [same for all the vehicle types of this simulation]
 </VehiclePrototypes>
+```
 
 - Examples, e.g., in the ./sim/buildingBlocks/*.xodr files
 
@@ -110,14 +117,14 @@ defining the types of the vehicle population, including obstacles:
   differently/cover the whole road
 
 - the percentage of the vehicle types on the various roads at
-  simulation start and at the inflows is specified in
-  <TrafficComposition>, see below.
+  simulation start and at the inflows is specified in the
+  *TrafficComposition* block, see below.
   
 
-defining the car-following models
+Defining the car-following models
 ---------------------------------
 
-this is the <AccelerationModelType> block. The specification consists of the model type
+this is done in the *AccelerationModelType* block. The specification consists of the model type
 and the corresponding parameters, e.g., for the ACC model (an IDM
 derivative, see www.traffic-simulation.de):
 
@@ -135,15 +142,15 @@ derivative, see www.traffic-simulation.de):
   ./sim/bookScenarioStartStop/startStop_all_ca.xprj
 
 - Some ModelParameter types are for several models, e.g.,
-  <ModelParameterOVM_FVDM .... />
+  *ModelParameterOVM_FVDM*
 
 - Some models have fundamental-diagram/optimal-speed types as
-  parameters. At present (feb18), only  optimal_speed_function="bando"
+  parameters. At present (feb18), only  *optimal_speed_function="bando"*
   is implemented
 
 - Some models are cellular automata rather than time-continuous models
   with an update time step of typically 1 s rather than 0.1 or 0.2 s
-  (<Simulation timestep="0.2" ...>). Therefore, the initial_sleep_time
+  (*<Simulation timestep="0.2" ...>*). Therefore, the initial_sleep_time
   in the .properties file should be increased to obtain a similar
   timelapse as in the continuous models (ratio Simulation
   timestep/initial_sleep_time gives time-lapse factor)
@@ -153,8 +160,8 @@ derivative, see www.traffic-simulation.de):
   label, MovSim does not know that this is an obstacle, so omitting
   the  car-following model will lead to a parsing error)
 
-- for each <AccelerationModelType>, the parameter can optionally vary
-  stochastically, see <TrafficComposition>
+- for each *AccelerationModelType*, the parameter can optionally vary
+  stochastically, see *TrafficComposition*
 
 
 
