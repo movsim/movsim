@@ -43,6 +43,10 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
     private TestVehicle testVehicle;
 
+    private double nextArrivalInterval;
+
+    private int vehiclesWaiting;
+
     /**
      * Instantiates a new upstream boundary .
      * 
@@ -57,32 +61,53 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        final double totalInflow = getTotalInflow(simulationTime);
-        nWait += totalInflow * dt;
-        
+        final double totalInflow = (getTotalInflow(simulationTime));
+        nWait += dt;
+
         calcApproximateInflow(dt);
-        
-        if (nWait >= 1.0) {
-            if (testVehicle == null) {
-                testVehicle = vehGenerator.getTestVehicle();
-            }
-            // try to insert new vehicle at inflow, iterate periodically over n lanes
-            int iLane = laneEnterLast;
-            for (int i = 0, N = roadSegment.laneCount(); i < N; i++) {
-                iLane = getNewCyclicLaneForEntering(iLane);
-                final LaneSegment laneSegment = roadSegment.laneSegment(iLane);
-                // laneIndex index is identical to vehicle's lanenumber
-                // type of new vehicle
-                final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment, simulationTime, totalInflow);
-                if (isEntered) {
-                    testVehicle = null;
-                    nWait--;
-                    incrementInflowCount(1);
-                    recordData(simulationTime, totalInflow);
-                    return; // only one insert per simulation update
-                }
+
+        if (vehiclesWaiting > 0) {
+            boolean isEntered = insertAtInflow(totalInflow, simulationTime);
+            if (isEntered) {
+                removeWaitingVehicle();
+                return; // only one insert per simulation update
             }
         }
+
+        if (nWait >= nextArrivalInterval) {
+            nWait = 0;
+            nextArrivalInterval = getPoissonInterarrivalDelay(totalInflow);
+            boolean isEntered = insertAtInflow(totalInflow, simulationTime);
+            if (isEntered) {
+                return; // only one insert per simulation update
+            }
+
+            // haven't entered a vehicle, add to wait queue
+            addWaitingVehicle();
+        }
+    }
+    
+    public boolean insertAtInflow(double totalInflow, double simulationTime) {
+        if (testVehicle == null) {
+            testVehicle = vehGenerator.getTestVehicle();
+        }
+
+        // try to insert new vehicle at inflow, iterate periodically over n lanes
+        int iLane = laneEnterLast;
+        for (int i = 0, N = roadSegment.laneCount(); i < N; i++) {
+            iLane = getNewCyclicLaneForEntering(iLane);
+            final LaneSegment laneSegment = roadSegment.laneSegment(iLane);
+            // laneIndex index is identical to vehicle's lanenumber
+            // type of new vehicle
+            final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment, simulationTime, totalInflow);
+            if (isEntered) {
+                testVehicle = null;
+                incrementInflowCount(1);
+                recordData(simulationTime, totalInflow);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -111,7 +136,6 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
      * @return true, if successful
      */
     private boolean tryEnteringNewVehicle(TestVehicle testVehicle, LaneSegment laneSegment, double time, double qBC) {
-
         final Vehicle leader = laneSegment.rearVehicle();
 
         // (1) empty road
@@ -119,8 +143,9 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
             enterVehicleOnEmptyRoad(laneSegment, time, testVehicle);
             return true;
         }
+
         // (2) check if gap to leader is sufficiently large origin of road section is assumed to be zero
-        final double netGapToLeader = leader.getRearPosition(); 
+        final double netGapToLeader = leader.getRearPosition();
         final double gapAtQMax = 1. / testVehicle.getRhoQMax();
 
         // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
@@ -132,6 +157,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
             enterVehicle(laneSegment, time, minRequiredGap, testVehicle, leader);
             return true;
         }
+
         // no entering possible
         return false;
     }
@@ -189,6 +215,25 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
     @Override
     public double getTotalInflow(double time) {
         return inflowTimeSeries.getFlowPerLane(time) * roadSegment.laneCount();
+    }
+
+    public double getPoissonInterarrivalDelay(double lambda) {
+        return (Math.log(1.0 - Math.random()) / -lambda);
+    }
+
+    public void addWaitingVehicle() {
+        vehiclesWaiting += 1;
+    }
+
+    public void removeWaitingVehicle() {
+        vehiclesWaiting -= 1;
+        if (vehiclesWaiting < 0) {
+            vehiclesWaiting = 0;
+        }
+    }
+
+    public int getVehiclesWaiting() {
+        return vehiclesWaiting;
     }
 
 }
