@@ -1,0 +1,39 @@
+Hello Chourok,
+
+I assume you speak of MovSim (www.movsim.org)
+
+1. If you have different scenarios (different models, parameters, initial or boundary conditions) iut is best to create a new simulation project for each scenario. In the simplest case, just copy the <project>.xprj and the <project>.xodr files to  <projectNew>.xprj and <projectNew>.xod, and change whatever is different in the new project. Then all output will be to files named <projectNew>.* which you can compare with <project>.*
+
+2. in the .xprj file, there is a section <FloatingCarOutput ...> ... </FloatingCarOutput>
+where you can specify which single vehicles are recorded. For example, the section
+
+<FloatingCarOutput n_timestep="5" route="main">
+<FloatingCar number="2" />
+<FloatingCar number="11" />
+</FloatingCarOutput>
+
+will record Car 2 and Car 11 of the route/road segment "main" (the first car has the lowest index)
+
+I hope this will help you
+
+Martin
+
+
+
+
+
+---------------------------------------------------------- Dr. Martin Treiber Institute for Transport & Economics, TU Dresden Chair of Traffic Modelling, Econometrics, and Statistics Falkenbrunnen, Room 123 (two floors up from the entrance!) Würzburger Str. 35, D-01062 Dresden treiber@vwi.tu-dresden.de, www.mtreiber.de phone/fax: +49 (351) 463 36794 / 36809 ---------------------------------------------------------
+On 09/04/2016 07:50 PM, chourok espoire wrote:
+> Dear Dr.Martin
+>
+>
+> Regarding the traffic simulator  proposed by you  by testing various scenarios (ring Road, ramp, light traffic, ..). we want to know if it's possible :
+>
+> 1. how to store the results of  (the new speed, new acceleration) of each scenarios in different file when we run the simulator? because when simulating the result of scenario x for example overwrite the result of another scenario.
+>
+> 2. How can identify the car to track its new position or speed in each time t?
+>
+> We hope that you can help us.
+>
+> Thank you Sir 
+> bests regards.

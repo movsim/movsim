@@ -1,0 +1,28 @@
+Dear Habib Ahsan,
+
+The attribute european_rules in LaneChangeModelType can take on two values: true for European-style lane changing, i.e., right overtaking is forbidden at speeds above crit_speed_eur, and european_rules=false means overtaking is allowed on both sides. (Notice that you can introduce asymmetries for non-European rules by the bias MOBIL parameter, relevant, e.g., for the US regulations (overtaking allowed on either side but one should keep to the right)
+
+
+Regarding trajectories of all vehicles: This is specified in the Trajectories block of OutputConfiguration. (not FloatingCarOutput; the latter gives detailed info for generally a few vehicles). For example,
+
+<Trajectories dt="1" route="main" />
+
+writes all vehicles being on the route (not road!) "main" in one-second intervals to the file project.traj.route_main.csv  So, the Routes block must be specified as well, e.g.,
+
+<Routes>
+<Route label="main">
+<Road id="1" />
+</Route>
+</Routes>
+
+attributes the route "main" to the road id "1" (if, in this project, the vehicles may change from road id=1 to an offramp id=2, this will not be logged in the above route setting but it will be logged if the route contains this road as well (Arne: how is the syntax for multi-link routes?)
+
+
+Arne: I do not know what is the actual status of the README_xprj.md file, so please add this info to this file
+
+
+Best,
+
+Martin
+
+

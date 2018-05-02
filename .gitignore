@@ -27,3 +27,6 @@ Thumbs.db
 *~
 *.dot
 /.classpath
+# ignore others
+int
+*highscore*

@@ -75,6 +75,14 @@ Which input files are optional?
   yOffset=-100
 ```
 
+Many more initializations can be changed by the properties file, e.g.,
+the initial simulation speed. To find a complete list in the sources,
+just search for "getProperty", e.g. in Linux:
+
+```
+  grep getProperty `find . -name "*.java"`
+```
+
 - log4j.properties?
 
 
