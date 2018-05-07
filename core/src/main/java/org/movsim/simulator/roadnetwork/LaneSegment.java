@@ -462,7 +462,8 @@ public class LaneSegment implements Iterable<Vehicle> {
                 accumDistance += source.roadLength();
                 sourceFrontVehicle = source.frontVehicle();
                 source = source.sourceLaneSegment();
-                if(source == this){
+                if (source == this || accumDistance > 5000) {
+                    // circular path or too far away
                     break;
                 }
             } while (sourceFrontVehicle == null && source != null);
@@ -564,7 +565,8 @@ public class LaneSegment implements Iterable<Vehicle> {
                 }
                 sink = sink.sinkLaneSegment();
                 logger.debug("current: {}, sink: {}", this, sink == null ? "null" : sink);
-                if (sink == this) {
+                if (sink == this || accumDistance > 5000) {
+                    // circular path or too far away
                     break;
                 }
             } while (sinkRearVehicle == null && sink != null);
@@ -801,12 +803,7 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     @Override
     public String toString() {
-        return "LaneSegment{" +
-                "roadSegment=" + roadSegment +
-                ", lane=" + lane +
-                ", type=" + type +
-                ", vehicles=" + vehicles +
-                ", removedVehicleCount=" + removedVehicleCount +
-                '}';
+        return "LaneSegment{" + "roadSegment=" + roadSegment + ", lane=" + lane + ", type=" + type + ", vehicles="
+                + vehicles + ", removedVehicleCount=" + removedVehicleCount + '}';
     }
 }
