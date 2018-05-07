@@ -30,3 +30,7 @@ Thumbs.db
 # ignore others
 int
 *highscore*
+# ignore intellij
+.idea/
+*.iml
+
