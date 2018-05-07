@@ -60,7 +60,6 @@ import com.google.common.base.Preconditions;
  */
 public class Vehicle {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(Vehicle.class);
 
     protected static final int INITIAL_ID = 1;
@@ -74,7 +73,7 @@ public class Vehicle {
     /**
      * 'Not Set' vehicle id value, guaranteed not to be used by any vehicles.
      */
-    public static final int ID_NOT_SET = -1;
+    // private static final int ID_NOT_SET = -1;
 
     private static final int VEHICLE_NUMBER_NOT_SET = -1;
 
@@ -903,9 +902,6 @@ public class Vehicle {
         return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_S);
     }
 
-    /**
-     * Reset delay.
-     */
     private void resetDelay(double dt) {
         tLaneChangeDelay = 0;
         updateLaneChangeDelay(dt); // TODO hack that updateLaneChangeDelay must
@@ -923,7 +919,7 @@ public class Vehicle {
         tLaneChangeDelay += dt;
     }
 
-    public double getContinousLane() {
+    public double getContinuousLane() {
         if (inProcessOfLaneChange()) {
             final double fractionTimeLaneChange = Math.min(1, tLaneChangeDelay / FINITE_LANE_CHANGE_TIME_S);
             return fractionTimeLaneChange * lane + (1 - fractionTimeLaneChange) * laneOld;
@@ -934,7 +930,6 @@ public class Vehicle {
     // ---------------------------------------------------------------------------------
     // braking lights for viewer
     // ---------------------------------------------------------------------------------
-
     public boolean isBrakeLightOn() {
         updateBrakeLightStatus();
         return brakeLightOn;
@@ -971,7 +966,7 @@ public class Vehicle {
     /**
      * Vehicle type.
      */
-    public static enum Type {
+    public enum Type {
         /**
          * Vehicle type has not been set.
          */

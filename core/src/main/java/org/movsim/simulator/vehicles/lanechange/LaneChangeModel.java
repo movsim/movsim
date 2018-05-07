@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator.vehicles.lanechange;
 
+import com.google.common.base.Preconditions;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -32,25 +33,27 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-
 /**
  * The Class LaneChangeModel.
  */
 public class LaneChangeModel {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(LaneChangeModel.class);
 
     // to avoid flips
-    public static double LANECHANGE_TDELAY_S = 3.0; // delay after lane change
-    public static double LANECHANGE_TDELAY_FRONT_S = 3.0; // delay after a cut-in ahead
+//    public static double LANECHANGE_TDELAY_S = 3.0; // delay after lane change
+//    public static double LANECHANGE_TDELAY_FRONT_S = 3.0; // delay after a cut-in ahead
 
     public enum LaneChangeDecision {
 
-        NONE(Lanes.NO_CHANGE), STAY_IN_LANE(Lanes.NO_CHANGE), DISCRETIONARY_TO_LEFT(Lanes.TO_LEFT), DISCRETIONARY_TO_RIGHT(
-                Lanes.TO_RIGHT), MANDATORY_TO_LEFT(Lanes.TO_LEFT), MANDATORY_TO_RIGHT(Lanes.TO_RIGHT), MANDATORY_STAY_IN_LANE(
-                Lanes.NO_CHANGE), OVERTAKE_VIA_PEER(Lanes.TO_LEFT);
+        NONE(Lanes.NO_CHANGE),
+        STAY_IN_LANE(Lanes.NO_CHANGE),
+        DISCRETIONARY_TO_LEFT(Lanes.TO_LEFT),
+        DISCRETIONARY_TO_RIGHT(Lanes.TO_RIGHT),
+        MANDATORY_TO_LEFT(Lanes.TO_LEFT),
+        MANDATORY_TO_RIGHT(Lanes.TO_RIGHT),
+        MANDATORY_STAY_IN_LANE(Lanes.NO_CHANGE),
+        OVERTAKE_VIA_PEER(Lanes.TO_LEFT);
 
         private final int laneChangeDirection;
 
@@ -100,13 +103,12 @@ public class LaneChangeModel {
     // distance at which driver should think about changing lanes for exit
     private static double distanceBeforeExitWantsToChangeLanes = 500.0;
     // distance at which driver must get into exit lane
-    public static double distanceBeforeExitMustChangeLanes = 300.0;
+    private static double distanceBeforeExitMustChangeLanes = 300.0;
 
     /**
      * Instantiates a new lane changing model.
-     * 
-     * @param laneChangeModelParameter
-     *            the lc input data
+     *
+     * @param laneChangeModelParameter the lc input data
      */
     public LaneChangeModel(org.movsim.autogen.LaneChangeModelType laneChangeModelParameter) {
         this.parameter = laneChangeModelParameter;
@@ -118,20 +120,17 @@ public class LaneChangeModel {
 
     // used in tests
     public LaneChangeModel(Vehicle vehicle, org.movsim.autogen.LaneChangeModelType laneChangeModelParameter) {
-        Preconditions.checkNotNull(laneChangeModelParameter);
-        this.parameter = laneChangeModelParameter;
+        this.parameter = Preconditions.checkNotNull(laneChangeModelParameter);
         initialize(vehicle);
     }
 
     /**
      * Initialize.
-     * 
-     * @param vehicle
-     *            the vehicle
+     *
+     * @param vehicle the vehicle
      */
     public void initialize(Vehicle vehicle) {
-        Preconditions.checkNotNull(vehicle);
-        this.me = vehicle;
+        this.me = Preconditions.checkNotNull(vehicle);
         lcModelMOBIL = new MOBIL(me, parameter.getModelParameterMOBIL());
         if (parameter.isSetOvertakingViaPeer()) {
             overtakingViaPeerModel = new OvertakingViaPeer(this, parameter.getOvertakingViaPeer());
@@ -140,7 +139,7 @@ public class LaneChangeModel {
 
     /**
      * Checks if is initialized.
-     * 
+     *
      * @return true, if is initialized
      */
     public boolean isInitialized() {
@@ -290,8 +289,9 @@ public class LaneChangeModel {
                     if (distanceToRoadSegmentEnd < 0) {
                         // just a hack. should not happen.
                         LOG.info("check this: roadSegmentLength not set. Do mandatory lane change anyway.");
-                        return (direction == Lanes.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
-                                : LaneChangeDecision.MANDATORY_TO_RIGHT;
+                        return (direction == Lanes.TO_LEFT) ?
+                                LaneChangeDecision.MANDATORY_TO_LEFT :
+                                LaneChangeDecision.MANDATORY_TO_RIGHT;
                     }
                     // evaluate additional motivation to leave entrance lane
                     double accInCurrentLane = me.getLongitudinalModel()
@@ -300,12 +300,13 @@ public class LaneChangeModel {
                     double bias = biasForMandatoryChange(distanceToRoadSegmentEnd);
                     if (accInNewLane + bias > accInCurrentLane) {
                         if (LOG.isDebugEnabled()) {
-                            LOG.debug(String
-                                    .format("change lane: veh.id=%d, distanceToRoadSegmentEnd=%.2f, accInCurrentLane=%.2f, accInNewLane=%.2f, bias=%.2f",
-                                            me.getId(), distanceToRoadSegmentEnd, accInCurrentLane, accInNewLane, bias));
+                            LOG.debug(String.format(
+                                    "change lane: veh.id=%d, distanceToRoadSegmentEnd=%.2f, accInCurrentLane=%.2f, accInNewLane=%.2f, bias=%.2f",
+                                    me.getId(), distanceToRoadSegmentEnd, accInCurrentLane, accInNewLane, bias));
                         }
-                        return (direction == Lanes.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
-                                : LaneChangeDecision.MANDATORY_TO_RIGHT;
+                        return (direction == Lanes.TO_LEFT) ?
+                                LaneChangeDecision.MANDATORY_TO_LEFT :
+                                LaneChangeDecision.MANDATORY_TO_RIGHT;
                     }
                 }
             }
@@ -342,8 +343,9 @@ public class LaneChangeModel {
         if (currentLane + direction >= Lanes.MOST_INNER_LANE) {
             final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + direction);
             if (isSafeLaneChange(me, newLaneSegment)) {
-                return (direction == Lanes.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
-                        : LaneChangeDecision.MANDATORY_TO_RIGHT;
+                return (direction == Lanes.TO_LEFT) ?
+                        LaneChangeDecision.MANDATORY_TO_LEFT :
+                        LaneChangeDecision.MANDATORY_TO_RIGHT;
             }
         }
 
@@ -370,8 +372,9 @@ public class LaneChangeModel {
         if (currentLane + direction >= Lanes.MOST_INNER_LANE) {
             final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + direction);
             if (isSafeLaneChange(me, newLaneSegment)) {
-                return (direction == Lanes.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
-                        : LaneChangeDecision.MANDATORY_TO_RIGHT;
+                return (direction == Lanes.TO_LEFT) ?
+                        LaneChangeDecision.MANDATORY_TO_LEFT :
+                        LaneChangeDecision.MANDATORY_TO_RIGHT;
             }
         }
 
@@ -441,10 +444,10 @@ public class LaneChangeModel {
             if (accToFront < -lcModelMOBIL.getParameter().getSafeDeceleration()) {
                 // check own disadvantage to change to left to decide to make room
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(String
-                            .format("next to entrance lane: pos=%.2f, lane=%d, netGap=%.2f, ownSpeed=%.2f, dv=%.2f, calcAccToFront=%.2f",
-                                    me.getFrontPosition(), currentLane, me.getNetDistance(frontVehicle), me.getSpeed(),
-                                    me.getRelSpeed(frontVehicle), accToFront));
+                    LOG.debug(String.format(
+                            "next to entrance lane: pos=%.2f, lane=%d, netGap=%.2f, ownSpeed=%.2f, dv=%.2f, calcAccToFront=%.2f",
+                            me.getFrontPosition(), currentLane, me.getNetDistance(frontVehicle), me.getSpeed(),
+                            me.getRelSpeed(frontVehicle), accToFront));
                 }
                 final int newLane = currentLane + Lanes.TO_LEFT;
                 final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
@@ -480,8 +483,8 @@ public class LaneChangeModel {
                 newLaneSegment.removeVehicle(index);
                 me.setLane(currentLane);
 
-                if (lcModelMOBIL.safetyCheckAcceleration(newBackNewAcc)
-                        || lcModelMOBIL.safetyCheckAcceleration(meNewAcc)) {
+                if (lcModelMOBIL.safetyCheckAcceleration(newBackNewAcc) || lcModelMOBIL
+                        .safetyCheckAcceleration(meNewAcc)) {
                     return LaneChangeDecision.NONE;
                 }
                 LOG.debug("finally change to left to make room for vehicle at entrance lane ...");

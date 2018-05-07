@@ -350,7 +350,7 @@ public abstract class RoadMapping {
      */
     public PolygonFloat mapFloat(Vehicle vehicle) {
         final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(),
-                -laneCenterOffset(vehicle.getContinousLane()));
+                -laneCenterOffset(vehicle.getContinuousLane()));
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 
