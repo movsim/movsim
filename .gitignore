@@ -1,6 +1,10 @@
 # ignore Eclipse stuff
 .project
 .settings
+log
+log4j.properties
+RoadSegment_Schelp.java
+Vehicle_Schelp.java
 */.project
 */.settings/
 */.classpath
