@@ -173,6 +173,15 @@ derivative, see www.traffic-simulation.de):
 - for each *AccelerationModelType*, the parameter can optionally vary
   stochastically, see *TrafficComposition*
 
+speed limits
+-------------
+
+Since speed limits are road network, and not vehicle-driver,
+attribbutes, they are not defined in the car-following model block but
+in the infrastructure (*.xodr*) file. The car-following models take
+this info and decrease the models's desired speed (each model has one)
+if it happens to be above the speed limit. See
+*sim/buildingBlocks/speedlimit.xodr*.
 
 
 defining the lane-changing models
@@ -399,13 +408,38 @@ or
 Routes
 ------
 
-These are given by the optional block *Routes*  inside *Scenario*
+These are given by the optional block *Routes*  inside *Scenario* and
+define routes as a sequence of connected links, i.e., *Road*s. In
+the following example, two routes using the links 1,4, and the link 3,
+are set up:
+```xml
+<Routes>
+<Route label="route1">
+  <Road id="1" />
+  <Road id="4" />
+</Route>
+<Route label="route2">
+  <Road id="3" />
+</Route>
+</Routes>
+```
+An error is cast if the links are not connected.
 
 
 - This can be used to implement traffic demands given by an OD matrix,
   where each OD element uses a given (shortest) route 
 
-- see,  e.g,. *sim/output/city_example.xprj*
+- For output of vehicle trajectories, it is also necessary to define
+  routes as part of *OutputConfiguration* inside *Scenario*:
+
+```xml
+<OutputConfiguration>
+  <Trajectories dt="1" route="route1" />
+  ...
+</OutputConfiguration>
+```
+
+- Example: *sim/output/city_example.xprj*
 
 
 Traffic lights
@@ -432,6 +466,22 @@ Given by the optional *OutputConfiguration* block inside *Scenario*
 - all output files names start with projectName and have as the last
   extension .csv (so can be easily removed since no input file has the
   *.csv* ending)
+
+- Examples of an output include *Trajectories* giving trajectories of
+  all vehicles on a specified route (see above) and
+  *FloatingCarOutput* giving xFCD for a defined set of vehicle indices
+  on defined routes (if you just wand the vehicles on a road segment,
+  just define a route with one segment). For example,
+
+```xml
+<FloatingCarOutput n_timestep="5" route="main">
+  <FloatingCar number="2" />
+  <FloatingCar number="11" />
+</FloatingCarOutput>
+```
+
+will record Car 2 and Car 11 of the route/road segment "main" (notice
+that the first car has the lowest index).
 
 
 Interaction

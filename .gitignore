@@ -3,8 +3,6 @@
 .settings
 log
 log4j.properties
-RoadSegment_Schelp.java
-Vehicle_Schelp.java
 */.project
 */.settings/
 */.classpath
@@ -37,4 +35,8 @@ int
 # ignore intellij
 .idea/
 *.iml
-
+# ignore tmp comments and mails
+README_xprj_addtl
+RoadSegment_Schelp.java
+Vehicle_Schelp.java
+sim/testing/*.txt
