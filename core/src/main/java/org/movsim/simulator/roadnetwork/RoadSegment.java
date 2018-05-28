@@ -855,7 +855,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
                 Vehicle vehicle = vehIterator.next();
                 assert vehicle.roadSegmentId() == id;
-                if (vehicle.inProcessOfLaneChange()) {
+                if (vehicle.inProcessOfLaneChangeDependingOnLCDecision()) {
                     // !!! assure update in each simulation timestep
                     vehicle.updateLaneChangeDelay(dt);
                 } else if (vehicle.considerLaneChange(dt, this)) {

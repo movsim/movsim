@@ -94,6 +94,8 @@ public class Vehicle {
     /** needs to be > 0 */
     private final static double FINITE_LANE_CHANGE_TIME_S = 7;
 
+    private final static double FINITE_LANE_CHANGE_TIME_MANDATORY_S = 1;
+
     private final VehicleDimensions dimensions;
 
     private final String label;
@@ -852,6 +854,15 @@ public class Vehicle {
         return false;
     }
 
+	public boolean lcDecisionisMandatory() {
+		LaneChangeDecision lcDecision = laneChangeModel.makeDecision(roadSegment);
+		if (lcDecision.isMandatory()) {
+			return true;
+		}		
+		return false;
+	}
+
+
     public boolean considerLaneChange(double dt, RoadSegment roadSegment) {
 
         if (roadSegment.laneCount() <= 1) {
@@ -864,7 +875,7 @@ public class Vehicle {
         if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
             return false;
         }
-        assert !inProcessOfLaneChange();
+        assert !inProcessOfLaneChangeDependingOnLCDecision();
 
         // if not in lane-changing process do determine if new lane is more
         // attractive and lane change is possible
@@ -898,8 +909,26 @@ public class Vehicle {
         this.targetLane = targetLane;
     }
 
-    public boolean inProcessOfLaneChange() {
-        return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_S);
+//    public boolean inProcessOfLaneChange() {
+//        return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_S);
+//    }
+	public boolean inProcessOfLaneChange() {
+		return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_S);
+		}	
+		
+    public boolean inProcessOfLaneChangeDependingOnLCDecision() {
+		try {
+			LaneChangeDecision lcDecision = laneChangeModel.makeDecision(roadSegment);
+			if (lcDecision.isMandatory()) {
+				return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_MANDATORY_S);
+		
+			}
+			else {return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_S); }
+		}
+		catch (Exception e) {//LOG.info("Exception in P o LC raised");
+				return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_S);
+			}	
+
     }
 
     private void resetDelay(double dt) {
@@ -919,9 +948,16 @@ public class Vehicle {
         tLaneChangeDelay += dt;
     }
 
+
     public double getContinuousLane() {
-        if (inProcessOfLaneChange()) {
-            final double fractionTimeLaneChange = Math.min(1, tLaneChangeDelay / FINITE_LANE_CHANGE_TIME_S);
+        if (inProcessOfLaneChangeDependingOnLCDecision()) {
+			double fractionTimeLaneChange;
+            if (!lcDecisionisMandatory()) {
+				fractionTimeLaneChange = Math.min(1, tLaneChangeDelay / FINITE_LANE_CHANGE_TIME_S);
+			} else {
+				fractionTimeLaneChange = Math.min(1, tLaneChangeDelay / FINITE_LANE_CHANGE_TIME_MANDATORY_S);
+			}
+			
             return fractionTimeLaneChange * lane + (1 - fractionTimeLaneChange) * laneOld;
         }
         return lane();
