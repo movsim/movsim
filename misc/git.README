@@ -25,7 +25,7 @@ git push origin HEAD:mybranch
 Checkout branch:
 git checkout -b test origin/test
 
-#delete branch:
+# delete branch:
 git branch -d delete_branch
 # force delete branch:
 git branch -D delete_branch
@@ -46,3 +46,13 @@ git gui
 
 # branch visualization
 gitk
+
+
+My Git Aliases
+============
+git config --global alias.ch checkout
+git config --global alias.br branch
+git config --global alias.co commit
+git config --global alias.st status
+
+see ~.gitconfig
