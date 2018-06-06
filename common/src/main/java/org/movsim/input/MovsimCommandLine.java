@@ -25,20 +25,13 @@
  */
 package org.movsim.input;
 
+import org.apache.commons.cli.*;
+import org.movsim.utilities.FileUtils;
+import org.movsim.xml.InputLoader;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.movsim.utilities.FileUtils;
-import org.movsim.xml.InputLoader;
 
 /**
  * MovSim console command line parser. Values from the command line are set to ProjectMetaData.
@@ -58,26 +51,15 @@ public class MovsimCommandLine {
         }
     }
 
-    /**
-     * Constructor.
-     * 
-     * Initializes logger and localization.
-     * 
-     * Parses command line and sets results in ProjectMetaData.
-     * 
-     * @param args
-     *            the args
-     */
     private MovsimCommandLine() {
         createOptions();
-        parser = new GnuParser();
+        parser = new DefaultParser();
     }
 
     /**
      * Parse the command line.
-     * 
-     * @param args
-     *            the args
+     *
+     * @param args the args
      * @throws ParseException
      */
     private void createAndParse(String[] args) throws ParseException {
@@ -94,29 +76,21 @@ public class MovsimCommandLine {
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
         options.addOption("d", "write_dot", false, "writes a 'dot' network file for further analysis of the xodr");
-	options.addOption("s", "simulation scanning mode", false,
-	        "invokes the simulator repeatedly in a loop (needs to be programmed by user)");
+        options.addOption("s", "simulation scanning mode", false,
+                "invokes the simulator repeatedly in a loop (needs to be programmed by user)");
 
-        OptionBuilder.withArgName("file");
-        OptionBuilder.hasArg();
-        ProjectMetaData.getInstance();
-        OptionBuilder.withDescription("movsim main configuration file (ending \""
-                + ProjectMetaData.getMovsimConfigFileEnding() + "\" will be added automatically if not provided.");
-        final Option xmlSimFile = OptionBuilder.create("f");
-        options.addOption(xmlSimFile);
+        options.addOption(Option.builder("f").longOpt("file").hasArg()
+                .desc("movsim main configuration file (ending \"" + ProjectMetaData.getMovsimConfigFileEnding()
+                        + "\" will be added automatically if not provided.").build());
 
-        OptionBuilder.withArgName("directory");
-        OptionBuilder.hasArg();
-        OptionBuilder.withDescription("argument is the output path relative to calling directory");
-        final Option outputPathOption = OptionBuilder.create("o");
-        options.addOption(outputPathOption);
+        options.addOption(Option.builder("o").longOpt("directory").hasArg()
+                .desc("argument is the output path relative to calling directory").build());
     }
 
     /**
      * Parses the command line.
-     * 
-     * @param cmdline
-     *            the cmdline
+     *
+     * @param cmdline the cmdline
      */
     private void parse(CommandLine cmdline) {
         if (cmdline.hasOption("h")) {
@@ -134,16 +108,13 @@ public class MovsimCommandLine {
         if (cmdline.hasOption("d")) {
             ProjectMetaData.getInstance().setWriteDotFile(true);
         }
-	if (cmdline.hasOption("s")) {
-	    ProjectMetaData.getInstance().setScanMode(true);
-	}
+        if (cmdline.hasOption("s")) {
+            ProjectMetaData.getInstance().setScanMode(true);
+        }
         requiredOptionOutputPath(cmdline);
         requiredOptionSimulation(cmdline);
     }
 
-    /**
-     * @param cmdline
-     */
     private void requiredOptionOutputPath(CommandLine cmdline) {
         String outputPath = cmdline.getOptionValue('o');
 
@@ -189,9 +160,8 @@ public class MovsimCommandLine {
 
     /**
      * Option simulation.
-     * 
-     * @param cmdline
-     *            the cmdline
+     *
+     * @param cmdline the cmdline
      */
     private void requiredOptionSimulation(CommandLine cmdline) {
         String filename = cmdline.getOptionValue('f');
@@ -209,8 +179,8 @@ public class MovsimCommandLine {
         // final boolean isXml = FileNameUtils.validateFileName(filename, ProjectMetaData.getMovsimConfigFileEnding());
         File file = new File(filename);
         final String name = file.getName();
-        ProjectMetaData.getInstance().setProjectName(
-                name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
+        ProjectMetaData.getInstance()
+                .setProjectName(name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
         ProjectMetaData.getInstance().setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
     }
 
