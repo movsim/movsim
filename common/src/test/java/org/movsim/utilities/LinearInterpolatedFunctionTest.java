@@ -1,7 +1,7 @@
 package org.movsim.utilities;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Test;
 
