@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.movsim</groupId>
     <artifactId>Movsim</artifactId>
-    <version>1.6.1-SNAPSHOT</version>
+    <version>1.6.0</version>
     <packaging>pom</packaging>
     <name>movsim</name>
     <url>http://movsim.org</url>
@@ -62,7 +62,7 @@
         <connection>scm:git:git@github.com:movsim/movsim.git</connection>
         <url>scm:git:git@github.com:movsim/movsim.git</url>
         <developerConnection>scm:git:git@github.com:movsim/movsim.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>Movsim-1.6.0</tag>
     </scm>
     <build>
         <pluginManagement>
