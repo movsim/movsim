@@ -91,7 +91,7 @@ public class Vehicle {
     /** in m/s^2 */
     private final static double THRESHOLD_BRAKELIGHT_OFF = 0.1;
 
-    /** needs to be > 0 */
+    /** needs to be  &gt; 0 */
     private final static double FINITE_LANE_CHANGE_TIME_S = 7;
 
     private final VehicleDimensions dimensions;

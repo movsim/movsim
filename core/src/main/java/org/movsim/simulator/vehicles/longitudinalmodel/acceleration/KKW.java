@@ -32,17 +32,14 @@ import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
-// paper reference / Kerner book
-// TODO consider also external speed limits
 /**
  * The Class KKW.
  * 
  * The k. Multiplikator fuer sync-Abstand D=lveh+k*v*tau
  * The pb0. "Troedelwahrsch." for standing vehicles
  * The pb1. "Troedelwahrsch." for moving vehicles
- * The pa1. "Beschl.=Anti-Troedelwahrsch." falls v<vp
- * The pa2. "Beschl.=Anti-Troedelwahrsch." falls v>=vp
+ * The pa1. "Beschl.=Anti-Troedelwahrsch." falls v &lt; vp
+ * The pa2. "Beschl.=Anti-Troedelwahrsch." falls v &gt;= vp
  * The vp. Geschw., ab der weniger "anti-getroedelt" wird
  */
 class KKW extends LongitudinalModelBase {

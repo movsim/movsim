@@ -47,7 +47,6 @@ public class RoadMappingBezier extends RoadMapping {
     /**
      * Constructor.
      * 
-     * @param laneCount
      * @param x0
      *            x-position of start of curve
      * @param y0

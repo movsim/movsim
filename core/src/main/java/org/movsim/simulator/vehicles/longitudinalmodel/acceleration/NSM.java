@@ -102,8 +102,6 @@ class NSM extends LongitudinalModelBase {
      *            the v
      * @param dv
      *            the dv
-     * @param localT
-     *            the local T
      * @param localV0
      *            the local v0
      * @return the double

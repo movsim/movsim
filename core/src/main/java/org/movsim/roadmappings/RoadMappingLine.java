@@ -93,7 +93,6 @@ public class RoadMappingLine extends RoadMapping {
     /**
      * Constructor.
      * 
-     * @param laneCount
      * @param x0
      * @param y0
      */

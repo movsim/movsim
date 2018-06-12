@@ -1,7 +1,7 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter;
 
 /**
- * A read-only interface of the model .... extension of the {@link IDM} ... TODO
+ * A read-only interface of the model 'ACC' as  extension of the IDM.
  * 
  * <p>
  * For details on the parameters see Chapter 11.3.8 of the textbook <i>Traffic Flow Dynamics</i> (Treiber/Kesting,

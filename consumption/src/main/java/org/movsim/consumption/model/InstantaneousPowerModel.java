@@ -27,7 +27,7 @@ package org.movsim.consumption.model;
 
 interface InstantaneousPowerModel {
 
-    /** can be <0 */
+    /** can be smaller than 0 */
     double getMechanicalPower(double speed, double acceleration, double slopeGrade);
 
     double getFreeWheelingDeceleration(double speed);

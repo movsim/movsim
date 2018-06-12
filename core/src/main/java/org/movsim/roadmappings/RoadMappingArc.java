@@ -58,8 +58,6 @@ public class RoadMappingArc extends RoadMapping {
     /**
      * The arc begins at startAngle and extends for arcAngle radians.
      * 
-     * @param laneCount
-     *            number of lanes
      * @param s
      * @param x0
      *            start of arc, x coordinate

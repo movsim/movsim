@@ -53,7 +53,7 @@ public class OpenDriveHandler {
     /** Mapping of signal-ids of single trafficlights to controller. */
     private final Map<String, Controller> signalIdsToController = new HashMap<>();
 
-    /** Checks uniqueness of signal ids in <road> definitions. */
+    /** Checks uniqueness of signal ids in  &lt;road &gt; definitions. */
     private final Set<String> uniqueTrafficLightIdsInRoads = new HashSet<>();
 
     /**
@@ -620,7 +620,7 @@ public class OpenDriveHandler {
     }
 
     /**
-     * Returns the lane used in {@link RoadSegment}s (positive integer) from the xodr convention (using laneId>0 and laneId<0
+     * Returns the lane used in {@link RoadSegment}s (positive integer) from the xodr convention (using laneId &gt; 0 and laneId  &lt; 0
      * for left and right driving directions.
      * 
      * @param xodrLaneId

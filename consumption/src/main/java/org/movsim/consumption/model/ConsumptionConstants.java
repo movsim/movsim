@@ -54,10 +54,10 @@ final class ConsumptionConstants {
         return fuelDensity / 1000;
     }
 
-    /** transforming factor g/kWh => kg/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
+    /** transforming factor from g/kWh to kg/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
     static final double GRAMM_PER_KWH_TO_KG_PER_WS = 1 / 3.6e9;
 
-    /** transforming factor kg/kWh => kg/(Ws): kg/(1000W*3600s) = 1/(3.6e6) */
+    /** transforming factor from kg/kWh to kg/(Ws): kg/(1000W*3600s) = 1/(3.6e6) */
     static final double KILOGRAMM_PER_KWH_TO_KG_PER_WS = GRAMM_PER_KWH_TO_KG_PER_WS * 1000;
 
     /** conversion factor for converting from liters to m^3 */
