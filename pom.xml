@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.movsim</groupId>
     <artifactId>Movsim</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
+    <version>1.7.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>movsim</name>
     <url>http://movsim.org</url>
     <inceptionYear>2011</inceptionYear>
-    <description>The Movsim parent project -- Movsim stands for multi-model, open-source vehicular-traffic simulator</description>
+    <description>The Movsim parent project -- Movsim stands for multi-model, open-source vehicular-traffic simulator
+    </description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <projectVersion>${project.version}</projectVersion>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+        <findbugs-maven-plugin.version>3.0.1</findbugs-maven-plugin.version>
         <!-- dependency version -->
         <jdom.version>2.0.2</jdom.version>
         <jaxb2-basics.version>1.11.1</jaxb2-basics.version>
@@ -65,61 +69,65 @@
         <tag>HEAD</tag>
     </scm>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
-                    <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>2.5.3</version>
-                    <configuration>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <!--<releaseProfiles>releases</releaseProfiles>-->
-                        <!--                         <goals>deploy</goals> -->
-                        <!--                         <autoversionsubmodules>true</autoversionsubmodules> -->
-                    </configuration>
-                </plugin>
-                <!--                 <plugin> -->
-                <!--                     <groupId>org.apache.maven.plugins</groupId> -->
-                <!--                     <artifactId>maven-site-plugin</artifactId> -->
-                <!--                     <version>3.2</version> -->
-                <!--                     <dependencies> -->
-                <!--                         <dependency> -->
-                <!--                             add support for ssh/scp -->
-                <!--                             <groupId>org.apache.maven.wagon</groupId> -->
-                <!--                             <artifactId>wagon-ssh</artifactId> -->
-                <!--                             <version>1.0</version> -->
-                <!--                         </dependency> -->
-                <!--                     </dependencies> -->
-                <!--                 </plugin> -->
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- execution: mvn javadoc:javadoc -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <show>private</show>
+                    <nohelp>true</nohelp>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- mvn findbugs:findbugs -->
+                <!-- mvn findbugs:gui -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs-maven-plugin.version}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <failOnError>false</failOnError>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
     <dependencies>
         <dependency>
@@ -138,10 +146,10 @@
             <version>2.11.0</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>log4j</groupId>-->
-            <!--<artifactId>log4j</artifactId>-->
-            <!--<version>1.2.16</version>-->
-            <!--<type>jar</type>-->
+        <!--<groupId>log4j</groupId>-->
+        <!--<artifactId>log4j</artifactId>-->
+        <!--<version>1.2.16</version>-->
+        <!--<type>jar</type>-->
         <!--</dependency>-->
         <dependency>
             <groupId>commons-io</groupId>
@@ -203,45 +211,14 @@
         </dependency>
     </dependencies>
     <reporting>
+        <!-- mvn site -->
         <plugins>
-            <!-- Default Site Pages -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.7</version>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.3</version>
-                <configuration>
-                    <xmlOutput>true</xmlOutput>
-                </configuration>
-            </plugin>
-            <!-- Java Documentation -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
-                <configuration>
-                    <failOnError>false</failOnError>
-                    <additionalparam>-Xdoclint:none</additionalparam>
-                    <excludePackageNames>org.movsim.autogen.*</excludePackageNames>
-                </configuration>
-            </plugin>
-            <!-- Source Code Cross-Reference -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <version>2.5</version>
-            </plugin>
         </plugins>
     </reporting>
-    <!--     <distributionManagement> -->
-    <!--         <site> -->
-    <!--             <id>movsim-server</id> -->
-    <!--             <url>scp://h2063376.stratoserver.net/home/movsim/www/version/${project.version}</url> -->
-    <!--         </site> -->
-    <!--     </distributionManagement> -->
 </project>
 
