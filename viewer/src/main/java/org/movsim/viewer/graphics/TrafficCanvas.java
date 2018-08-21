@@ -274,7 +274,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         initGraphicSettings();
         forceRepaintBackground();
     }
-
+    
     @Override
     public void resetScaleAndOffset() {
         scale = Double.parseDouble(properties.getProperty("initialScale"));

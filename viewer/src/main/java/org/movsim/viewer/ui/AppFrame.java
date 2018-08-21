@@ -87,14 +87,7 @@ public class AppFrame extends JFrame {
             trafficCanvas
                     .setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectFile());
         } else {
-            System.out.println("try to load default");
-            final String path = "sim/buildingBlocks/";
-            URL project = App.class.getClassLoader().getResource(path + "onramp.xml");
-            URL projectPath = App.class.getClassLoader().getResource(path);
-            File file = new File(project.getFile()); // TODO use file, working in applet?
-            System.out.println("file exists = " + file.exists());
-            System.out.println("project = " + project.getFile());
-            trafficCanvas.setupTrafficScenario(file.getName(), projectPath.getFile());
+            System.out.println("Please provide scenario via -f option");
         }
 
         statusPanel.reset();
