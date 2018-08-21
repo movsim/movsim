@@ -103,7 +103,7 @@ public final class ProjectMetaData {
      * @param projectName the new project name
      */
     public void setProjectName(String projectName) {
-        System.out.println("projectname = " + projectName);
+        System.out.println("set projectname to = " + projectName);
         this.projectName = projectName;
     }
 

@@ -71,7 +71,7 @@ or via https (to prevent firewall problems)
        
     git clone https://github.com/movsim/movsim.git
               
-[Java](http://openjdk.java.net/install/index.html) is required at least in version 7 (JRE 1.7).
+[Java](http://openjdk.java.net/install/index.html) is required at least in version 8 (JRE 1.8).
 
 [Apache Maven] (http://maven.apache.org/download.html) is the software build and management tool for MovSim.
 
