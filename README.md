@@ -73,7 +73,7 @@ or via https (to prevent firewall problems)
               
 [Java](http://openjdk.java.net/install/index.html) is required at least in version 8 (JRE 1.8).
 
-[Apache Maven] (http://maven.apache.org/download.html) is the software build and management tool for MovSim.
+[Apache Maven](http://maven.apache.org/download.html) is the software build and management tool for MovSim.
 
 MovSim produces csv/text-based output that can be plotted using [gnuplot](http://www.gnuplot.info/) or other tools. 
 
@@ -84,16 +84,6 @@ To build MovSim, type `mvn install` from the main MovSim directory.
 
 To run the movsim _core_ or _viewer_ see their respective readme files: [core](https://github.com/movsim/movsim/blob/develop/core/README.md) and [viewer](https://github.com/movsim/movsim/blob/develop/viewer/README.md).
 
-
-## Eclipse
-
-MovSim can be built and run from within the [Eclipse IDE](http://www.eclipse.org/downloads/) with the m2e(Maven Integration for Eclipse) plugin.
-
-Import the project into Eclipse from the _File >> Import_ menu item. In the resulting Select dialog, choose the _General >> Existing Projects into Workspace_ option. In the resulting dialog select the `movsim/core` directory and import. Repeat for the `movsim/viewer` directory.
-
-You can then build and run either the _core_ or _viewer_ Java applications.
-
-We use the source code formatter _movsim/misc/codestyle/eclipse_movsim_profile.xml_.
 
 ## Development
 
