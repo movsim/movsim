@@ -232,14 +232,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         return simulationRunnable;
     }
 
-    /**
-     * Load scenario from xml.
-     * 
-     * @param scenario
-     * @param path
-     * @throws JAXBException
-     * @throws SAXException
-     */
+    // TODO Apparently the viewer needs a second initialization to work. Investigate and remove!
     public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();
         ProjectMetaData.getInstance().setProjectName(scenario);

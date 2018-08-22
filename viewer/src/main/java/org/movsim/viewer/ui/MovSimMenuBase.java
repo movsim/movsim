@@ -68,28 +68,6 @@ public class MovSimMenuBase extends JPanel {
                     }
                 }));
 
-        helpMenu.add(new JMenuItem(new AbstractAction(resourceBundle.getString("HelpMenuDocumentation")) {//$NON-NLS-1$
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        handleAbout(actionEvent);
-                    }
-                })).setEnabled(false);
-
-        final JMenu languageMenu = new JMenu(resourceBundle.getString("LanguageChooser"));
-        languageMenu.add(new JMenuItem(new AbstractAction(resourceBundle.getString("English")) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        }));
-
-        languageMenu.add(new JMenuItem(new AbstractAction(resourceBundle.getString("German")) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        })).setEnabled(false);
-
-        helpMenu.add(languageMenu);
-
         return helpMenu;
     }
 
@@ -97,55 +75,6 @@ public class MovSimMenuBase extends JPanel {
         final String titleString = (String) resourceBundle.getObject("AboutTitle"); //$NON-NLS-1$
         final String aboutString = (String) resourceBundle.getObject("AboutText"); //$NON-NLS-1$
         JOptionPane.showMessageDialog(canvasPanel, aboutString, titleString, JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    void handleTravelTimeDiagram(ActionEvent actionEvent) {
-        // final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        // if (trafficUi.getStatusPanel().isWithTravelTimes()) {
-        // if (cb.isSelected()) {
-        // travelTimeDiagram = new TravelTimeDiagram(resourceBundle, cb);
-        // } else {
-        // SwingHelper.closeWindow(travelTimeDiagram);
-        // }
-        // } else {
-        // JOptionPane.showMessageDialog(frame, resourceBundle.getString("NoTravelTime"));
-        // cb.setSelected(false);
-        // }
-    }
-
-    void handleSpatioTemporalDiagram(ActionEvent actionEvent) {
-        // final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        // if (cb.isSelected()) {
-        // spatioTemporalDiagram = new SpatioTemporalView(resourceBundle, cb);
-        // } else {
-        // SwingHelper.closeWindow(spatioTemporalDiagram);
-        // }
-    }
-
-    void handleFloatingCarsDiagram(ActionEvent actionEvent) {
-        // final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        // if (cb.isSelected()) {
-        // fcAcc = new FloatingCarsAccelerationView();
-        // fcSpeed = new FloatingCarsSpeedView();
-        // fcTrajectories = new FloatingCarsTrajectoriesView();
-        // } else {
-        // SwingHelper.closeWindow(fcAcc);
-        // SwingHelper.closeWindow(fcSpeed);
-        // SwingHelper.closeWindow(fcTrajectories);
-        // }
-    }
-
-    void handleDetectorsDiagram(ActionEvent actionEvent) {
-        // final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        // if (cb.isSelected()) {
-        // detectorsDiagram = new DetectorsView(resourceBundle, cb);
-        // } else {
-        // SwingHelper.closeWindow(detectorsDiagram);
-        // }
-    }
-
-    void handleFuelConsumptionDiagram(ActionEvent actionEvent) {
-        SwingHelper.notImplemented(canvasPanel);
     }
 
     protected void handleLogOutput(ActionEvent actionEvent) {
