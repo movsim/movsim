@@ -84,8 +84,7 @@ public class AppFrame extends JFrame {
         initFrameSize(properties);
 
         if (projectMetaData.hasProjectName()) {
-            trafficCanvas
-                    .setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectFile());
+            trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectFile());
         } else {
             System.out.println("Please provide scenario via -f option");
         }

@@ -232,14 +232,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         return simulationRunnable;
     }
 
-    // TODO Apparently the viewer needs a second initialization to work. Investigate and remove!
-    public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
-        roadNetwork.clear();
-        ProjectMetaData.getInstance().setProjectName(scenario);
-        ProjectMetaData.getInstance().setPathToProjectXmlFile(path);
-        initialize();
-    }
-
     private void matchRoadSegmentsAndRoadInput(List<Road> roads,
             MicroscopicBoundaryConditions microBoundaryConditions) {
         for (Road roadInput : roads) {

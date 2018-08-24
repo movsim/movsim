@@ -287,23 +287,9 @@ public class TrafficCanvas extends SimulationCanvasBase
         drawRoadId = !drawRoadId;
     }
 
-    /**
-     * Sets up the given traffic scenario.
-     *
-     * @param scenario
-     * @throws SAXException
-     * @throws JAXBException
-     */
     public void setupTrafficScenario(String scenario, String path) {
-        reset();
-        try {
-            simulator.loadScenarioFromXml(scenario, path);
-        } catch (JAXBException | SAXException e) {
-            throw new IllegalArgumentException(e.toString());
-        }
         properties = ViewProperties.loadProperties(scenario, path);
-        initGraphicSettings();
-        forceRepaintBackground();
+        reset();
     }
 
     private void initGraphicSettings() {
