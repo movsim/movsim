@@ -25,16 +25,16 @@
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="onramp.xodr">
-        <Simulation timestep="0.2">
+    <Scenario network_filename="onramp2.xodr">
+        <Simulation timestep="0.2" seed="42" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.1" />
                 <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.1" />
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="1200" />
-                    <Inflow t="600" q_per_hour="1600" />
+                    <Inflow t="0" q_per_hour="1200" v="20" />
+                    <Inflow t="600" q_per_hour="1600" v="20" />
                 </TrafficSource>
             </Road>
             <Road id="4">
