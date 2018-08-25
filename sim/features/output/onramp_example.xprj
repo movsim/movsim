@@ -97,8 +97,9 @@
             <TravelTimes route="onramp" dt="0" />
             <IndividualTravelTimes route="main" />
             <IndividualTravelTimes route="onramp" />
-            <ConsumptionCalculation route="main" tauEMA="30" />
-            <ConsumptionCalculation route="onramp" />
+            <!-- fuel consumption is quite expensive -->
+        <!-- <ConsumptionCalculation route="main" tauEMA="30" /> -->
+        <!-- <ConsumptionCalculation route="onramp" /> -->
         </OutputConfiguration>
     </Scenario>
 </Movsim>
