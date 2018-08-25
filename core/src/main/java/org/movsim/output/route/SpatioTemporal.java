@@ -42,8 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SpatioTemporal extends OutputOnRouteBase {
 
-    /** The Constant LOG. */
-    final static Logger LOG = LoggerFactory.getLogger(SpatioTemporal.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SpatioTemporal.class);
 
     private final double dxOutput;
     private final double dtOutput;
@@ -79,13 +78,8 @@ public class SpatioTemporal extends OutputOnRouteBase {
         }
     }
 
-    /**
-     * Calculate data.
-     */
     private void calcData() {
-
         TreeSet<SpatialTemporal> dataPoints = gatherData();
-
         if (!dataPoints.isEmpty()) {
             interpolateGridData(dataPoints);
         }
@@ -98,7 +92,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
         final double[] aMicro = new double[size];
         int j = 0;
         for (SpatialTemporal dp : dataPoints) {
-            LOG.debug("data point for interpolation={}", dp.toString());
+            LOG.debug("data point for interpolation={}", dp);
             vMicro[j] = dp.speed;
             xMicro[j] = dp.position;
             aMicro[j] = dp.acceleration;

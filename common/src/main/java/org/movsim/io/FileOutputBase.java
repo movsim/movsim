@@ -25,24 +25,23 @@
  */
 package org.movsim.io;
 
-import java.io.File;
-import java.io.PrintWriter;
-
+import com.google.common.base.Preconditions;
 import org.movsim.shutdown.ShutdownHooks;
 import org.movsim.shutdown.SimulationShutDown;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import java.io.File;
+import java.io.PrintWriter;
 
 public class FileOutputBase implements SimulationShutDown {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(FileOutputBase.class);
 
     public static final String COMMENT_CHAR = "#";
     public static final String SEPARATOR_CHAR = ",";
+    public static final String NEWLINE = "%n";
 
     protected final String path;
     protected final String baseFilename;
@@ -73,7 +72,7 @@ public class FileOutputBase implements SimulationShutDown {
     @Override
     public void onShutDown() {
         if (writer != null) {
-            LOG.debug("closing writer for filename={}", filename);
+            LOG.info("close writer for file={}", filename);
             writer.close();
         }
     }

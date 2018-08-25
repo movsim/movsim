@@ -28,9 +28,6 @@ package org.movsim.output.route;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.io.FileOutputBase;
 
-/**
- * The Class FileSpatioTemporal.
- */
 class FileSpatioTemporal extends FileOutputBase {
 
     private static final String extensionFormat = ".st.route_%s.csv";
@@ -52,7 +49,7 @@ class FileSpatioTemporal extends FileOutputBase {
             writer.printf(outputFormat, simulationTime, x, spatioTemporal.getAverageSpeed(i),
                     spatioTemporal.getAverageAcceleration(i));
         }
-        write("%n"); // block ends
+        write(NEWLINE); // block ends
     }
 
 }
