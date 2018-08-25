@@ -70,7 +70,7 @@ public class EquilibriumPropertiesImpl implements EquilibriumProperties {
     public EquilibriumPropertiesImpl(double vehicleLength, LongitudinalModelBase model) {
         this.rhoMax = 1.0 / Math.max(vehicleLength, TINY_VALUE);
         if (vehicleLength < TINY_VALUE) {
-            LOG.warn("vehicle length is artifically small={}, asume finite length {}", vehicleLength, TINY_VALUE);
+            LOG.warn("vehicle length is artificially small={}, assume finite length {}", vehicleLength, TINY_VALUE);
         }
 
         if (model.hasDesiredSpeed()) {
