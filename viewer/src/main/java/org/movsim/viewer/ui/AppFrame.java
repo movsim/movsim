@@ -39,11 +39,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.movsim.autogen.Movsim;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
 import org.movsim.viewer.App;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.SwingHelper;
+import org.movsim.xml.InputLoader;
 
 @SuppressWarnings("synthetic-access")
 public class AppFrame extends JFrame {
@@ -58,7 +60,8 @@ public class AppFrame extends JFrame {
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
 
-        final Simulator simulator = new Simulator();
+        Movsim movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
+        final Simulator simulator = new Simulator(movsimInput);
         initLookAndFeel();
 
         final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);
@@ -81,19 +84,19 @@ public class AppFrame extends JFrame {
         initFrameSize(properties);
 
         if (projectMetaData.hasProjectName()) {
-            trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(),
-                    projectMetaData.getPathToProjectFile());
+            trafficCanvas
+                    .setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectFile());
         } else {
             System.out.println("try to load default");
             final String path = "sim/buildingBlocks/";
-            URL project = App.class.getClassLoader().getResource(path+"onramp.xml");
+            URL project = App.class.getClassLoader().getResource(path + "onramp.xml");
             URL projectPath = App.class.getClassLoader().getResource(path);
-            File file = new File(project.getFile());  // TODO use file, working in applet?
-            System.out.println("file exists = "+file.exists());
-            System.out.println("project = "+project.getFile());
+            File file = new File(project.getFile()); // TODO use file, working in applet?
+            System.out.println("file exists = " + file.exists());
+            System.out.println("project = " + project.getFile());
             trafficCanvas.setupTrafficScenario(file.getName(), projectPath.getFile());
         }
-        
+
         statusPanel.reset();
         trafficCanvas.start();
         setVisible(true);

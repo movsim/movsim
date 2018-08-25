@@ -5,8 +5,6 @@ MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
 
 http://www.movsim.org
 
-Demonstration: www.verkehrsdynamik.de 
-
 
 Description
 -----------
@@ -27,11 +25,18 @@ The `core` submodule provides the following features:
   * Kerner-Klenov-Wolf Cellular Automaton
 - text-file output of detectors, spatiotemporal fields, floating-car data etc. 
 
+Documentation
+-------------
+
+A mathematical description of the models as well as the basic concepts can be found in the book [Traffic Flow Dynamics](http://www.traffic-flow-dynamics.org) by Treiber/Kesting. A good starting point is the free chapter about [Car-Following Models based on Driving Strategies](http://traffic-flow-dynamics.org/res/SampleChapter11.pdf).
+
+Documentation by example can be found in the [_sim_ directory](https://github.com/movsim/movsim/tree/develop/sim).
+
 
 Installation
 ------------
 
-For installation see the [README.md](https://github.com/movsim/movsim/blob/master/README.md) in the main MovSim directory.
+For installation see the [README.md](https://github.com/movsim/movsim/blob/develop/README.md) in the main MovSim directory.
 
 
 Usage
@@ -41,16 +46,9 @@ To build the MovSim core with Maven, type `mvn install` from the MovSim `core/` 
 
 MovSim core can be run directly from the command-line. To see the MovSim options, invoke the target by typing e.g.:
 
-    java -jar target/MovsimCore-1.5.0-SNAPSHOT-jar-with-dependencies.jar -h
+    java -jar target/MovsimCore-1.6.0-SNAPSHOT-jar-with-dependencies.jar -h
 
-There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim). The `runmovsim` script can be used to run the simulator and gnuplot for plot these scenarios, for example:
-
-    cd ../sim/bookScenarioStartStop/
-    ../../core/runmovsim -f startStop_IDM.xml
-    gnuplot startStop_IDM.gpl
-
-The `.csv` output is put in the directory from which the simulator is called and the graphical output is put in `.eps` (Encapsulated PostScript) files.
-
+There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/develop/sim). The `runmovsim` script can be used to run the simulator and gnuplot for plot these scenarios.
 
 Logging output
 --------------
@@ -69,7 +67,7 @@ For commercial use, please contact the copyright holders at movsim@akesting.de
 Copyright
 ---------
 
-MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
+MovSim is Copyright (C) 2010-2016 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
-MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
+MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/develop/COPYING).
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -27,7 +27,6 @@
 package org.movsim.roadmappings;
 
 import java.util.Arrays;
-
 
 /**
  * Road mapping defined by a quadratic Bezier curve.
@@ -62,8 +61,8 @@ public class RoadMappingBezier extends RoadMapping {
      * @param cY
      *            y-position of control point
      */
-    RoadMappingBezier(int laneCount, double x0, double y0, double x1, double y1, double cX, double cY) {
-        super(laneCount, x0, y0);
+    RoadMappingBezier(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1, double cX, double cY) {
+        super(laneGeometries, x0, y0);
         p0x = x0;
         p0y = y0;
         p1x = cX;
@@ -97,9 +96,9 @@ public class RoadMappingBezier extends RoadMapping {
      * @param c
      * @param d
      */
-    RoadMappingBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a,
-            double b, double c, double d) {
-        super(laneCount, x0, y0);
+    RoadMappingBezier(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length,
+            double a, double b, double c, double d) {
+        super(laneGeometries, x0, y0);
         p0x = x0;
         p0y = y0;
         p2x = a;
@@ -125,9 +124,9 @@ public class RoadMappingBezier extends RoadMapping {
      * @param t
      *            single degree of freedom in setting the control point
      */
-    RoadMappingBezier(RoadMapping roadMapping, double x1, double y1, double t) {
-        super(roadMapping.laneCount(), 0, 0);
-        final RoadMapping.PosTheta posTheta = roadMapping.endPos();
+    RoadMappingBezier(RoadMapping roadMapping, LaneGeometries laneGeometries, double x1, double y1, double t) {
+        super(laneGeometries, 0, 0);
+        final PosTheta posTheta = roadMapping.endPos();
         p0x = posTheta.x;
         p0y = posTheta.y;
         p1x = posTheta.x + t * posTheta.cosTheta;
@@ -175,14 +174,14 @@ public class RoadMappingBezier extends RoadMapping {
         return p1y + lateralOffset * adj / h;
     }
 
-    protected RoadMappingBezier(int laneCount, double x0, double y0) {
-        super(laneCount, x0, y0);
+    protected RoadMappingBezier(LaneGeometries laneGeometries, double x0, double y0) {
+        super(laneGeometries, x0, y0);
         p0x = x0;
         p0y = y0;
     }
 
     @Override
-    public RoadMapping.PosTheta startPos() {
+    public PosTheta startPos() {
         posTheta.x = p0x;
         posTheta.y = p0y;
         final double opp = p1y - p0y;
@@ -194,7 +193,7 @@ public class RoadMappingBezier extends RoadMapping {
     }
 
     @Override
-    public RoadMapping.PosTheta endPos() {
+    public PosTheta endPos() {
         posTheta.x = p2x;
         posTheta.y = p2y;
         final double opp = p2y - p1y;
@@ -206,7 +205,7 @@ public class RoadMappingBezier extends RoadMapping {
     }
 
     @Override
-    public RoadMapping.PosTheta endPos(double lateralOffset) {
+    public PosTheta endPos(double lateralOffset) {
         final PosTheta posTheta = endPos();
         // adjust for the lateral offset
         posTheta.x += lateralOffset * posTheta.sinTheta;
@@ -260,7 +259,7 @@ public class RoadMappingBezier extends RoadMapping {
     }
 
     @Override
-    public RoadMapping.PosTheta map(double roadPos, double lateralOffset) {
+    public PosTheta map(double roadPos, double lateralOffset) {
         final double t = roadPosToT(roadPos);
         bezier(t);
         // and finally adjust for the lateral offset
@@ -270,7 +269,7 @@ public class RoadMappingBezier extends RoadMapping {
         return posTheta;
     }
 
-    private RoadMapping.PosTheta bezier(double t) {
+    private PosTheta bezier(double t) {
         // see http://www.cubic.org/docs/bezier.htm for a good visual explanation of the
         // the DeCasteljau algorithm for evaluating points on a Bezier curve
         // calculate the interpolated point between p0 and p1
@@ -292,7 +291,7 @@ public class RoadMappingBezier extends RoadMapping {
         return posTheta;
     }
 
-    private RoadMapping.PosTheta bezierPos(double t) {
+    private PosTheta bezierPos(double t) {
         // see http://www.cubic.org/docs/bezier.htm for a good visual explanation of the
         // the DeCasteljau algorithm for evaluating points on a Bezier curve
         // calculate the interpolated point between p0 and p1
@@ -314,7 +313,7 @@ public class RoadMappingBezier extends RoadMapping {
             final double dt = 1.0 / (S_COUNT - 1);
             double t = 0.0;
             sValues[0] = 0.0;
-            RoadMapping.PosTheta p = bezierPos(t);
+            PosTheta p = bezierPos(t);
             double x0 = p.x;
             double y0 = p.y;
             for (int i = 1; i < S_COUNT; ++i) {
@@ -375,4 +374,5 @@ public class RoadMappingBezier extends RoadMapping {
         assert A_32 != 0.0;
         return (P + Q) / (4 * A_32);
     }
+
 }

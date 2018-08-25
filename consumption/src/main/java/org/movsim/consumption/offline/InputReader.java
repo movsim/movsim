@@ -26,28 +26,24 @@
 package org.movsim.consumption.offline;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.autogen.BatchData;
+import org.movsim.io.CsvReaderUtil;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 public class InputReader {
 
-    static final Logger LOG = LoggerFactory.getLogger(InputReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InputReader.class);
 
-    private final char separator = ',';
+    private final char separator;
 
     private List<ConsumptionDataRecord> records;
 
@@ -64,8 +60,9 @@ public class InputReader {
         Preconditions.checkNotNull(batch);
         Preconditions.checkArgument(inputFile.exists() && inputFile.isFile(), "file=" + inputFile.getAbsolutePath()
                 + " does not exist!");
+        this.separator = batch.getSeparator().charAt(0);
         this.batchInput = batch;
-        records = new LinkedList<ConsumptionDataRecord>();
+        this.records = new LinkedList<ConsumptionDataRecord>();
 
         process(inputFile);
     }
@@ -75,7 +72,7 @@ public class InputReader {
     }
 
     private void process(File inputFile) {
-        List<String[]> inputDataLines = readData(inputFile);
+        List<String[]> inputDataLines = CsvReaderUtil.readData(inputFile, separator);
 
         if (inputDataLines == null || inputDataLines.isEmpty()) {
             LOG.warn("no input read");
@@ -110,7 +107,7 @@ public class InputReader {
     private void addNormalizedTime() {
         if (!records.isEmpty()) {
             final double startTime = records.get(0).getTime();
-            System.out.println("add normalized time with startTime=" + startTime);
+            LOG.info("add normalized time with startTime={}", startTime);
             for (ConsumptionDataRecord record : records) {
                 record.setNormalizedTime(record.getTime() - startTime);
             }
@@ -127,8 +124,8 @@ public class InputReader {
             ConsumptionDataRecord recordBwd = records.get(Math.max(0, i - 1));
             double speed = calcDerivate(recordFwd.getPosition() - recordBwd.getPosition(), recordFwd.getTime()
                     - recordBwd.getTime());
-            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getPosition(), speed,
-                    record.getAcceleration(), record.getGrade()));
+            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getTimestamp(), record
+                    .getPosition(), speed, record.getAcceleration(), record.getGrade()));
         }
         return newRecords;
     }
@@ -143,8 +140,8 @@ public class InputReader {
             ConsumptionDataRecord recordBwd = records.get(Math.max(0, i - 1));
             double acceleration = calcDerivate(recordFwd.getSpeed() - recordBwd.getSpeed(), recordFwd.getTime()
                     - recordBwd.getTime());
-            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getPosition(), record
-                    .getSpeed(), acceleration, record.getGrade()));
+            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getTimestamp(), record
+                    .getPosition(), record.getSpeed(), acceleration, record.getGrade()));
         }
         return newRecords;
     }
@@ -164,38 +161,12 @@ public class InputReader {
             } catch (NumberFormatException e) {
                 LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
             } catch (IllegalArgumentException e) {
-                LOG.info("cannot parse data. Ignore line=", Arrays.toString(line));
+                LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
             }
         }
 
         LOG.info("parsed={} from={} input lines", records.size(), input.size());
     }
 
-    private List<String[]> readData(File file) {
-        LOG.info("using input file={}", file.getAbsolutePath());
-        List<String[]> myEntries = Lists.newArrayList();
-
-        // see http://opencsv.sourceforge.net/#how-to-read
-        CSVReader reader = null;
-        try {
-            reader = new CSVReader(new FileReader(file), separator);
-            myEntries = reader.readAll();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-        }
-        return myEntries;
-    }
 
 }

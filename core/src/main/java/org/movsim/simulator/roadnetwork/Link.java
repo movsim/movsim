@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -58,12 +58,21 @@ public class Link {
      * @param toRoadSegment
      */
     public static void addLanePair(int fromLane, RoadSegment fromRoadsegment, int toLane, RoadSegment toRoadSegment) {
-        // toRoadSegment.setSourceRoadSegmentForLane(fromRoadsegment, toLane);
-        // toRoadSegment.setSourceLaneForLane(fromLane, toLane);
-        // fromRoadsegment.setSinkRoadSegmentForLane(toRoadSegment, fromLane);
-        // fromRoadsegment.setSinkLaneForLane(toLane, fromLane);
-
+        // check if lanes are already connected: ambiguous xodr!
+        if (toRoadSegment.sourceLaneSegment(toLane) != null
+                && toRoadSegment.sourceLaneSegment(toLane).roadSegment() != fromRoadsegment) {
+            throw new IllegalArgumentException("Ambiguous network input! Cannot connect source roadSegment="
+                    + fromRoadsegment + "\nto lane=" + toLane + " of sink roadSegment=" + toRoadSegment
+                    + ".\n Sink already is=" + toRoadSegment.sourceLaneSegment(toLane).roadSegment());
+        }
         toRoadSegment.setSourceLaneSegmentForLane(fromRoadsegment.laneSegment(fromLane), toLane);
+
+        if (fromRoadsegment.sinkLaneSegment(fromLane) != null
+                && fromRoadsegment.sinkLaneSegment(fromLane).roadSegment() != toRoadSegment) {
+            throw new IllegalArgumentException("Ambiguous network input! Cannot connect sink roadSegment="
+                    + toRoadSegment + "\nfrom lane=" + fromLane + " of source roadSegment=" + toRoadSegment
+                    + ".\n Source already is=" + fromRoadsegment.sinkLaneSegment(fromLane).roadSegment());
+        }
         fromRoadsegment.setSinkLaneSegmentForLane(toRoadSegment.laneSegment(toLane), fromLane);
     }
 
@@ -79,22 +88,21 @@ public class Link {
         for (int lane = 1; lane <= limit; ++lane) {
             addLanePair(lane, sourceRoad, lane, sinkRoad);
         }
-//        final int offset = sinkRoad.trafficLaneMin() - sourceRoad.trafficLaneMin();
-//        assert sourceRoad.laneCount() + offset == sinkRoad.laneCount();
-//        if (offset < 0) {
-//            final int limit = sourceRoad.laneCount() + offset;
-//            for (int i = 0; i < limit; ++i) {
-//                addLanePair(i - offset, sourceRoad, i, sinkRoad);
-//            }
-//        } else {
-//            final int laneCount = sourceRoad.laneCount();
-//            for (int i = 0; i < laneCount; ++i) {
-//                addLanePair(i, sourceRoad, i + offset, sinkRoad);
-//            }
-//        }
+        // final int offset = sinkRoad.trafficLaneMin() - sourceRoad.trafficLaneMin();
+        // assert sourceRoad.laneCount() + offset == sinkRoad.laneCount();
+        // if (offset < 0) {
+        // final int limit = sourceRoad.laneCount() + offset;
+        // for (int i = 0; i < limit; ++i) {
+        // addLanePair(i - offset, sourceRoad, i, sinkRoad);
+        // }
+        // } else {
+        // final int laneCount = sourceRoad.laneCount();
+        // for (int i = 0; i < laneCount; ++i) {
+        // addLanePair(i, sourceRoad, i + offset, sinkRoad);
+        // }
+        // }
         return sinkRoad;
     }
-
 
     /**
      * Convenience function to add a merge of two road segments into a single road segments.

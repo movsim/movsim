@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimInitialConditions>
+    <RoadInitialConditions id="IDM">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="20" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="30" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="40" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="50" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="60" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="70" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="80" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="90" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="100" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="110" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="120" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="130" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="140" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="150" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="160" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="170" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="180" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="190" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="200" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="210" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="220" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="230" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="240" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="250" speed="0" label="IDM1" />
+            <VehicleInitialCondition position="260" speed="0" label="IDM1" />
+            <!-- obstacle shifts floating car numbers -->
+            <VehicleInitialCondition position="1000" speed="0" label="Obstacle" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="IIDM">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="20" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="30" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="40" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="50" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="60" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="70" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="80" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="90" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="100" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="110" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="120" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="130" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="140" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="150" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="160" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="170" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="180" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="190" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="200" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="210" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="220" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="230" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="240" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="250" speed="0" label="IIDM1" />
+            <VehicleInitialCondition position="260" speed="0" label="IIDM1" />
+            <!-- obstacle shifts floating car numbers -->
+            <VehicleInitialCondition position="1000" speed="0" label="Obstacle" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="ACC">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="20" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="30" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="40" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="50" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="60" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="70" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="80" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="90" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="100" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="110" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="120" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="130" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="140" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="150" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="160" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="170" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="180" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="190" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="200" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="210" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="220" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="230" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="240" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="250" speed="0" label="ACC1" />
+            <VehicleInitialCondition position="260" speed="0" label="ACC1" />
+            <!-- obstacle shifts floating car numbers -->
+            <VehicleInitialCondition position="1000" speed="0" label="Obstacle" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="IDMM">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="20" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="30" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="40" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="50" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="60" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="70" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="80" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="90" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="100" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="110" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="120" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="130" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="140" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="150" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="160" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="170" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="180" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="190" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="200" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="210" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="220" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="230" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="240" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="250" speed="0" label="IDMM1" />
+            <VehicleInitialCondition position="260" speed="0" label="IDMM1" />
+            <!-- obstacle shifts floating car numbers -->
+            <VehicleInitialCondition position="1000" speed="0" label="Obstacle" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="IDM_noise">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="20" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="30" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="40" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="50" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="60" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="70" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="80" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="90" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="100" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="110" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="120" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="130" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="140" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="150" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="160" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="170" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="180" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="190" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="200" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="210" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="220" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="230" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="240" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="250" speed="0" label="IDM1_noise" />
+            <VehicleInitialCondition position="260" speed="0" label="IDM1_noise" />
+            <!-- obstacle shifts floating car numbers -->
+            <VehicleInitialCondition position="1000" speed="0" label="Obstacle" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="FVDM">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="20" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="30" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="40" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="50" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="60" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="70" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="80" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="90" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="100" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="110" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="120" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="130" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="140" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="150" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="160" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="170" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="180" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="190" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="200" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="210" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="220" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="230" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="240" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="250" speed="0" label="FVDM1" />
+            <VehicleInitialCondition position="260" speed="0" label="FVDM1" />
+            <!-- obstacle shifts floating car numbers -->
+            <VehicleInitialCondition position="1000" speed="0" label="Obstacle" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="OVM">
+        <MicroscopicInitialConditions>
+            <VehicleInitialCondition position="10" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="20" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="30" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="40" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="50" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="60" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="70" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="80" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="90" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="100" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="110" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="120" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="130" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="140" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="150" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="160" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="170" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="180" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="190" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="200" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="210" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="220" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="230" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="240" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="250" speed="0" label="OVM1" />
+            <VehicleInitialCondition position="260" speed="0" label="OVM1" />
+            <!-- obstacle shifts floating car numbers -->
+            <VehicleInitialCondition position="1000" speed="0" label="Obstacle" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+</MovsimInitialConditions>
+

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -29,14 +29,14 @@ package org.movsim.roadmappings;
 /**
  * Maps a road segment onto a spiral.
  */
+// TODO - spiral is approximated by an arc - fix to use proper spiral
 public class RoadMappingSpiral extends RoadMappingArc {
     double startCurvature;
     double endCurvature;
 
-    RoadMappingSpiral(int laneCount, double s, double x0, double y0, double theta, double length,
+    RoadMappingSpiral(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length,
             double startCurvature, double endCurvature) {
-        // TODO - spiral is approximated by an arc - fix to use proper spiral
-        super(laneCount, s, x0, y0, theta, length, (startCurvature + endCurvature) / 2.0);
+        super(laneGeometries, s, x0, y0, theta, length, (startCurvature + endCurvature) / 2.0);
         this.startCurvature = startCurvature;
         this.endCurvature = endCurvature;
         roadLength = length;

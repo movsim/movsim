@@ -31,13 +31,11 @@ package org.movsim.simulator.roadnetwork;
  * Lanes value constants.
  * </p>
  * <p>
- * Lanes are numbered from the inside laneIndex to the outside laneIndex. So, for example, on a three laneIndex road LANE1 is the
- * inside laneIndex, LANE2 is the middle laneIndex and LANE3 is the outside laneIndex.
+ * Lanes are numbered from the inside laneIndex to the outside laneIndex. So, for example, on a three laneIndex road LANE1 is the inside
+ * laneIndex, LANE2 is the middle laneIndex and LANE3 is the outside laneIndex.
  * </p>
  * Lanes numbering is independent of whether traffic drives on the right or the left, indeed references to "right lanes"
  * and "left lanes" is conscientiously eschewed.
- * <p>
- * </p>
  */
 public final class Lanes {
 
@@ -46,7 +44,7 @@ public final class Lanes {
     }
 
     // from inner to outer lanes
-    public static final int LANE1 = 1; // NOT DRIVABLE TODO avoid lane index 0, opendrive reserves this for middlelane
+    public static final int LANE1 = 1;
     public static final int LANE2 = 2;
     public static final int LANE3 = 3;
     public static final int LANE4 = 4;
@@ -60,6 +58,9 @@ public final class Lanes {
     public final static int NO_CHANGE = 0;
 
     public static final int MOST_INNER_LANE = LANE1;
+
+    /** internal overtaking lane, works with mapping */
+    public static final int OVERTAKING = 0;
 
     /**
      * Lanes type.
@@ -112,7 +113,24 @@ public final class Lanes {
      * 
      */
     public enum LaneSectionType {
-        LEFT, RIGHT;
+        LEFT("-", true), RIGHT("+", false);
+
+        private final String idAppender;
+
+        private final boolean reverseDirection;
+
+        private LaneSectionType(String idAppender, boolean reverseDirection) {
+            this.idAppender = idAppender;
+            this.reverseDirection = reverseDirection;
+        }
+
+        public String idAppender() {
+            return idAppender;
+        }
+
+        public boolean isReverseDirection() {
+            return reverseDirection;
+        }
     }
 
     /**
@@ -125,14 +143,14 @@ public final class Lanes {
     public enum RoadLinkElementType {
         ROAD("road"), JUNCTION("junction");
 
-        private final String openDriveIdentifier;
+        private final String xodrIdentifier;
 
         RoadLinkElementType(String keyword) {
-            this.openDriveIdentifier = keyword;
+            this.xodrIdentifier = keyword;
         }
 
         public String xodrIdentifier() {
-            return openDriveIdentifier;
+            return xodrIdentifier;
         }
     }
 

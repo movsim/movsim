@@ -27,8 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterACC;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 
@@ -47,9 +45,6 @@ import org.slf4j.LoggerFactory;
  * </p>
  */
 class ACC extends LongitudinalModelBase {
-
-    /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(ACC.class);
 
     private final IModelParameterACC param;
 
@@ -81,7 +76,7 @@ class ACC extends LongitudinalModelBase {
         // me.getPosition(), me.getSpeed(), alphaT, alphaV0, T, Tlocal);
         // }
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
         final double aLocal = alphaA * param.getA();
 
         return acc(s, v, dv, aLead, Tlocal, v0Local, aLocal);

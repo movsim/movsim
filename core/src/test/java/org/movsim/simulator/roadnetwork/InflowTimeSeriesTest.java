@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -35,20 +35,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.movsim.autogen.Inflow;
+import org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries;
 
 public class InflowTimeSeriesTest {
     private static final double delta = 0.00001;
-	private InflowTimeSeries inflowTimeSeries;
+    private InflowTimeSeries inflowTimeSeries;
 
-	@Before
-	public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         final List<Inflow> inflowDataPoints = new ArrayList<>();
-		// time, flowPerHour, speed
+        // time, flowPerHour, speed
         inflowDataPoints.add(createInflowDataPoint(0.0, 0.0, 24.0));
         inflowDataPoints.add(createInflowDataPoint(600.0, 1200.0, 24.0));
         inflowDataPoints.add(createInflowDataPoint(900.0, 1800.0, 12.0));
-		inflowTimeSeries = new InflowTimeSeries(inflowDataPoints);
-	}
+        inflowTimeSeries = new InflowTimeSeries(inflowDataPoints);
+    }
 
     private static Inflow createInflowDataPoint(double time, double flow, double speed) {
         Inflow inflow = new Inflow();
@@ -58,31 +59,31 @@ public class InflowTimeSeriesTest {
         return inflow;
     }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@Test
-	public final void testInflowTimeSeries() {
-		assertNotNull(inflowTimeSeries);
-	}
+    @Test
+    public final void testInflowTimeSeries() {
+        assertNotNull(inflowTimeSeries);
+    }
 
-	@Test
-	public final void testGetFlowPerLane() {
+    @Test
+    public final void testGetFlowPerLane() {
         assertEquals(0.0, inflowTimeSeries.getFlowPerLane(0.0), delta);
         assertEquals(600.0 / 3600.0, inflowTimeSeries.getFlowPerLane(300.0), delta);
         assertEquals(1200.0 / 3600.0, inflowTimeSeries.getFlowPerLane(600.0), delta);
         assertEquals(1500.0 / 3600.0, inflowTimeSeries.getFlowPerLane(750.0), delta);
         assertEquals(1800.0 / 3600.0, inflowTimeSeries.getFlowPerLane(900.0), delta);
-	}
+    }
 
-	@Test
-	public final void testGetSpeed() {
+    @Test
+    public final void testGetSpeed() {
         assertEquals(24.0, inflowTimeSeries.getSpeed(0.0), delta);
         assertEquals(24.0, inflowTimeSeries.getSpeed(300.0), delta);
         assertEquals(24.0, inflowTimeSeries.getSpeed(600.0), delta);
         assertEquals(18.0, inflowTimeSeries.getSpeed(750.0), delta);
         assertEquals(12.0, inflowTimeSeries.getSpeed(900.0), delta);
-	}
+    }
 
 }

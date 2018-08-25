@@ -33,7 +33,7 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.Vehicle.Type;
-import org.movsim.utilities.Tables;
+import org.movsim.utilities.LinearInterpolatedFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class SpatioTemporal extends OutputOnRouteBase {
 
     /** The Constant LOG. */
-    final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
+    final static Logger LOG = LoggerFactory.getLogger(SpatioTemporal.class);
 
     private final double dxOutput;
     private final double dtOutput;
@@ -92,23 +92,26 @@ public class SpatioTemporal extends OutputOnRouteBase {
     }
 
     private void interpolateGridData(TreeSet<SpatialTemporal> dataPoints) {
-        int size = dataPoints.size();
+        final int size = dataPoints.size();
         final double[] xMicro = new double[size];
         final double[] vMicro = new double[size];
         final double[] aMicro = new double[size];
         int j = 0;
         for (SpatialTemporal dp : dataPoints) {
-            // LOG.debug("data point for interpolation={}", dp.toString());
+            LOG.debug("data point for interpolation={}", dp.toString());
             vMicro[j] = dp.speed;
             xMicro[j] = dp.position;
             aMicro[j] = dp.acceleration;
             ++j;
         }
 
+        LinearInterpolatedFunction speeds = new LinearInterpolatedFunction(xMicro, vMicro);
+        LinearInterpolatedFunction accelerations = new LinearInterpolatedFunction(xMicro, aMicro);
+
         for (int i = 0; i < macroSpeed.length; ++i) {
             final double x = i * dxOutput;
-            macroSpeed[i] = Tables.intpextp(xMicro, vMicro, x);
-            macroAcceleration[i] = Tables.intpextp(xMicro, aMicro, x);
+            macroSpeed[i] = speeds.value(x);
+            macroAcceleration[i] = accelerations.value(x);
         }
     }
 
@@ -135,38 +138,18 @@ public class SpatioTemporal extends OutputOnRouteBase {
         return dataPoints;
     }
 
-    /**
-     * Gets the dt out.
-     * 
-     * @return the dt out
-     */
     public double getDtOutput() {
         return dtOutput;
     }
 
-    /**
-     * Gets the dx out.
-     * 
-     * @return the dx out
-     */
     public double getDxOutput() {
         return dxOutput;
     }
 
-    /**
-     * Returns the size of the storage arrays.
-     * 
-     * @return the size of the arrays
-     */
     public int size() {
         return macroSpeed.length;
     }
 
-    /**
-     * Gets the average speed.
-     * 
-     * @return the average speed
-     */
     public double getAverageSpeed(int index) {
         return macroSpeed[index];
     }
@@ -175,19 +158,11 @@ public class SpatioTemporal extends OutputOnRouteBase {
         return macroAcceleration[index];
     }
 
-    /**
-     * Gets the time offset.
-     * 
-     * @return the time offset
-     */
     public double getTimeOffset() {
         return lastTimeOutput;
     }
 
-    /**
-     * convenience class of one spatio-temporal data point
-     */
-    final class SpatialTemporal {
+    private static final class SpatialTemporal {
         final double position;
         final double speed;
         final double length;

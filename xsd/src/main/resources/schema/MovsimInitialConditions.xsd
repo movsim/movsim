@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation>XML Schema Definition for Movsim microscopic or macroscopic initial condition input file, (c) 2015 by MovSim.org</xs:documentation>
+    </xs:annotation>
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- own definition -->
+    <xs:simpleType name="nonNegativeDouble">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="positiveDouble">
+        <xs:restriction base="xs:double">
+            <xs:minExclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="probability">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0" />
+            <xs:maxInclusive value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!-- define own integer types based on xs:int because they are bound to Integer -->
+    <xs:simpleType name="positiveInteger">
+        <xs:restriction base="xs:int">
+            <xs:minExclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="nonNegativeInteger">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- root element -->
+    <xs:element name="MovsimInitialConditions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="RoadInitialConditions" type="RoadInitialConditionsType" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="RoadInitialConditionsType">
+        <xs:choice>
+            <xs:element name="MacroscopicInitialConditions" type="MacroscopicInitialConditionsType" />
+            <xs:element name="MicroscopicInitialConditions" type="MicroscopicInitialConditionsType" />
+        </xs:choice>
+        <xs:attribute name="id" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="MacroscopicInitialConditionsType">
+        <xs:sequence>
+            <xs:element name="MacroCondition" type="MacroConditionType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="MacroConditionType">
+        <xs:attribute name="position" type="nonNegativeDouble" use="required" />
+        <xs:attribute name="density_per_km" type="nonNegativeDouble" use="required" />
+        <xs:attribute name="speed" type="nonNegativeDouble" use="optional" />
+    </xs:complexType>
+    <xs:complexType name="MicroscopicInitialConditionsType">
+        <xs:sequence>
+            <xs:element name="VehicleInitialCondition" type="VehicleInitialConditionType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="VehicleInitialConditionType">
+        <xs:attribute name="position" type="nonNegativeDouble" use="required" />
+        <xs:attribute name="speed" type="nonNegativeDouble" use="required" />
+        <!-- By convention the lane index starts with 1 for the most inner lane. -->
+        <xs:attribute name="lane" type="nonNegativeInteger" default="1" />
+        <xs:attribute name="label" type="xs:string" use="optional" />
+    </xs:complexType>
+</xs:schema>
+

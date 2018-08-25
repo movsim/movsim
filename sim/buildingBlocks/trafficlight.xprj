@@ -35,26 +35,25 @@
                 <VehicleType label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
             </TrafficComposition>
             <Road id="1">
-                <InitialConditions />
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="500" />
                 </TrafficSource>
                 <Detectors />
             </Road>
         </Simulation>
-         <TrafficLights>
-            <ControllerGroup id="plan1"  >
+        <TrafficLights>
+            <ControllerGroup id="plan1">
                 <Phase duration="35">
-                    <TrafficLightState name="firstLight" status="Green" />
+                    <TrafficLightState type="firstLight" status="Green" />
                 </Phase>
-                <Phase duration="3">
-                    <TrafficLightState name="firstLight" status="GreenRed" />
+                <Phase duration="5">
+                    <TrafficLightState type="firstLight" status="GreenRed" />
                 </Phase>
                 <Phase duration="40">
-                    <TrafficLightState name="firstLight" status="Red" />
+                    <TrafficLightState type="firstLight" status="Red" />
                 </Phase>
                 <Phase duration="2">
-                    <TrafficLightState name="firstLight" status="RedGreen" />
+                    <TrafficLightState type="firstLight" status="RedGreen" />
                 </Phase>
             </ControllerGroup>
         </TrafficLights>

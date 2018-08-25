@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -33,13 +33,17 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
  */
 public class RoadMappingLine extends RoadMapping {
 
+    public static RoadMapping create(RoadGeometry roadGeometry) {
+        return create(roadGeometry.getLaneGeometries(), roadGeometry.geometry());
+    }
+
+    private static RoadMapping create(LaneGeometries laneGeometries, Geometry geometry) {
+        return new RoadMappingLine(laneGeometries, geometry.getS(), geometry.getX(), geometry.getY(),
+                geometry.getHdg(), geometry.getLength());
+    }
+
     protected double x1;
     protected double y1;
-
-    public static RoadMapping create(int laneCount, Geometry geometry, double laneWidth) {
-        return new RoadMappingLine(laneCount, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
-                geometry.getLength(), laneWidth);
-    }
 
     /**
      * Constructor.
@@ -55,8 +59,8 @@ public class RoadMappingLine extends RoadMapping {
      * @param y1
      *            y-position of end of line
      */
-    RoadMappingLine(int laneCount, double x0, double y0, double x1, double y1) {
-        super(laneCount, x0, y0);
+    RoadMappingLine(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
+        super(laneGeometries, x0, y0);
         this.x1 = x1;
         this.y1 = y1;
         init();
@@ -77,8 +81,8 @@ public class RoadMappingLine extends RoadMapping {
      * @param length
      *            length of line
      */
-    RoadMappingLine(int laneCount, double s, double x0, double y0, double theta, double length) {
-        super(laneCount, x0, y0);
+    RoadMappingLine(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length) {
+        super(laneGeometries, x0, y0);
         roadLength = length;
         posTheta.sinTheta = Math.sin(theta);
         posTheta.cosTheta = Math.cos(theta);
@@ -93,8 +97,8 @@ public class RoadMappingLine extends RoadMapping {
      * @param x0
      * @param y0
      */
-    RoadMappingLine(int laneCount, double x0, double y0) {
-        super(laneCount, x0, y0);   
+    RoadMappingLine(LaneGeometries laneGeometries, double x0, double y0) {
+        super(laneGeometries, x0, y0);
     }
 
     /**
@@ -107,9 +111,9 @@ public class RoadMappingLine extends RoadMapping {
      * @param y1
      *            new point, y coordinate
      */
-    RoadMappingLine(RoadMapping roadMapping, double x1, double y1) {
-        super(roadMapping.laneCount(), 0, 0);
-        final RoadMapping.PosTheta posTheta = roadMapping.endPos();
+    RoadMappingLine(RoadMapping roadMapping, LaneGeometries laneGeometries, double x1, double y1) {
+        super(laneGeometries, 0, 0);
+        final PosTheta posTheta = roadMapping.endPos();
         x0 = posTheta.x;
         y0 = posTheta.y;
         this.x1 = x1;
@@ -117,10 +121,8 @@ public class RoadMappingLine extends RoadMapping {
         init();
     }
 
-    RoadMappingLine(int laneCount, double s, double x, double y, double hdg, double length, double a) {
-        this(laneCount, s, x, y, hdg, length);
-        laneWidth = a;
-        roadWidth = laneWidth * laneCount;
+    RoadMappingLine(LaneGeometries laneGeometries, double s, double x, double y, double hdg, double length, double a) {
+        this(laneGeometries, s, x, y, hdg, length);
     }
 
     protected void init() {
@@ -137,11 +139,16 @@ public class RoadMappingLine extends RoadMapping {
     }
 
     @Override
-    public RoadMapping.PosTheta map(double roadPos, double lateralOffset) {
-        // lateralOffset offset is perpendicular to road
-        posTheta.x = x0 + roadPos * posTheta.cosTheta + lateralOffset * posTheta.sinTheta;
-        posTheta.y = y0 - roadPos * posTheta.sinTheta + lateralOffset * posTheta.cosTheta;
+    public PosTheta map(double roadPos, double lateralOffset) {
+        // lateralOffset offset is perpendicular to road, offset to right < 0!
+        posTheta.x = x0 + roadPos * posTheta.cosTheta - lateralOffset * posTheta.sinTheta;
+        posTheta.y = y0 + roadPos * posTheta.sinTheta + lateralOffset * posTheta.cosTheta;
         return posTheta;
+    }
+
+    @Override
+    public String toString() {
+        return "RoadMappingLine [x1=" + x1 + ", y1=" + y1 + "]";
     }
 
 }

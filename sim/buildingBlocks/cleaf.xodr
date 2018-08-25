@@ -7,7 +7,7 @@
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="2250.0" hdg="1.570796" length="583.0">
+            <geometry s="0.0" x="512.5" y="-2250.0" hdg="1.570796" length="583.0">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -34,7 +34,7 @@
             <successor elementType="junction" elementId="1001" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="1667.0" hdg="1.570796" length="250.0">
+            <geometry s="0.0" x="512.5" y="-1667.0" hdg="1.570796" length="250.0">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -73,7 +73,7 @@
             <successor elementType="road" elementId="4" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="1417.0" hdg="1.570796" length="734.5">
+            <geometry s="0.0" x="512.5" y="-1417.0" hdg="1.570796" length="734.5">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -112,7 +112,7 @@
             <successor elementType="road" elementId="5" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="682.5" hdg="1.570796" length="120.0">
+            <geometry s="0.0" x="512.5" y="-682.5" hdg="1.570796" length="120.0">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -151,7 +151,7 @@
             <successor elementType="road" elementId="6" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="562.5" hdg="1.570796" length="125.0">
+            <geometry s="0.0" x="512.5" y="-562.5" hdg="1.570796" length="125.0">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -194,7 +194,7 @@
             <successor elementType="junction" elementId="1003" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="437.5" hdg="1.570796" length="120.0">
+            <geometry s="0.0" x="512.5" y="-437.5" hdg="1.570796" length="120.0">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -233,7 +233,7 @@
             <successor elementType="road" elementId="8" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="317.5" hdg="1.570796" length="734.5">
+            <geometry s="0.0" x="512.5" y="-317.5" hdg="1.570796" length="734.5">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -272,7 +272,7 @@
             <successor elementType="road" elementId="9" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="-417.0" hdg="1.570796" length="250.0">
+            <geometry s="0.0" x="512.5" y="417.0" hdg="1.570796" length="250.0">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -310,7 +310,7 @@
             <predecessor elementType="road" elementId="8" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="522.5" y="-667.0" hdg="1.570796" length="583.0">
+            <geometry s="0.0" x="512.5" y="667.0" hdg="1.570796" length="583.0">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -345,7 +345,7 @@
             <successor elementType="road" elementId="11" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="-1250.0" hdg="-1.570796" length="583.0">
+            <geometry s="0.0" x="487.5" y="1250.0" hdg="-1.570796" length="583.0">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -372,7 +372,7 @@
             <successor elementType="junction" elementId="1005" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="-667.0" hdg="-1.570796" length="250.0">
+            <geometry s="0.0" x="487.5" y="667.0" hdg="-1.570796" length="250.0">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -411,7 +411,7 @@
             <successor elementType="road" elementId="13" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="-417.0" hdg="-1.570796" length="734.5">
+            <geometry s="0.0" x="487.5" y="417.0" hdg="-1.570796" length="734.5">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -450,7 +450,7 @@
             <successor elementType="road" elementId="14" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="317.5" hdg="-1.570796" length="120.0">
+            <geometry s="0.0" x="487.5" y="-317.5" hdg="-1.570796" length="120.0">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -489,7 +489,7 @@
             <successor elementType="road" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="437.5" hdg="-1.570796" length="125.0">
+            <geometry s="0.0" x="487.5" y="-437.5" hdg="-1.570796" length="125.0">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -532,7 +532,7 @@
             <successor elementType="junction" elementId="1007" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="562.5" hdg="-1.570796" length="120.0">
+            <geometry s="0.0" x="487.5" y="-562.5" hdg="-1.570796" length="120.0">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -571,7 +571,7 @@
             <successor elementType="road" elementId="17" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="682.5" hdg="-1.570796" length="734.5">
+            <geometry s="0.0" x="487.5" y="-682.5" hdg="-1.570796" length="734.5">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -610,7 +610,7 @@
             <successor elementType="road" elementId="18" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="1417.0" hdg="-1.570796" length="250.0">
+            <geometry s="0.0" x="487.5" y="-1417.0" hdg="-1.570796" length="250.0">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -648,7 +648,7 @@
             <predecessor elementType="road" elementId="17" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="477.5" y="1667.0" hdg="-1.570796" length="583.0">
+            <geometry s="0.0" x="487.5" y="-1667.0" hdg="-1.570796" length="583.0">
                 <!-- hdgDegrees="-90.0"-->
                 <line />
             </geometry>
@@ -683,7 +683,7 @@
             <successor elementType="road" elementId="20" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-1250.0" y="522.5" hdg="-0.0" length="583.0">
+            <geometry s="0.0" x="-1250.0" y="-512.5" hdg="-0.0" length="583.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -710,7 +710,7 @@
             <successor elementType="junction" elementId="1009" />
         </link>
         <planView>
-            <geometry s="0.0" x="-667.0" y="522.5" hdg="-0.0" length="250.0">
+            <geometry s="0.0" x="-667.0" y="-512.5" hdg="-0.0" length="250.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -749,7 +749,7 @@
             <successor elementType="road" elementId="22" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-417.0" y="522.5" hdg="-0.0" length="734.5">
+            <geometry s="0.0" x="-417.0" y="-512.5" hdg="-0.0" length="734.5">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -788,7 +788,7 @@
             <successor elementType="road" elementId="23" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="317.5" y="522.5" hdg="-0.0" length="120.0">
+            <geometry s="0.0" x="317.5" y="-512.5" hdg="-0.0" length="120.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -827,7 +827,7 @@
             <successor elementType="road" elementId="24" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="437.5" y="522.5" hdg="-0.0" length="125.0">
+            <geometry s="0.0" x="437.5" y="-512.5" hdg="-0.0" length="125.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -866,7 +866,7 @@
             <successor elementType="junction" elementId="1011" />
         </link>
         <planView>
-            <geometry s="0.0" x="562.5" y="522.5" hdg="-0.0" length="120.0">
+            <geometry s="0.0" x="562.5" y="-512.5" hdg="-0.0" length="120.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -905,7 +905,7 @@
             <successor elementType="road" elementId="26" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="682.5" y="522.5" hdg="-0.0" length="734.5">
+            <geometry s="0.0" x="682.5" y="-512.5" hdg="-0.0" length="734.5">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -944,7 +944,7 @@
             <successor elementType="road" elementId="27" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1417.0" y="522.5" hdg="-0.0" length="250.0">
+            <geometry s="0.0" x="1417.0" y="-512.5" hdg="-0.0" length="250.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -982,7 +982,7 @@
             <predecessor elementType="road" elementId="26" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="1667.0" y="522.5" hdg="-0.0" length="583.0">
+            <geometry s="0.0" x="1667.0" y="-512.5" hdg="-0.0" length="583.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -1017,7 +1017,7 @@
             <successor elementType="road" elementId="29" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="2250.0" y="477.5" hdg="3.141593" length="583.0">
+            <geometry s="0.0" x="2250.0" y="-487.5" hdg="3.141593" length="583.0">
                 <!-- hdgDegrees="180.0"-->
                 <line />
             </geometry>
@@ -1044,7 +1044,7 @@
             <successor elementType="junction" elementId="1013" />
         </link>
         <planView>
-            <geometry s="0.0" x="1667.0" y="477.5" hdg="3.141593" length="250.0">
+            <geometry s="0.0" x="1667.0" y="-487.5" hdg="3.141593" length="250.0">
                 <!-- hdgDegrees="180.0"-->
                 <line />
             </geometry>
@@ -1083,7 +1083,7 @@
             <successor elementType="road" elementId="31" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1417.0" y="477.5" hdg="3.141593" length="734.5">
+            <geometry s="0.0" x="1417.0" y="-487.5" hdg="3.141593" length="734.5">
                 <!-- hdgDegrees="180.0"-->
                 <line />
             </geometry>
@@ -1122,7 +1122,7 @@
             <successor elementType="road" elementId="32" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="682.5" y="477.5" hdg="-3.141593" length="120.0">
+            <geometry s="0.0" x="682.5" y="-487.5" hdg="-3.141593" length="120.0">
                 <!-- hdgDegrees="-180.0"-->
                 <line />
             </geometry>
@@ -1161,7 +1161,7 @@
             <successor elementType="road" elementId="33" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="562.5" y="477.5" hdg="-3.141593" length="125.0">
+            <geometry s="0.0" x="562.5" y="-487.5" hdg="-3.141593" length="125.0">
                 <!-- hdgDegrees="-180.0"-->
                 <line />
             </geometry>
@@ -1200,7 +1200,7 @@
             <successor elementType="junction" elementId="1015" />
         </link>
         <planView>
-            <geometry s="0.0" x="437.5" y="477.5" hdg="-3.141593" length="120.0">
+            <geometry s="0.0" x="437.5" y="-487.5" hdg="-3.141593" length="120.0">
                 <!-- hdgDegrees="-180.0"-->
                 <line />
             </geometry>
@@ -1239,7 +1239,7 @@
             <successor elementType="road" elementId="35" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="317.5" y="477.5" hdg="3.141593" length="734.5">
+            <geometry s="0.0" x="317.5" y="-487.5" hdg="3.141593" length="734.5">
                 <!-- hdgDegrees="180.0"-->
                 <line />
             </geometry>
@@ -1278,7 +1278,7 @@
             <successor elementType="road" elementId="36" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-417.0" y="477.5" hdg="3.141593" length="250.0">
+            <geometry s="0.0" x="-417.0" y="-487.5" hdg="3.141593" length="250.0">
                 <!-- hdgDegrees="180.0"-->
                 <line />
             </geometry>
@@ -1316,7 +1316,7 @@
             <predecessor elementType="road" elementId="35" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="-667.0" y="477.5" hdg="3.141593" length="583.0">
+            <geometry s="0.0" x="-667.0" y="-487.5" hdg="3.141593" length="583.0">
                 <!-- hdgDegrees="180.0"-->
                 <line />
             </geometry>
@@ -1352,7 +1352,7 @@
             <successor elementType="road" elementId="26" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="542.5" y="1417.0" hdg="1.570796" length="1374.446786">
+            <geometry s="0.0" x="542.5" y="-1417.0" hdg="1.570796" length="1374.446786">
                 <!-- hdgDegrees="90.0"-->
                 <arc curvature="-0.001143" />
                 <!-- radius="875.0"-->
@@ -1378,7 +1378,7 @@
             <successor elementType="road" elementId="35" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="457.5" y="-417.0" hdg="-1.570796" length="1374.446786">
+            <geometry s="0.0" x="457.5" y="417.0" hdg="-1.570796" length="1374.446786">
                 <!-- hdgDegrees="-90.0"-->
                 <arc curvature="-0.001143" />
                 <!-- radius="875.0"-->
@@ -1404,7 +1404,7 @@
             <successor elementType="road" elementId="17" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-417.0" y="542.5" hdg="-0.0" length="1374.446786">
+            <geometry s="0.0" x="-417.0" y="-542.5" hdg="-0.0" length="1374.446786">
                 <!-- hdgDegrees="-0.0"-->
                 <arc curvature="-0.001143" />
                 <!-- radius="875.0"-->
@@ -1430,7 +1430,7 @@
             <successor elementType="road" elementId="8" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1417.0" y="457.5" hdg="3.141593" length="1374.446786">
+            <geometry s="0.0" x="1417.0" y="-457.5" hdg="3.141593" length="1374.446786">
                 <!-- hdgDegrees="180.0"-->
                 <arc curvature="-0.001143" />
                 <!-- radius="875.0"-->
@@ -1456,7 +1456,7 @@
             <successor elementType="road" elementId="31" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="542.5" y="317.5" hdg="1.570796" length="659.734457">
+            <geometry s="0.0" x="542.5" y="-317.5" hdg="1.570796" length="659.734457">
                 <!-- hdgDegrees="90.0"-->
                 <arc curvature="-0.007143" />
                 <!-- radius="140.0"-->
@@ -1482,7 +1482,7 @@
             <successor elementType="road" elementId="22" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="457.5" y="682.5" hdg="-1.570796" length="659.734457">
+            <geometry s="0.0" x="457.5" y="-682.5" hdg="-1.570796" length="659.734457">
                 <!-- hdgDegrees="-90.0"-->
                 <arc curvature="-0.007143" />
                 <!-- radius="140.0"-->
@@ -1508,7 +1508,7 @@
             <successor elementType="road" elementId="4" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="682.5" y="542.5" hdg="-0.0" length="659.734457">
+            <geometry s="0.0" x="682.5" y="-542.5" hdg="-0.0" length="659.734457">
                 <!-- hdgDegrees="-0.0"-->
                 <arc curvature="-0.007143" />
                 <!-- radius="140.0"-->
@@ -1534,7 +1534,7 @@
             <successor elementType="road" elementId="13" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="317.5" y="457.5" hdg="-3.141593" length="659.734457">
+            <geometry s="0.0" x="317.5" y="-457.5" hdg="-3.141593" length="659.734457">
                 <!-- hdgDegrees="-180.0"-->
                 <arc curvature="-0.007143" />
                 <!-- radius="140.0"-->

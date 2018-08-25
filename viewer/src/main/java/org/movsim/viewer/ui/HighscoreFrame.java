@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
+import org.apache.commons.lang3.StringUtils;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.SimulationRun;
 import org.movsim.simulator.SimulationRunnable;
@@ -30,17 +31,28 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
+// TODO this class needs a throughout refactoring ...
+// FIXME: ramp_metering.xprj throws assertion error:
+// Exception in thread "main" java.lang.AssertionError
+// at org.movsim.simulator.SimulationRun.setCompletionCallback(SimulationRun.java:180)
+// at org.movsim.viewer.ui.HighscoreFrame.<init>(HighscoreFrame.java:65)
+// at org.movsim.viewer.ui.HighscoreFrame.initialize(HighscoreFrame.java:70)
+// at org.movsim.viewer.ui.AppFrame.<init>(AppFrame.java:103)
+// at org.movsim.viewer.App.main(App.java:88)
 public class HighscoreFrame implements SimulationRun.CompletionCallback, SimulationRunnable.UpdateStatusCallback {
 
-    final static Logger logger = LoggerFactory.getLogger(HighscoreFrame.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HighscoreFrame.class);
 
-    public enum Quantity {
-        totalSimulationTime("Time (s)"), totalTravelTime("Total Traveltime (s)"), totalTravelDistance(
-                "Total Distance (km)"), totalFuelUsedLiters("Fuel (liters)");
+    enum Quantity {
+        TOTAL_SIMULATION_TIME("Time (s)"), TOTAL_TRAVEL_TIME("Total Traveltime (s)"), TOTAL_TRAVEL_DISTANCE(
+                "Total Distance (km)"), TOTAL_FUEL_USED_LITERS("Fuel (liters)");
 
-        final String label;
+        private final String label;
 
-        private Quantity(String label) {
+        Quantity(String label) {
+            Preconditions.checkArgument(StringUtils.isNotBlank(label));
             this.label = label;
         }
 
@@ -52,35 +64,30 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
     private final Simulator simulator;
     private final String simulationFinished;
     private final String askingForName;
-    private final int MAX_RANK_FOR_HIGHSCORE;
+    private final int maxRankForHighscore;
 
     public HighscoreFrame(ResourceBundle resourceBundle, Simulator simulator, Properties properties) {
-        this.simulator = simulator;
+        this.simulator = Preconditions.checkNotNull(simulator);
         this.simulationFinished = (String) resourceBundle.getObject("SimulationFinished");
         this.askingForName = (String) resourceBundle.getObject("AskingForName");
-
-        this.MAX_RANK_FOR_HIGHSCORE = Integer.parseInt(properties.getProperty("maxRankForHighscorePrompt"));
+        this.maxRankForHighscore = Integer.parseInt(properties.getProperty("maxRankForHighscorePrompt"));
 
         simulator.getSimulationRunnable().setCompletionCallback(this);
         simulator.getSimulationRunnable().addUpdateStatusCallback(this);
     }
 
-    /**
-     * @param simulationTime
-     * @param totalFuelUsedLiters
-     */
     private void highscoreForGames(final HighscoreEntry highscoreEntry) {
         EventQueue.invokeLater(new Runnable() {
 
             @Override
             public void run() {
                 String highscoreFilename = ProjectMetaData.getInstance().getProjectName() + "_highscore.txt";
-                TreeSet<HighscoreEntry> sortedResults = new TreeSet<HighscoreEntry>(new Comparator<HighscoreEntry>() {
+                TreeSet<HighscoreEntry> sortedResults = new TreeSet<>(new Comparator<HighscoreEntry>() {
                     @Override
                     public int compare(HighscoreEntry o1, HighscoreEntry o2) {
-                        Double d1 = new Double(o1.getQuantity(Quantity.totalSimulationTime));
-                        Double d2 = new Double(o2.getQuantity(Quantity.totalSimulationTime));
-                        return d1.compareTo(d2); 
+                        Double d1 = new Double(o1.getQuantity(Quantity.TOTAL_SIMULATION_TIME));
+                        Double d2 = new Double(o2.getQuantity(Quantity.TOTAL_SIMULATION_TIME));
+                        return d1.compareTo(d2);
                     }
                 });
                 sortedResults.addAll(readHighscores(highscoreFilename));
@@ -88,16 +95,17 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
                 int rank = determineRanking(highscoreEntry, sortedResults);
                 JOptionPane.showMessageDialog(null, getDialogMessage(highscoreEntry, sortedResults.size(), rank));
 
-                if (rank <= MAX_RANK_FOR_HIGHSCORE) {
-                    // TODO limit input to reasonable number of characters
+                if (rank <= maxRankForHighscore) {
+                    int maxChars = 20;
                     String username = JOptionPane.showInputDialog(null, askingForName, "");
+                    if (username.length() > maxChars) {
+                        username = username.substring(0, maxChars);
+                    }
                     highscoreEntry.setPlayerName(username);
                 }
 
                 sortedResults.add(highscoreEntry);
-
                 writeFile(highscoreFilename, sortedResults);
-
                 displayHighscores(sortedResults);
             }
 
@@ -115,10 +123,10 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
 
             private String getDialogMessage(HighscoreEntry entry, int highscoreSize, int rank) {
                 return String.format(simulationFinished,
-                        (int) highscoreEntry.getQuantity(Quantity.totalSimulationTime),
-                        (int) highscoreEntry.getQuantity(Quantity.totalTravelTime),
-                        (int) highscoreEntry.getQuantity(Quantity.totalTravelDistance),
-                        highscoreEntry.getQuantity(Quantity.totalFuelUsedLiters), highscoreSize + 1, rank);
+                        (int) highscoreEntry.getQuantity(Quantity.TOTAL_SIMULATION_TIME),
+                        (int) highscoreEntry.getQuantity(Quantity.TOTAL_TRAVEL_TIME),
+                        (int) highscoreEntry.getQuantity(Quantity.TOTAL_TRAVEL_DISTANCE),
+                        highscoreEntry.getQuantity(Quantity.TOTAL_FUEL_USED_LITERS), highscoreSize + 1, rank);
             }
 
             private void writeFile(String highscoreFilename, Iterable<HighscoreEntry> highscores) {
@@ -137,20 +145,19 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
      * @return the high score table
      */
     private List<HighscoreEntry> readHighscores(String filename) {
-        List<HighscoreEntry> highscores = new LinkedList<HighscoreEntry>();
-        BufferedReader hsreader = FileUtils.getReader(filename);
-        if(hsreader==null){
+        BufferedReader hsReader = FileUtils.getReader(filename);
+        if (hsReader == null) {
             // no file available
-            return new LinkedList<HighscoreEntry>(); 
+            return new LinkedList<>();
         }
+        List<HighscoreEntry> highscores = new LinkedList<>();
         String line;
         try {
-            while ((line = hsreader.readLine()) != null) {
+            while ((line = hsReader.readLine()) != null) {
                 highscores.add(new HighscoreEntry(line));
             }
         } catch (IOException e) {
-            logger.error("error reading file {} - starting new high score.", filename);
-            return new LinkedList<HighscoreEntry>();
+            LOG.error("error reading file {} - starting new high score.", filename);
         }
         return highscores;
     }
@@ -160,17 +167,17 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
      */
     public void displayHighscores(Collection<HighscoreEntry> highscores) {
         // TODO combine with Quantity.values
-        
+
         String[] columnNames = getTableHeader();
-        String[][] table = new String[MAX_RANK_FOR_HIGHSCORE][columnNames.length];
+        String[][] table = new String[maxRankForHighscore][columnNames.length];
         int row = 0;
         for (HighscoreEntry entry : highscores) {
-            if (row > MAX_RANK_FOR_HIGHSCORE) {
+            if (row > maxRankForHighscore) {
                 break;
             }
+            table[row][0] = String.format("%d", row + 1);
+            table[row][1] = String.format("%s", entry.getPlayerName());
             for (Quantity quantity : Quantity.values()) {
-                table[row][0] = String.format("%d", row+1);
-                table[row][1] = String.format("%s", entry.getPlayerName());
                 table[row][2 + quantity.ordinal()] = String.format("%.1f", entry.getQuantity(quantity));
             }
             ++row;
@@ -186,12 +193,12 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
         f.setVisible(true);
     }
 
-    private String[] getTableHeader() {
-        String[] columnsHeaders = new String[Quantity.values().length+2];
+    private static String[] getTableHeader() {
+        String[] columnsHeaders = new String[Quantity.values().length + 2];
         int col = 0;
         columnsHeaders[col++] = "Rank";
         columnsHeaders[col++] = "Name";
-        for(Quantity quantity : Quantity.values()){
+        for (Quantity quantity : Quantity.values()) {
             columnsHeaders[col++] = quantity.getLabel();
         }
         return columnsHeaders;
@@ -209,11 +216,11 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
     public void simulationComplete(double simulationTime) {
         RoadNetwork roadNetwork = simulator.getRoadNetwork();
         HighscoreEntry highscoreEntry = new HighscoreEntry();
-        highscoreEntry.setQuantity(Quantity.totalSimulationTime, simulationTime);
-        highscoreEntry.setQuantity(Quantity.totalTravelTime, roadNetwork.totalVehicleTravelTime());
-        highscoreEntry.setQuantity(Quantity.totalTravelDistance, roadNetwork.totalVehicleTravelDistance()
+        highscoreEntry.setQuantity(Quantity.TOTAL_SIMULATION_TIME, simulationTime);
+        highscoreEntry.setQuantity(Quantity.TOTAL_TRAVEL_TIME, roadNetwork.totalVehicleTravelTime());
+        highscoreEntry.setQuantity(Quantity.TOTAL_TRAVEL_DISTANCE, roadNetwork.totalVehicleTravelDistance()
                 * Units.M_TO_KM);
-        highscoreEntry.setQuantity(Quantity.totalFuelUsedLiters, roadNetwork.totalVehicleFuelUsedLiters());
+        highscoreEntry.setQuantity(Quantity.TOTAL_FUEL_USED_LITERS, roadNetwork.totalVehicleFuelUsedLiters());
         highscoreForGames(highscoreEntry);
     }
 

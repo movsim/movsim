@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <VehiclePrototypes write_fund_diagrams="true" write_acc_functions="true">
+        <VehiclePrototypeConfiguration label="ACC" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="GIPPS" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterGipps v0="33.33" a="1.5" b="1.0" s0="3" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="IDM" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="IDMM" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="33.33" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
+            </AccelerationModelType>
+            <MemoryParameter tau="600" alpha_v0="1" alpha_T="1.7" alpha_a="1" />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="OVM_FVDM" length="5" maximum_deceleration="100000">
+            <AccelerationModelType>
+                <ModelParameterOVM_FVDM v0="33.33" tau="0.65" s0="3" transition_width="15" beta="1.5" gamma="0" optimal_speed_function="bando" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+         <VehiclePrototypeConfiguration label="KRAUSS" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterKrauss v0="33.33" a="1.0" b="1.0" s0="3" epsilon="0.4" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+                <VehiclePrototypeConfiguration label="NEWELL" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterNewell v0="33.33" s0="10" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="KKW" length="20">
+            <AccelerationModelType>
+                <ModelParameterKKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" s0="0" />
+                <!-- gamma="0.55" ? -->
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="NSM" length="1">
+            <AccelerationModelType>
+                <!-- BARL optimal_speed_function : p0 != p possible -->
+                <ModelParameterNSM v0="2" p_slowdown="0.1" p_slow_start="0.1" s0="0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        
+         <VehiclePrototypeConfiguration label="CCS" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="70" A="0.7" cw="0.5" friction="0.01" T="0.5" s0="0.6" p0="250" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1.1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0." right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="fund_diagrams.xodr">
+        <!-- set dt=1 because it is a model parameter of the GIPPS model and also the necessary update timestep of the Nagel-Schreckenberg CA -->
+        <Simulation timestep="1" duration="2000" seed="42" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="ACC" fraction="1" />
+            </TrafficComposition>
+            <Road id="1" />
+        </Simulation>
+    </Scenario>
+</Movsim>
+

@@ -25,6 +25,9 @@
  */
 package org.movsim.consumption.offline;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+
 public class ConsumptionDataRecord {
 
     /** index counter for convenience */
@@ -33,6 +36,8 @@ public class ConsumptionDataRecord {
     private final double position;
     /** in seconds */
     private final double time;
+    /** DateTime */
+    private final DateTime dateTime;
     /** in m/s */
     private final double speed;
     /** in m/s^2 */
@@ -51,10 +56,11 @@ public class ConsumptionDataRecord {
     /** chosen gear */
     private int gear;
 
-    public ConsumptionDataRecord(int index, double time, double position, double speed, double acceleration,
-            double grade) {
+    public ConsumptionDataRecord(int index, double time, DateTime timestamp, double position, double speed,
+            double acceleration, double grade) {
         this.index = index;
         this.time = time;
+        this.dateTime = timestamp;
         this.position = position;
         this.speed = speed;
         this.acceleration = acceleration;
@@ -64,6 +70,10 @@ public class ConsumptionDataRecord {
 
     public double getTime() {
         return time;
+    }
+
+    public DateTime getTimestamp() {
+        return dateTime;
     }
 
     public double getSpeed() {
@@ -102,6 +112,8 @@ public class ConsumptionDataRecord {
         StringBuilder sb = new StringBuilder();
         sb.append("#Index").append(separator);
         sb.append("time(s)").append(separator);
+        sb.append("DateTime").append(separator);
+        sb.append("DateTime(input format)").append(separator);
         sb.append("normTime(s)").append(separator);
         sb.append("v(m/s)").append(separator);
         sb.append("acc(m/s^2)").append(separator);
@@ -115,10 +127,17 @@ public class ConsumptionDataRecord {
         return sb.toString().split(separator);
     }
 
-    public String[] toCsv(final String separator) {
+    public String[] toCsv(final String separator, DateTimeFormatter dtFormat) {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%d", index)).append(separator);
         sb.append(String.format("%.2f", time)).append(separator);
+        sb.append(String.format("%s", dateTime)).append(separator);
+        // write additionally in the same format as the input time format for convenience (e.g. gnuplot plotting)
+        if(dtFormat != null){
+            sb.append(String.format("%s", dtFormat.print(dateTime))).append(separator);
+        }else{
+            sb.append(String.format("%s", dateTime)).append(separator);
+        }
         sb.append(String.format("%.2f", normalizedTime)).append(separator);
         sb.append(String.format("%.4f", speed)).append(separator);
         sb.append(String.format("%.6f", acceleration)).append(separator);

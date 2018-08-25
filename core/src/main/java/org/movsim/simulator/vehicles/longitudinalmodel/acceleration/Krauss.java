@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -68,8 +68,6 @@ class Krauss extends LongitudinalModelBase {
         this.param = parameters;
     }
 
-
-
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         final double s = me.getNetDistance(frontVehicle);
@@ -77,7 +75,7 @@ class Krauss extends LongitudinalModelBase {
         final double dv = me.getRelSpeed(frontVehicle);
 
         final double localT = alphaT * T;
-        final double localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
 
         return acc(s, v, dv, localT, localV0);
     }

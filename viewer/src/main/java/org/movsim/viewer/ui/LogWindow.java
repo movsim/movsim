@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -90,14 +90,14 @@ public class LogWindow extends JFrame {
         final String warn = resourceBundle.getString("LogWarn");
         final String error = resourceBundle.getString("LogError");
         final String[] logLevels = { debug, info, warn, error, off };
-        final JComboBox logLevel = new JComboBox(logLevels);
+        final JComboBox<String> logLevel = new JComboBox<>(logLevels);
         logLevel.setSelectedItem("info");
         SwingHelper.setComponentSize(logLevel, 120, 22);
 
         logLevel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final JComboBox comboBox = (JComboBox) e.getSource();
+                final JComboBox<?> comboBox = (JComboBox<?>) e.getSource();
                 final String chosenLogLevel = (String) comboBox.getSelectedItem();
                 logger.info("Changed loglevel to {}", chosenLogLevel);
                 if (chosenLogLevel.equals(debug)) {

@@ -2,16 +2,12 @@
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <OpenDRIVE>
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep 2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-    <road id="1" name="R1" length="300" junction="-1">
+    <road id="1" name="R1" length="150" junction="-1">
         <link>
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="375" y="695" hdg="1.47" length="150">
-                <!-- hdgDegrees="90.0"-->
-                <line />
-            </geometry>
-            <geometry s="150.0" x="390" y="550" hdg="1.570796" length="150">
+            <geometry s="0.0" x="390" y="-400" hdg="1.570796" length="150">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -32,7 +28,7 @@
             <successor elementType="junction" elementId="1001" />
         </link>
         <planView>
-            <geometry s="0.0" x="390" y="400" hdg="1.570796" length="100.0">
+            <geometry s="0.0" x="390" y="-250" hdg="1.570796" length="100.0">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -58,7 +54,7 @@
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="390" y="300" hdg="1.570796" length="280">
+            <geometry s="0.0" x="390" y="-150" hdg="1.570796" length="280">
                 <!-- hdgDegrees="90.0"-->
                 <line />
             </geometry>
@@ -94,21 +90,18 @@
                 <right>
                     <lane id="-1" type="driving" level="false">
                         <link>
-                            <predecessor id="-1" />
                             <successor id="-1" />
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                     <lane id="-2" type="driving" level="false">
                         <link>
-                            <predecessor id="-2" />
                             <successor id="-2" />
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                     <lane id="-3" type="driving" level="false">
                         <link>
-                            <predecessor id="-3" />
                             <successor id="-3" />
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
@@ -197,7 +190,7 @@
             <successor elementType="road" elementId="26" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="400" y="300" hdg="1.570796" length="314.16">
+            <geometry s="0.0" x="400" y="-150" hdg="1.570796" length="314.16">
                 <arc curvature="-0.005" />
             </geometry>
         </planView>
@@ -215,13 +208,13 @@
             </laneSection>
         </lanes>
         <signals>
-            <signal s="300" id="tl1" name="first" />
+            <signal s="300" id="tl1" name="first and only signal" />
         </signals>
     </road>
     
      <!-- id maps to movsim controllerGroupID -->
     <controller id="group1">
-		<control signalId="tl1"/>
+		<control signalId="tl1" type="first"/>
     </controller>
     
     <junction id="1001" name="">

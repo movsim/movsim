@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <Consumption>
+        <ConsumptionModels>
+            <ConsumptionModel label="carConsumption" output="true">
+                <VehicleData mass="1000" cross_section_surface="2.13" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="1500" />
+                <EngineCombustionMap max_power_kW="100" cylinder_vol_l="1.8" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="225" pe_min_bar="1" pe_max_bar="22" />
+                <RotationModel idle_rotation_rate_invmin="700" max_rotation_rate_invmin="4500" dynamic_tyre_radius="0.31">
+                    <!-- gear box with 7 gears -->
+                    <GearRatio phi="16.7" />
+                    <GearRatio phi="10.1" />
+                    <GearRatio phi="6.8" />
+                    <GearRatio phi="5.0" />
+                    <GearRatio phi="3.8" />
+                    <GearRatio phi="3.1" />
+                    <GearRatio phi="2.6" />
+                </RotationModel>
+            </ConsumptionModel>
+        </ConsumptionModels>
+    </Consumption>
+
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9" consumption_model_name="carConsumption">
+            <AccelerationModelType>
+                <ModelParameterACC v0="20" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.05" right_bias_acceleration="0.05" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <!-- trucks -->
+        <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="9" consumption_model_name="carConsumption">
+            <AccelerationModelType>
+                <ModelParameterACC v0="15" T="1.4" s0="2" s1="2" delta="4" a="0.6" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.3" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <RoadTypeSpeedMappings>
+        <RoadTypeSpeedMapping road_type="motorway" default_speed_kmh="108" />
+        <RoadTypeSpeedMapping road_type="town" default_speed_kmh="70" />
+    </RoadTypeSpeedMappings>
+    <Scenario network_filename="city_example.xodr">
+        <Simulation timestep="0.2" duration="1200" seed="42" crash_exit="true">
+            <TrafficComposition>
+                <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.3" />
+                <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.3" />
+            </TrafficComposition>
+            <Road id="1">
+                <TrafficSource logging="true">
+                    <Inflow t="0" q_per_hour="600" v="24" />
+                    <Inflow t="1800" q_per_hour="1200" v="20" />
+                    <Inflow t="3600" q_per_hour="0" v="24" />
+                </TrafficSource>
+            </Road>
+            <Road id="2" />
+            <Road id="3">
+                <Detectors sample_interval="60" logging="true">
+                    <CrossSection position="200" />
+                </Detectors>
+            </Road>
+            <Road id="4" />
+            <Road id="6">
+                <TrafficSource logging="true">
+                    <Inflow t="0" q_per_hour="200" v="20" />
+                </TrafficSource>
+            </Road>
+        </Simulation>
+        <TrafficLights logging="true" n_timestep="5">
+            <ControllerGroup id="group1"  >
+                <Phase duration="35">
+                    <TrafficLightState type="first" status="Green" />
+                    <TrafficLightState type="second" status="Red" />
+                </Phase>
+                <Phase duration="3">
+                    <TrafficLightState type="first" status="GreenRed" /> 
+                    <!-- <TrafficLightState name="second" status="RedGreen" /> -->
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState type="first" status="Red" />
+                    <TrafficLightState type="second" status="Green" />
+                </Phase>
+                <Phase duration="2">
+                    <!-- <TrafficLightState name="first" status="RedGreen" /> -->
+                    <TrafficLightState type="second" status="GreenRed" />
+                </Phase>
+            </ControllerGroup>
+        </TrafficLights>
+        
+        <Routes>
+            <!-- without first road element on purpose -->
+            <Route label="main">
+                <Road id="2" />
+                <Road id="3" />
+                <Road id="4" />
+            </Route>
+            <Route label="onramp">
+                <Road id="5" />
+                <Road id="3" />
+                <Road id="4" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <FloatingCarOutput n_timestep="1" route="main">
+                <!-- check NPException       <FloatingCar number="1" /> -->
+                <FloatingCar number="2" />
+                <FloatingCar number="3" />
+                <FloatingCar number="4" />
+                <FloatingCar number="5" />
+                <FloatingCar number="20" />
+                <FloatingCar number="100" />
+            </FloatingCarOutput>
+            <SpatioTemporalConfiguration dx="100" dt="40" route="main" />
+            <SpatioTemporalConfiguration dx="100" dt="40" route="onramp" />
+            <Trajectories dt="1" route="onramp" />
+            <Trajectories dt="1" route="main" />
+            <!--  start_time="0" end_time="120" -->
+            <TravelTimes route="main" dt="0" tauEMA="40" />
+            <TravelTimes route="onramp" dt="0" />
+            <IndividualTravelTimes route="main" />
+            <IndividualTravelTimes route="onramp" />
+            <ConsumptionCalculation route="main" tauEMA="30" />
+            <ConsumptionCalculation route="onramp" />
+        </OutputConfiguration>
+    </Scenario>
+</Movsim>
+

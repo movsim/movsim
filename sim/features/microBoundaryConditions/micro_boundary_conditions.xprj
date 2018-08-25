@@ -19,7 +19,7 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="straightroad.xodr">
+    <Scenario network_filename="straightroad.xodr" micro_boundary_conditions_filename="example_micro_bc.xml">
         <Simulation timestep="0.2" duration="1200" seed="42">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
@@ -27,10 +27,10 @@
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="true">
-                    <InflowFromFile filename="example_micro_bc.dat" column_time="1" format_time="HH:mm:ss" column_vehicle_type="2" column_speed="3" format_speed="0.27777" column_lane="4" column_comment="5" column_separator=","/>
-                    <!-- format_time column_comment column separator -->
+                    <!-- microscopic boundary data for road found in external file -->
                 </TrafficSource>
             </Road>
         </Simulation>
     </Scenario>
 </Movsim>
+

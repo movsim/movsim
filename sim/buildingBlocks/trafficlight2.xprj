@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <!-- trucks -->
+        <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="4.0" minimum_gap="2.0" threshold_acceleration="0.2" right_bias_acceleration="0.3" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="trafficlight2.xodr">
+        <Simulation timestep="0.2" seed="42">
+            <TrafficComposition>
+                <VehicleType label="ACC1" fraction="0.6" relative_v0_randomization="0.2" route_label="main" />
+                <VehicleType label="ACC2" fraction="0.4" relative_v0_randomization="0.2" route_label="offramp" />
+            </TrafficComposition>
+            <Road id="1">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="20" />
+                </TrafficSource>
+            </Road>
+            <Road id="7">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="300" v="10" />
+                </TrafficSource>
+            </Road>
+        </Simulation>
+        <TrafficLights>
+            <ControllerGroup id="offramp">
+                <Phase duration="35">
+                    <TrafficLightState type="main" status="Green" />
+                    <TrafficLightState type="ramp" status="Green" />
+                </Phase>
+                <Phase duration="3">
+                    <TrafficLightState type="main" status="GreenRed" />
+                    <TrafficLightState type="ramp" status="GreenRed" />
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState type="main" status="Red" />
+                    <TrafficLightState type="ramp" status="Red" />
+                </Phase>
+                <Phase duration="2">
+                    <TrafficLightState type="main" status="RedGreen" />
+                    <TrafficLightState type="ramp" status="RedGreen" />
+                </Phase>
+            </ControllerGroup>
+            <ControllerGroup id="onramp">
+                <Phase duration="40">
+                    <TrafficLightState type="main" status="Red" />
+                </Phase>
+                <Phase duration="2">
+                    <TrafficLightState type="main" status="RedGreen" />
+                </Phase>
+                <Phase duration="35">
+                    <TrafficLightState type="main" status="Green" />
+                </Phase>
+                <Phase duration="3">
+                    <TrafficLightState type="main" status="GreenRed" />
+                </Phase>
+            </ControllerGroup>
+        </TrafficLights>
+        <Routes>
+            <Route label="main">
+                <Road id="1" />
+                <Road id="2" />
+                <Road id="3" />
+            </Route>
+            <Route label="offramp">
+                <Road id="1" />
+                <Road id="2" />
+                <Road id="4" />
+            </Route>
+        </Routes>
+    </Scenario>
+</Movsim>
+

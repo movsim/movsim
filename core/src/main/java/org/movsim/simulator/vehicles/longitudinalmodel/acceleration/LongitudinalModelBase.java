@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -41,7 +41,9 @@ import com.google.common.base.Preconditions;
 public abstract class LongitudinalModelBase {
 
     public enum ModelCategory {
-        TIME_CONTINUOUS_MODEL, ITERATED_COUPLED_MAP_MODEL, CELLULAR_AUTOMATON;
+        TIME_CONTINUOUS_MODEL,
+        ITERATED_COUPLED_MAP_MODEL,
+        CELLULAR_AUTOMATON;
 
         public boolean isCA() {
             return (this == CELLULAR_AUTOMATON);
@@ -58,14 +60,16 @@ public abstract class LongitudinalModelBase {
     }
 
     public enum ModelName {
-        IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"), ACC(ModelCategory.TIME_CONTINUOUS_MODEL,
-                "Adaptive-Cruise-Control-Model"), OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL,
-                "Optimal-Velocity-Model / Full-Velocity-Difference-Model"), GIPPS(ModelCategory.ITERATED_COUPLED_MAP_MODEL,
-                "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),KRAUSS(
-                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
-                "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
-                "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model"), PTM(
-                ModelCategory.TIME_CONTINUOUS_MODEL, "Prospect-Theory Model");
+        IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"),
+        ACC(ModelCategory.TIME_CONTINUOUS_MODEL, "Adaptive-Cruise-Control-Model"),
+        OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Optimal-Velocity-Model / Full-Velocity-Difference-Model"),
+        GIPPS(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Gipps-Model"),
+        NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),
+        KRAUSS(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"),
+        NSM(ModelCategory.CELLULAR_AUTOMATON, "Nagel-Schreckenberg-Model / Barlovic-Model"),
+        KKW(ModelCategory.CELLULAR_AUTOMATON, "Kerner-Klenov-Wolf-Model"),
+        CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model"),
+        PTM(ModelCategory.TIME_CONTINUOUS_MODEL, "Prospect-Theory Model");
 
         private final ModelCategory modelCategory;
 
@@ -100,16 +104,6 @@ public abstract class LongitudinalModelBase {
     private final double scalingLength;
     protected double v0RandomizationFactor = 1;
 
-    // protected long id;
-
-    /**
-     * Constructor.
-     * 
-     * @param modelName
-     *            the model name
-     * @param parameters
-     *            the parameters
-     */
     protected LongitudinalModelBase(ModelName modelName) {
         this.modelName = modelName;
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
@@ -132,7 +126,7 @@ public abstract class LongitudinalModelBase {
     public ModelCategory getModelCategory() {
         return modelName.getCategory();
     }
-    
+
     /**
      * Checks if is cellular automaton.
      * 
@@ -164,13 +158,22 @@ public abstract class LongitudinalModelBase {
      * Returns the desired speed.
      * 
      * <br>
-     * Overwrite {@link setRelativeRandomizationV0} if model is not able to handle such randomization. <br>
+     * Overwrite {@code setRelativeRandomizationV0} if model is not able to handle such randomization. <br>
      * Remark: CCS is the only model without a desired speed, so that this method cannot be final :(
      * 
      * @return the desired speed (m/s)
      */
     public double getDesiredSpeed() {
         return v0RandomizationFactor * getParameter().getV0();
+    }
+
+    public boolean hasDesiredSpeed() {
+        try {
+            getDesiredSpeed();
+            return true;
+        } catch (UnsupportedOperationException e) {
+            return false;
+        }
     }
 
     /**
@@ -183,6 +186,15 @@ public abstract class LongitudinalModelBase {
      */
     public double getMinimumGap() {
         return getParameter().getS0();
+    }
+
+    public boolean hasMinimumGap() {
+        try {
+            getMinimumGap();
+            return true;
+        } catch (UnsupportedOperationException e) {
+            return false;
+        }
     }
 
     protected abstract IModelParameter getParameter();
@@ -199,7 +211,7 @@ public abstract class LongitudinalModelBase {
     public void setRelativeRandomizationV0(double relRandomizationFactor, DistributionTypeEnum distributionType) {
         if (distributionType == DistributionTypeEnum.GAUSSIAN) {
             v0RandomizationFactor = MyRandom.getGaussiansDistributedRandomizedFactor(relRandomizationFactor, 3);
-        }else {
+        } else {
             v0RandomizationFactor = MyRandom.getUniformlyDistributedRandomizedFactor(relRandomizationFactor);
         }
         Preconditions.checkArgument(v0RandomizationFactor > 0, "relative v0 randomization factor must be > 0");

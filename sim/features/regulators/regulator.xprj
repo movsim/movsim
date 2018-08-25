@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="IDM1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <!-- trucks -->
+        <VehiclePrototypeConfiguration label="IDM2" length="16" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="18" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="4.0" minimum_gap="2.0" threshold_acceleration="0.2" right_bias_acceleration="0.3" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="regulator.xodr">
+        <Simulation timestep="0.4" crash_exit="false" duration="600" time_offset="2013-02-01T00:00:00Z">
+            <TrafficComposition>
+                <VehicleType label="IDM1" fraction="0.4" relative_v0_randomization="0.2" />
+                <VehicleType label="ACC1" fraction="0.4" relative_v0_randomization="0.2" />
+                <VehicleType label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
+            </TrafficComposition>
+            <Road id="4+">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
+            </Road>
+            <Road id="6-">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="200" />
+                </TrafficSource>
+            </Road>
+        </Simulation>
+        <Regulators>
+            <Regulator type="Ferry" id="test1">
+                <NotifyObject road_id="4+" position="100" name="test" id="suppressLaneChanges">
+                    <userData code="comment" value="50 m vor Schleuse (OW)" />
+                    <userData code="notifier_subfunction" value="lock_in" />
+                    <userData code="regulator_name" value="Schleuse 7_Hermelingen" />
+                </NotifyObject>
+                <NotifyObject road_id="4+" s="350" name="test" id="testS" />
+                <NotifyObject road_id="4+" position="800" name="test" id="stopToStandstill-pos" />
+                <Signal signal_id="r4_1+" />
+                <Signal signal_id="r4_2+" />
+                <Signal signal_id="r4_1-" />
+            </Regulator>
+            <Regulator type="AdaptiveSpeedLimit" name="ttt" id="test2">
+                <NotifyObject road_id="4-" s="500" name="test" id="testId3-s" />
+                <NotifyObject road_id="4-" position="1000" name="test" id="testId4" />
+            </Regulator>
+            <Regulator type="ParkingDeck" name="changeToRestrictedLane" id="test3">
+                <NotifyObject road_id="5+" position="1" name="test" id="1" />
+            </Regulator>
+        </Regulators>
+    </Scenario>
+</Movsim>
+

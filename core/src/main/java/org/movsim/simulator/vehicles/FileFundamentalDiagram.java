@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -26,7 +26,7 @@
 package org.movsim.simulator.vehicles;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
 import org.movsim.utilities.Units;
 
@@ -34,7 +34,7 @@ import org.movsim.utilities.Units;
  * The Class FileFundamentalDiagram.
  */
 public class FileFundamentalDiagram extends FileOutputBase {
-    
+
     private static final String extensionFormat = ".fund_%s.csv";
     private static final String outputHeading = String.format("%s %8s, %8s, %8s, %8s%n", FileOutputBase.COMMENT_CHAR,
             "rho[1/km]", "s[m]", "vEq[km/h]", "Q[veh/h]");
@@ -70,9 +70,9 @@ public class FileFundamentalDiagram extends FileOutputBase {
         for (int i = 0; i < count; i++) {
             final double rho = equilibriumProperties.getRho(i);
             final double s = equilibriumProperties.getNetDistance(rho);
-            final double vEq = equilibriumProperties.getVEq(i);
-            writer.printf(outputFormat, Units.INVM_TO_INVKM * rho, s,
-                    Units.MS_TO_KMH * vEq, Units.INVS_TO_INVH * rho * vEq);
+            final double vEq = equilibriumProperties.getVEq(rho);
+            writer.printf(outputFormat, Units.INVM_TO_INVKM * rho, s, Units.MS_TO_KMH * vEq, Units.INVS_TO_INVH * rho
+                    * vEq);
         }
     }
 }

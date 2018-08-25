@@ -35,30 +35,82 @@
                 <VehicleType label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
             </TrafficComposition>
             <Road id="1">
-                <InitialConditions />
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="500" />
                 </TrafficSource>
-                <Detectors />
+            </Road>
+            <Road id="2">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
+            </Road>
+            <Road id="3+">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
+            </Road>
+            <Road id="3-">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="200" />
+                </TrafficSource>
+            </Road>
+            <Road id="4+">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
+            </Road>
+            <Road id="4-">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="200" />
+                </TrafficSource>
             </Road>
         </Simulation>
         <TrafficLights logging="true" n_timestep="5">
-            <ControllerGroup id="plan1"  >
+            <ControllerGroup id="plan1">
                 <Phase duration="35">
-                    <TrafficLightState name="first" status="Green" />
-                    <TrafficLightState name="second" status="Red" />
+                    <TrafficLightState type="first" status="Green" />
+                    <TrafficLightState type="second" status="Red" />
                 </Phase>
                 <Phase duration="3">
-                    <TrafficLightState name="first" status="GreenRed" /> 
-                    <!-- <TrafficLightState name="second" status="RedGreen" /> -->
+                    <TrafficLightState type="first" status="GreenRed" />
+                    <!-- <TrafficLightState type="second" status="RedGreen" /> -->
                 </Phase>
                 <Phase duration="40">
-                    <TrafficLightState name="first" status="Red" />
-                    <TrafficLightState name="second" status="Green" />
+                    <TrafficLightState type="first" status="Red" />
+                    <TrafficLightState type="second" status="Green" />
                 </Phase>
                 <Phase duration="2">
-                    <!-- <TrafficLightState name="first" status="RedGreen" /> -->
-                    <TrafficLightState name="second" status="GreenRed" />
+                    <!-- <TrafficLightState type="first" status="RedGreen" /> -->
+                    <TrafficLightState type="second" status="GreenRed" />
+                </Phase>
+            </ControllerGroup>
+            <ControllerGroup id="single">
+                <Phase duration="35">
+                    <TrafficLightState type="first" status="Green" />
+                </Phase>
+                <Phase duration="3">
+                    <TrafficLightState type="first" status="GreenRed" />
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState type="first" status="Red" />
+                </Phase>
+            </ControllerGroup>
+            <ControllerGroup id="road4">
+                <Phase duration="35">
+                    <TrafficLightState type="first" status="Green" />
+                    <TrafficLightState type="second" status="Red" />
+                </Phase>
+                <Phase duration="3">
+                    <TrafficLightState type="first" status="GreenRed" />
+                    <!-- <TrafficLightState type="second" status="RedGreen" /> -->
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState type="first" status="Red" />
+                    <TrafficLightState type="second" status="Green" />
+                </Phase>
+                <Phase duration="2">
+                    <!-- <TrafficLightState type="first" status="RedGreen" /> -->
+                    <TrafficLightState type="second" status="GreenRed" />
                 </Phase>
             </ControllerGroup>
         </TrafficLights>

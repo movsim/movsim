@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <Movsim>
-   <Consumption>
+    <Consumption>
         <ConsumptionModels>
             <ConsumptionModel label="carDiesel" output="false">
                 <VehicleData mass="1500" cross_section_surface="2.2" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="1500" />
@@ -56,22 +56,21 @@
                     <VehicleType label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
                 </TrafficComposition>
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="0" v="20"/>
-                    <Inflow t="60" q_per_hour="1800" v="20"/>
+                    <Inflow t="0" q_per_hour="0" v="20" />
+                    <Inflow t="60" q_per_hour="1800" v="20" />
                     <Inflow t="120" q_per_hour="1800" v="20" />
                     <Inflow t="180" q_per_hour="0" v="20" />
                 </TrafficSource>
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="0" alpha_T="0.8" alpha_v0="1" />
-                    <Inhomogeneity position="200" alpha_T="1." alpha_v0="1" />
+                    <Inhomogeneity position="0" valid_length="200" adaptation_length="200" start_alpha_T="0.8" target_alpha_T="1.0" />
                 </FlowConservingInhomogeneities>
+                <VariableMessageSignDiversions>
+                    <VariableMessageSignDiversion position="100" valid_length="300" />
+                </VariableMessageSignDiversions>
             </Road>
             <Road id="10">
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="250" alpha_T="1.5" alpha_v0="0.9" />
-                    <Inhomogeneity position="250" alpha_T="3.5" alpha_v0="0.4" />
-                    <Inhomogeneity position="370" alpha_T="3.5" alpha_v0="0.4" />
-                    <Inhomogeneity position="370" alpha_T="1.5" alpha_v0="0.9" />
+                    <Inhomogeneity position="250" valid_length="120" adaptation_length="0" target_alpha_T="1.5" />
                 </FlowConservingInhomogeneities>
             </Road>
         </Simulation>

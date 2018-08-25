@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 class Newell extends LongitudinalModelBase {
 
     /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(Newell.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Newell.class);
 
     /** The simulation timepstep as parameter */
     private final double dt;
@@ -60,7 +60,7 @@ class Newell extends LongitudinalModelBase {
         // TODO check modeling of parameter dt=T (dt is the constant update time and cannot be changed)
         final double dtLocal = alphaT * dt;
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getEffectiveSpeedlimit());
 
         // actual Newell formula
         return acc(s, v, dv, dtLocal, v0Local);

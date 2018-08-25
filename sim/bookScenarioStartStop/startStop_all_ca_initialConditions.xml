@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimInitialConditions>
+    <RoadInitialConditions id="NSM">
+        <MicroscopicInitialConditions>
+            <!-- in physical quantities (meter and m/s) -->
+            <VehicleInitialCondition position="7.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="15.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="22.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="30.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="37.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="45.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="52.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="60.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="67.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="75.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="82.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="90.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="97.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="105.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="112.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="120.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="127.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="135.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="142.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="150.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="157.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="165.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="172.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="180.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="187.5" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="195.0" speed="0" label="NSM1" />
+            <VehicleInitialCondition position="1000" speed="0" label="ObstacleNSM" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="BARL">
+        <MicroscopicInitialConditions>
+            <!-- in physical quantities (meter and m/s) -->
+            <VehicleInitialCondition position="7.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="15.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="22.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="30.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="37.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="45.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="52.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="60.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="67.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="75.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="82.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="90.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="97.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="105.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="112.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="120.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="127.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="135.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="142.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="150.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="157.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="165.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="172.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="180.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="187.5" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="195.0" speed="0" label="BARL1" />
+            <VehicleInitialCondition position="1000" speed="0" label="ObstacleNSM" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+    <RoadInitialConditions id="KKW">
+        <MicroscopicInitialConditions>
+            <!-- in physical quantities (meter and m/s) -->
+            <VehicleInitialCondition position="10" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="20" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="30" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="40" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="50" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="60" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="70" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="80" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="90" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="100" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="110" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="120" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="130" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="140" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="150" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="160" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="170" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="180" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="190" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="200" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="210" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="220" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="230" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="240" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="250" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="260" speed="0" label="KKW1" />
+            <VehicleInitialCondition position="1000" speed="0" label="ObstacleKKW" />
+        </MicroscopicInitialConditions>
+    </RoadInitialConditions>
+</MovsimInitialConditions>
+

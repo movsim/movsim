@@ -29,11 +29,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadSegmentUtils;
 
 import com.google.common.base.Preconditions;
 
 /**
- * Iterable collection of the road segments that form a route that can be take through the road network.
+ * Iterable collection of the road segments that form a route that can be taken through the road network.
  */
 public class Route implements Iterable<RoadSegment> {
 
@@ -62,8 +63,8 @@ public class Route implements Iterable<RoadSegment> {
                 + " already added to route.");
 
         if (!roadSegments.isEmpty()) {
-            Preconditions.checkState(roadSegment.isDownstreamLink(roadSegments.getLast()), "roadSegment=" + roadSegment
-                    + " not connected to upstream roadSegment=" + roadSegments.getLast());
+            Preconditions.checkState(RoadSegmentUtils.isConnected(roadSegments.getLast(), roadSegment),
+                    "Segments not connected: upstream=" + roadSegments.getLast() + ", downstream=" + roadSegment);
         }
 
         roadSegments.add(roadSegment);
@@ -90,9 +91,9 @@ public class Route implements Iterable<RoadSegment> {
     }
 
     /**
-     * Returns the number of RoadSegments in the route.
+     * Returns the number of RoadSegmentUtils in the route.
      * 
-     * @return the number of RoadSegments in route
+     * @return the number of RoadSegmentUtils in route
      */
     public final int size() {
         return roadSegments.size();
@@ -127,7 +128,7 @@ public class Route implements Iterable<RoadSegment> {
 
     @Override
     public String toString() {
-        return "Route [roadSegments=" + roadSegments + ", name=" + name + ", length=" + length + "]";
+        return "Route [name=" + name + ", length=" + length + ", roadSegments=" + roadSegments + "]";
     }
 
     @Override

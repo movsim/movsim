@@ -27,7 +27,7 @@ package org.movsim.output.route;
 
 import org.movsim.autogen.Trajectories;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -47,10 +47,10 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
     private static final String extensionFormat = ".traj.route_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId, infoComment, absTime, xWithOffset[m]";
-    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %s, %10.4f%n";
+    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %10.4f, %s%n";
 
     /** The Constant LOG. */
-    private final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
+    private final static Logger LOG = LoggerFactory.getLogger(FileTrajectories.class);
 
     private final double positionIntervalStart;
     private final double positionIntervalEnd;
@@ -73,7 +73,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         positionIntervalStart = 0;
         positionIntervalEnd = route.getLength();
 
-        logger.info("interval for output: timeStart=" + (traj.isSetStartTime() ? traj.getStartTime() : "--")
+        LOG.info("interval for output: timeStart=" + (traj.isSetStartTime() ? traj.getStartTime() : "--")
                 + ", timeEnd=" + (traj.isSetEndTime() ? traj.getEndTime() : "--"));
         writer = createWriter(String.format(extensionFormat, route.getName()));
         writeHeader(route);
@@ -90,7 +90,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         this.time = simulationTime;
         if (isLargerThanStartTimeInterval() && isSmallerThanEndTimeInterval()) {
             if (iterationCount % 1000 == 0) {
-                logger.info("time = {}, timestep= {}", time, dt);
+                LOG.debug("time = {}, timestep= {}", time, dt);
             }
             if ((time - lastUpdateTime + MovsimConstants.SMALL_VALUE) >= traj.getDt()) {
                 lastUpdateTime = time;
@@ -99,7 +99,6 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
             }
         }
     }
-
 
     private boolean isLargerThanStartTimeInterval() {
         if (!traj.isSetStartTime()) {
@@ -154,7 +153,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         final double dv = (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) ? 0 : me
                 .getRelSpeed(frontVehicle);
         write(outputFormat, time, me.lane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(), me.getId(),
-                me.roadSegmentId(), me.originRoadSegmentId(), me.getInfoComment(), formattedTime,
-                pos + traj.getOffsetPosition());
+                me.roadSegmentId(), me.originRoadSegmentId(), formattedTime, pos + traj.getOffsetPosition(), me
+                        .getUserData().getString(","));
     }
 }

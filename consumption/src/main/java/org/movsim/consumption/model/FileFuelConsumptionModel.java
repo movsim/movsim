@@ -2,8 +2,9 @@ package org.movsim.consumption.model;
 
 import java.util.Locale;
 
+import org.movsim.autogen.VehicleData;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 
 // TODO refactoring of fuel consumption code base and corresponding file output
 class FileFuelConsumptionModel extends FileOutputBase {
@@ -31,12 +32,12 @@ class FileFuelConsumptionModel extends FileOutputBase {
         this.fuelConsumption = fuelConsumption;
     }
 
-    public void writeZeroAccelerationTest(VehicleAttributes vehicleAttributes, InstantaneousPowerModel instPowerModel,
+    public void writeZeroAccelerationTest(VehicleData vehicleAttributes, InstantaneousPowerModel instPowerModel,
             EngineRotationModel engineRotationModel) {
         writer = createWriter(String.format(extensionFormatZeroAcceleration, keyLabel));
         writer.printf(outputHeadingZeroAcceleration);
         writer.flush();
-        writer.printf("# veh mass = %.1f%n", vehicleAttributes.mass());
+        writer.printf("# veh mass = %.1f%n", vehicleAttributes.getMass());
         writer.printf("# number of gears = %d%n", engineRotationModel.getNumberOfGears());
         writer.printf("# v[m/s], accFreeWheeling[m/s^2], fuelFlow[l/h], gear, c100[l/100km]%n");
         final double vMax = 200 / 3.6;
@@ -45,17 +46,17 @@ class FileFuelConsumptionModel extends FileOutputBase {
         while (v <= vMax) {
             final double accFreeWheeling = instPowerModel.getFreeWheelingDeceleration(v);
             final double acc = 0.0;
-            final double[] fuelFlow = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
-            final int optGear = (int) fuelFlow[1]; // !! not a gearIndex
-            final double c100 = fuelConsumption.getInstConsumption100km(v, 0, optGear, true);
-            writer.printf(outputFormatZeroAcceleration, v, accFreeWheeling, 3.6e6 * fuelFlow[0], optGear, c100);
+            final FuelAndGear result = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
+            final double c100 = fuelConsumption.getInstConsumption100km(v, 0, result.getGear(), true);
+            writer.printf(outputFormatZeroAcceleration, v, accFreeWheeling, 3.6e6 * result.getFuelFlow(),
+                    result.getGear(), c100);
             writer.flush();
             v += dv;
         }
         writer.close();
     }
 
-    public void writeJante(int gearTest, VehicleAttributes vehicle, InstantaneousPowerModel carPowerModel) {
+    public void writeJante(int gearTest, VehicleData vehicle, InstantaneousPowerModel carPowerModel) {
         writer = createWriter(String.format(extensionFormatJante, keyLabel));
         writer.printf(outputHeadingJante);
         writer.flush();
@@ -76,14 +77,14 @@ class FileFuelConsumptionModel extends FileOutputBase {
                 final double v = v_kmh / 3.6;
                 final double acc = 0.01 * (int) (100 * (accmin + iacc * dacc));
                 final double forceMech = carPowerModel.getMechanicalPower(v, acc, 0);
-                final double powMechEl = Math.max(v * forceMech + vehicle.electricPower(), 0.);
+                final double powMechEl = Math.max(v * forceMech + vehicle.getElectricPower(), 0.);
                 double fuelFlow = 100000;
                 int gear = gearTest;
                 if (determineOptimalGear) {
                     // v=const => min(consump)=min(fuelFlow)
-                    final double[] res = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
-                    fuelFlow = res[0];
-                    gear = (int) res[1];
+                    final FuelAndGear result = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
+                    fuelFlow = result.getFuelFlow();
+                    gear = result.getGear();
                 } else {
                     final int gearIndex = gear - 1;
                     fuelFlow = fuelConsumption.getFuelFlow(v, acc, 0, gearIndex, true);
@@ -98,7 +99,7 @@ class FileFuelConsumptionModel extends FileOutputBase {
         writer.close();
     }
 
-    public void writeJanteOptimalGear(VehicleAttributes vehicle, InstantaneousPowerModel carPowerModel) {
+    public void writeJanteOptimalGear(VehicleData vehicle, InstantaneousPowerModel carPowerModel) {
         writeJante(0, vehicle, carPowerModel);
     }
 
@@ -109,15 +110,17 @@ class FileFuelConsumptionModel extends FileOutputBase {
         writer.flush();
 
         // fstr.printf("# power in idle mode = %f kW%n", 0.001*powIdle);
-        writer.printf("# c_spec0 in idle mode = %f kg/kWh = %f Liter/kWh %n", 3.6e6 * engineModel.cSpec0Idle, 3.6e6
-                / ConsumptionConstants.RHO_FUEL_PER_LITER * engineModel.cSpec0Idle);
+        writer.printf("# c_spec0 in idle mode = %f kg/kWh = %f Liter/kWh %n", engineModel.cSpec0Idle
+                / ConsumptionConstants.KILOGRAMM_PER_KWH_TO_KG_PER_WS,
+                engineModel.cSpec0Idle / engineModel.getFuelDensityPerLiter()
+                        / ConsumptionConstants.KILOGRAMM_PER_KWH_TO_KG_PER_WS);
 
         final int N_FREQ = 40;
         final double df = (engineRotationModel.getMaxFrequency() - engineRotationModel.getMinFrequency())
                 / (N_FREQ - 1);
         final int N_POW = 80;
         final double powMin = -20000; // range
-        final double dPow = (engineModel.maxPower - powMin) / (N_POW - 1);
+        final double dPow = (engineModel.getMaxPower() - powMin) / (N_POW - 1);
 
         for (int i = 0; i < N_FREQ; i++) {
             final double f = engineRotationModel.getMinFrequency() + i * df;
@@ -133,6 +136,39 @@ class FileFuelConsumptionModel extends FileOutputBase {
             writer.println(); // gnuplot block
         }
         writer.close();
+    }
+
+    public void writeSpecificConsumption(EngineRotationModel engineRotationModel, EngineConstantMapImpl engineModel) {
+        writer = createWriter(String.format(extensionFormatSpecificConsumption, keyLabel));
+        writer.printf(outputHeadingSpecificConsumption);
+        writer.flush();
+
+        writer.printf("# specific consumption = %f kg/kWh = %f Liter/kWh %n", engineModel.getMinSpecificConsumption()
+                / ConsumptionConstants.KILOGRAMM_PER_KWH_TO_KG_PER_WS, engineModel.getMinSpecificConsumption()
+                / engineModel.getFuelDensityPerLiter() / ConsumptionConstants.KILOGRAMM_PER_KWH_TO_KG_PER_WS);
+
+        final int N_FREQ = 40;
+        final double df = (engineRotationModel.getMaxFrequency() - engineRotationModel.getMinFrequency())
+                / (N_FREQ - 1);
+        final int N_POW = 80;
+        final double powMin = -20000; // range
+        final double dPow = (engineModel.getMaxPower() - powMin) / (N_POW - 1);
+
+        for (int i = 0; i < N_FREQ; i++) {
+            final double f = engineRotationModel.getMinFrequency() + i * df;
+            for (int j = 0; j <= N_POW; j++) {
+                final double pow = powMin + j * dPow;
+                final double dotC = engineModel.getFuelFlow(f, pow);
+                final double indMoment = MomentsHelper.getMoment(pow, f);
+                final double cSpec = engineModel.getMinSpecificConsumption();
+                // factor 3.6e6 for converting from m^3/s to liter/h
+                writer.printf(Locale.US, "%.1f, %.3f, %.9f, %.9f, %.9f%n", f * 60, pow / 1000., 3.6e6 * dotC,
+                        indMoment, cSpec * 3.6e9);
+            }
+            writer.println(); // gnuplot block
+        }
+        writer.close();
+
     }
 
 }

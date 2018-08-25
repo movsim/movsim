@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -72,33 +72,6 @@ public class MOBILTest {
     public void tearDown() throws Exception {
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.vehicles.lanechange.MOBIL#MOBIL(org.movsim.simulator.vehicles.Vehicle)}.
-     */
-    @Test
-    public final void testMOBILVehicle() {
-        //fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.vehicles.lanechange.MOBIL#MOBIL(org.movsim.simulator.vehicles.Vehicle, org.movsim.input.model.vehicle.lanechange.LaneChangeMobilData)}.
-     */
-    @Test
-    public final void testMOBILVehicleLaneChangeMobilData() {
-        //fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.vehicles.lanechange.MOBIL#MOBIL(org.movsim.simulator.vehicles.Vehicle, double, double, double, double, double)}.
-     */
-    @Test
-    public final void testMOBILVehicleDoubleDoubleDoubleDoubleDouble() {
-        //fail("Not yet implemented");
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.vehicles.lanechange.MOBIL#calcAccelerationBalance(int, org.movsim.simulator.roadnetwork.RoadSegment)}.
-     */
     @Test
     public final void testCalcAccelerationBalance() {
         final double lengthCar = 6.0;
@@ -206,9 +179,6 @@ public class MOBILTest {
         assertTrue(balance < 0.0);
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.vehicles.lanechange.MOBIL#getMinimumGap()}.
-     */
     @Test
     public final void testGetMinimumGap() {
         final double minimumGap = 2.1;
@@ -216,9 +186,6 @@ public class MOBILTest {
         assertEquals(minimumGap, mobil.getParameter().getMinimumGap(), delta);
     }
 
-    /**
-     * Test method for {@link org.movsim.simulator.vehicles.lanechange.MOBIL#getSafeDeceleration()}.
-     */
     @Test
     public final void testGetSafeDeceleration() {
         final double safeDeceleration = 4.3;

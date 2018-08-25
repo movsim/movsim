@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -28,13 +28,13 @@ package org.movsim;
 import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 
+import org.movsim.autogen.Movsim;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.logging.LogFileAppender;
 import org.movsim.logging.Logger;
 import org.movsim.simulator.Simulator;
+import org.movsim.xml.InputLoader;
 import org.xml.sax.SAXException;
 
 /**
@@ -52,27 +52,38 @@ public class MovsimCoreMain {
      *            the command line arguments
      * @throws SAXException
      * @throws JAXBException
-     * @throws ParserConfigurationException
      */
     public static void main(String[] args) throws JAXBException, SAXException {
 
         Locale.setDefault(Locale.US);
 
-        // final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        // parse the command line, putting the results into projectMetaData
         Logger.initializeLogger();
 
         MovsimCommandLine.parse(args);
 
-        if (!ProjectMetaData.getInstance().hasProjectName()) {
-            System.err.println("no xml simulation configuration file provided.");
-            System.exit(-1);
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        if (!projectMetaData.hasProjectName()) {
+            throw new IllegalArgumentException("no xml simulation configuration file provided.");
         }
 
-        LogFileAppender.initialize(ProjectMetaData.getInstance());
+        // FIXME not working
+        // LogFileAppender.initialize(projectMetaData);
 
-        final Simulator simulator = new Simulator();
+        // unmarshall movsim configuration file
+        Movsim movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
+        if (projectMetaData.isScanMode()) {
+            System.out.println("scanning mode");
+            SimulationScan.invokeSimulationScan(movsimInput);
+        } else {
+            invokeSingleSimulation(movsimInput);
+        }
+    }
+
+    public static Simulator invokeSingleSimulation(Movsim inputData) throws JAXBException, SAXException {
+        Simulator simulator = new Simulator(inputData);
         simulator.initialize();
         simulator.runToCompletion();
+        return simulator;
     }
+
 }

@@ -9,15 +9,12 @@
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="simple_onramp.xodr">
+    <Scenario network_filename="simple_onramp.xodr" initial_conditions_filename="onramp_initialconditions.xml">
         <Simulation timestep="1.1" duration="7200" seed="42">
             <TrafficComposition>
                 <VehicleType label="GIPPS1" fraction="1" />
             </TrafficComposition>
             <Road id="1">
-                <InitialConditions>
-                    <MacroIC position="8600" density_per_km="2" speed="30" />
-                </InitialConditions>
                 <TrafficSource logging="true">
                     <Inflow t="0" q_per_hour="200" v="30" />
                     <Inflow t="1500" q_per_hour="2200" v="22" />
@@ -25,8 +22,7 @@
                 </TrafficSource>
                 <!-- improve vehicle performance at inflow -->
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="0" alpha_T="0.8" />
-                    <Inhomogeneity position="2000" alpha_T="1" />
+                    <Inhomogeneity position="0" valid_length="2000" adaptation_length="0" start_alpha_T="0.8" target_alpha_T="1" />
                 </FlowConservingInhomogeneities>
                 <Detectors sample_interval="60" logging="true">
                     <CrossSection position="1000" />
@@ -40,9 +36,6 @@
                 </Detectors>
             </Road>
             <Road id="2">
-                <InitialConditions>
-                    <MacroIC position="0" density_per_km="2" speed="30" />
-                </InitialConditions>
                 <SimpleRamp relative_speed="0.5" relative_gap="0.5" logging="true">
                     <Inflow t="0" q_per_hour="550" />
                 </SimpleRamp>
@@ -52,11 +45,7 @@
                     <CrossSection position="2000" />
                 </Detectors>
             </Road>
-            <Road id="3">
-                <InitialConditions>
-                    <MacroIC position="0" density_per_km="2" speed="30" />
-                </InitialConditions>
-            </Road>
+            <Road id="3" />
         </Simulation>
         <Routes>
             <Route label="main">

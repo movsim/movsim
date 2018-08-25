@@ -1,26 +1,26 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
- * 
+ *
  * This file is part of
- * 
+ *
  * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
+ *
  * MovSim is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * MovSim is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with MovSim. If not, see <http://www.gnu.org/licenses/>
  * or <http://www.movsim.org>.
- * 
+ *
  * -----------------------------------------------------------------------------------------
  */
 
@@ -30,11 +30,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
+import org.movsim.roadmappings.RoadGeometry.GeometryType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * RoadMapping consisting of a number of consecutive heterogeneous RoadMappings.
+ * RoadMapping consisting of a number of consecutive heterogeneous RoadMappingUtils.
  */
 public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RoadMappingPoly.class);
 
     protected final ArrayList<RoadMapping> roadMappings = new ArrayList<>();
 
@@ -43,27 +48,17 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         return roadMappings.iterator();
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     */
-    public RoadMappingPoly(int laneCount, double laneWidth) {
-        super(laneCount, laneWidth, 0, 0);
+    public RoadMappingPoly(LaneGeometries laneGeometries) {
+        super(laneGeometries, 0, 0);
     }
 
     /**
      * Constructor, adds an initial line.
-     * 
-     * @param laneCount
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
+     *
      */
-    public RoadMappingPoly(int laneCount, double x0, double y0, double x1, double y1) {
-        super(laneCount, x0, y0);
-        final RoadMapping roadMapping = new RoadMappingLine(laneCount, x0, y0, x1, y1);
+    public RoadMappingPoly(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
+        super(laneGeometries, x0, y0);
+        final RoadMapping roadMapping = new RoadMappingLine(laneGeometries, x0, y0, x1, y1);
         roadLength = roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
@@ -78,22 +73,22 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     }
 
     @Override
-    public RoadMapping.PosTheta startPos() {
+    public PosTheta startPos() {
         return roadMappings.get(0).startPos();
     }
 
     @Override
-    public RoadMapping.PosTheta startPos(double lateralOffset) {
+    public PosTheta startPos(double lateralOffset) {
         return roadMappings.get(0).startPos(lateralOffset);
     }
 
     @Override
-    public RoadMapping.PosTheta endPos() {
+    public PosTheta endPos() {
         return roadMappings.get(roadMappings.size() - 1).endPos();
     }
 
     @Override
-    public RoadMapping.PosTheta endPos(double lateralOffset) {
+    public PosTheta endPos(double lateralOffset) {
         return roadMappings.get(roadMappings.size() - 1).endPos(lateralOffset);
     }
 
@@ -117,21 +112,22 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
 
     public void addLinePoint(double x, double y) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, x, y);
+        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, this.laneGeometries, x, y);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
 
     public void addLinePointRelative(double dx, double dy) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
-        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
+        final PosTheta posTheta = lastRoadMapping.endPos();
+        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, this.laneGeometries, posTheta.x + dx,
+                posTheta.y + dy);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
 
     public void addLine(double s, double x0, double y0, double theta, double length) {
-        final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, s, x0, y0, theta, length);
+        final RoadMappingLine roadMapping = new RoadMappingLine(this.laneGeometries, s, x0, y0, theta, length);
         roadLength += length;
         roadMappings.add(roadMapping);
     }
@@ -142,33 +138,58 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
 
     public void addArc(double s, double x0, double y0, double theta, double length, double curvature) {
         // final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        // final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
+        // final PosTheta posTheta = lastRoadMapping.endPos();
         // <geometry s="3.66" x="-4.64" y="4.34" hdg="5.29" length="9.19">
         // <arc curvature="-1.2698412698412698e-01"/>
         // </geometry>
         // RoadMappingArc(laneCount, s, x0, y0, theta, length, curvature) {
-        final RoadMappingArc roadMapping = new RoadMappingArc(laneCount, s, x0, y0, theta, length, curvature);
+        final RoadMappingArc roadMapping = new RoadMappingArc(this.laneGeometries, s, x0, y0, theta, length, curvature);
         roadLength += length;
         roadMappings.add(roadMapping);
     }
 
     public void addArc(Geometry geometry) {
-        addArc(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(), geometry
-                .getArc().getCurvature());
+        addArc(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(),
+                geometry.getArc().getCurvature());
     }
 
     public void addSpiral(double s, double x0, double y0, double theta, double length, double startCurvature,
             double endCurvature) {
-        final RoadMappingSpiral roadMapping = new RoadMappingSpiral(laneCount, s, x0, y0, theta, length,
+        final RoadMappingSpiral roadMapping = new RoadMappingSpiral(this.laneGeometries, s, x0, y0, theta, length,
                 startCurvature, endCurvature);
         roadLength += length;
         roadMappings.add(roadMapping);
     }
 
+    public void addSpiral(Geometry geometry) {
+        addSpiral(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(),
+                geometry.getSpiral().getCurvStart(), geometry.getSpiral().getCurvEnd());
+    }
+
     public void addPoly3(double s, double x0, double y0, double theta, double length, double a, double b, double c,
             double d) {
-        final RoadMappingBezier roadMapping = new RoadMappingBezier(laneCount, s, x0, y0, theta, length, a, b, c, d);
+        RoadMappingBezier roadMapping = new RoadMappingBezier(laneGeometries, s, x0, y0, theta, length, a, b, c, d);
         roadLength += length;
         roadMappings.add(roadMapping);
+    }
+
+    public void add(RoadGeometry roadGeometry) {
+        if (roadGeometry.geometryType() == GeometryType.LINE) {
+            addLine(roadGeometry.geometry());
+        } else if (roadGeometry.geometryType() == GeometryType.ARC) {
+            addArc(roadGeometry.geometry());
+        } else if (roadGeometry.geometryType() == GeometryType.POLY3) {
+            throw new IllegalArgumentException("POLY3 geometry not yet supported");
+        } else if (roadGeometry.geometryType() == GeometryType.SPIRAL) {
+            LOG.warn("SPIRAL geometry not yet fully supported but approximated by an arc");
+            addSpiral(roadGeometry.geometry());
+        } else {
+            throw new IllegalArgumentException("Unknown geometry");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "RoadMappingPoly [roadMappings.size()=" + roadMappings.size() + "]";
     }
 }

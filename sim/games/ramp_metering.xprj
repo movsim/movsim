@@ -66,7 +66,6 @@
                     <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="north" />
                     <VehicleType label="ACC3" fraction="0.7" relative_v0_randomization="0.2" route_label="north_then_east" />
                 </TrafficComposition>
-                <InitialConditions />
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="1900" v="24" />
                     <Inflow t="60" q_per_hour="1900" v="24" />
@@ -81,15 +80,15 @@
                     <Inflow t="50" q_per_hour="1500" v="24" />
                     <Inflow t="60" q_per_hour="2000" v="24" />
                     <Inflow t="100" q_per_hour="2000" v="24" />
-                    <Inflow t="100" q_per_hour="200" v="24" />
+                    <Inflow t="101" q_per_hour="200" v="24" />
                     <Inflow t="110" q_per_hour="200" v="24" />
                     <Inflow t="120" q_per_hour="2000" v="24" />
                     <Inflow t="150" q_per_hour="2000" v="24" />
-                    <Inflow t="150" q_per_hour="200" v="24" />
+                    <Inflow t="151" q_per_hour="200" v="24" />
                     <Inflow t="170" q_per_hour="200" v="24" />
                     <Inflow t="180" q_per_hour="1500" v="24" />
                     <Inflow t="210" q_per_hour="1500" v="24" />
-                    <Inflow t="210" q_per_hour="0" v="24" />
+                    <Inflow t="211" q_per_hour="0" v="24" />
                 </TrafficSource>
             </Road>
             <Road id="37">
@@ -100,10 +99,10 @@
             <ControllerGroup id="group1" >
 				<!-- duration set to very long time. State changes will result only from user-interaction -->
                 <Phase duration="10000000">
-                    <TrafficLightState name="first" status="Green" />
+                    <TrafficLightState type="first" status="Green" />
                 </Phase>
                 <Phase duration="10000000">
-                    <TrafficLightState name="first" status="Red" />
+                    <TrafficLightState type="first" status="Red" />
                 </Phase>
             </ControllerGroup>
         </TrafficLights>

@@ -63,6 +63,7 @@ set style line 99 lt 7 lw 1 linecolor rgb "#000000" #black
 
 select(x,xmin,xmax)=((x>=xmin)&&(x<=xmax)) ? 0 : 1/0  #-1000
 
+set grid
 set title "Consumption for zero acceleration, model ".consumptionModelName
 set xlabel "Speed (km/h)"
 set ylabel "Consumption (l/100km)"
@@ -79,7 +80,7 @@ plot\
  constAccInput u ($1*3.6):($5+select($4,5.9,6.1)) t "Gear 6" w p ls 6,\
  constAccInput u ($1*3.6):($5+select($4,6.9,7.1)) t "Gear 7" w p ls 8
 
-
+unset grid
 #################################
 # Definition of Contour lines   (line style=line style indicated at splot)
 #################################
@@ -103,11 +104,11 @@ set palette defined ( 0 "#dd00ff",  13 "#9933ff", 20 "#6666ff", 30 "#00eeee",\
 #########################################
 #set term post eps enhanced color solid "Helvetica" 20
 
-set xlabel "V [km/h]"
+set xlabel "speed [km/h]"
 set xrange [10:140]
 
-set ylabel "acc [m/s^{2}]"
-set yrange [-1:1]
+set ylabel "acceleration [m/s^{2}]"
+set yrange [-1:2]
 
 set title "C100 [liters/100 km] for model ".consumptionModelName
 set zrange [0:20]
@@ -129,7 +130,7 @@ set ylabel "Torque [Nm]"
 set yrange [0:230]
 
 set title "Specific consumption(f,pressure) [g/kWh] for model ".consumptionModelName
-set zrange [200:500]
+set zrange [150:500]
 unset ztics 
 
 set cntrparam levels discrete 200,210,220,230,240,250,260,270,280,290,300 # freely set lines

@@ -1,14 +1,58 @@
+git-flow
+========
+# Ubuntu/linux user:
+sudo apt-get install git-flow:
 
+# initializes git flow in your local repo
+git flow init -d
+
+# do not push to master but to develop branch
+# (which is done my 'git flow init -d'
+# git branch --set-upstream develop origin/develop  
+
+git flow feature help ... 
+
+=======
+#use colorful git output (also possible with option --global)
+git config color.ui true
+
+Useful commands:
+================
 Push local branch to remote repo:
-
 git push origin mybranch
 git push origin HEAD:mybranch
 
 Checkout branch:
 git checkout -b test origin/test
 
-#delete branch:
-#from HEAD
+# delete branch:
 git branch -d delete_branch
+# force delete branch:
 git branch -D delete_branch
 
+====================================
+
+# http://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-appears-in-branch-a
+# Deletes all stale remote-tracking branches under <name>. These stale branches have already been removed from the remote repository referenced by <name>, but are still locally available in "remotes/<name>". 
+
+git remote prune origin # --dry-run # 
+git fetch -p # fetches and prunes all origins.
+
+
+Tools
+=========
+# visual diff tool
+git gui
+
+# branch visualization
+gitk
+
+
+My Git Aliases
+============
+git config --global alias.ch checkout
+git config --global alias.br branch
+git config --global alias.co commit
+git config --global alias.st status
+
+see ~.gitconfig

@@ -22,22 +22,12 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="ringroad_2lanes.xodr">
+    <Scenario network_filename="ringroad_2lanes.xodr" initial_conditions_filename="ringroad_initialConditions.xml">
         <Simulation timestep="0.2" seed="42" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="FAST_TYPE" fraction="0.8" />
                 <VehicleType label="SLOW_TYPE" fraction="0.2" />
             </TrafficComposition>
-            <Road id="43">
-                <InitialConditions>
-                    <MacroIC position="1" density_per_km="40" />
-                </InitialConditions>
-
-		<Detectors sample_interval="30" logging="true">
-                    <CrossSection position="100" />
-                </Detectors>
- 
-            </Road>
         </Simulation>
     </Scenario>
 </Movsim>

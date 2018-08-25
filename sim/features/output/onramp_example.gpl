@@ -1,0 +1,260 @@
+# gnuplot command file
+
+# parameterised startStop command file
+# invoke using -e option to set parameters, eg:
+# gnuplot -e "lang='de'" onramp.gpl
+
+set datafile separator ","
+
+# parameters
+if (!exists("inputPath")) inputPath = "./"
+if (!exists("outputPath")) outputPath = "./"
+if (!exists("ldm")) ldm = ""
+if (!exists("baseFile")) baseFile = "onramp_example".ldm
+#print "LDM=".ldm
+
+# variables
+vehicle = ldm."1"
+
+# input files
+fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
+stFile = inputPath.baseFile.".st.route_main.csv"  ## spatiotemporal output
+stFileRamp = inputPath.baseFile.".st.route_onramp.csv"  ## spatiotemporal output
+detFile(n) = sprintf(inputPath.baseFile.".det.road_1.x_%d.csv",n)
+roadSourceFile = inputPath.baseFile.".source.road_1.csv"
+rampSourceFile = inputPath.baseFile.".source.road_5.csv"
+trajectoriesFile = inputPath.baseFile.".traj.route_onramp.csv"
+ttGridFile= inputPath.baseFile.".tt_grid.route_main.csv"
+ttGridFileRamp=inputPath.baseFile.".tt_grid.route_onramp.csv"
+ttMeanFile= inputPath.baseFile.".tt_mean.route_main.csv"
+ttMeanFileRamp=inputPath.baseFile.".tt_mean.route_onramp.csv"
+indivttFile= inputPath.baseFile.".tt_individual.route_main.csv"
+indivttFileRamp= inputPath.baseFile.".tt_individual.route_onramp.csv"
+consumptionFile= inputPath.baseFile.".consumption.route_main.csv"
+consumptionFileRamp=inputPath.baseFile.".consumption.route_onramp.csv"
+
+
+# output files
+fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
+veqOutput = outputPath.baseFile.".veq_".vehicle.".eps"
+vqOutput = outputPath.baseFile.".vq_".vehicle.".eps"
+detOutput = outputPath.baseFile.".det_q.eps"
+detmicroOutput = outputPath.baseFile.".det_q_micro.eps"
+inflowOutput = outputPath.baseFile.".inflow_log.eps"
+v2dOutput = outputPath.baseFile.".v2d.eps"
+v2dallOutput = outputPath.baseFile.".v2d_all_main.eps"
+v2dallOutputRamp = outputPath.baseFile.".v2d_all_ramp.eps"
+a2dallOutput = outputPath.baseFile.".a2d_all.eps"
+trajectoriesOutput = outputPath.baseFile.".trajectories.eps"
+traveltimeGridOutput = outputPath.baseFile.".traveltime_grid.eps"
+traveltimeMeanOutput = outputPath.baseFile.".traveltime_mean.eps"
+indivtraveltimeOutput = outputPath.baseFile.".traveltime_individual.eps"
+consumptionOutput = outputPath.baseFile.".consumption.eps"
+cumTraveltimeOutput = outputPath.baseFile.".cumTraveltime.eps"
+cumConsumptionOutput = outputPath.baseFile.".cumConsumption.eps"
+
+
+
+########  Languages  #####################################
+
+# English
+fundTitle =  "Fundamental diagram Q({/Symbol r})"
+veqTitle = "Equilibrium velocity V_{eq}({/Symbol r})"
+vqTitle = "V-Q equilibrium relation V_{eq}(Q)"
+densityLabel = "Density {/Symbol r} (vehicles/km)"
+flowLabel = "Flow Q (vehicles/h)"
+veqLabel = "Velocity V_{eq} (km/h)"
+#timeLabel = "Time (s)"
+timeMinuteLabel = "Time (min)"
+distanceLabel = "Distance (m)"
+velocityLabel = "Velocity (km/h)"
+accelerationLabel = "Acceleration (m/s^2)"
+positionLabel = "Position (km)"
+entranceDistanceLabel = "Distance from entrance (km)"
+enteredVehicleLabel = "Number of entered vehicles"
+colorboxLabel = "V (km/h)"
+traveltimeLabel = "Inst. Link Traveltime (s)"
+indivtraveltimeLabel = "Individual realized traveltime (s)"
+consumptionLabel = "Inst. Consumption (liters/s)"
+cumTraveltimeLabel = "Cumulated Traveltime (h)"
+cumConsumptionLabel = "Cumulated Consumption (liters)"
+
+########  Line Styles  ###################################
+
+set style line 1 linetype 1 linewidth 7 pointtype 7 pointsize 1.5 lc rgb "#000000"
+set style line 2 linetype 7 linewidth 3 pointtype 5 pointsize 1.5 lc rgb "#dd0000"
+set style line 3 linetype 1 linewidth 7 pointtype 9 pointsize 1.5 lc rgb "#ff8800"
+set style line 4 linetype 3 linewidth 3 pointtype 11 pointsize 1.5 lc rgb "#00aa44"
+set style line 5 linetype 5 linewidth 7 pointtype 13 pointsize 1.5 lc rgb "#220099"
+
+set style line 1 linetype 11 linewidth 7 pointtype 7 pointsize 0.2 lc rgb "#000000"
+
+min(x,y)=(x<y) ? x : y
+
+set term post eps enhanced color dash "Helvetica" 26
+set nogrid
+
+
+########################################################
+
+set size 1,1
+set title ""
+set key box
+
+########################################################
+
+
+######################################
+# travel times
+######################################
+
+set auto x
+set auto y
+set xlabel timeMinuteLabel
+
+set ylabel traveltimeLabel
+set out traveltimeGridOutput
+plot\
+ ttGridFile using ($1/60.0):2 title "main route" with lines linestyle 1,\
+ ttGridFileRamp using ($1/60.0):2 title "onramp route" with lines linestyle 3,\
+ ttGridFile using ($1/60.0):($3) title "EMA" with lines linestyle 2,\
+ ttGridFileRamp using ($1/60.0):($3) title "EMA" with lines linestyle 4,\
+ ttGridFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
+ ttGridFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
+
+set out traveltimeMeanOutput
+plot\
+ ttMeanFile using ($1/60.0):2 title "main route" with lines linestyle 1,\
+ ttMeanFileRamp using ($1/60.0):2 title "onramp route" with lines linestyle 3,\
+ ttMeanFile using ($1/60.0):($3) title "EMA" with lines linestyle 2,\
+ ttMeanFileRamp using ($1/60.0):($3) title "EMA" with lines linestyle 4,\
+ ttMeanFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
+ ttMeanFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
+
+set ylabel cumTraveltimeLabel
+set out cumTraveltimeOutput
+plot\
+ ttGridFile using ($1/60):($5) title "main route" with lines linestyle 1,\
+ ttGridFileRamp using ($1/60):($5) title "onramp route" with lines linestyle 3
+ 
+######################################
+# individual (realized) travel times
+######################################
+
+set auto x
+set auto y
+set xlabel timeMinuteLabel
+set ylabel indivtraveltimeLabel
+set out indivtraveltimeOutput
+plot\
+ indivttFile using ($1/60.0):3 title "main route: individual tt" with points linestyle 2,\
+ indivttFileRamp using ($1/60.0):3 title "onramp route: individual tt" with points linestyle 3
+
+ 
+######################################
+# consumption 
+######################################
+
+set auto x
+set auto y
+set xlabel timeMinuteLabel
+
+set ylabel consumptionLabel
+set out consumptionOutput
+plot\
+ consumptionFile using ($1/60.):2 title "main route" with lines linestyle 1,\
+ consumptionFileRamp using ($1/60.):2 title "onramp route" with lines linestyle 3,\
+ consumptionFile using ($1/60.):3 title "EMA" with lines linestyle 2,\
+ consumptionFileRamp using ($1/60.):3 title "EMA" with lines linestyle 4
+ 
+ #consumptionFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
+ #consumptionFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
+ 
+set ylabel cumConsumptionLabel
+set out cumConsumptionOutput
+plot\
+ consumptionFile using ($1/60.0):4 title "main route" with lines linestyle 1,\
+ consumptionFileRamp using ($1/60.0):4 title "onramp route" with lines linestyle 3
+ 
+
+######################################
+# logging of inflows for testing
+######################################
+
+
+set xlabel densityLabel
+set ylabel flowLabel
+
+set xrange [0:150]
+
+set auto x
+set xlabel timeMinuteLabel
+set ylabel enteredVehicleLabel
+set out inflowOutput
+plot\
+ roadSourceFile using ($1/60.0):6 title "upstream boundary" with lines linestyle 1,\
+ rampSourceFile using ($1/60.0):6 title "onramp boundary" with lines linestyle 3,\
+ roadSourceFile using ($1/60.0):5 title "inflow mainroad" with lines linestyle 2,\
+ rampSourceFile using ($1/60.0):5 title "inflow onramp" with lines linestyle 4
+
+###############################
+# trajectories
+###############################
+
+set auto x
+set auto y
+set xlabel timeMinuteLabel
+set ylabel positionLabel 
+#set xrange [0:7]
+#set xtics 1
+set out trajectoriesOutput
+plot trajectoriesFile using ($1/60.0):($3/1000):4 title "" with points lc variable
+
+#plot trajectoriesFile using ($1/60.0):($3/1000.) title "" with points ls 11
+
+############### 3d ###########
+
+set palette defined (0 "red", 20 "orange", 40 "yellow", 60 "green", 80 "blue",  100 "#dd00ff" )
+set cbrange [0:140]
+set pm3d; set pm3d map
+#set contour surface
+set cntrparam bspline
+set cntrparam levels 15
+unset clabel  # dann lauter gleiche Kontourlinien;
+                     # Farbe und Typ mit "w l ls" beim splot-Kommando
+
+#set view 20,63
+#set hidden3d
+set ticslevel 0
+set nogrid
+
+##################################
+set auto x
+set auto y
+set nokey
+
+set size 1.3,1.2
+set label 1 colorboxLabel at screen 1.1,1.02
+set term post eps enhanced color solid "Helvetica" 30
+set xlabel timeMinuteLabel
+#set ylabel entranceDistanceLabel offset -1.5,0
+set ylabel positionLabel offset -1.0,0
+unset surface
+
+set out v2dallOutput
+splot stFile using ($1/60.0):($2/1000.0):($3*3.6) with lines linestyle 99
+
+set out v2dallOutputRamp
+splot stFileRamp using ($1/60.0):($2/1000.0):($3*3.6) with lines linestyle 99
+
+set label 1 "a (m/s^2)" at screen 1.1,1.02
+set palette defined (-2 "red", -0.5 "orange", 0 "yellow", 0.2 "green", 0.6 "blue",  1.0 "#dd00ff", 1.5 "black" )
+set cbrange [-2:2]
+#set out a2dallOutput
+#splot stFile using ($2/60.0):($1/1000.0):6 with lines linestyle 99
+
+set nolabel
+unset colorbox
+unset pm3d
+
+

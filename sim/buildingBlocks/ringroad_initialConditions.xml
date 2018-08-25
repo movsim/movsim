@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MovsimInitialConditions>
+    <RoadInitialConditions id="1">
+        <MacroscopicInitialConditions>
+            <!-- critical density for emerging stop-and-go wave about >= 33 vehicles per km per lane -->
+            <MacroCondition position="1" density_per_km="36" speed="20" />
+        </MacroscopicInitialConditions>
+    </RoadInitialConditions>
+</MovsimInitialConditions>
+

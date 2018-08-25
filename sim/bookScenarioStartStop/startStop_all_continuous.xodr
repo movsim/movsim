@@ -10,7 +10,7 @@
     
     <road name="" length="800.0" id="IDM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="50.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="290.0" hdg="0.0" length="1050.0">
                 <line />
             </geometry>
         </planView>
@@ -27,7 +27,7 @@
     
     <road name="" length="800.0" id="IIDM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="100.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="250.0" hdg="0.0" length="1050.0">
                 <line />
             </geometry>
         </planView>
@@ -44,7 +44,7 @@
     
     <road name="" length="800.0" id="ACC" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="150.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="210.0" hdg="0.0" length="1050.0">
                 <line />
             </geometry>
         </planView>
@@ -61,7 +61,7 @@
     
     <road name="" length="800.0" id="IDMM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="200.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="170.0" hdg="0.0" length="1050.0">
                 <line />
             </geometry>
         </planView>
@@ -78,7 +78,7 @@
     
     <road name="" length="800.0" id="IDM_noise" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="250.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="130.0" hdg="0.0" length="1050.0">
                 <line />
             </geometry>
         </planView>
@@ -95,7 +95,7 @@
     
     <road name="" length="800.0" id="FVDM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="300.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="90.0" hdg="0.0" length="1050.0">
                 <line />
             </geometry>
         </planView>
@@ -112,7 +112,7 @@
     
     <road name="" length="800.0" id="OVM" junction="-1">
         <planView>
-            <geometry s="0.0" x="50.0" y="350.0" hdg="0.0" length="2500.0">
+            <geometry s="0.0" x="50.0" y="50.0" hdg="0.0" length="1050.0">
                 <line />
             </geometry>
         </planView>

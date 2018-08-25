@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep  2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
+    <road name="R1" length="1000.0" id="1" junction="-1">
+        <link>
+            <successor elementType="road" elementId="2" contactPoint="start" />
+        </link>
+        <type type="town" />
+        <planView>
+            <geometry s="0.0" x="0.0" y="300.0" hdg="0.0" length="1000.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R2" length="2000.0" id="2" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end" />
+            <successor elementType="road" elementId="3" contactPoint="start" />
+        </link>
+        <type type="town" />
+        <planView>
+            <geometry s="0.0" x="1000.0" y="300.0" hdg="0.0" length="2000.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <signals>
+            <signal s="1500" id="tl_r2" name="first" />
+        </signals>
+    </road>
+    <!-- road element with merging entry lane -->
+    <road name="R3" length="500.0" id="3" junction="-1">
+        <link>
+            <predecessor elementType="junction" elementId="15" contactPoint="end" />
+            <successor elementType="road" elementId="4" contactPoint="start" />
+        </link>
+        <type type="town" />
+        <planView>
+            <geometry s="0.0" x="3000.0" y="300.0" hdg="0.0" length="500.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="mwyEntry" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R4" length="2500.0" id="4" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="3" contactPoint="end" />
+        </link>
+        <type type="town" />
+        <planView>
+            <geometry s="0.0" x="3500.0" y="300.0" hdg="0.0" length="2500.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <signals>
+            <signal s="1000" id="tl_r4" name="second" />
+        </signals>
+    </road>
+    <!-- merging road element -->
+    <road name="R5" length="1011.2" id="5" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="6" contactPoint="end" />
+            <successor elementType="junction" elementId="15" contactPoint="start" />
+        </link>
+        <type type="town" />
+        <planView>
+            <geometry s="0.0" x="2000" y="130" hdg="0.16" length="1011.2">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R6" length="400" id="6" junction="-1">
+        <link>
+            <successor elementType="road" elementId="5" contactPoint="start" />
+        </link>
+        <type type="town" />
+        <planView>
+            <geometry s="0.0" x="1600" y="130" hdg="0.0" length="400">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!-- id maps to movsim controllerGroupID -->
+    <controller id="group1">
+        <control signalId="tl_r2" type="first" />
+        <control signalId="tl_r4" type="second" />
+    </controller>
+    <!-- connector of merging and main road -->
+    <junction name="" id="15">
+        <connection id="0" incomingRoad="2" connectingRoad="3" contactPoint="start">
+            <laneLink from="-1" to="-1" />
+            <!--            <laneLink from="-2" to="-2" /> -->
+        </connection>
+        <connection id="1" incomingRoad="5" connectingRoad="3" contactPoint="start">
+            <laneLink from="-1" to="-2" />
+        </connection>
+    </junction>
+</OpenDRIVE>
+

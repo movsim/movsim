@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,15 +25,17 @@
  */
 package org.movsim.simulator;
 
+import org.movsim.shutdown.ShutdownHooks;
+
 /**
  * <p>
- * Class to encapsulate a simulation thread. Includes the necessary synchronization and callbacks to coordinate with an
- * application UI thread.
+ * Class to encapsulate a simulation thread. Includes the necessary synchronization and callbacks to coordinate with an application UI
+ * thread.
  * </p>
  * 
  * <p>
- * This class is generic and can be used for any type of simulation: it can be used with any simulation object that
- * implements the SimulationTimeStep interface.
+ * This class is generic and can be used for any type of simulation: it can be used with any simulation object that implements the
+ * SimulationTimeStep interface.
  * </p>
  * 
  */
@@ -250,19 +252,18 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * <p>
-     * Main thread loop. During the loop <code>timeStep(dt, simulationTime, iterationCount)</code> is called for the
-     * simulation object. Typically the simulation object is an iterable collection of elements, each with their own
-     * timestep method.
+     * Main thread loop. During the loop <code>timeStep(dt, simulationTime, iterationCount)</code> is called for the simulation object.
+     * Typically the simulation object is an iterable collection of elements, each with their own timestep method.
      * </p>
      * 
      * <p>
-     * This method must be synchronized (using <code>dataLock</code>) (normally with the <code>drawForeground</code>
-     * method), so that elements are not updated, added or removed from the simulation while they are being drawn.
+     * This method must be synchronized (using <code>dataLock</code>) (normally with the <code>drawForeground</code> method), so that
+     * elements are not updated, added or removed from the simulation while they are being drawn.
      * </p>
      * 
      * <p>
-     * <code>updateStatus(simulationTime)</code> is called after the simulation object has been updated to allow the
-     * application to make updates before the repaint is called.
+     * <code>updateStatus(simulationTime)</code> is called after the simulation object has been updated to allow the application to make
+     * updates before the repaint is called.
      * </p>
      * 
      */
@@ -276,6 +277,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
                 if (completionCallback != null) {
                     completionCallback.simulationComplete(simulationTime);
                 }
+                ShutdownHooks.INSTANCE.onShutDown();
                 break;
             }
             try {
@@ -291,11 +293,13 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
                 try {
                     simulation.timeStep(dt, simulationTime, iterationCount);
                 } catch (final Exception e) {
+                    ShutdownHooks.INSTANCE.onShutDown();
                     if (handleExceptionCallback != null) {
                         handleExceptionCallback.handleException(e);
                     }
                     e.printStackTrace();
                 }
+
                 for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
                     updateStatusCallback.updateStatus(simulationTime);
                 }

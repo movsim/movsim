@@ -45,18 +45,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
-/**
- * The Class FileUtils.
- */
-public class FileUtils {
+public final class FileUtils {
 
     private static Logger LOG = LoggerFactory.getLogger(FileUtils.class);
+
+    private FileUtils() {
+        throw new IllegalStateException("do not instanciate");
+    }
 
     /**
      * Searches a file first in given location {@code filename} and second in path of the inputfile.
      * 
-     * @param filename
-     * @return the file if it exists
      * @throws IllegalArgumentException
      */
     public static File lookupFilename(String filename) throws IllegalArgumentException {
@@ -115,25 +114,6 @@ public class FileUtils {
         return System.getProperty("user.dir");
     }
 
-    // /**
-    // * Home directory.
-    // *
-    // * @return the string
-    // */
-    // public static String homeDirectory() {
-    // final String home = System.getProperty("user.home");
-    // // if (home.equalsIgnoreCase("?")) {
-    // // }
-    // return home;
-    // }
-
-    /**
-     * File exists.
-     * 
-     * @param filename
-     *            the filename
-     * @return true, if successful
-     */
     public static boolean fileExists(String filename) {
         final File file = new File(filename);
         if (file.exists() && file.isFile()) {
@@ -143,15 +123,6 @@ public class FileUtils {
         return (false);
     }
 
-    /**
-     * Dir exists. check if directory exists (in fact the same as file)
-     * 
-     * @param path
-     *            the path
-     * @param msg
-     *            the additional message
-     * @return true, if successful
-     */
     public static boolean dirExists(String path, String msg) {
         final File file = new File(path);
         if (file.exists() && file.isDirectory()) {
@@ -161,14 +132,6 @@ public class FileUtils {
         return (false);
     }
 
-    /**
-     * Creates the directory, if it does not exit already. Elsewise, does nothing.
-     * 
-     * @param path
-     *            the path
-     * @param msg
-     *            the msg
-     */
     public static void createDir(String path, String msg) {
         final File file = new File(path);
         if (dirExists(path, msg)) {
@@ -181,14 +144,6 @@ public class FileUtils {
         }
     }
 
-    /**
-     * Delete file.
-     * 
-     * @param filename
-     *            the filename
-     * @param msg
-     *            the msg
-     */
     public static void deleteFile(String filename, String msg) {
         final File file = new File(filename);
         if (file.exists()) {
@@ -200,14 +155,6 @@ public class FileUtils {
         }
     }
 
-    /**
-     * Deletes all files and subdirectories under dir.
-     * 
-     * @param dir
-     *            the dir
-     * @return true, if all deletions were successful. If a deletion fails, the method stops attempting to delete and
-     *         returns false.
-     */
     private static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             final String[] children = dir.list();
@@ -221,12 +168,6 @@ public class FileUtils {
         return dir.delete();
     }
 
-    /**
-     * Delete dir.
-     * 
-     * @param dirName
-     *            the dir name
-     */
     public static void deleteDir(String dirName) {
         if (!dirExists(dirName, "FileUtils...deleteDir...")) {
             return;
@@ -238,15 +179,6 @@ public class FileUtils {
         }
     }
 
-    /**
-     * Gets the file list.
-     * 
-     * @param path
-     *            the path
-     * @param regexExpression
-     *            the regexExpression
-     * @return the file list
-     */
     public static String[] getFileList(String path, String regex) {
         final File dir = new File(path);
 
@@ -276,14 +208,6 @@ public class FileUtils {
         return (fileNames);
     }
 
-    /**
-     * Delete file list.
-     * 
-     * @param path
-     *            the path
-     * @param regexExpression
-     *            the regexExpression
-     */
     public static void deleteFileList(String path, String regex) {
         final String[] files = getFileList(path + File.separator, regex);
         for (int i = 0; i < files.length; i++) {
@@ -294,14 +218,6 @@ public class FileUtils {
         }
     }
 
-    /**
-     * Write stream to file.
-     * 
-     * @param filename
-     *            the filename
-     * @param is
-     *            the is
-     */
     public static void writeStreamToFile(String filename, InputStream is) {
         final PrintWriter writer = getWriter(filename);
         try {
@@ -316,14 +232,6 @@ public class FileUtils {
         writer.close();
     }
 
-    /**
-     * Resource to file.
-     * 
-     * @param res
-     *            the res
-     * @param filename
-     *            the filename
-     */
     public static void resourceToFile(final InputStream resourceAsStream, String filename) {
         try {
             if (resourceAsStream == null) {
@@ -346,13 +254,6 @@ public class FileUtils {
         }
     }
 
-    /**
-     * Gets the inputsource from filename.
-     * 
-     * @param filename
-     *            the filename
-     * @return the input
-     */
     public static InputSource getInputSourceFromFilename(String filename) {
         final File inputFile = new File(filename);
         return getInputSourceFromFilename(inputFile);
@@ -390,10 +291,6 @@ public class FileUtils {
         return string;
     }
 
-    /**
-     * @param outputPath
-     * @return
-     */
     public static String getCanonicalPath(String outputPath) {
         final File file = new File(outputPath);
         String path = null;

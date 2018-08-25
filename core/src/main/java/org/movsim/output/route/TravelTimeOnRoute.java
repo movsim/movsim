@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,8 +25,15 @@
  */
 package org.movsim.output.route;
 
+import java.util.EnumMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import org.movsim.autogen.TravelTimes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadNetworkUtils;
+import org.movsim.simulator.roadnetwork.RoadNetworkUtils.TravelTimeType;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.utilities.ExponentialMovingAverage;
 import org.slf4j.Logger;
@@ -35,70 +42,76 @@ import org.slf4j.LoggerFactory;
 public class TravelTimeOnRoute extends OutputOnRouteBase {
 
     /** The Constant LOG. */
-    final static Logger logger = LoggerFactory.getLogger(TravelTimeOnRoute.class);
+    final static Logger LOG = LoggerFactory.getLogger(TravelTimeOnRoute.class);
 
     private final double tauEMA;
 
     private final double beta;
 
-    private final FileTravelTimeOnRoute fileWriter;
-
-    private double instantaneousTravelTime;
-
-    private double totalTravelTime;
-
-    private double meanSpeed;
-
-    private double instTravelTimeEMA;
-    
-    private int numberOfVehicles;
+    private final Map<TravelTimeType, TravelTime> travelTimes = new EnumMap<>(TravelTimeType.class);
 
     public TravelTimeOnRoute(double simulationTimestep, TravelTimes travelTimeInput, RoadNetwork roadNetwork,
             Route route, boolean writeOutput) {
         super(roadNetwork, route);
         this.tauEMA = travelTimeInput.getTauEMA();
         this.beta = Math.exp(-simulationTimestep / tauEMA);
-        fileWriter = writeOutput ? new FileTravelTimeOnRoute(travelTimeInput.getDt(), route) : null;
-        totalTravelTime = 0;
+        for (TravelTimeType type : TravelTimeType.values()) {
+            FileTravelTimeOnRoute writer = writeOutput
+                    ? new FileTravelTimeOnRoute(travelTimeInput.getDt(), route, type.toString().toLowerCase()) : null;
+            travelTimes.put(type, new TravelTime(writer));
+        }
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-
-        numberOfVehicles = RoadNetwork.vehicleCount(route) - roadNetwork.obstacleCount(route);
-        
-        instantaneousTravelTime = RoadNetwork.instantaneousTravelTime(route);
-
-        totalTravelTime += instantaneousTravelTime;
-
-        meanSpeed = route.getLength() / instantaneousTravelTime;
-
-        instTravelTimeEMA = (simulationTime == 0) ? instantaneousTravelTime : ExponentialMovingAverage.calc(
-                instantaneousTravelTime, instTravelTimeEMA, beta);
-
-        if (fileWriter != null) {
-            fileWriter.write(simulationTime, this);
+        int numberOfVehicles = Math.max(0, RoadNetworkUtils.vehicleCount(route) - roadNetwork.obstacleCount(route));
+        for (TravelTimeType type : TravelTimeType.values()) {
+            TravelTime tt = travelTimes.get(type);
+            tt.numberOfVehicles = numberOfVehicles;
+            tt.instantaneousTravelTime = RoadNetworkUtils.instantaneousTravelTime(route, type);
+            tt.totalTravelTime += dt * numberOfVehicles;
+            tt.meanSpeed = route.getLength() / tt.instantaneousTravelTime;
+            tt.instTravelTimeEMA = (simulationTime == 0) ? tt.instantaneousTravelTime
+                    : ExponentialMovingAverage.calc(tt.instantaneousTravelTime, tt.instTravelTimeEMA, beta);
+            if (tt.fileWriter != null) {
+                tt.fileWriter.write(simulationTime, tt);
+            }
         }
     }
 
-    public double getInstantaneousTravelTime() {
-        return instantaneousTravelTime;
-    }
+    public static final class TravelTime {
+        private double instantaneousTravelTime;
+        private double totalTravelTime;
+        private double meanSpeed;
+        private double instTravelTimeEMA;
+        private int numberOfVehicles;
 
-    public double getMeanSpeed() {
-        return meanSpeed;
-    }
+        private final FileTravelTimeOnRoute fileWriter;
 
-    public double getInstantaneousTravelTimeEMA() {
-        return instTravelTimeEMA;
-    }
+        public TravelTime(@Nullable FileTravelTimeOnRoute fileWriter) {
+            this.fileWriter = fileWriter;
+        }
 
-    public double getTotalTravelTime() {
-        return totalTravelTime;
-    }
+        public double getInstantaneousTravelTime() {
+            return instantaneousTravelTime;
+        }
 
-    public int getNumberOfVehicles() {
-        return numberOfVehicles;
+        public double getMeanSpeed() {
+            return meanSpeed;
+        }
+
+        public double getInstantaneousTravelTimeEMA() {
+            return instTravelTimeEMA;
+        }
+
+        public double getTotalTravelTime() {
+            return totalTravelTime;
+        }
+
+        public int getNumberOfVehicles() {
+            return numberOfVehicles;
+        }
+
     }
 
 }

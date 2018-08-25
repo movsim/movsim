@@ -26,14 +26,34 @@ import org.slf4j.LoggerFactory;
 public final class ModelParameters {
 
     /** The Constant LOG. */
-    private static final Logger logger = LoggerFactory.getLogger(ModelParameters.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ModelParameters.class);
 
     public static void test() {
         ModelParameterIDM modelParameterIDM = new ModelParameterIDM();
         modelParameterIDM.isSetB();
 
         // IDM idm = new IDM(ModelParameterIDM);
-
+    }
+    
+    /**
+     * Returns the model parameter 'desired timegap' if provided by the model. Otherwise the default value is provided.
+     * 
+     * @param longModel
+     * @param defaultValue
+     * @return the timegap parameter if supported by model or the default value
+     */
+    public static double determineTimeGapParmeter(LongitudinalModelBase longModel, double defaultValue) {
+        if (longModel instanceof IDM) {
+            return ((IDM) longModel).getParameter().getT();
+        } else if (longModel instanceof ACC) {
+            return ((ACC) longModel).getParameter().getT();
+        } else if (longModel instanceof OVM_FVDM) {
+            return ((OVM_FVDM) longModel).getParameter().getTau();
+        } else if (longModel instanceof Gipps) {
+            return ((Gipps) longModel).getParameterT();
+        }
+        // TODO check if a useful time gap value can be derived/approximated
+        return defaultValue;
     }
 
     public static ModelParameterIDM getDefaultModelParameterIDM() {
@@ -63,7 +83,6 @@ public final class ModelParameters {
         return param.getS0() >= 0;
     }
 
-
     private static boolean isValidProbabilityRange(double p) {
         return p >= 0 && p <= 1;
     }
@@ -81,7 +100,7 @@ public final class ModelParameters {
         }
         return true;
     }
-    
+
     public static boolean isValidParameters(IModelParameterIDM param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param) || param.getT() <= 0 || param.getS1() < 0
                 || param.getDelta() <= 0 || param.getA() <= 0 || param.getB() <= 0) {
@@ -111,7 +130,6 @@ public final class ModelParameters {
         }
         return true;
     }
-
 
     public static boolean isValidParameter(IModelParameterNewell param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param)) {

@@ -1,26 +1,12 @@
 /*
- * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- * <movsim.org@gmail.com>
- * -----------------------------------------------------------------------------------------
- * 
- * This file is part of
- * 
- * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with MovSim. If not, see <http://www.gnu.org/licenses/>
- * or <http://www.movsim.org>.
- * 
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <movsim.org@gmail.com>
+ * ----------------------------------------------------------------------------------------- This file is part of MovSim - the
+ * multi-model open-source vehicular-traffic simulator. MovSim is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version. MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details. You should have received a copy of the GNU General Public License along with MovSim. If not, see
+ * <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * -----------------------------------------------------------------------------------------
  */
 package org.movsim.input;
@@ -32,12 +18,11 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
 
+import com.google.common.base.Preconditions;
+
 /**
- * Container for some shared information. Singleton pattern.
- * 
- * <br>
+ * Container for some shared information. Singleton pattern. <br>
  * created: Mar 9, 2013<br>
- * 
  */
 // TODO this class deperately needs a throughout refactoring !!!
 public final class ProjectMetaData {
@@ -51,22 +36,30 @@ public final class ProjectMetaData {
     private static ProjectMetaData singleton = new ProjectMetaData();
 
     private String projectName;
+
     private String pathToProjectXmlFile;
+
     private String outputPath;
+
     private String xodrNetworkFilename;
+
     private String xodrPath;
 
     private String consumptionFilename;
+
     private String consumptionPath;
 
     private boolean instantaneousFileOutput = true;
-    // private boolean onlyValidation = false;
+
+    private boolean writeDotFile = false;
+
+    private boolean scanMode = false;
 
     private long timeOffsetMillis = 0;
 
     /**
-     * Needed for Applet. Change to true, if you cannot access the file system.
-     * Allows to read the config files from resources instead.
+     * Needed for Applet. Change to true, if you cannot access the file system. Allows to read the config files from resources
+     * instead.
      */
     private boolean xmlFromResources = false;
 
@@ -76,18 +69,18 @@ public final class ProjectMetaData {
     private boolean parseFromInputstream = false;
 
     private InputStream movsimXml;
+
     private InputStream networkXml;
+
     private InputStream projectProperties;
 
     /**
      * private constructor: singleton pattern.
      */
-    private ProjectMetaData() {
-    }
+    private ProjectMetaData() {}
 
     /**
      * Gets the single instance of ProjectMetaData.
-     * 
      * @return single instance of ProjectMetaData
      */
     public static ProjectMetaData getInstance() {
@@ -107,9 +100,7 @@ public final class ProjectMetaData {
 
     /**
      * Sets the project name.
-     * 
-     * @param projectName
-     *            the new project name
+     * @param projectName the new project name
      */
     public void setProjectName(String projectName) {
         System.out.println("projectname = " + projectName);
@@ -130,9 +121,7 @@ public final class ProjectMetaData {
 
     /**
      * Sets the path to project xml file.
-     * 
-     * @param pathToProjectXmlFile
-     *            the new path to project xml file
+     * @param pathToProjectXmlFile the new path to project xml file
      */
     public void setPathToProjectXmlFile(String pathToProjectXmlFile) {
         this.pathToProjectXmlFile = pathToProjectXmlFile;
@@ -151,9 +140,7 @@ public final class ProjectMetaData {
 
     /**
      * Sets the output path.
-     * 
-     * @param outputPath
-     *            the new output path
+     * @param outputPath the new output path
      */
     public void setOutputPath(String outputPath) {
         this.outputPath = outputPath;
@@ -165,8 +152,7 @@ public final class ProjectMetaData {
 
     public String getXodrNetworkFilename() {
         if (!hasNetworkFilename()) {
-            throw new IllegalStateException(
-                    "network filename not yet set. Check in advance using \"hasNetworkFilename()\"");
+            throw new IllegalStateException("network filename not yet set. Check in advance using \"hasNetworkFilename()\"");
         }
         return xodrNetworkFilename;
     }
@@ -175,23 +161,13 @@ public final class ProjectMetaData {
         this.xodrNetworkFilename = xodrFilename;
     }
 
-    public void setXodrPath(String xodrPath) {
-        this.xodrPath = xodrPath;
-    }
-
-    public String getXodrPath() {
-        return xodrPath;
-    }
-
     public boolean isInstantaneousFileOutput() {
         return instantaneousFileOutput;
     }
 
     /**
      * Sets the instantaneous file output.
-     * 
-     * @param instantaneousFileOutput
-     *            the new instantaneous file output
+     * @param instantaneousFileOutput the new instantaneous file output
      */
     public void setInstantaneousFileOutput(boolean instantaneousFileOutput) {
         this.instantaneousFileOutput = instantaneousFileOutput;
@@ -203,9 +179,7 @@ public final class ProjectMetaData {
 
     /**
      * Sets the xml from resources. Xml config files are read from resources.
-     * 
-     * @param xmlFromResources
-     *            the new xml from resources
+     * @param xmlFromResources the new xml from resources
      */
     public void setXmlFromResources(boolean xmlFromResources) {
         this.xmlFromResources = xmlFromResources;
@@ -219,8 +193,7 @@ public final class ProjectMetaData {
     }
 
     /**
-     * @param parseFromInputstream
-     *            the parseFromInputstream to set
+     * @param parseFromInputstream the parseFromInputstream to set
      */
     public void setParseFromInputstream(boolean parseFromInputstream) {
         this.parseFromInputstream = parseFromInputstream;
@@ -234,8 +207,7 @@ public final class ProjectMetaData {
     }
 
     /**
-     * @param movsimXml
-     *            the movsimXml to set
+     * @param movsimXml the movsimXml to set
      */
     public void setMovsimXml(InputStream movsimXml) {
         this.movsimXml = movsimXml;
@@ -249,8 +221,7 @@ public final class ProjectMetaData {
     }
 
     /**
-     * @param networkXml
-     *            the networkXml to set
+     * @param networkXml the networkXml to set
      */
     public void setNetworkXml(InputStream networkXml) {
         this.networkXml = networkXml;
@@ -264,8 +235,7 @@ public final class ProjectMetaData {
     }
 
     /**
-     * @param projectProperties
-     *            the projectProperties to set
+     * @param projectProperties the projectProperties to set
      */
     public void setProjectProperties(InputStream projectProperties) {
         this.projectProperties = projectProperties;
@@ -321,5 +291,27 @@ public final class ProjectMetaData {
     public String getFormatedTimeWithOffset(double simulationTime) {
         DateTime dateTime = new DateTime(timeOffsetMillis + Math.round(1000 * simulationTime), DateTimeZone.UTC);
         return ISODateTimeFormat.dateTimeNoMillis().print(dateTime);
+    }
+
+    public void setWriteDotFile(boolean writeDotFile) {
+        this.writeDotFile = writeDotFile;
+    }
+
+    public boolean isWriteDotFile() {
+        return writeDotFile;
+    }
+
+    public File getFile(String filename) {
+        Preconditions.checkNotNull(filename);
+        Preconditions.checkArgument(!filename.isEmpty(), "filename=" + filename);
+        return new File(getPathToProjectFile() + filename);
+    }
+    
+    public void setScanMode(boolean scanMode) {
+        this.scanMode = scanMode;
+    }
+
+    public boolean isScanMode() {
+        return scanMode;
     }
 }

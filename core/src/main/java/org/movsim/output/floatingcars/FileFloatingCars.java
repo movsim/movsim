@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -26,9 +26,10 @@
 package org.movsim.output.floatingcars;
 
 import java.io.PrintWriter;
+import java.util.Map;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -42,8 +43,9 @@ import org.slf4j.LoggerFactory;
 
 // TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
 class FileFloatingCars extends FileOutputBase {
+
     /** The Constant LOG. */
-    final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
+    final static Logger LOG = LoggerFactory.getLogger(FileFloatingCars.class);
 
     private static final String extensionFormat = ".car.route_%s.%06d.csv";
     private static final String extensionRegex = "[.]car[.]route_.*[.]\\d+[.]csv";
@@ -52,7 +54,7 @@ class FileFloatingCars extends FileOutputBase {
             + "     t[s],    roadId,      lane,      x[m], totalX[m],    v[m/s],  a[m/s^2],aModel[m/s^2], gap[m],   dv[m/s],distToTL[m],fuelFlow[ml/s],frontVehID,slope[rad]";
 
     // note: number before decimal point is total width of field, not width of integer part
-    private static final String outputFormat = "%10.2f,%10d,%10d,%10.1f,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d,%8.5f%n";
+    private static final String outputFormat = "%10.2f,%10d,%10d,%10.2f,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d,%8.5f%n";
 
     /**
      * Instantiates a new FileFloatingCars.
@@ -72,20 +74,27 @@ class FileFloatingCars extends FileOutputBase {
 
     static void writeHeader(PrintWriter writer, Vehicle vehicle, Route route) {
         writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, vehicle.getId()));
-        writer.println(String.format("%s random fix= %.8f", COMMENT_CHAR, vehicle.getRandomFix()));
-        writer.println(String.format("%s model label  = %s", COMMENT_CHAR, vehicle.getLabel()));
-        writer.println(String.format("%s model category = %s", COMMENT_CHAR, vehicle.getLongitudinalModel().modelName()
-                .getCategory().toString()));
-        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, vehicle.getLongitudinalModel()
-                .modelName().getDetailedName(), vehicle.getLongitudinalModel().modelName().getShortName()));
-        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, vehicle.physicalQuantities()
-                .getLength()));
+        writer.println(String.format("%s random fix = %.8f", COMMENT_CHAR, vehicle.getRandomFix()));
+        writer.println(String.format("%s vehicle type = %s", COMMENT_CHAR, vehicle.type()));
+        writer.println(String.format("%s model label = %s", COMMENT_CHAR, vehicle.getLabel()));
+        if (vehicle.getLongitudinalModel() != null) {
+            writer.println(String.format("%s model category = %s", COMMENT_CHAR, vehicle.getLongitudinalModel()
+                    .modelName().getCategory().toString()));
+            writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, vehicle
+                    .getLongitudinalModel().modelName().getDetailedName(), vehicle.getLongitudinalModel().modelName()
+                    .getShortName()));
+        }
+        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, vehicle
+                .physicalQuantities().getLength()));
         writer.println(String.format("%s position x is defined by vehicle front (on the given road segment)",
                 COMMENT_CHAR));
         writer.println(String.format("%s origin roadsegment id= %d, exit roadsegment id= %d (not set=%d)",
-                COMMENT_CHAR, vehicle.originRoadSegmentId(), vehicle.exitRoadSegmentId(), Vehicle.ROAD_SEGMENT_ID_NOT_SET));
-        writer.println(String.format("%s %s", COMMENT_CHAR, vehicle.getInfoComment()));
+                COMMENT_CHAR, vehicle.originRoadSegmentId(), vehicle.exitRoadSegmentId(),
+                Vehicle.ROAD_SEGMENT_ID_NOT_SET));
         writer.println(String.format("%s %s", COMMENT_CHAR, route.toString()));
+        for (Map.Entry<String, String> entry : vehicle.getUserData()) {
+            writer.println(String.format("%s userData: %s=%s", COMMENT_CHAR, entry.getKey(), entry.getValue()));
+        }
         writer.println(outputHeading);
     }
 
@@ -108,7 +117,8 @@ class FileFloatingCars extends FileOutputBase {
                 physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
                 physicalQuantities.getRelSpeed(frontVeh),
                 physicalQuantities.getxScale() * veh.getDistanceToTrafficlight(),
-                1000 * veh.getActualFuelFlowLiterPerS(), frontVeh == null ? -1 : frontVeh.getVehNumber(),
+                1000 * veh.getEnergyModel().getActualFuelFlowLiterPerS(),
+                frontVeh == null ? -1 : frontVeh.getVehNumber(),
                 veh.getSlope());
         writer.flush();
     }

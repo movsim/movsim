@@ -88,7 +88,7 @@
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="1040.0" y="315.0" hdg="-0.209385" length="408.931535">
+            <geometry s="0.0" x="1040.0" y="280.0" hdg="-0.209385" length="400">
                 <line />
             </geometry>
         </planView>

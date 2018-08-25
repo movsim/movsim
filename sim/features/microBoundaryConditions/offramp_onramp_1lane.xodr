@@ -20,7 +20,7 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R2" length="200.0" id="2" junction="1009">
+    <road name="R2" length="200.0" id="2" junction="-1">
         <link>
             <predecessor elementType="road" elementId="1" contactPoint="end" />
             <successor elementType="junction" elementId="1009" />
@@ -46,13 +46,13 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R3" length="600.0" id="3" junction="-1">
+    <road name="R3" length="560.0" id="3" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
             <successor elementType="road" elementId="5" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1040.0" y="300.0" hdg="0.0" length="600.0">
+            <geometry s="0.0" x="1040.0" y="300.0" hdg="0.0" length="560.0">
                 <line />
             </geometry>
         </planView>
@@ -75,7 +75,7 @@
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="1040.0" y="315.0" hdg="-0.3" length="200">
+            <geometry s="0.0" x="1040.0" y="290.0" hdg="-0.3" length="200">
                 <line />
             </geometry>
         </planView>
@@ -107,35 +107,9 @@
             <laneSection s="0.0">
                 <right>
                     <lane id="-1" type="driving" level="0">
-                        <link>
-                            <predecessor id="-1" />
-                        </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                     <lane id="-2" type="mwyEntry" level="0">
-                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                    </lane>
-                </right>
-            </laneSection>
-        </lanes>
-    </road>
-    
-    <road name="R6" length="600.0" id="6" junction="-1">
-        <link>
-            <predecessor elementType="road" elementId="5" contactPoint="end" />
-        </link>
-        <planView>
-            <geometry s="0.0" x="2000.0" y="300.0" hdg="0.0" length="600.0">
-                <line />
-            </geometry>
-        </planView>
-        <lanes>
-            <laneSection s="0.0">
-                <right>
-                    <lane id="-1" type="driving" level="0">
-                        <link>
-                            <predecessor id="-1" />
-                        </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                 </right>
@@ -148,7 +122,7 @@
             <predecessor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1408.93" y="369.1" hdg="0.3" length="200">
+            <geometry s="0.0" x="1408.93" y="230" hdg="0.3" length="200">
                 <line />
             </geometry>
         </planView>
@@ -162,6 +136,106 @@
             </laneSection>
         </lanes>
     </road>
+    
+    <road name="R6" length="300.0" id="6" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="5" contactPoint="end" />
+            <successor elementType="road" elementId="8" contactPoint="start" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="2000.0" y="300.0" hdg="0.0" length="300.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    
+    <road name="R8" length="200.0" id="8" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="6" contactPoint="start" />
+            <successor elementType="junction" elementId="1008" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="2300.0" y="300.0" hdg="0.0" length="200.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="mwyExit" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R9" length="600.0" id="9" junction="-1">
+        <link>
+            <predecessor elementType="junction" elementId="1008" contactPoint="start" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="2500" y="300.0" hdg="0.0" length="600.0">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <!--<link>
+                            <predecessor id="-1" />
+                        </link>-->
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <road name="R10" length="200" id="10" junction="-1">
+        <link>
+            <predecessor elementType="junction" elementId="1008" contactPoint="start" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="2500.0" y="290.0" hdg="-0.3" length="200">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <!--<link>
+                            <predecessor id="-2" />
+                        </link> -->
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    
+    
+    
     <junction id="15" name="onramp" >
         <connection id="0" incomingRoad="3" connectingRoad="5" contactPoint="start">
             <laneLink from="-1" to="-1" />
@@ -171,11 +245,20 @@
         </connection>
     </junction>
     
-    <junction id="1009" name="offramp">
+    <junction id="1009" name="offramp1">
         <connection id="0" incomingRoad="4" connectingRoad="2" contactPoint="start">
             <laneLink from="-2" to="-1" />
         </connection>
         <connection id="1" incomingRoad="3" connectingRoad="2" contactPoint="start">
+            <laneLink from="-1" to="-1" />
+        </connection>
+    </junction>
+    
+     <junction id="1008" name="offramp2">
+        <connection id="0" incomingRoad="10" connectingRoad="8" contactPoint="start">
+            <laneLink from="-2" to="-1" />
+        </connection>
+        <connection id="1" incomingRoad="9" connectingRoad="8" contactPoint="start">
             <laneLink from="-1" to="-1" />
         </connection>
     </junction>

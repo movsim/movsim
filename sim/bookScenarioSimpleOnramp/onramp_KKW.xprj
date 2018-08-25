@@ -18,21 +18,10 @@
             </TrafficComposition>
             <!-- scaled units for time and space -->
             <Road id="1">
-                <InitialConditions>
-                    <!--                 <MacroIC position="2000" density_per_km_per_km="2" v="3" /> -->
-                </InitialConditions>
                 <TrafficSource logging="true">
                     <Inflow t="0" q_per_hour="100" v="110" />
                     <Inflow t="600" q_per_hour="2000" v="90" />
                 </TrafficSource>
-                <TrafficSink />
-                <!-- improve vehicle performance at inflow -->
-                <FlowConservingInhomogeneities />
-                <!--             <SimpleRampS>
-                <SimpleRamp position="30000" merge_length="1000" logging="true">
-                    <Inflow t="0" q_per_hour="550" />
-                </SimpleRamp>
-            </SimpleRampS> -->
                 <Detectors sample_interval="60" logging="true">
                     <CrossSection position="16000" />
                     <CrossSection position="18000" />
@@ -43,9 +32,6 @@
                 </Detectors>
             </Road>
             <Road id="2">
-                <InitialConditions>
-                    <!--                 <MacroIC position="0" density_per_km_per_km="2" v="30" /> -->
-                </InitialConditions>
                 <SimpleRamp relative_speed="0.5" relative_gap="0.5" logging="true">
                     <Inflow t="0" q_per_hour="550" />
                 </SimpleRamp>
@@ -54,11 +40,6 @@
                     <CrossSection position="1000" />
                     <CrossSection position="2000" />
                 </Detectors>
-            </Road>
-            <Road id="3">
-                <InitialConditions>
-                    <!--                 <MacroIC position="0" density_per_km_per_km="2" v="30" />-->
-                </InitialConditions>
             </Road>
         </Simulation>
         <Routes>

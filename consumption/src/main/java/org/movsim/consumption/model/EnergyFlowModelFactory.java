@@ -33,8 +33,6 @@ public class EnergyFlowModelFactory {
     /**
      * Returns a cached {@link EnergyFlowModel} for the given {@code label} name.
      * 
-     * @param label
-     * @return
      */
     public EnergyFlowModel get(String label) {
         return energyFlowModels.get(label);

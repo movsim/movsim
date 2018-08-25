@@ -1,7 +1,15 @@
-/.settings
-**/.settings/
-/.classpath
-target/
+# ignore Eclipse stuff
+.project
+.settings
+log
+log4j.properties
+*/.project
+*/.settings/
+*/.classpath
+*/test-output
+*/.gitignore
+**/target/
+**/doc/
 bin/
 figs/
 csv/
@@ -19,11 +27,16 @@ Thumbs.db
 *.log.*
 *.eps
 *~
-/.project
-README_compileRun
-README_floatcars
+*.dot
+/.classpath
+# ignore others
 int
-*_highscore.txt
-log
-log4j.properties
-
+*highscore*
+# ignore intellij
+.idea/
+*.iml
+# ignore tmp comments and mails
+README_xprj_addtl
+RoadSegment_Schelp.java
+Vehicle_Schelp.java
+sim/testing/*.txt

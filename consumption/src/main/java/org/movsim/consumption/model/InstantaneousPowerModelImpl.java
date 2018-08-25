@@ -25,26 +25,27 @@
  */
 package org.movsim.consumption.model;
 
+import org.movsim.autogen.VehicleData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class InstantaneousPowerModelImpl implements InstantaneousPowerModel {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(InstantaneousPowerModelImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InstantaneousPowerModelImpl.class);
 
-    private final VehicleAttributes vehicle;
+    private final VehicleData vehicle;
 
-    InstantaneousPowerModelImpl(VehicleAttributes vehicleAttributes) {
+    InstantaneousPowerModelImpl(VehicleData vehicleAttributes) {
         this.vehicle = vehicleAttributes;
     }
 
     @Override
     public double getFreeWheelingDeceleration(double speed) {
         // TODO consider slope gradient
-        return -(ConsumptionConstants.GRAVITATION * vehicle.constantFrictionCoefficient()
-                + ConsumptionConstants.GRAVITATION * vehicle.speedFrictionCoefficient() * speed + vehicle.cwValue()
-                * ConsumptionConstants.RHO_AIR * vehicle.crossSectionSurface() * speed * speed / (2 * vehicle.mass()));
+        return -(ConsumptionConstants.GRAVITATION * vehicle.getConstFriction() + ConsumptionConstants.GRAVITATION
+                * vehicle.getVFriction() * speed + vehicle.getCdValue() * ConsumptionConstants.RHO_AIR
+                * vehicle.getCrossSectionSurface() * speed * speed / (2 * vehicle.getMass()));
     }
 
     @Override
@@ -53,13 +54,12 @@ class InstantaneousPowerModelImpl implements InstantaneousPowerModel {
     }
 
     private double getMechanicalForce(double v, double acc, double slopeGrade) {
-        final double c = vehicle.mass() * ConsumptionConstants.GRAVITATION
-                * (vehicle.constantFrictionCoefficient() + slopeGrade);
-        final double d = vehicle.mass() * ConsumptionConstants.GRAVITATION * vehicle.speedFrictionCoefficient();
-        final double e = 0.5 * ConsumptionConstants.RHO_AIR * vehicle.cwValue() * vehicle.crossSectionSurface();
-        // System.out.println("v=" + v + ", acc=" + acc + ", slope gradient=" + slopeGrade + ", c=" + c + ", d=" + d
-        // + ", e=" + e);
-        return vehicle.mass() * acc + c + d * v + e * v * v;
+        final double c = vehicle.getMass() * ConsumptionConstants.GRAVITATION
+                * (vehicle.getConstFriction() + slopeGrade);
+        final double d = vehicle.getMass() * ConsumptionConstants.GRAVITATION * vehicle.getVFriction();
+        final double e = 0.5 * ConsumptionConstants.RHO_AIR * vehicle.getCdValue() * vehicle.getCrossSectionSurface();
+        LOG.debug("v=" + v + ", acc=" + acc + ", slope gradient=" + slopeGrade + ", c=" + c + ", d=" + d + ", e=" + e);
+        return vehicle.getMass() * acc + c + d * v + e * v * v;
     }
 
 }

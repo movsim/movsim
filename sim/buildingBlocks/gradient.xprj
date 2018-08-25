@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- impact on vehicle acceleration not yet implemented. Impact on fuel consumption already considered! -->
+<!-- TODO: impact of gradient on vehicle acceleration not yet implemented, fuel consumption already considers gradient -->
 <Movsim>
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
@@ -10,7 +10,6 @@
                 <ModelParameterMOBIL safe_deceleration="4.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
-        <!-- trucks -->
         <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="9">
             <AccelerationModelType>
                 <ModelParameterACC v0="25" T="1.2" s0="2" s1="0" delta="4" a="0.8" b="2.0" coolness="1" />
@@ -27,9 +26,8 @@
                 <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
             </TrafficComposition>
             <Road id="1">
-                <InitialConditions />
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="1700" />
+                    <Inflow t="0" q_per_hour="1700" v="20" />
                 </TrafficSource>
                 <Detectors />
             </Road>

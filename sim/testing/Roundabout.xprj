@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<Movsim>
+    <VehiclePrototypes>
+		<!-- Cars 1 -->
+        <VehiclePrototypeConfiguration label="Car1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="13.89" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+		<!-- Cars 2 -->
+        <VehiclePrototypeConfiguration label="Car2" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="13.89" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+		<!-- Cars 3 -->
+        <VehiclePrototypeConfiguration label="Car3" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="13.89" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+		<!-- Cars 4 -->
+        <VehiclePrototypeConfiguration label="Car4" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="13.89" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="Roundabout.xodr">
+        <Simulation timestep="0.2" seed="42" crash_exit="false">
+            <TrafficComposition>
+                 <VehicleType label="Car1" fraction="0.2" relative_v0_randomization="0.2" />
+                     <VehicleType label="Car2" fraction="0.5" relative_v0_randomization="0.2" />
+					  <VehicleType label="Car3" fraction="0.25" relative_v0_randomization="0.2" />
+					 <VehicleType label="Car4" fraction="0.05" relative_v0_randomization="0.2" />
+            </TrafficComposition>
+            <Road id="2">
+                <TrafficComposition>
+                     <VehicleType label="Car1" fraction="0.2" relative_v0_randomization="0.2" route_label="ws" />
+                     <VehicleType label="Car2" fraction="0.5" relative_v0_randomization="0.2" route_label="we" />
+					  <VehicleType label="Car3" fraction="0.25" relative_v0_randomization="0.2" route_label="wn" />
+					 <VehicleType label="Car4" fraction="0.05" relative_v0_randomization="0.2" route_label="ww" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="200" v="13.89" />
+                </TrafficSource>
+            </Road>
+            <Road id="4">
+                <TrafficComposition>
+                     <VehicleType label="Car1" fraction="0.2" relative_v0_randomization="0.2" route_label="se" />
+                     <VehicleType label="Car2" fraction="0.5" relative_v0_randomization="0.2" route_label="sn" />
+					  <VehicleType label="Car3" fraction="0.25" relative_v0_randomization="0.2" route_label="sw" />
+					 <VehicleType label="Car4" fraction="0.05" relative_v0_randomization="0.2" route_label="ss" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="200" v="13.89" />
+                </TrafficSource>
+            </Road>
+			<Road id="6">
+                <TrafficComposition>
+                     <VehicleType label="Car1" fraction="0.2" relative_v0_randomization="0.2" route_label="en" />
+                     <VehicleType label="Car2" fraction="0.5" relative_v0_randomization="0.2" route_label="ew" />
+					  <VehicleType label="Car3" fraction="0.25" relative_v0_randomization="0.2" route_label="es" />
+					 <VehicleType label="Car4" fraction="0.05" relative_v0_randomization="0.2" route_label="ee" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="200" v="13.89" />
+                </TrafficSource>
+            </Road>
+            <Road id="8">
+                <TrafficComposition>
+                     <VehicleType label="Car1" fraction="0.2" relative_v0_randomization="0.2" route_label="nw" />
+                     <VehicleType label="Car2" fraction="0.5" relative_v0_randomization="0.2" route_label="ns" />
+					  <VehicleType label="Car3" fraction="0.25" relative_v0_randomization="0.2" route_label="ne" />
+					 <VehicleType label="Car4" fraction="0.05" relative_v0_randomization="0.2" route_label="nn" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="200" v="13.89" />
+                </TrafficSource>
+            </Road>
+       </Simulation>
+       <Routes>
+			<Route label="ws">
+		    	<Road id="2" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="3" />
+			</Route>
+			<Route label="we">
+		    	<Road id="2" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="32" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="5" />
+			</Route>
+			<Route label="wn">
+		    	<Road id="2" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="32" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="33" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="7" />
+			</Route>
+			<Route label="ww">
+		    	<Road id="2" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="32" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="33" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="34" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="1" />
+			</Route>
+			<Route label="se">
+		    	<Road id="4" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="5" />
+			</Route>
+			<Route label="sn">
+		    	<Road id="4" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="33" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="7" />
+			</Route>
+			<Route label="sw">
+		    	<Road id="4" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="33" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="34" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="1" />
+			</Route>
+			<Route label="ss">
+		    	<Road id="4" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="33" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="34" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="31" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="3" />
+			</Route>
+			<Route label="en">
+		    	<Road id="6" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="7" />
+			</Route>
+			<Route label="ew">
+		    	<Road id="6" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="34" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="1" />
+			</Route>
+			<Route label="es">
+		    	<Road id="6" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="34" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="31" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="3" />
+			</Route>
+			<Route label="ee">
+		    	<Road id="6" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="34" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="31" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="32" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="5" />
+			</Route>
+			<Route label="nw">
+		    	<Road id="8" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="1" />
+			</Route>
+			<Route label="ns">
+		    	<Road id="8" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="31" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="3" />
+			</Route>
+			<Route label="ne">
+		    	<Road id="8" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="31" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="32" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="5" />
+			</Route>
+			<Route label="nn">
+		    	<Road id="8" />
+				<Road id="28" />
+				<Road id="12" />
+				<Road id="21" />
+				<Road id="31" />
+				<Road id="22" />
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="32" />
+				<Road id="24" />
+				<Road id="10" />
+				<Road id="25" />
+				<Road id="33" />
+				<Road id="26" />
+				<Road id="11" />
+				<Road id="27" />
+				<Road id="7" />
+			</Route>
+			<Route label="exit">
+				<Road id="9" />
+				<Road id="23" />
+				<Road id="3" />
+			</Route>
+		</Routes>
+    </Scenario>
+</Movsim>
+
+
+
+	

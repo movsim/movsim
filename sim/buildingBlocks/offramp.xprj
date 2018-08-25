@@ -19,12 +19,6 @@
                 <ModelParameterMOBIL safe_deceleration="4.0" minimum_gap="2.0" threshold_acceleration="0.2" right_bias_acceleration="0.3" politeness="0.1" />
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
-        <VehiclePrototypeConfiguration label="Obstacle" length="0">
-            <AccelerationModelType>
-                <ModelParameterIDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-            </AccelerationModelType>
-            <LaneChangeModelType />
-        </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
     <Scenario network_filename="offramp.xodr">
         <Simulation timestep="0.2" seed="42" crash_exit="false">
@@ -34,7 +28,7 @@
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="1200" />
+                    <Inflow t="0" q_per_hour="1200" v="20" />
                 </TrafficSource>
             </Road>
         </Simulation>

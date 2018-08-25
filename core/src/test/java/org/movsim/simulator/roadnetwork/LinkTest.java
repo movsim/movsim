@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -37,33 +37,13 @@ import org.movsim.roadmappings.RoadMapping;
 @SuppressWarnings("static-method")
 public class LinkTest {
 
-    protected static class RoadMappingConcrete extends RoadMapping {
-        public RoadMappingConcrete(int laneCount) {
-            super(laneCount, 0, 0);
-        }
-
-        public RoadMappingConcrete(int laneCount, double roadLength) {
-            this(laneCount);
-            this.roadLength = roadLength;
-        }
-
-        @Override
-        public RoadMappingConcrete.PosTheta map(double roadPos, double delta) {
-            return posTheta;
-        }
-    }
-
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addLanePair(int, org.movsim.simulator.roadnetwork.RoadSegment, int, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddLanePair() {
         final int laneCount = 1;
         final double roadLength = 1000.0;
-        final RoadMapping m = new RoadMappingConcrete(laneCount, roadLength);
-        final RoadSegment r1 = new RoadSegment(m);
-        final RoadSegment r2 = new RoadSegment(m);
+        final RoadMapping m = RoadMappingConcrete.create(laneCount, roadLength);
+        final RoadSegment r1 = new RoadSegment(roadLength, laneCount, m, RoadSegmentDirection.FORWARD);
+        final RoadSegment r2 = new RoadSegment(roadLength, laneCount, m, RoadSegmentDirection.FORWARD);
 
         Link.addLanePair(Lanes.LANE1, r1, Lanes.LANE1, r2);
 
@@ -73,10 +53,6 @@ public class LinkTest {
         assertEquals(Lanes.LANE1, r2.sourceLane(Lanes.LANE1));
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addJoin(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddJoin() {
         final int laneCount = 2;
@@ -95,21 +71,17 @@ public class LinkTest {
         assertEquals(Lanes.LANE2, r2.sourceLane(Lanes.LANE2));
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addOffsetJoin(int, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddOffsetJoin() {
         final int laneCount = 2;
         final int offset = 1;
-        final RoadMapping m1 = new RoadMappingConcrete(laneCount, 1000.0);
-        final RoadSegment r1 = new RoadSegment(m1);
-        final RoadMapping m2 = new RoadMappingConcrete(laneCount + offset, 1000.0);
-        final RoadSegment r2 = new RoadSegment(m2);
+        final RoadMapping m1 = RoadMappingConcrete.create(laneCount, 1000.0);
+        final RoadSegment r1 = new RoadSegment(m1.roadLength(), laneCount, m1, RoadSegmentDirection.FORWARD);
+        final RoadMapping m2 = RoadMappingConcrete.create(laneCount + offset, 1000.0);
+        final RoadSegment r2 = new RoadSegment(m2.roadLength(), laneCount + offset, m2, RoadSegmentDirection.FORWARD);
         r2.setLaneType(Lanes.LANE3, Lanes.Type.ENTRANCE);
-        final RoadMapping m3 = new RoadMappingConcrete(laneCount, 1000.0);
-        final RoadSegment r3 = new RoadSegment(m3);
+        final RoadMapping m3 = RoadMappingConcrete.create(laneCount, 1000.0);
+        final RoadSegment r3 = new RoadSegment(m3.roadLength(), laneCount, m3, RoadSegmentDirection.FORWARD);
         Link.addJoin(r1, r2);
 
         assertEquals(r2, r1.sinkRoadSegment(Lanes.LANE1));
@@ -132,10 +104,6 @@ public class LinkTest {
         assertEquals(Lanes.LANE2, r3.sourceLane(Lanes.LANE2));
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addMerge(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddMerge() {
         final int laneCount = 2;
@@ -160,12 +128,8 @@ public class LinkTest {
         assertEquals(Lanes.LANE2, r1.sourceLane(Lanes.LANE2));
     }
 
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.Link#addFork(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
-     */
     @Test
     public final void testAddFork() {
-        //fail("Not yet implemented"); //$NON-NLS-1$
+        // fail("Not yet implemented"); //$NON-NLS-1$
     }
 }

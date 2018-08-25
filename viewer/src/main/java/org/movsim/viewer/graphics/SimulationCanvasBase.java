@@ -1,26 +1,26 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
- * 
+ *
  * This file is part of
- * 
+ *
  * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
+ *
  * MovSim is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * MovSim is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with MovSim. If not, see <http://www.gnu.org/licenses/>
  * or <http://www.movsim.org>.
- * 
+ *
  * -----------------------------------------------------------------------------------------
  */
 
@@ -39,7 +39,7 @@ import org.movsim.simulator.SimulationRunnable;
  * <p>
  * Simulation canvas abstract base class. Contains the SimulationRunnable which runs the simulation in a separate thread.
  * </p>
- * 
+ *
  * <p>
  * This base class handles:
  * <ul>
@@ -48,17 +48,15 @@ import org.movsim.simulator.SimulationRunnable;
  * <li>Zooming and panning.</li>
  * </ul>
  * </p>
- * 
+ *
  * <p>
  * That is the base class handles the "policy free" aspects of the view. Other aspects of the view (colors, setting up the simulation,
  * drawing the foreground and background) are deferred to a subclass.
  * </p>
- * 
- * 
  */
 public abstract class SimulationCanvasBase extends Canvas {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3351170249194920665L;
 
     private static final double FORCE_REPAINT_BACKGROUND_INTERVAL = 60.0; // seconds;
 
@@ -73,6 +71,8 @@ public abstract class SimulationCanvasBase extends Canvas {
     protected boolean backgroundChanged;
     // default background color
     protected Color backgroundColor;
+    // optional background picture
+    protected String backgroundPicturePath;
     // scale factor pixels/m, smaller value means a smaller looking view
     double scale;
     int xOffset = 0;
@@ -102,7 +102,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     /**
      * Abstract function to allow the view to draw the simulation background, normally this is everything that does not move.
-     * 
+     *
      * @param g
      */
     protected abstract void drawBackground(Graphics2D g);
@@ -114,13 +114,12 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     /**
      * Constructor, set the simulation.
-     * 
+     *
      * @param simulationRunnable
      */
     public SimulationCanvasBase(SimulationRunnable simulationRunnable) {
         assert simulationRunnable != null;
         this.simulationRunnable = simulationRunnable;
-
     }
 
     public void reset() {
@@ -128,19 +127,16 @@ public abstract class SimulationCanvasBase extends Canvas {
         simulationRunnable.reset();
     }
 
-    public abstract void resetScaleAndOffset(); 
+    public abstract void resetScaleAndOffset();
 
     protected void setTransform() {
         transform.setToIdentity();
         transform.scale(scale, scale);
         transform.translate(xOffset, yOffset);
-        // transform is applied as below (ie scale then offset):
-        // xScreen = x * scale + xOffset;
     }
 
     @Override
     public void setSize(int newWidth, int newHeight) {
-        // TODO assert isDisplayable();
         if (!isDisplayable()) {
             return;
         }
@@ -197,7 +193,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     /**
      * Application-triggered painting. <code>update()</code> is asynchronously triggered by a previous call to <code>repaint()</code>.
-     * 
+     *
      * @param g
      */
     @Override
@@ -208,27 +204,27 @@ public abstract class SimulationCanvasBase extends Canvas {
             clearBackground(bufferGraphics);
         }
         bufferGraphics.setTransform(transform);
-        
+
         if (backgroundChanged) {
             // if the background has been changed, then its content needs to be repainted
             drawBackground(bufferGraphics);
             backgroundChanged = false;
         }
-        
+
         // update background (for outflow) every e.g. 60 seconds of simulation
         measuredTime += simulationRunnable.timeStep();
         if (measuredTime > FORCE_REPAINT_BACKGROUND_INTERVAL) {
             forceRepaintBackground();
             measuredTime = 0;
         }
-        
+
         drawForegroundAndBlit(g);
     }
 
     /**
      * System-triggered painting. <code>paint()</code> is called if any part of the window becomes invalid; for example it has been
      * obscured, or it has been resized.
-     * 
+     *
      * @param g
      */
     @Override
@@ -246,7 +242,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     /**
      * Draw the foreground and blit it to the screen.
-     * 
+     *
      * @param g
      */
     private void drawForegroundAndBlit(Graphics g) {
@@ -263,7 +259,7 @@ public abstract class SimulationCanvasBase extends Canvas {
     /**
      * Clear the view background. Default implementation just fills the background with the background color. May be overridden by a
      * subclass if required.
-     * 
+     *
      * @param g
      */
     protected void clearBackground(Graphics2D g) {
@@ -277,7 +273,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     /**
      * Set the thread sleep time. This controls the animation speed.
-     * 
+     *
      * @param sleepTime_ms
      *            sleep time in milliseconds
      */
@@ -287,7 +283,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     /**
      * Returns the thread sleep time
-     * 
+     *
      * @return the sleep time in milliseconds
      */
     public final int sleepTime() {
@@ -298,12 +294,12 @@ public abstract class SimulationCanvasBase extends Canvas {
      * <p>
      * Returns the time for which the simulation has been running.
      * </p>
-     * 
+     *
      * <p>
      * This is the logical time in the simulation (that is the sum of the timesteps), not the amount of real time that has been required to
      * do the simulation calculations.
      * </p>
-     * 
+     *
      * @return the simulation time
      */
     public final double simulationTime() {
@@ -316,6 +312,10 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public void setBackgroundPicturePath(String backgroundPicturePath) {
+        this.backgroundPicturePath = backgroundPicturePath;
     }
 
     /**
@@ -335,7 +335,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     /**
      * Returns true if the animation is stopped.
-     * 
+     *
      * @return true if the animation is stopped
      */
     public final boolean isStopped() {
@@ -352,7 +352,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     /**
      * Returns true if the simulation is paused.
-     * 
+     *
      * @return true if the simulation is paused
      */
     public final boolean isPaused() {

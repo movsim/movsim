@@ -1,0 +1,162 @@
+# gnuplot command file
+
+# parameterised fundamental diagrams command file
+# invoke using -e option to set parameters, eg:
+# gnuplot -e "ldm='IDM'" fund_diagrams.gpl
+
+set datafile separator ","
+
+if (!exists("project")) project="fund_diagram"
+if (!exists("ldm")) ldm = "IDM"
+
+# variables
+
+str_sfix="s=20m=const."
+str_dvfix="{/Symbol D}v=0m/s=const."
+str_vfix="v=20m/s=const."
+str_vleadfix="v_{leader}=20m/s=const."
+
+# range for relative speed
+dvMin=-8
+dvMax=15
+
+a=2.
+b=2.0
+bmax=20.
+
+function="_acc_"
+
+scan_const_s="v_dv"
+scan_const_dv="v_s"
+scan_const_v="dv_s"
+scan_const_vlead="dv_s_lead"
+
+#################################################
+set datafile separator ","
+
+# set the output type
+#set terminal postscript eps enhanced color solid font "Helvetica" 26
+set terminal pngcairo size 1024,768 enhanced font 'Verdana,24'
+
+ending=".csv"
+outputEnding=".png"
+#outputEnding=".eps"
+
+
+set nokey
+set size 1,1
+
+#set style line 99 lt 6 lw 3 # yellow
+#set style line 99 lt 7 lw 3 # black
+
+set style line 99 lt -1 lw 1 # black
+
+set pm3d; set pm3d map                     # color coded 3d surface
+set contour surface      # Aktiviert Kontourlinien auf 3D-Flaeche
+set cntrparam bspline
+
+# steady-state with denser contours
+set cntrparam levels discrete -3,-2.8,-2.6,-2.4,-2.2,-2.0,-1.8,-1.6,-1.4,-1.2,-1.0,-0.8,-0.6,-0.4,-0.2,-0.02,-0.015,-0.01,-0.005,0,3,2.8,2.6,2.4,2.2,2.0,1.8,1.6,1.4,1.2,1.0,0.8,0.6,0.4,0.2,0.02,0.015,0.01,0.005
+
+
+bred=4 # (critical) decel for color "red"
+colPercent(acc)=100*(acc+bmax)/(a+bmax)
+set palette defined (0 "#2200cc", colPercent(-0.5*(bred+bmax)) "#8800aa",\
+     colPercent(-bred) "red",\
+     colPercent(-b) "orange", colPercent(0) "yellow",\
+     colPercent(0.5*a) "green", 100 "#008866")
+
+unset clabel
+unset surface      # pm3d off: kein Gitternetz gemacht
+                            # pm3d on: Schnelles Plotten mit/ohne Netz
+                            # (je nach pm3d Einstellung) mit Artefakten
+set nogrid    # sonst Bug: durchscheinendes Koordinatengitter
+set isosamples 50,50
+set noparam
+set zlabel ""
+
+
+set cbrange [-bmax:a]  #[min:max] of color-coded  range 
+set auto z
+
+set label 1 at screen 0.72,0.91
+set label 1 "dv/dt (m/s^2)"
+
+
+#####################################################
+# Plots as a function of s and v for fixed dv
+#####################################################
+
+set title ldm." ".str_dvfix
+
+set xlabel "v (m/s)"
+set ylabel "s (m)"
+
+inputFile=project."_".ldm.function.scan_const_dv.ending
+print "inputFile=",inputFile
+
+outputFile=project."_".ldm.function.scan_const_dv.outputEnding
+print "outputFile=",outputFile
+set out outputFile
+
+splot inputFile u 2:1:4 w l ls 99
+
+#####################################################
+# Plots as a function of ds and s for fixed v
+#####################################################
+
+set xrange [dvMin:dvMax]
+set title ldm." ".str_vfix
+
+set xlabel "{/Symbol D}v (m/s)"
+set ylabel "s (m)"
+
+inputFile=project."_".ldm.function.scan_const_v.ending
+print "inputFile=",inputFile
+
+outputFile=project."_".ldm.function.scan_const_v.outputEnding
+print "outputFile=",outputFile
+set out outputFile
+
+splot inputFile u 3:1:4 w l ls 99
+
+#####################################################
+# Plots as a function of ds and s for fixed v
+#####################################################
+
+set xrange [dvMin:dvMax]
+set title ldm." ".str_vleadfix
+
+set xlabel "{/Symbol D}v (m/s)"
+set ylabel "s (m)"
+
+inputFile=project."_".ldm.function.scan_const_vlead.ending
+print "inputFile=",inputFile
+
+outputFile=project."_".ldm.function.scan_const_vlead.outputEnding
+print "outputFile=",outputFile
+set out outputFile
+
+splot inputFile u 3:1:4 w l ls 99
+
+#####################################################
+# Plots as a function of dv and v for fixed s
+#####################################################
+
+set autoscale x
+set yrange [dvMin:dvMax]
+set title ldm." ".str_sfix
+
+set xlabel "v (m/s)"
+set ylabel "{/Symbol D}v (m/s)"
+
+inputFile=project."_".ldm.function.scan_const_s.ending
+print "inputFile=",inputFile
+
+outputFile=project."_".ldm.function.scan_const_s.outputEnding
+print "outputFile=",outputFile
+set out outputFile
+
+splot inputFile u 2:3:4 w l ls 99
+
+

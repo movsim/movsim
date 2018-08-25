@@ -25,7 +25,7 @@ outputFileEnding=".eps"
 
 gpsInput="-GPS"
 canInput="-CAN"
-modelOutput="-MODEL_".consumptionModelName
+modelOutput="-GPS_".consumptionModelName
 specCons=".specCons_"
 
 # input files
@@ -88,13 +88,13 @@ plot\
 set out speedCompareOutput
 print "plot ".speedCompareOutput
 plot\
-  modelFile u ($2/60.):($4*3.6) t "MODEL speed [km/h]" w p ls 1,\
+  modelFile u ($2/60.):($6*3.6) t "MODEL speed [km/h]" w p ls 1,\
   gpsFile u ($30/60.):12 t "GPS speed [km/h]" w p ls 2
 
 set out accCompareOutput
 print "plot ".accCompareOutput
 plot\
-  modelFile u ($2/60.):5 t "MODEL acceleration [m/s^2]" w p ls 1,\
+  modelFile u ($2/60.):7 t "MODEL acceleration [m/s^2]" w p ls 1,\
   gpsFile u ($30/60.):26 t "GPS acceleration [m/s^2]" w p ls 2
 
 
@@ -135,9 +135,9 @@ set ylabel "Model Quantities"
 set out fuelModelOutput
 print "plot ".fuelModelOutput
 plot\
-  modelFile u ($1/60.):($7*3600*10) t "10*consumption [l/h]" w l ls 4,\
-  modelFile u ($1/60.):(fuel100($7*3600,$4*3.6)) t "consumption [l/100km]" w l ls 5,\
-  modelFile u ($1/60.):($9*10) t "10*gear" w l ls 6
+  modelFile u ($1/60.):($9*3600*10) t "10*consumption [l/h]" w l ls 4,\
+  modelFile u ($1/60.):(fuel100($9*3600,$6*3.6)) t "consumption [l/100km]" w l ls 5,\
+  modelFile u ($1/60.):($11*10) t "10*gear" w l ls 6
 
 set key left
 set ylabel "Cumulated Consumption (liter)"
@@ -145,7 +145,7 @@ set out fuelCompareOutput
 print "plot ".fuelCompareOutput
 plot\
   canFile u ($2/60.):20 t "CAN data" w l ls 1,\
-  modelFile u ($3/60.):8 t "model" w l ls 3
+  modelFile u ($1/60.):10 t "model" w l ls 3
 
 
 ############################################################################
