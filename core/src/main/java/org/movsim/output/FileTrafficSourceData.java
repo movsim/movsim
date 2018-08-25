@@ -28,27 +28,16 @@ package org.movsim.output;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-/**
- * The Class FileTrafficSourceData.
- * 
- */
 public class FileTrafficSourceData extends FileOutputBase implements TrafficSourceMacro.RecordDataCallback {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FileTrafficSourceData.class);
-
     private static final String extensionFormat = ".source.road_%s.csv";
-    private static final String outputHeading = COMMENT_CHAR
-            + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
+    private static final String outputHeading =
+            COMMENT_CHAR + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
 
     /**
      * Instantiates a new file upstream boundary data.
-     * 
-     * @param roadId
-     * 
      */
     public FileTrafficSourceData(String roadId) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());

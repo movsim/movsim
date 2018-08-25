@@ -9,9 +9,9 @@ import org.movsim.io.FileOutputBase;
 // TODO refactoring of fuel consumption code base and corresponding file output
 class FileFuelConsumptionModel extends FileOutputBase {
 
-    private static final String extensionFormatJante = ".jante_%s.csv";
-    private static final String extensionFormatZeroAcceleration = ".constAccel_%s.csv";
-    private static final String extensionFormatSpecificConsumption = ".specCons_%s.csv";
+    public static final String extensionFormatJante = ".jante_%s.csv";
+    public static final String extensionFormatZeroAcceleration = ".constAccel_%s.csv";
+    public static final String extensionFormatSpecificConsumption = ".specCons_%s.csv";
 
     private static final String outputHeadingJante = COMMENT_CHAR
             + "v(km/h),   acc(m/s^2),  forceMech(N), powMech(kW), fuelFlow(l/h), consump(liters/100km), Gear\n";

@@ -8,7 +8,6 @@ import com.google.common.base.Preconditions;
 
 /**
  * Writes output for all decision points in single file.
- * 
  */
 class ServiceProviderLogging extends FileOutputBase implements SimulationTimeStep {
 
@@ -42,7 +41,7 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
                 writer.printf(outputHeading, "disutility" + alternativeId, "prob" + alternativeId, "traveltimeError" + alternativeId);
             }
         }
-        writer.printf("%n");
+        writer.printf(NEWLINE);
         writer.flush();
     }
 
@@ -55,7 +54,7 @@ class ServiceProviderLogging extends FileOutputBase implements SimulationTimeSte
                         alternative.getTravelTimeError());
             }
         }
-        writer.printf("%n");
+        writer.printf(NEWLINE);
         writer.flush();
     }
 

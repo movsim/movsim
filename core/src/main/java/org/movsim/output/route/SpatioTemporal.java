@@ -37,12 +37,7 @@ import org.movsim.utilities.LinearInterpolatedFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The Class SpatioTemporal.
- */
 public class SpatioTemporal extends OutputOnRouteBase {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SpatioTemporal.class);
 
     private final double dxOutput;
     private final double dtOutput;

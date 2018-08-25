@@ -37,15 +37,8 @@ import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The Class FileFloatingCars.
- */
-
 // TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
 class FileFloatingCars extends FileOutputBase {
-
-    /** The Constant LOG. */
-    final static Logger LOG = LoggerFactory.getLogger(FileFloatingCars.class);
 
     private static final String extensionFormat = ".car.route_%s.%06d.csv";
     private static final String extensionRegex = "[.]car[.]route_.*[.]\\d+[.]csv";
@@ -56,12 +49,6 @@ class FileFloatingCars extends FileOutputBase {
     // note: number before decimal point is total width of field, not width of integer part
     private static final String outputFormat = "%10.2f,%10d,%10d,%10.2f,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d,%8.5f%n";
 
-    /**
-     * Instantiates a new FileFloatingCars.
-     * 
-     * @param floatingCars
-     *            the floating cars
-     */
     FileFloatingCars() {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         String regex = baseFilename + extensionRegex;

@@ -57,12 +57,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-/**
- * The Class SimulationOutput.
- */
 public class SimulationOutput implements SimulationTimeStep {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(SimulationOutput.class);
 
     private List<FloatingCars> floatingCarOutputs = new ArrayList<>();

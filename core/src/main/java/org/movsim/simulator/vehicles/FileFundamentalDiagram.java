@@ -30,9 +30,6 @@ import org.movsim.io.FileOutputBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
 import org.movsim.utilities.Units;
 
-/**
- * The Class FileFundamentalDiagram.
- */
 public class FileFundamentalDiagram extends FileOutputBase {
 
     private static final String extensionFormat = ".fund_%s.csv";

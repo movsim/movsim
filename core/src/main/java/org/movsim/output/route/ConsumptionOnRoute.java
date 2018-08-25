@@ -10,9 +10,6 @@ import org.slf4j.LoggerFactory;
 
 public class ConsumptionOnRoute extends OutputOnRouteBase {
 
-    /** The Constant LOG. */
-    final static Logger LOG = LoggerFactory.getLogger(ConsumptionOnRoute.class);
-
     private final double tauEMA;
 
     private final double beta;

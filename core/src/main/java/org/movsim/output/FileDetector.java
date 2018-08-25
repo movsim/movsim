@@ -31,9 +31,6 @@ import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.controller.LoopDetector;
 import org.movsim.utilities.Units;
 
-/**
- * The Class FileDetector.
- */
 public class FileDetector extends FileOutputBase {
 
     private static final String extensionFormat = ".det.road_%s.x_%d.csv";
@@ -72,10 +69,6 @@ public class FileDetector extends FileOutputBase {
         writeHeader();
     }
 
-    /**
-     * Writes the header.
-     * 
-     */
     private void writeHeader() {
         writer.printf(
                 COMMENT_CHAR + " number of lanes = %d. (most inner lane is = %d and increasing to outer lanes)%n",
@@ -97,9 +90,6 @@ public class FileDetector extends FileOutputBase {
 
     /**
      * Pulls data and writes aggregated data to output file.
-     * 
-     * @param time
-     *            the time
      */
     public void writeAggregatedData(double time) {
         writer.printf(outputFormatTime, time);
@@ -112,11 +102,6 @@ public class FileDetector extends FileOutputBase {
         writer.printf("%n");
     }
 
-    /**
-     * Writes out the values per lane.
-     * 
-     * @param time
-     */
     private void writeQuantitiesPerLane() {
         for (int i = 0; i < laneCount; i++) {
             write(outputFormat, detector.getVehCountOutput(i), detector.getVehCumulatedCountOutput(i), Units.MS_TO_KMH
@@ -125,11 +110,6 @@ public class FileDetector extends FileOutputBase {
         }
     }
 
-    /**
-     * Writes out the values over all lanes.
-     * 
-     * @param time
-     */
     private void writeLaneAverages() {
         write(outputFormat, detector.getVehCountOutputAllLanes(), detector.getVehCumulatedCountOutputAllLanes(),
                 Units.MS_TO_KMH * detector.getMeanSpeedAllLanes(), Units.INVS_TO_INVH * detector.getFlowAllLanes(),

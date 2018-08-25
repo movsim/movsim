@@ -40,13 +40,11 @@ import org.slf4j.LoggerFactory;
 
 public class FileTrajectories extends FileOutputBase implements SimulationTimeStep {
 
-    private final static Logger LOG = LoggerFactory.getLogger(FileTrajectories.class);
-
     private static final String SEPARATOR = ",";
-    private static final String extensionFormat = ".traj.route_%s.csv";
-    private static final String outputHeading = COMMENT_CHAR
+    private static final String EXTENSION_FORMAT = ".traj.route_%s.csv";
+    private static final String OUTPUT_HEADING = COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId, infoComment, absTime, xWithOffset[m]";
-    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %10.4f, %s%n";
+    private static final String OUTPUT_FORMAT = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %10.4f, %s%n";
 
     private final double positionIntervalStart;
     private final double positionIntervalEnd;
@@ -65,13 +63,13 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
 
         LOG.info("interval for output: timeStart={}, timeEnd", traj.isSetStartTime() ? traj.getStartTime() : "--",
                 traj.isSetEndTime() ? traj.getEndTime() : "--");
-        writer = createWriter(String.format(extensionFormat, route.getName()));
+        writer = createWriter(String.format(EXTENSION_FORMAT, route.getName()));
         writeHeader(route);
     }
 
     private void writeHeader(Route route) {
         writer.println(String.format("%s %s", COMMENT_CHAR, route.toString()));
-        writer.println(outputHeading);
+        writer.println(OUTPUT_HEADING);
         writer.flush();
     }
 
@@ -133,7 +131,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         double dv = (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) ?
                 0 :
                 me.getRelSpeed(frontVehicle);
-        write(outputFormat, time, me.lane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(), me.getId(),
+        write(OUTPUT_FORMAT, time, me.lane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(), me.getId(),
                 me.roadSegmentId(), me.originRoadSegmentId(), formattedTime, pos + traj.getOffsetPosition(),
                 me.getUserData().getString(SEPARATOR));
     }

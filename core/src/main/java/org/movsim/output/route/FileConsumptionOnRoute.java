@@ -9,7 +9,7 @@ import org.movsim.simulator.roadnetwork.routing.Route;
 import com.google.common.base.Preconditions;
 
 /**
- * calculates and writes fuel collective fuel consumption on a route over all vehicles.
+ * Calculates and writes fuel collective fuel consumption on a route over all vehicles.
  */
 public class FileConsumptionOnRoute extends FileOutputBase {
 

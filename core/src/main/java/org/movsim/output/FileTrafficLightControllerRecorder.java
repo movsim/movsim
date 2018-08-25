@@ -34,9 +34,6 @@ import org.movsim.simulator.roadnetwork.controller.TrafficLightRecordDataCallbac
 
 import com.google.common.base.Preconditions;
 
-/**
- * The Class FileTrafficLightControllerRecorder.
- */
 public class FileTrafficLightControllerRecorder extends FileOutputBase implements TrafficLightRecordDataCallback {
 
     private static final String extensionFormat = ".controllerGroup_%s.firstSignal_%s.csv";
@@ -79,15 +76,9 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
         for (TrafficLight trafficLight : trafficLights) {
             writer.printf("%.1f,  %d,  ", trafficLight.position(), trafficLight.status().ordinal());
         }
-        write("%n");
+        write(NEWLINE);
     }
 
-    /**
-     * Write header.
-     * 
-     * @param trafficLights
-     *            the traffic lights
-     */
     private void writeHeader(Iterable<TrafficLight> trafficLights) {
         writer.printf(COMMENT_CHAR + " number codes for traffic lights status: %n");
         for (TrafficLightStatus status : TrafficLightStatus.values()) {

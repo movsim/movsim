@@ -37,7 +37,8 @@ import java.io.PrintWriter;
 
 public class FileOutputBase implements SimulationShutDown {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FileOutputBase.class);
+    // logger for all sub-classes
+    public final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     public static final String COMMENT_CHAR = "#";
     public static final String SEPARATOR_CHAR = ",";

@@ -16,8 +16,6 @@ import com.google.common.collect.Iterators;
 
 public class IndividualTravelTimesOnRoute extends OutputOnRouteBase {
 
-    final static Logger LOG = LoggerFactory.getLogger(IndividualTravelTimesOnRoute.class);
-
     private final SignalPoint entrySignalPoint;
 
     private final SignalPoint exitSignalPoint;

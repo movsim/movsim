@@ -35,8 +35,6 @@ import org.slf4j.LoggerFactory;
 public class FileTrafficSinkData extends FileOutputBase implements
         org.movsim.simulator.roadnetwork.boundaries.TrafficSink.RecordDataCallback {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FileTrafficSourceData.class);
-
     private static final String extensionFormat = ".sink.road_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s], timeFormatted, totalVehiclesRemoved, lane, route, vehicleId, vehicleLabel, vehicleUserData ...\n";
