@@ -111,7 +111,7 @@
                     <VehicleType label="CCS2" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
                 </TrafficComposition>
             </Road>
-            <Road id="-3">
+            <Road id="3">
                 <TrafficComposition>
                     <VehicleType label="CCS3" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
                 </TrafficComposition>
@@ -158,6 +158,7 @@
                 <!--                 <Slope position="140" gradient="0.02" /> -->
                 <!--             </Slopes> -->
             </Road>
+            <Road id="12" />
             <Road id="13">
                 <!--             <Slopes> -->
                 <!--                 <Slope position="1" gradient="0.10" /> -->
