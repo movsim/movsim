@@ -11,6 +11,9 @@ csv/
 # git merge files
 *.orig
 
+# java misson control
+*.jfr
+
 ########
 # IDEs #
 
