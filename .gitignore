@@ -51,6 +51,9 @@ out/
 logs/
 classes/
 
+# maven
+dependency-reduced-pom.xml
+
 # Log file
 *.log
 
