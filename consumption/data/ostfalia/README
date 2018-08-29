@@ -4,7 +4,7 @@ mvn clean install
 
 # do calculation:
 # Hint: put symlink to movsim/consumption/runmovsimconsumption in your bin search path
-runmovsimconsumption -f consumption_ostfalia.xml
+runmovsimconsumption -f consumption_ostfalia
 
 # do plotting of trajectory data
 gnuplot plot_route_seesen.gpl
