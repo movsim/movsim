@@ -11,6 +11,9 @@ csv/
 # git merge files
 *.orig
 
+# java misson control
+*.jfr
+
 ########
 # IDEs #
 
@@ -47,6 +50,9 @@ target/
 out/
 logs/
 classes/
+
+# maven
+dependency-reduced-pom.xml
 
 # Log file
 *.log

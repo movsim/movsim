@@ -483,11 +483,12 @@ public class OpenDriveHandler {
                             roadSegment);
                 }
             }
-            if (lane.getLink().isSetSuccessor()) {
-                if (!hasRoadSuccessor(road)) {
-                    throw new IllegalArgumentException(
-                            "successor lane link but no road link defined for road=" + road.getId());
-                }
+            if (lane.getLink().isSetSuccessor() && !road.isSetJunction()) {
+				if (!hasRoadSuccessor(road)) {
+					throw new IllegalArgumentException(
+							"successor lane link but no road link defined for road=" + road.getId() + " name="
+									+ road.getName() + " junction=" + road.getJunction() + " lane=" + lane.getId());
+				}
                 int fromLane = lane.getId();
                 RoadSegment roadSegment = getRoadSegment(roadNetwork, road.getId(), fromLane);
                 int toLane = lane.getLink().getSuccessor().getId();

@@ -1,74 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MovsimInitialConditions>
-	 <RoadInitialConditions id="0">
+    <RoadInitialConditions id="0">
         <MacroscopicInitialConditions>
-			MacroCondition
-            <MacroIC position="10" density_per_km="100" speed="0" label="CCS0"/>
+            <MacroCondition position="10" density_per_km="100" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
-
-	 <RoadInitialConditions id="-1">
+    <RoadInitialConditions id="-1">
         <MacroscopicInitialConditions>
-                                <MacroIC position="10" density_per_km="200" speed="0" />
+            <MacroCondition position="10" density_per_km="200" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
-
-
-	 <RoadInitialConditions id="-2">
+    <RoadInitialConditions id="-2">
         <MacroscopicInitialConditions>
-                                <MacroIC position="10" density_per_km="200" speed="0" />
+            <MacroCondition position="10" density_per_km="200" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
-
-
-	 <RoadInitialConditions id="-3">
+    <RoadInitialConditions id="-3">
         <MacroscopicInitialConditions>
-                                <MacroIC position="10" density_per_km="370" speed="0" />
+            <MacroCondition position="10" density_per_km="370" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
-
-
-	 <RoadInitialConditions id="-4">
+    <RoadInitialConditions id="-4">
         <MacroscopicInitialConditions>
-                                <MacroIC position="10" density_per_km="370" speed="0" />
+            <MacroCondition position="10" density_per_km="370" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
-
-
-	 <RoadInitialConditions id="-5">
+    <RoadInitialConditions id="-5">
         <MacroscopicInitialConditions>
-                                <MacroIC position="10" density_per_km="370" speed="0" />
+            <MacroCondition position="10" density_per_km="370" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
-    
     <RoadInitialConditions id="-6">
         <MacroscopicInitialConditions>
-                                <MacroIC position="10" density_per_km="370" speed="0" />
+            <MacroCondition position="10" density_per_km="370" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
-    
     <RoadInitialConditions id="-7">
         <MacroscopicInitialConditions>
-			                    <MacroIC position="10" density_per_km="370" speed="0" />
+            <MacroCondition position="10" density_per_km="370" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
     <RoadInitialConditions id="-8">
         <MacroscopicInitialConditions>
-                                <MacroIC position="10" density_per_km="370" speed="0" />
+            <MacroCondition position="10" density_per_km="370" speed="0" />
         </MacroscopicInitialConditions>
     </RoadInitialConditions>
     <RoadInitialConditions id="-9">
         <MacroscopicInitialConditions>
-                                <MacroIC position="10" density_per_km="390" speed="0" />
+            <MacroCondition position="10" density_per_km="390" speed="0" />
         </MacroscopicInitialConditions>
-        
-        <RoadInitialConditions id="-10">
-        <MacroscopicInitialConditions>
-                                                    <MacroIC position="10" density_per_km="390" speed="0" />
-        </MacroscopicInitialConditions>
-        
     </RoadInitialConditions>
-                        
-    
+    <RoadInitialConditions id="-10">
+        <MacroscopicInitialConditions>
+            <MacroCondition position="10" density_per_km="390" speed="0" />
+        </MacroscopicInitialConditions>
+    </RoadInitialConditions>
 </MovsimInitialConditions>
 
