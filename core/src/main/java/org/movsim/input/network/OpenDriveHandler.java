@@ -483,7 +483,7 @@ public class OpenDriveHandler {
                             roadSegment);
                 }
             }
-            if (lane.getLink().isSetSuccessor() && !road.isSetJunction()) {
+            if (lane.getLink().isSetSuccessor() ) {
 				if (!hasRoadSuccessor(road)) {
 					throw new IllegalArgumentException(
 							"successor lane link but no road link defined for road=" + road.getId() + " name="
