@@ -47,7 +47,6 @@ import org.slf4j.LoggerFactory;
 // fluctStrenth 1
 public class Noise {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(Noise.class);
 
     /** constant for uniform distribution calculation. */

@@ -45,7 +45,6 @@ import com.google.common.base.Preconditions;
  */
 public class TrafficLightApproaching {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLightApproaching.class);
 
     // order of trafficlights given by signal points
