@@ -564,7 +564,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                     accumDistance += sink.roadLength();
                 }
                 sink = sink.sinkLaneSegment();
-                logger.debug("current: {}, sink: {}", this, sink == null ? "null" : sink);
+                logger.debug("current: {}, sink: {}", this, sink);
                 if (sink == this || accumDistance > 5000) {
                     // circular path or too far away
                     break;
