@@ -23,12 +23,15 @@
                     <Inflow t="600" q_per_hour="2000" v="90" />
                 </TrafficSource>
                 <Detectors sample_interval="60" logging="true">
-                    <CrossSection position="16000" />
-                    <CrossSection position="18000" />
-                    <CrossSection position="20000" />
-                    <CrossSection position="22000" />
-                    <CrossSection position="24000" />
-                    <CrossSection position="26000" />
+                    <CrossSection position="1000" />
+                    <CrossSection position="6000" />
+                    <CrossSection position="8000" />
+                    <CrossSection position="9000" />
+                    <CrossSection position="10000" />
+                    <CrossSection position="11000" />
+                    <CrossSection position="12000" />
+                    <CrossSection position="13000" />
+                    <CrossSection position="14000" />
                 </Detectors>
             </Road>
             <Road id="2">
