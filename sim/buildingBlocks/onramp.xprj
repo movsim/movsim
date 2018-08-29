@@ -42,7 +42,6 @@
                     <VehicleType label="ACC1" fraction="0.98" relative_v0_randomization="0.1" />
                     <VehicleType label="ACC2" fraction="0.02" relative_v0_randomization="0.1" />
                 </TrafficComposition>
-                <InitialConditions />
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" />
                 </TrafficSource>
