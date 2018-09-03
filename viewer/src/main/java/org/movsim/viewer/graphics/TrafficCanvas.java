@@ -26,27 +26,8 @@
 
 package org.movsim.viewer.graphics;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Stroke;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
-import javax.imageio.ImageIO;
-import javax.xml.bind.JAXBException;
-
 import org.apache.commons.lang3.StringUtils;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
@@ -72,11 +53,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import javax.imageio.ImageIO;
+import javax.xml.bind.JAXBException;
+import java.awt.*;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+
 /**
  * <p>
  * TrafficCanvas class.
  * </p>
- *
+ * <p>
  * <p>
  * Handles:
  * <ul>
@@ -93,7 +88,6 @@ import org.xml.sax.SAXException;
  * <p>
  * Actual road networks and traffic scenarios should be set up in a subclass.
  * </p>
- *
  */
 public class TrafficCanvas extends SimulationCanvasBase
         implements SimulationRunnable.UpdateDrawingCallback, SimulationRunnable.HandleExceptionCallback {
@@ -108,14 +102,12 @@ public class TrafficCanvas extends SimulationCanvasBase
 
     /**
      * Callbacks from this TrafficCanvas to the application UI.
-     *
      */
     public interface StatusControlCallbacks {
         /**
          * Callback to get the UI to display a status message.
          *
-         * @param message
-         *            the status message
+         * @param message the status message
          */
         public void showStatusMessage(String message);
 
@@ -170,7 +162,9 @@ public class TrafficCanvas extends SimulationCanvasBase
         HIGHLIGHT_VEHICLE
     }
 
-    /** Color mode displayed on startup */
+    /**
+     * Color mode displayed on startup
+     */
     protected VehicleColorMode vehicleColorMode = VehicleColorMode.VELOCITY_COLOR;
     protected VehicleColorMode vehicleColorModeSave;
 
@@ -181,7 +175,9 @@ public class TrafficCanvas extends SimulationCanvasBase
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
 
-    /** vehicle mouse-over support */
+    /**
+     * vehicle mouse-over support
+     */
     String popupString;
     String popupStringExitEndRoad;
     protected Vehicle vehiclePopup;
@@ -274,7 +270,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         initGraphicSettings();
         forceRepaintBackground();
     }
-    
+
     @Override
     public void resetScaleAndOffset() {
         scale = Double.parseDouble(properties.getProperty("initialScale"));
@@ -303,17 +299,25 @@ public class TrafficCanvas extends SimulationCanvasBase
             LOG.info("set color for vehicle label={}", vehicleTypeLabel);
             labelColors.put(vehicleTypeLabel, color);
         }
-        backgroundPicture = null;
-        if (StringUtils.isNotBlank(backgroundPicturePath)) {
+
+        backgroundPicture = readBackgroundImage(backgroundPicturePath);
+    }
+
+    private BufferedImage readBackgroundImage(String filename) {
+        if (StringUtils.isNotBlank(filename)) {
             try {
                 String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
-                File file = new File(currentPath, backgroundPicturePath);
+                if (ProjectMetaData.getInstance().hasPathToProjectFile()) {
+                    currentPath = ProjectMetaData.getInstance().getPathToProjectFile();
+                }
+                File file = new File(currentPath, filename);
                 LOG.info("background image file parent={}, name={}", file.getParent(), file.getName());
-                backgroundPicture = ImageIO.read(file);
+                return ImageIO.read(file);
             } catch (Exception e) {
-                LOG.error("cannot load background image " + backgroundPicturePath, e);
+                LOG.error("cannot load background image " + filename, e);
             }
         }
+        return null;
     }
 
     /**
@@ -328,10 +332,8 @@ public class TrafficCanvas extends SimulationCanvasBase
     /**
      * Sets the (locale dependent) message strings.
      *
-     * @param popupString
-     *            popup window format string for vehicle that leaves road segment at a specific exit
-     * @param popupStringExitEndRoad
-     *            popup window format string for vehicle that leaves road segment at end
+     * @param popupString            popup window format string for vehicle that leaves road segment at a specific exit
+     * @param popupStringExitEndRoad popup window format string for vehicle that leaves road segment at end
      */
     public void setMessageStrings(String popupString, String popupStringExitEndRoad) {
         this.popupString = popupString;
@@ -503,7 +505,7 @@ public class TrafficCanvas extends SimulationCanvasBase
      * Draws the foreground: everything that moves each timestep. For the traffic simulation that means draw all the vehicles:<br />
      * For each roadSection, draw all the vehicles in the roadSection, positioning them using the roadMapping for that roadSection.
      * </p>
-     *
+     * <p>
      * <p>
      * This method is synchronized with the <code>SimulationRunnable.run()</code> method, so that vehicles are not updated, added or removed
      * while they are being drawn.
@@ -512,8 +514,6 @@ public class TrafficCanvas extends SimulationCanvasBase
      * tm The abstract method paintAfterVehiclesMoved is called after the vehicles have been moved, to allow any further required drawing on
      * the canvas.
      * </p>
-     *
-     * @param g
      */
     @Override
     protected void drawForeground(Graphics2D g) {
@@ -530,7 +530,7 @@ public class TrafficCanvas extends SimulationCanvasBase
                 for (final Vehicle vehicle : roadSegment) {
                     drawVehicle(g, simulationTime, roadMapping, vehicle);
                 }
-                for (Iterator<Vehicle> vehIter = roadSegment.overtakingVehicles(); vehIter.hasNext();) {
+                for (Iterator<Vehicle> vehIter = roadSegment.overtakingVehicles(); vehIter.hasNext(); ) {
                     Vehicle vehicle = vehIter.next();
                     drawVehicle(g, simulationTime, roadMapping, vehicle);
                 }
@@ -571,16 +571,15 @@ public class TrafficCanvas extends SimulationCanvasBase
     /**
      * Draws the background: everything that does not move each timestep. The background consists of the road segments and the sources and
      * sinks, if they are visible.
-     *
-     * @param g
      */
     @Override
     protected void drawBackground(Graphics2D g) {
 
-        if (backgroundPicture != null)
-            g.drawImage(backgroundPicture, 0, -(int) (backgroundPicture.getHeight()),
-                    (int) (backgroundPicture.getWidth() * 1.01), 0, 0, 0, backgroundPicture.getWidth(),
-                    backgroundPicture.getHeight(), null);
+        if (backgroundPicture != null) {
+            int height = backgroundPicture.getHeight();
+            int width = backgroundPicture.getWidth();
+            g.drawImage(backgroundPicture, 0, -(int) height, (int) (width * 1.01), 0, 0, 0, width, height, null);
+        }
 
         drawRoadSegmentsAndLines(g);
 
@@ -615,8 +614,6 @@ public class TrafficCanvas extends SimulationCanvasBase
 
     /**
      * Draws each road segment in the road network.
-     *
-     * @param g
      */
     private void drawRoadSegmentsAndLines(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
@@ -664,8 +661,8 @@ public class TrafficCanvas extends SimulationCanvasBase
         // draw the road edges
         g.setStroke(new BasicStroke());
         g.setColor(roadEdgeColor);
-        double offset = roadMapping.getLaneGeometries().getLeft().getLaneCount()
-                * roadMapping.getLaneGeometries().getLaneWidth();
+        double offset = roadMapping.getLaneGeometries().getLeft().getLaneCount() * roadMapping.getLaneGeometries()
+                .getLaneWidth();
         LOG.debug("draw road left outer edge: offset={}", offset);
         PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
         // edge of most outer edge
@@ -713,9 +710,9 @@ public class TrafficCanvas extends SimulationCanvasBase
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             final double position = roadMapping.isPeer() ? roadMapping.roadLength() : 0.0;
-            final double offset = roadMapping.isPeer()
-                    ? roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1)
-                    : roadMapping.getMaxOffsetRight();
+            final double offset = roadMapping.isPeer() ?
+                    roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1) :
+                    roadMapping.getMaxOffsetRight();
             final PosTheta posTheta = roadMapping.map(position, offset);
             final int fontHeight = 12;
             final Font font = new Font("SansSerif", Font.PLAIN, fontHeight);
@@ -734,14 +731,14 @@ public class TrafficCanvas extends SimulationCanvasBase
             for (SpeedLimit speedLimit : roadSegment.speedLimits()) {
                 g.setFont(font);
                 final double position = speedLimit.position();
-                final double offset = roadMapping.isPeer()
-                        ? roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1)
-                        : roadMapping.getMaxOffsetRight();
+                final double offset = roadMapping.isPeer() ?
+                        roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1) :
+                        roadMapping.getMaxOffsetRight();
                 final PosTheta posTheta = roadMapping.map(position, offset);
                 final String text = String.valueOf((int) (speedLimit.getSpeedLimitKmh())) + "km/h";
                 g.setFont(font);
-                Color color = speedLimit.getSpeedLimit() < MovsimConstants.MAX_VEHICLE_SPEED ? Color.RED
-                        : Color.DARK_GRAY;
+                Color color =
+                        speedLimit.getSpeedLimit() < MovsimConstants.MAX_VEHICLE_SPEED ? Color.RED : Color.DARK_GRAY;
                 g.setColor(color);
                 TrafficCanvasUtils.drawTextRotated(text, posTheta, font, g);
                 TrafficCanvasUtils.drawLine(g, roadMapping, position, 1, color);
@@ -754,9 +751,9 @@ public class TrafficCanvas extends SimulationCanvasBase
             final int fontHeight = 12;
             final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
             final RoadMapping roadMapping = roadSegment.roadMapping();
-            final double offset = roadMapping.isPeer()
-                    ? roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1)
-                    : roadMapping.getMaxOffsetRight();
+            final double offset = roadMapping.isPeer() ?
+                    roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1) :
+                    roadMapping.getMaxOffsetRight();
             for (GradientProfile gradientProfile : roadSegment.gradientProfiles()) {
                 for (Entry<Double, Double> gradientEntry : gradientProfile.gradientEntries()) {
                     final double position = gradientEntry.getKey();
@@ -778,9 +775,9 @@ public class TrafficCanvas extends SimulationCanvasBase
         g.setColor(color);
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
-            final double offset = roadMapping.isPeer()
-                    ? roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1)
-                    : roadMapping.getMaxOffsetRight();
+            final double offset = roadMapping.isPeer() ?
+                    roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1) :
+                    roadMapping.getMaxOffsetRight();
             for (FlowConservingBottleneck bottleneck : roadSegment.flowConservingBottlenecks()) {
                 final double posStart = bottleneck.position();
                 PosTheta posTheta = roadMapping.map(posStart, offset);
