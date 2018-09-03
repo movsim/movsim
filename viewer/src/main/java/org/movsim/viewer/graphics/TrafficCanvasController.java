@@ -31,7 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TrafficCanvasController {
-    final static Logger logger = LoggerFactory.getLogger(TrafficCanvasController.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficCanvasController.class);
+
     final TrafficCanvas trafficCanvas;
     protected final RoadNetwork roadNetwork;
 
@@ -49,7 +51,7 @@ public class TrafficCanvasController {
                 trafficCanvas.mouseOverTipWindow.setVisible(false);
             }
             trafficCanvas.resume();
-        } else if (trafficCanvas.isStopped() == false) {
+        } else if (trafficCanvas.isStopped()) {
             trafficCanvas.pause();
         }
         if (trafficCanvas.statusControlCallbacks != null) {
@@ -81,7 +83,7 @@ public class TrafficCanvasController {
             sleepTime = 0;
         }
         trafficCanvas.setSleepTime(sleepTime);
-        logger.debug("sleeptime: {}", trafficCanvas.sleepTime());
+        LOG.debug("sleeptime: {}", trafficCanvas.sleepTime());
     }
 
     public void commandSlower() {
@@ -91,7 +93,7 @@ public class TrafficCanvasController {
             sleepTime = 400;
         }
         trafficCanvas.setSleepTime(sleepTime);
-        logger.debug("sleeptime: {}", trafficCanvas.sleepTime());
+        LOG.debug("sleeptime: {}", trafficCanvas.sleepTime());
     }
 
     public void commandReset() {
@@ -112,7 +114,7 @@ public class TrafficCanvasController {
             vcmOrdinal = 0;
         }
         trafficCanvas.vehicleColorMode = VehicleColorMode.values()[vcmOrdinal];
-        logger.info("VehicleColorMode: {}", trafficCanvas.vehicleColorMode);
+        LOG.info("VehicleColorMode: {}", trafficCanvas.vehicleColorMode);
         trafficCanvas.repaint();
     }
 
@@ -126,7 +128,7 @@ public class TrafficCanvasController {
             trafficCanvas.vehicleColorModeSave = trafficCanvas.vehicleColorMode;
             trafficCanvas.vehicleColorMode = mode;
         }
-        logger.debug("VehicleColorMode: {}", trafficCanvas.vehicleColorMode); //$NON-NLS-1$
+        LOG.debug("VehicleColorMode: {}", trafficCanvas.vehicleColorMode); //$NON-NLS-1$
         trafficCanvas.repaint();
     }
 

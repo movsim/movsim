@@ -25,10 +25,12 @@
  */
 package org.movsim.viewer.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Window;
@@ -39,13 +41,13 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.ToolTipManager;
 
 public class SwingHelper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SwingHelper.class);
+
     private SwingHelper() {
+        // do not invoke
     }
 
     public static void setComponentSize(JComponent comp, int width, int height) {
@@ -54,46 +56,22 @@ public class SwingHelper {
         comp.setMaximumSize(comp.getPreferredSize());
     }
 
-    /**
-     * make lightweight components visible over canvas
-     */
-    public static void makeLightWeightComponentsVisible() {
-        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-        ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
-    }
-
-    public static ImageIcon createImageIcon(Class<?> bezugsklasse, String path) {
-        final URL imgURL = bezugsklasse.getResource(path);
+    public static ImageIcon createImageIcon(Class<?> referencingClass, String path) {
+        final URL imgURL = referencingClass.getResource(path);
         if (imgURL != null) {
             return new ImageIcon(imgURL);
         }
-        System.err.println("Couldn't find file: " + path);
+        LOG.error("Couldn't find file={}", path);
         return null;
     }
 
-    public static ImageIcon createImageIcon(Class<?> bezugsklasse, String path, int width, int height) {
-        final URL imgURL = bezugsklasse.getResource(path);
+    public static ImageIcon createImageIcon(Class<?> referencingClass, String path, int width, int height) {
+        final URL imgURL = referencingClass.getResource(path);
         if (imgURL != null) {
             return new ImageIcon(new ImageIcon(imgURL).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
         }
-        System.err.println("Couldn't find file: " + path);
+        LOG.error("Couldn't find file={}", path);
         return null;
-    }
-
-    /**
-     * Creates the image icon.
-     * 
-     * @param path
-     *            the path
-     * @param width
-     *            the width
-     * @param height
-     *            the height
-     * @return the image icon
-     */
-    public static ImageIcon createImageIcon(String path, int width, int height) {
-        return new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-
     }
 
     public static void activateWindowClosingAndSystemExitButton(JFrame frame) {
@@ -129,14 +107,6 @@ public class SwingHelper {
         return (Frame) ret;
     }
 
-    public static JFrame getJFrame(Component c) {
-        Component ret = c;
-        while (ret != null && !(ret instanceof JFrame)) {
-            ret = ret.getParent();
-        }
-        return (JFrame) ret;
-    }
-
     /**
      * hue values (see, e.g., http://help.adobe.com/en_US/Photoshop/11.0/images/wc_HSB.png): h=0:red, h=0.2: yellow, h=0.35: green, h=0.5:
      * blue, h=0.65: violet, then a long magenta region
@@ -167,16 +137,4 @@ public class SwingHelper {
         return v > 0.1 ? new Color(rgb) : Color.BLACK;
     }
 
-    public static void notImplemented(Component c) {
-        JOptionPane.showMessageDialog(getFrame(c), "Not implemented yet"); //$NON-NLS-1$
-    }
-
-    public static void showMessage(final String message) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JOptionPane.showMessageDialog(null, message);
-            }
-        });
-    }
 }

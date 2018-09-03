@@ -25,13 +25,14 @@
  */
 package org.movsim.viewer.util;
 
-import java.util.Formatter;
+public final class StringHelper {
 
-public class StringHelper {
+    private StringHelper(){
+        throw new IllegalStateException("do not invoke");
+    }
 
-
-    public static String getTime(double time_s, boolean withH, boolean withM, boolean withS) {
-        final int time = (int) time_s;
+    public static String getTime(double timeSec, boolean withH, boolean withM, boolean withS) {
+        final int time = (int) timeSec;
         final int n_h = time / 3600;
         final int n_min = (time - 3600 * n_h) / 60;
         final int n_sec = time % 60;
@@ -42,27 +43,15 @@ public class StringHelper {
         }
         if (withM) {
             timeString += ":";
-            timeString += (n_min < 10) ? ("0" + String.valueOf(n_min)) : String.valueOf(n_min);
+            timeString += (n_min < 10) ? ("0" + n_min) : String.valueOf(n_min);
 
         }
         if (withS) {
             timeString += ":";
-            timeString += (n_sec < 10) ? ("0" + String.valueOf(n_sec)) : String.valueOf(n_sec);
+            timeString += (n_sec < 10) ? ("0" + n_sec) : String.valueOf(n_sec);
         }
 
         return timeString;
     }
 
-    public static String getFormatedTime(double timeInSeconds) {
-        int intTime = (int) timeInSeconds;
-        final int hours = intTime / 3600;
-        intTime = intTime % 3600;
-        final int min = intTime / 60;
-        intTime = intTime % 60;
-        final StringBuilder stringBuilder = new StringBuilder();
-        final Formatter formatter = new Formatter(stringBuilder);
-        formatter.format("%02d:%02d:%02d", hours, min, intTime);
-        formatter.close();
-        return stringBuilder.toString();
-    }
 }

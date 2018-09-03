@@ -25,19 +25,20 @@
  */
 package org.movsim.viewer.util;
 
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-
 import org.apache.log4j.WriterAppender;
 import org.apache.log4j.spi.LoggingEvent;
+
+import javax.swing.*;
 
 @SuppressWarnings("synthetic-access")
 public class SwingLogAppender extends WriterAppender {
 
-    static private JTextArea jTextArea = null;
+    private static JTextArea jTextArea = null;
 
-    /** Set the target JTextArea for the logging information to appear. */
-    static public void setTextArea(JTextArea jTextArea) {
+    /**
+     * Set the target JTextArea for the logging information to appear.
+     */
+    public static void setTextArea(JTextArea jTextArea) {
         SwingLogAppender.jTextArea = jTextArea;
     }
 

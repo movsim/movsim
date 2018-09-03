@@ -33,17 +33,20 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.movsim.viewer.graphics.TrafficCanvas;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CanvasPanel extends JPanel {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CanvasPanel.class);
+
     private static final long serialVersionUID = 1L;
 
     private TrafficCanvas trafficCanvas;
 
     public CanvasPanel(final ResourceBundle resourceBundle, final TrafficCanvas trafficCanvas) {
-
         // TODO check if needed anymore. Seems working fine with linux. Check windows and mac!
         // SwingHelper.makeLightWeightComponentsVisible();
-
         try {
             // Execute a job on the event-dispatching thread; creating this applet's GUI.
             SwingUtilities.invokeAndWait(new Runnable() {
@@ -53,8 +56,7 @@ public class CanvasPanel extends JPanel {
                 }
             });
         } catch (final Exception e) {
-            e.printStackTrace();
-            System.err.println("initApp didn't complete successfully"); //$NON-NLS-1$
+            LOG.error("initApp didn't complete successfully", e); //$NON-NLS-1$
         }
     }
 
@@ -94,9 +96,8 @@ public class CanvasPanel extends JPanel {
     }
 
     public void quit() {
-        if (trafficCanvas.isStopped() == false) {
+        if (trafficCanvas.isStopped()) {
             trafficCanvas.stop();
-            // statusCallbacks.stateChanged();
         }
     }
 }

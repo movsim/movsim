@@ -1,26 +1,16 @@
 package org.movsim.viewer.graphics;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Shape;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
-import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-
 import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMapping.PolygonFloat;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.*;
 
 public final class TrafficCanvasUtils {
 
@@ -41,15 +31,15 @@ public final class TrafficCanvasUtils {
     static Rectangle2D getRectangle(PosTheta posTheta, double widthHeight) {
         Rectangle2D rect = new Rectangle2D.Double(posTheta.getScreenX(), posTheta.getScreenY(), widthHeight,
                 widthHeight);
-        LOG.debug("rectangle={}", rect.toString());
+        LOG.debug("rectangle={}", rect);
         return rect;
     }
 
     static void drawTextRotated(String text, PosTheta posTheta, Font font, Graphics2D g) {
         FontRenderContext frc = g.getFontRenderContext();
         GlyphVector gv = font.createGlyphVector(frc, text); //$NON-NLS-1$
-        AffineTransform at = AffineTransform.getTranslateInstance((int) posTheta.getScreenX(),
-                (int) posTheta.getScreenY());
+        AffineTransform at = AffineTransform
+                .getTranslateInstance((int) posTheta.getScreenX(), (int) posTheta.getScreenY());
         at.rotate(-posTheta.getTheta());
         Shape glyph = gv.getOutline();
         Shape transformedGlyph = at.createTransformedShape(glyph);

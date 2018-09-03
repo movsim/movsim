@@ -1,26 +1,27 @@
 package org.movsim.viewer.ui;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.movsim.input.ProjectMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+import java.util.Properties;
+
 public class ViewProperties {
 
-    final static Logger logger = LoggerFactory.getLogger(ViewProperties.class);
-    
-    final static String defaultPropertyName = "/config/defaultviewerconfig.properties";
+    private static final Logger LOG = LoggerFactory.getLogger(ViewProperties.class);
+
+    private static final String DEFAULT_PROPERTY_NAME = "/config/defaultviewerconfig.properties";
+
     private static Properties defaultProperties;
+
+    private ViewProperties() {
+        // TODO review static context
+    }
 
     /**
      * Load default properties from the {code /config/defaultviewerconfig.properties} path. Needed for applet initialization.
-     * 
+     *
      * @return the properties
      */
     public static Properties loadDefaultProperties() {
@@ -28,21 +29,20 @@ public class ViewProperties {
             defaultProperties = new Properties();
             try {
                 // create and load default properties
-                logger.info("read default properties from file "+defaultPropertyName);
-                final InputStream is = ViewProperties.class.getResourceAsStream(defaultPropertyName);
+                LOG.info("read default properties from file {}", DEFAULT_PROPERTY_NAME);
+                final InputStream is = ViewProperties.class.getResourceAsStream(DEFAULT_PROPERTY_NAME);
                 defaultProperties.load(is);
                 is.close();
                 defaultProperties = new Properties(defaultProperties);
             } catch (FileNotFoundException e) {
                 // ignore exception.
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.error("error", e);
             }
         }
         return defaultProperties;
     }
 
-    
     public static Properties loadProperties(ProjectMetaData projectMetaData) {
         if (projectMetaData.hasProjectName()) {
             return loadProperties(projectMetaData.getProjectName(), projectMetaData.getPathToProjectFile());
@@ -52,7 +52,7 @@ public class ViewProperties {
 
     /**
      * Load default properties and overwrites them with project specific properties if available
-     * 
+     *
      * @param projectName
      * @param path
      * @return properties
@@ -61,7 +61,7 @@ public class ViewProperties {
         Properties applicationProps = loadDefaultProperties();
         final File file = new File(path + projectName + ".properties");
         try {
-            logger.debug("try to read from file=" + file.getName() + ", path=" + file.getAbsolutePath());
+            LOG.debug("try to read from file={}, path={}", file.getName(), file.getAbsolutePath());
             if (ProjectMetaData.getInstance().isXmlFromResources()) {
                 final InputStream inputStream = ViewProperties.class.getResourceAsStream(file.toString());
                 if (inputStream != null) {
@@ -75,12 +75,11 @@ public class ViewProperties {
             }
 
         } catch (FileNotFoundException e) {
-            logger.info("cannot find "+file.toString()+". Fall back to default properties.");
+            LOG.info("cannot find {} Fall back to default properties", file);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("error", e);
         }
         return applicationProps;
     }
-    
-    
+
 }

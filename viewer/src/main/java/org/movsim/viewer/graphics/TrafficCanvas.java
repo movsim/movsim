@@ -96,6 +96,8 @@ public class TrafficCanvas extends SimulationCanvasBase
 
     private static final Logger LOG = LoggerFactory.getLogger(TrafficCanvas.class);
 
+    private static final String FONT_NAME = "SansSerif";
+
     protected final Simulator simulator;
     protected final RoadNetwork roadNetwork;
     private Properties properties;
@@ -147,7 +149,6 @@ public class TrafficCanvas extends SimulationCanvasBase
     private float lineWidth;
     private float lineLength;
     private float gapLength;
-    private float gapLengthExit;
 
     /**
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
@@ -173,7 +174,7 @@ public class TrafficCanvas extends SimulationCanvasBase
     protected Color[] accelerationColors;
     protected final Map<String, Color> labelColors = new HashMap<>();
 
-    private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
+    private static final double[] ACCELERATIONS = new double[] { -7.5, -0.1, 0.2 };
 
     /**
      * vehicle mouse-over support
@@ -241,7 +242,6 @@ public class TrafficCanvas extends SimulationCanvasBase
         lineWidth = Float.parseFloat(properties.getProperty("lineWidth"));
         lineLength = Float.parseFloat(properties.getProperty("lineLength"));
         gapLength = Float.parseFloat(properties.getProperty("gapLength"));
-        gapLengthExit = Float.parseFloat(properties.getProperty("gapLengthExit"));
 
         scale = Double.parseDouble(properties.getProperty("initialScale"));
         setSleepTime(Integer.parseInt(properties.getProperty("initial_sleep_time")));
@@ -347,7 +347,7 @@ public class TrafficCanvas extends SimulationCanvasBase
 
     void setAccelerationColors() {
         accelerationColors = new Color[] { Color.WHITE, Color.RED, Color.BLACK, Color.GREEN };
-        assert accelerations.length == accelerationColors.length - 1;
+        assert ACCELERATIONS.length == accelerationColors.length - 1;
     }
 
     public double getVmaxForColorSpectrum() {
@@ -439,15 +439,15 @@ public class TrafficCanvas extends SimulationCanvasBase
      * @param vehicle
      * @param simulationTime
      */
-    protected Color vehicleColor(Vehicle vehicle, double simulationTime) {
+    protected Color vehicleColor(Vehicle vehicle) {
         Color color;
 
         switch (vehicleColorMode) {
         case ACCELERATION_COLOR:
             final double a = vehicle.physicalQuantities().getAcc();
-            final int count = accelerations.length;
+            final int count = ACCELERATIONS.length;
             for (int i = 0; i < count; ++i) {
-                if (a < accelerations[i])
+                if (a < ACCELERATIONS[i])
                     return accelerationColors[i];
             }
             color = accelerationColors[accelerationColors.length - 1];
@@ -522,17 +522,16 @@ public class TrafficCanvas extends SimulationCanvasBase
         final long timeBeforePaint_ms = System.currentTimeMillis();
         synchronized (simulationRunnable.dataLock) {
             drawTrafficLights(g);
-            final double simulationTime = this.simulationTime();
             for (final RoadSegment roadSegment : roadNetwork) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 assert roadMapping != null;
                 PaintRoadMapping.setClipPath(g, roadMapping, clipPath);
                 for (final Vehicle vehicle : roadSegment) {
-                    drawVehicle(g, simulationTime, roadMapping, vehicle);
+                    drawVehicle(g, roadMapping, vehicle);
                 }
                 for (Iterator<Vehicle> vehIter = roadSegment.overtakingVehicles(); vehIter.hasNext(); ) {
                     Vehicle vehicle = vehIter.next();
-                    drawVehicle(g, simulationTime, roadMapping, vehicle);
+                    drawVehicle(g, roadMapping, vehicle);
                 }
             }
             totalAnimationTime += System.currentTimeMillis() - timeBeforePaint_ms;
@@ -540,7 +539,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         }
     }
 
-    private void drawVehicle(Graphics2D g, double simulationTime, RoadMapping roadMapping, Vehicle vehicle) {
+    private void drawVehicle(Graphics2D g, RoadMapping roadMapping, Vehicle vehicle) {
         // draw vehicle polygon at new position
         final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle);
         vehiclePath.reset();
@@ -549,7 +548,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         vehiclePath.lineTo(polygon.getXPoint(2), polygon.getYPoint(2));
         vehiclePath.lineTo(polygon.getXPoint(3), polygon.getYPoint(3));
         vehiclePath.closePath();
-        g.setPaint(vehicleColor(vehicle, simulationTime));
+        g.setPaint(vehicleColor(vehicle));
         g.fill(vehiclePath);
         if (vehicle.isBrakeLightOn()) {
             // if the vehicle is decelerating then display the
@@ -578,7 +577,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         if (backgroundPicture != null) {
             int height = backgroundPicture.getHeight();
             int width = backgroundPicture.getWidth();
-            g.drawImage(backgroundPicture, 0, -(int) height, (int) (width * 1.01), 0, 0, 0, width, height, null);
+            g.drawImage(backgroundPicture, 0, -height, (int) (width * 1.01), 0, 0, 0, width, height, null);
         }
 
         drawRoadSegmentsAndLines(g);
@@ -715,7 +714,7 @@ public class TrafficCanvas extends SimulationCanvasBase
                     roadMapping.getMaxOffsetRight();
             final PosTheta posTheta = roadMapping.map(position, offset);
             final int fontHeight = 12;
-            final Font font = new Font("SansSerif", Font.PLAIN, fontHeight);
+            final Font font = new Font(FONT_NAME, Font.PLAIN, fontHeight);
             g.setFont(font);
             g.setColor(Color.BLACK);
             TrafficCanvasUtils.drawTextRotated(roadSegment.userId(), posTheta, font, g);
@@ -726,7 +725,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         for (final RoadSegment roadSegment : roadNetwork) {
             assert roadSegment.speedLimits() != null;
             final int fontHeight = 12;
-            final Font font = new Font("SansSerif", Font.BOLD, fontHeight);
+            final Font font = new Font(FONT_NAME, Font.BOLD, fontHeight);
             final RoadMapping roadMapping = roadSegment.roadMapping();
             for (SpeedLimit speedLimit : roadSegment.speedLimits()) {
                 g.setFont(font);
@@ -749,7 +748,7 @@ public class TrafficCanvas extends SimulationCanvasBase
     private void drawSlopes(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final int fontHeight = 12;
-            final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
+            final Font font = new Font(FONT_NAME, Font.BOLD, fontHeight); //$NON-NLS-1$
             final RoadMapping roadMapping = roadSegment.roadMapping();
             final double offset = roadMapping.isPeer() ?
                     roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1) :
@@ -769,7 +768,7 @@ public class TrafficCanvas extends SimulationCanvasBase
 
     private void drawFlowConservingBottlenecks(Graphics2D g) {
         final int fontHeight = 12;
-        final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
+        final Font font = new Font(FONT_NAME, Font.BOLD, fontHeight); //$NON-NLS-1$
         final Color color = Color.ORANGE;
         final Color prevColor = g.getColor();
         g.setColor(color);
