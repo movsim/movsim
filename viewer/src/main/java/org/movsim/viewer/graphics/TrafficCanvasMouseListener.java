@@ -81,7 +81,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     public void mouseClicked(MouseEvent mouseEvent) {
         LOG.debug("mouseClicked at screen={}", mouseEvent.getPoint()); //$NON-NLS-1$
         if (trafficCanvas.lastVehicleViewed != -1) {
-            LOG.debug("vehicle id set"); //$NON-NLS-1$
+            LOG.info("vehicle id set"); //$NON-NLS-1$
             trafficCanvas.vehicleToHighlightId = trafficCanvas.lastVehicleViewed;
             trafficCanvas.vehicleColorMode = VehicleColorMode.HIGHLIGHT_VEHICLE;
             trafficCanvas.repaint();
@@ -99,8 +99,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 checkForTrafficLights(transformedPoint, roadSegment, roadMapping);
             }
         } catch (NoninvertibleTransformException e1) {
-            LOG.error(e1.getMessage());
-            return;
+            LOG.error("Error occurred", e1);
         }
     }
 
@@ -162,11 +161,12 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
 
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
-        LOG.debug("SimCanvas mouseEntered"); //$NON-NLS-1$
+        LOG.debug("SimCanvas mouseEntered");
     }
 
     @Override
     public void mouseExited(MouseEvent mouseEvent) {
+        // do nothing
     }
 
     @Override
@@ -208,7 +208,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                         TrafficCanvasUtils.fillPath(polygon, path);
                         if (path.contains(transformedPoint)) {
                             // the mouse is over a source
-                            LOG.debug("mouse over source ");
+                            LOG.debug("mouse over source");
                             trafficCanvas.showSourceMouseOverInfo(mouseEvent.getPoint(), source);
                         }
                     }
@@ -232,15 +232,14 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                         TrafficCanvasUtils.fillPath(polygon, path);
                         if (path.contains(transformedPoint)) {
                             // the mouse is over a vehicle
-                            LOG.debug("mouse over vehicle={}", vehicle.toString());
+                            LOG.debug("mouse over vehicle={}", vehicle);
                             trafficCanvas.showVehicleMouseOverInfo(mouseEvent.getPoint(), vehicle);
                             break;
                         }
                     }
                 }
             } catch (NoninvertibleTransformException e) {
-                LOG.error(e.getMessage());
-                return;
+                LOG.error("error occurred", e.getMessage());
             }
         }
     }
@@ -249,10 +248,10 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     public void mouseWheelMoved(MouseWheelEvent event) {
         final int notches = event.getWheelRotation();
         if (notches < 0) {
-            LOG.info("Mouse wheel moved UP {} notch(es)", -notches);
+            LOG.debug("Mouse wheel moved UP {} notch(es)", -notches);
             controller.commandZoomIn();
         } else {
-            LOG.info("Mouse wheel moved DOWN {} notch(es)", notches);
+            LOG.debug("Mouse wheel moved DOWN {} notch(es)", notches);
             controller.commandZoomOut();
         }
     }
