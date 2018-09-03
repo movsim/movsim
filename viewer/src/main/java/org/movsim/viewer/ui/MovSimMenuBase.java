@@ -27,7 +27,6 @@
 package org.movsim.viewer.ui;
 
 import java.awt.event.ActionEvent;
-import java.util.EventObject;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
@@ -42,7 +41,9 @@ import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("serial")
 public class MovSimMenuBase extends JPanel {
+
     private static final long serialVersionUID = -2588408479627239336L;
+
     final CanvasPanel canvasPanel;
     final TrafficCanvas trafficCanvas;
     final ResourceBundle resourceBundle;
@@ -64,14 +65,14 @@ public class MovSimMenuBase extends JPanel {
         helpMenu.add(new JMenuItem(new AbstractAction(resourceBundle.getString("HelpMenuAbout")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
-                        handleAbout(actionEvent);
+                        handleAbout();
                     }
                 }));
 
         return helpMenu;
     }
 
-    void handleAbout(EventObject event) {
+    void handleAbout() {
         final String titleString = (String) resourceBundle.getObject("AboutTitle"); //$NON-NLS-1$
         final String aboutString = (String) resourceBundle.getObject("AboutText"); //$NON-NLS-1$
         JOptionPane.showMessageDialog(canvasPanel, aboutString, titleString, JOptionPane.INFORMATION_MESSAGE);

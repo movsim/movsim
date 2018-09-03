@@ -27,41 +27,32 @@
 package org.movsim.viewer.ui;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.util.EventObject;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.filechooser.FileFilter;
-import javax.xml.bind.JAXBException;
 
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS.Waves;
-import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.TrafficCanvas;
-import org.movsim.viewer.util.SwingHelper;
-import org.xml.sax.SAXException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings({ "synthetic-access", "serial" })
 public class AppMenu extends MovSimMenuBase {
+
     private static final long serialVersionUID = -1741830983719200790L;
+
     private final Simulator simulator;
     private final AppFrame frame;
-    private final Properties properties;
 
     public AppMenu(AppFrame mainFrame, Simulator simulator, CanvasPanel canvasPanel,
-            TrafficCanvas trafficCanvas, ResourceBundle resourceBundle, Properties properties) {
+            TrafficCanvas trafficCanvas, ResourceBundle resourceBundle) {
         super(canvasPanel, trafficCanvas, resourceBundle);
         this.frame = mainFrame;
         this.simulator = simulator;
-        this.properties = properties;
     }
 
     public void initMenus() {

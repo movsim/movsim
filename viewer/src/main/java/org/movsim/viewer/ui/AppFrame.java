@@ -25,30 +25,26 @@
  */
 package org.movsim.viewer.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Frame;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.io.File;
-import java.net.URL;
-import java.util.Properties;
-import java.util.ResourceBundle;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import org.movsim.autogen.Movsim;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
-import org.movsim.viewer.App;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.SwingHelper;
 import org.movsim.xml.InputLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("synthetic-access")
-public class AppFrame extends JFrame {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+@SuppressWarnings("synthetic-access") public class AppFrame extends JFrame {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AppFrame.class);
+
     private static final long serialVersionUID = 1L;
 
     private final CanvasPanel canvasPanel;
@@ -84,9 +80,10 @@ public class AppFrame extends JFrame {
         initFrameSize(properties);
 
         if (projectMetaData.hasProjectName()) {
-            trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectFile());
+            trafficCanvas
+                    .setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectFile());
         } else {
-            System.out.println("Please provide scenario via -f option");
+            LOG.warn("Please provide scenario via -f option");
         }
 
         statusPanel.reset();
@@ -111,22 +108,15 @@ public class AppFrame extends JFrame {
 
     private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvas trafficCanvas,
             Properties properties) {
-        final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle,
-                properties);
+        final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle);
         trafficMenus.initMenus();
     }
 
     private void initLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (final ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (final InstantiationException e) {
-            e.printStackTrace();
-        } catch (final IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (final UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            LOG.error("error occurred", e);
         }
         SwingUtilities.updateComponentTreeUI(this);
     }

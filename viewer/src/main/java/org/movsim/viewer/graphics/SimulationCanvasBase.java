@@ -274,11 +274,11 @@ public abstract class SimulationCanvasBase extends Canvas {
     /**
      * Set the thread sleep time. This controls the animation speed.
      *
-     * @param sleepTime_ms
+     * @param sleepTimeMilliseconds
      *            sleep time in milliseconds
      */
-    public final void setSleepTime(int sleepTime_ms) {
-        simulationRunnable.setSleepTime(sleepTime_ms);
+    public final void setSleepTime(int sleepTimeMilliseconds) {
+        simulationRunnable.setSleepTime(sleepTimeMilliseconds);
     }
 
     /**

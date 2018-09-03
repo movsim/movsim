@@ -25,15 +25,6 @@
  */
 package org.movsim.viewer.ui;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import javax.swing.JButton;
-import javax.swing.JToolBar;
-
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvas.StatusControlCallbacks;
 import org.movsim.viewer.graphics.TrafficCanvasController;
@@ -41,24 +32,31 @@ import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 public class MovSimToolBar extends JToolBar implements ActionListener {
 
     private static final long serialVersionUID = 1L;
 
-    final static Logger logger = LoggerFactory.getLogger(MovSimToolBar.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MovSimToolBar.class);
 
     protected String newline = "\n";
     private final TrafficCanvasController controller;
-    static final private String START = "toogle start/pause/resume";
-    static final private String ZOOM_IN = "zoom in";
-    static final private String ZOOM_OUT = "zoom out";
-    static final private String FASTER = "faster";
-    static final private String SLOWER = "slower";
-    static final private String RECENTER = "recenter";
-    static final private String VEHICLE_COLORS = "vehicle colors";
-    static final private String RESET = "reset";
+    private static final String START = "toogle start/pause/resume";
+    private static final String ZOOM_IN = "zoom in";
+    private static final String ZOOM_OUT = "zoom out";
+    private static final String FASTER = "faster";
+    private static final String SLOWER = "slower";
+    private static final String RECENTER = "recenter";
+    private static final String VEHICLE_COLORS = "vehicle colors";
+    private static final String RESET = "reset";
 
-    JButton buttonStart;
+    private JButton buttonStart;
     private final StatusPanel statusPanel;
     private final StatusControlCallbacks statusCallbacks;
 
@@ -79,15 +77,16 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
 
             @Override
             public void stateChanged() {
+                String images = "/images/";
                 if (trafficCanvas.isStopped()) {
-                    buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"
-                            + ".png", 32, 32));
+                    buttonStart
+                            .setIcon(SwingHelper.createImageIcon(this.getClass(), images + "button_play" + ".png", 32, 32));
                 } else if (trafficCanvas.isPaused()) {
-                    buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"
-                            + ".png", 32, 32));
+                    buttonStart
+                            .setIcon(SwingHelper.createImageIcon(this.getClass(), images + "button_play" + ".png", 32, 32));
                 } else {
-                    buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_pause"
-                            + ".png", 32, 32));
+                    buttonStart
+                            .setIcon(SwingHelper.createImageIcon(this.getClass(), images + "button_pause" + ".png", 32, 32));
                 }
             }
         };
@@ -131,7 +130,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
             button.setIcon(SwingHelper.createImageIcon(this.getClass(), imgLocation, 32, 32));
         } else { // no image found
             button.setText(resourceBundle.getString(textResource));
-            logger.error("Resource not found: ", imgLocation);
+            LOG.error("Resource not found: {}", imgLocation);
         }
         return button;
     }
@@ -143,7 +142,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        logger.info("action command: {}", e.getActionCommand());
+        LOG.info("action command: {}", e.getActionCommand());
         if (e.getActionCommand().equals(ZOOM_IN)) {
             controller.commandZoomIn();
         } else if (e.getActionCommand().equals(ZOOM_OUT)) {

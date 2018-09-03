@@ -25,24 +25,6 @@
  */
 package org.movsim.viewer.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Enumeration;
-import java.util.ResourceBundle;
-
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
-import org.apache.log4j.Category;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.movsim.viewer.util.SwingHelper;
@@ -50,15 +32,23 @@ import org.movsim.viewer.util.SwingLogAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Enumeration;
+import java.util.ResourceBundle;
+
 /**
  * @author ralph
- * 
  */
 public class LogWindow extends JFrame {
 
     private static final long serialVersionUID = 7260621844785396283L;
-    final static Logger logger = LoggerFactory.getLogger(LogWindow.class);
-    static private JTextArea jTextArea = null;
+    private static final Logger LOG = LoggerFactory.getLogger(LogWindow.class);
+    private static JTextArea jTextArea = null;
 
     public LogWindow(ResourceBundle resourceBundle, final JCheckBoxMenuItem cbMenu) {
         super(resourceBundle.getString("LogWindowTitle"));
@@ -73,7 +63,7 @@ public class LogWindow extends JFrame {
             }
         });
 
-        logger.debug("Constuctor LogWindow");
+        LOG.debug("Constuctor LogWindow");
 
         setLocation(10, 700);
 
@@ -99,7 +89,7 @@ public class LogWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 final JComboBox<?> comboBox = (JComboBox<?>) e.getSource();
                 final String chosenLogLevel = (String) comboBox.getSelectedItem();
-                logger.info("Changed loglevel to {}", chosenLogLevel);
+                LOG.info("Changed loglevel to {}", chosenLogLevel);
                 if (chosenLogLevel.equals(debug)) {
                     changeLevelOfAllLoggersTo(Level.DEBUG);
                 } else if (chosenLogLevel.equals(info)) {
@@ -141,7 +131,7 @@ public class LogWindow extends JFrame {
         final Enumeration<org.apache.log4j.Logger> loggers = LogManager.getCurrentLoggers();
         while (loggers.hasMoreElements()) {
             final org.apache.log4j.Logger l = loggers.nextElement();
-            ((Category) l).setLevel(level);
+            l.setLevel(level);
         }
     }
 }

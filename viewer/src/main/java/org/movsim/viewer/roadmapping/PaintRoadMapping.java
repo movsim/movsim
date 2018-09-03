@@ -51,10 +51,9 @@ import org.slf4j.LoggerFactory;
  */
 public final class PaintRoadMapping {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(PaintRoadMapping.class);
 
-    private static final boolean drawBezierPoints = false;
+    private static final boolean DRAW_BEZIER_POINTS = false;
 
     private PaintRoadMapping() {
         throw new IllegalStateException("do not instanciate");
@@ -81,7 +80,7 @@ public final class PaintRoadMapping {
 
         final Class<? extends RoadMapping> roadMappingClass = roadMapping.getClass();
         if (roadMappingClass == RoadMappingLine.class) {
-            LOG.debug("paint RoadMappingLine={}", roadMapping.toString());
+            LOG.debug("paint RoadMappingLine={}", roadMapping);
             posTheta = roadMapping.startPos(lateralOffset);
             from.setLocation(posTheta.getScreenX(), posTheta.getScreenY());
             posTheta = roadMapping.endPos(lateralOffset);
@@ -91,7 +90,7 @@ public final class PaintRoadMapping {
             return;
         } else if (roadMappingClass == RoadMappingArc.class) {
             final RoadMappingArc arc = (RoadMappingArc) roadMapping;
-            LOG.debug("lateralOffset={},  paint RoadMappingArc={}", lateralOffset, arc.toString());
+            LOG.debug("lateralOffset={},  paint RoadMappingArc={}", lateralOffset, arc);
             posTheta = roadMapping.startPos();
             final double angSt = arc.startAngle() + (arc.clockwise() ? 0.5 * Math.PI : -0.5 * Math.PI);
             final double radius = arc.radius();
@@ -105,14 +104,14 @@ public final class PaintRoadMapping {
             g.draw(arc2D);
             return;
         } else if (roadMappingClass == RoadMappingPoly.class) {
-            LOG.debug("paint RoadMappingPoly={}", roadMapping.toString());
+            LOG.debug("paint RoadMappingPoly={}", roadMapping);
             final RoadMappingPoly poly = (RoadMappingPoly) roadMapping;
             for (final RoadMapping map : poly) {
                 paintRoadMapping(g, map, lateralOffset);
             }
             return;
         } else if (roadMappingClass == RoadMappingPolyLine.class) {
-            LOG.debug("paint RoadMappingPolyLine={}", roadMapping.toString());
+            LOG.debug("paint RoadMappingPolyLine={}", roadMapping);
             // TODO need to properly handle joins of the lines in the polyline
             if (lateralOffset == 0.0) {
                 final RoadMappingPolyLine polyLine = (RoadMappingPolyLine) roadMapping;
@@ -165,7 +164,7 @@ public final class PaintRoadMapping {
                 posTheta = bezier.startPos(lateralOffset);
                 final int radius = 10;
                 final int radiusC = 6;
-                if (drawBezierPoints) {
+                if (DRAW_BEZIER_POINTS) {
                     g.fillOval((int) posTheta.getScreenX() - radius / 2, (int) posTheta.getScreenY() - radius / 2,
                             radius, radius);
                 }
@@ -173,7 +172,7 @@ public final class PaintRoadMapping {
                 posTheta = bezier.endPos(lateralOffset);
                 path.quadTo(bezier.controlX(lateralOffset), bezier.controlY(lateralOffset), posTheta.getScreenX(),
                         posTheta.getScreenY());
-                if (drawBezierPoints) {
+                if (DRAW_BEZIER_POINTS) {
                     g.fillOval((int) posTheta.getScreenX() - radius / 2, (int) posTheta.getScreenY() - radius / 2,
                             radius, radius);
                     g.fillOval((int) bezier.controlX(lateralOffset) - radiusC / 2, (int) bezier.controlY(lateralOffset)
@@ -184,7 +183,7 @@ public final class PaintRoadMapping {
                     posTheta = bezier.endPos(lateralOffset);
                     path.quadTo(bezier.controlX(lateralOffset), bezier.controlY(lateralOffset), posTheta.getScreenX(),
                             posTheta.getScreenY());
-                    if (drawBezierPoints) {
+                    if (DRAW_BEZIER_POINTS) {
                         g.fillOval((int) posTheta.getScreenX() - radius / 2, (int) posTheta.getScreenY() - radius / 2,
                                 radius, radius);
                         g.fillOval((int) bezier.controlX(lateralOffset) - radiusC / 2,
