@@ -60,9 +60,9 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
     private String backgroundPicturePath;
 
     // scale factor pixels/m, smaller value means a smaller looking view
-    private double scale;
-    private int xOffset = 0;
-    private int yOffset = 0;
+    public double scale;
+    public int xOffset = 0;
+    public int yOffset = 0;
 
     // Facade to draw with awt on a javafx canvas
     private FXGraphics2D fxGraphics2D;
@@ -230,9 +230,15 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
         setTransformAndScale();
     }
 
-    private void setTransformAndScale() {
+    public void setTransformAndScale() {
         transform.setToIdentity();
         transform.scale(scale, scale);
+        transform.translate(xOffset, yOffset);
+        fxGraphics2D.transform(transform);
+    }
+
+    public void setTranslateFx() {
+        transform.setToIdentity();
         transform.translate(xOffset, yOffset);
         fxGraphics2D.transform(transform);
     }
