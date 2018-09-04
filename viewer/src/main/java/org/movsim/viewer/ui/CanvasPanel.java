@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.movsim.viewer.graphics.TrafficCanvas;
+import org.movsim.viewer.util.SwingHelper;
 
 public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -42,7 +43,7 @@ public class CanvasPanel extends JPanel {
     public CanvasPanel(final ResourceBundle resourceBundle, final TrafficCanvas trafficCanvas) {
 
         // TODO check if needed anymore. Seems working fine with linux. Check windows and mac!
-        // SwingHelper.makeLightWeightComponentsVisible();
+//         SwingHelper.makeLightWeightComponentsVisible();
 
         try {
             // Execute a job on the event-dispatching thread; creating this applet's GUI.
