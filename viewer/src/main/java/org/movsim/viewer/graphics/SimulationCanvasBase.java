@@ -33,6 +33,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
+import com.google.common.base.Preconditions;
 import org.movsim.simulator.SimulationRunnable;
 
 /**
@@ -56,16 +57,14 @@ import org.movsim.simulator.SimulationRunnable;
  */
 public abstract class SimulationCanvasBase extends Canvas {
 
-    private static final long serialVersionUID = 3351170249194920665L;
+    private static final double FORCE_REPAINT_BACKGROUND_INTERVAL_SECONDS = 60.0;
 
-    private static final double FORCE_REPAINT_BACKGROUND_INTERVAL = 60.0; // seconds;
-
-    protected final SimulationRunnable simulationRunnable;
+    protected final transient SimulationRunnable simulationRunnable;
     protected long totalAnimationTime;
 
     // drawing support
-    private Image backgroundBuffer;
-    private Image foregroundBuffer;
+    private transient Image backgroundBuffer;
+    private transient Image foregroundBuffer;
     private int bufferHeight;
     private int bufferWidth;
     protected boolean backgroundChanged;
@@ -118,8 +117,7 @@ public abstract class SimulationCanvasBase extends Canvas {
      * @param simulationRunnable
      */
     public SimulationCanvasBase(SimulationRunnable simulationRunnable) {
-        assert simulationRunnable != null;
-        this.simulationRunnable = simulationRunnable;
+        this.simulationRunnable = Preconditions.checkNotNull(simulationRunnable);
     }
 
     public void reset() {
@@ -167,25 +165,6 @@ public abstract class SimulationCanvasBase extends Canvas {
         return scale;
     }
 
-    @Deprecated
-    protected void setScales() {
-        final int width = Math.max(getSize().width, 10);
-        final int height = Math.max(getSize().height, 10);
-
-        if (backgroundBuffer == null || width != bufferWidth || height != bufferHeight) {
-            backgroundBuffer = createImage(width, height);
-            foregroundBuffer = createImage(width, height);
-            bufferWidth = width;
-            bufferHeight = height;
-        }
-    }
-
-    protected void clearOffsets() {
-        xOffset = 0;
-        yOffset = 0;
-        setTransform();
-    }
-
     public void forceRepaintBackground() {
         backgroundChanged = true;
         repaint();
@@ -213,7 +192,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
         // update background (for outflow) every e.g. 60 seconds of simulation
         measuredTime += simulationRunnable.timeStep();
-        if (measuredTime > FORCE_REPAINT_BACKGROUND_INTERVAL) {
+        if (measuredTime > FORCE_REPAINT_BACKGROUND_INTERVAL_SECONDS) {
             forceRepaintBackground();
             measuredTime = 0;
         }
