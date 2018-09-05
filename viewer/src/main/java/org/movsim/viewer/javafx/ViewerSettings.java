@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class GraphicSettings {
-    private static final Logger LOG = LoggerFactory.getLogger(GraphicSettings.class);
+public class ViewerSettings {
+    private static final Logger LOG = LoggerFactory.getLogger(ViewerSettings.class);
 
     private boolean drawRoadId;
     private boolean drawSources;
@@ -43,10 +43,9 @@ public class GraphicSettings {
     public int xOffset = 0;
     public int yOffset = 0;
 
-    private java.awt.Color backgroundColor;
+    private javafx.scene.paint.Color backgroundColor;
     // optional background picture
     private String backgroundPicturePath;
-
 
     public enum VehicleColorMode {
         VELOCITY_COLOR,
@@ -58,18 +57,17 @@ public class GraphicSettings {
         HIGHLIGHT_VEHICLE
     }
 
-
     private VehicleColorMode vehicleColorMode = VehicleColorMode.VELOCITY_COLOR;
 
     public Map<String, Color> getLabelColors() {
         return labelColors;
     }
 
-    public Color getBackgroundColor() {
+    public javafx.scene.paint.Color getBackgroundColor() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(Color backgroundColor) {
+    public void setBackgroundColor(javafx.scene.paint.Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
@@ -86,6 +84,10 @@ public class GraphicSettings {
     }
 
     public void setScale(double scale) {
+//        final int width = 1000; TODO scale
+//        final int height = 1000;
+//        xOffset -= 0.5 * width * (1.0 / this.scale - 1.0 / scale);
+//        yOffset -= 0.5 * height * (1.0 / this.scale - 1.0 / scale);
         this.scale = scale;
     }
 
@@ -257,7 +259,7 @@ public class GraphicSettings {
         this.vmaxForColorSpectrum = vmaxForColorSpectrum;
     }
 
-    GraphicSettings() {
+    ViewerSettings() {
     }
 
     protected void initGraphicConfigFieldsFromProperties(Properties properties) {
@@ -288,7 +290,7 @@ public class GraphicSettings {
         xOffset = Integer.parseInt(properties.getProperty("xOffset"));
         yOffset = Integer.parseInt(properties.getProperty("yOffset"));
 
-        backgroundColor = new java.awt.Color(Integer.parseInt(properties.getProperty("backgroundColor"), hexRadix));
+        backgroundColor = javafx.scene.paint.Color.web(properties.getProperty("backgroundColor"));
         backgroundPicturePath = properties.getProperty("backgroundPicturePath");
     }
 }

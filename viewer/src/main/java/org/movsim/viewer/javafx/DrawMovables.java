@@ -15,7 +15,7 @@ import java.awt.geom.Path2D;
 import java.util.Iterator;
 
 public class DrawMovables {
-    private GraphicSettings settings;
+    private ViewerSettings settings;
     private RoadNetwork roadNetwork;
     private final SimulationRunnable simulationRunnable;
 
@@ -30,7 +30,7 @@ public class DrawMovables {
     private long vehicleToHighlightId = -1;
 
 
-    public DrawMovables(GraphicSettings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable) {
+    public DrawMovables(ViewerSettings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable) {
         this.settings = settings;
         this.roadNetwork = roadNetwork;
         this.simulationRunnable = simulationRunnable;

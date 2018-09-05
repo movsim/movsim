@@ -10,12 +10,7 @@ import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
-import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
-import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
-import org.movsim.utilities.Units;
-import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +18,6 @@ import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBException;
-import java.awt.*;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -32,15 +26,15 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
 
     private static final Logger LOG = LoggerFactory.getLogger(FxSimCanvas.class);
 
-    private final Simulator simulator;
+    public Simulator simulator;
     private SimulationRunnable simulationRunnable = null;
-    private final RoadNetwork roadNetwork;
+    private RoadNetwork roadNetwork;
 
-    public GraphicSettings settings = new GraphicSettings();
+    public ViewerSettings settings = new ViewerSettings();
     private Properties viewProperties;
 
-    private final DrawMovables drawMovables;
-    private final DrawBackground drawBackground;
+    private DrawMovables drawMovables;
+    private DrawBackground drawBackground;
 
     // Facade to draw with awt on a javafx canvas TODO convert everything javafx to step by step -> remove
     private FXGraphics2D fxGraphics2D;
@@ -58,6 +52,11 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
         gc = getGraphicsContext2D();
         fxGraphics2D = new FXGraphics2D(this.getGraphicsContext2D());
 
+        init();
+    }
+
+
+    public void init() {
         ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         Movsim movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
 
@@ -84,12 +83,10 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
             System.err.println("Please provide scenario via -f option");
             System.exit(-1);
         }
-
     }
 
-    private void initGraphicConfigFieldsFromProperties() {
-        settings.initGraphicConfigFieldsFromProperties(viewProperties);
-        setSleepTime(Integer.parseInt(viewProperties.getProperty("initial_sleep_time")));
+    public void resetSimulation() {
+        simulator.reset();
     }
 
     /**
@@ -108,7 +105,8 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
     }
 
     private void initGraphicSettings() {
-        initGraphicConfigFieldsFromProperties();
+        settings.initGraphicConfigFieldsFromProperties(viewProperties);
+        setSleepTime(Integer.parseInt(viewProperties.getProperty("initial_sleep_time")));
         execScale();
         execTranslateFx();
         for (final RoadSegment roadSegment : roadNetwork) {
@@ -172,6 +170,10 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
         if (statusControlCallbacks != null) {
             statusControlCallbacks.stateChanged();
         }
+    }
+
+    public void forceRepaintBackground() {
+        drawBackground.update(fxGraphics2D);
     }
 
     /**

@@ -25,14 +25,14 @@ import java.util.Map;
 public class DrawBackground {
     private static final Logger LOG = LoggerFactory.getLogger(DrawBackground.class);
 
-    private GraphicSettings settings;
+    private ViewerSettings settings;
     private RoadNetwork roadNetwork;
     private SimulationRunnable simulationRunnable;
     private Simulator simulator;
 
     private BufferedImage backgroundPicture = null;
 
-    public DrawBackground(GraphicSettings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable, Simulator simulator) {
+    public DrawBackground(ViewerSettings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable, Simulator simulator) {
         this.settings = settings;
         this.roadNetwork = roadNetwork;
         this.simulationRunnable = simulationRunnable;
@@ -45,8 +45,8 @@ public class DrawBackground {
     }
 
     private void clearBackground(FXGraphics2D g) {
-        g.setColor(settings.getBackgroundColor());
-        g.fillRect(0, 0, 1000, 800);
+        g.setBackground(Color.GREEN);
+        g.clearRect(0 - settings.getxOffset(), 0 - settings.getyOffset(), 1000, 1000);
     }
 
     /**
