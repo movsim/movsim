@@ -22,13 +22,13 @@ public class JavaFxApp extends Application {
     private int yOffsetSave;
 
     public static void main(String[] args) {
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
 
         Logger.initializeLoggerJavaFx();
+
         // parse the command line, putting the results into projectMetaData
         MovsimCommandLine.parse(args);
 
-        properties = ViewProperties.loadProperties(projectMetaData);
+        properties = ViewProperties.loadProperties(ProjectMetaData.getInstance());
 
         launch(args);
     }
@@ -43,19 +43,21 @@ public class JavaFxApp extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         primaryStage.setOnCloseRequest((e) -> Platform.exit());
+
+        // Dragging canvas support
         canvas.setOnMousePressed((e) -> {
             startDragX = (int) e.getX();
             startDragY = (int) e.getY();
-            xOffsetSave = canvas.xOffset;
-            yOffsetSave = canvas.xOffset;
+            xOffsetSave = canvas.settings.getxOffset();
+            yOffsetSave = canvas.settings.getyOffset();
         });
         canvas.setOnMouseReleased((e) -> {
-            int xOffsetNew = xOffsetSave + (int) ((e.getX() - startDragX) / canvas.scale);
-            int yOffsetNew = yOffsetSave + (int) ((e.getY() - startDragY) / canvas.scale);
-            if ((xOffsetNew != canvas.xOffset) || (yOffsetNew != canvas.yOffset)) {
-                canvas.xOffset = xOffsetNew;
-                canvas.yOffset = yOffsetNew;
-                canvas.setTranslateFx();
+            int xOffsetNew = xOffsetSave + (int) ((e.getX() - startDragX) / canvas.settings.getScale());
+            int yOffsetNew = yOffsetSave + (int) ((e.getY() - startDragY) / canvas.settings.getScale());
+            if ((xOffsetNew != canvas.settings.getxOffset()) || (yOffsetNew != canvas.settings.getyOffset())) {
+                canvas.settings.setxOffset(xOffsetNew);
+                canvas.settings.setyOffset(yOffsetNew);
+                canvas.execTranslateFx();
             }
         });
     }

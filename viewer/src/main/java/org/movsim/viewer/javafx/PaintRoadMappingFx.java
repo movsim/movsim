@@ -26,11 +26,10 @@
 
 package org.movsim.viewer.javafx;
 
-import java.awt.geom.Arc2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.*;
 import java.util.Iterator;
 
 import org.jfree.fx.FXGraphics2D;
@@ -239,5 +238,27 @@ public final class PaintRoadMappingFx {
       clipPath.closePath();
       g.setClip(clipPath);
     }
+  }
+
+  public static void drawLine(FXGraphics2D g, RoadMapping roadMapping, double position, int strokeWidth, Color color) {
+    Color prevColor = g.getColor();
+    final double lateralExtend = roadMapping.getLaneCountInDirection() * roadMapping.laneWidth();
+    final PosTheta posTheta = roadMapping.map(position, 0/* offset */);
+    final RoadMapping.PolygonFloat line = roadMapping.mapLine(posTheta, roadMapping.isPeer() ? +lateralExtend : -lateralExtend);
+    g.setColor(color);
+    g.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+    g.draw(new Line2D.Float(line.getXPoint(0), line.getYPoint(0), line.getXPoint(1), line.getYPoint(1)));
+    g.setColor(prevColor);
+  }
+
+  protected static void drawTextRotated(String text, PosTheta posTheta, Font font, FXGraphics2D g) {
+    FontRenderContext frc = g.getFontRenderContext();
+    GlyphVector gv = font.createGlyphVector(frc, text); //$NON-NLS-1$
+    AffineTransform at = AffineTransform.getTranslateInstance((int) posTheta.getScreenX(),
+            (int) posTheta.getScreenY());
+    at.rotate(-posTheta.getTheta());
+    Shape glyph = gv.getOutline();
+    Shape transformedGlyph = at.createTransformedShape(glyph);
+    g.fill(transformedGlyph);
   }
 }
