@@ -1,9 +1,15 @@
 package org.movsim.viewer.javafx;
 
+import org.apache.commons.lang3.StringUtils;
+import org.movsim.input.ProjectMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -39,13 +45,16 @@ public class ViewerSettings {
     private final Map<String, Color> labelColors = new HashMap<>();
 
     // scale factor pixels/m, smaller value means a smaller looking view
-    public double scale;
+    public double scale = 1;
     public int xOffset = 0;
     public int yOffset = 0;
+    private int xPixSizeWindow;
+    private int yPixSizeWindow;
 
     private javafx.scene.paint.Color backgroundColor;
     // optional background picture
     private String backgroundPicturePath;
+    private BufferedImage backgroundPicture;
 
     public enum VehicleColorMode {
         VELOCITY_COLOR,
@@ -84,10 +93,8 @@ public class ViewerSettings {
     }
 
     public void setScale(double scale) {
-//        final int width = 1000; TODO scale
-//        final int height = 1000;
-//        xOffset -= 0.5 * width * (1.0 / this.scale - 1.0 / scale);
-//        yOffset -= 0.5 * height * (1.0 / this.scale - 1.0 / scale);
+        xOffset -= 0.5 * xPixSizeWindow * (1.0 / this.scale - 1.0 / scale);
+        yOffset -= 0.5 * yPixSizeWindow * (1.0 / this.scale - 1.0 / scale);
         this.scale = scale;
     }
 
@@ -259,6 +266,31 @@ public class ViewerSettings {
         this.vmaxForColorSpectrum = vmaxForColorSpectrum;
     }
 
+    public BufferedImage getBackgroundPicture() {
+        return backgroundPicture;
+    }
+
+    public void setBackgroundPicture(BufferedImage backgroundPicture) {
+        this.backgroundPicture = backgroundPicture;
+    }
+
+    public int getxPixSizeWindow() {
+        return xPixSizeWindow;
+    }
+
+    public void setxPixSizeWindow(int xPixSizeWindow) {
+        this.xPixSizeWindow = xPixSizeWindow;
+    }
+
+    public int getyPixSizeWindow() {
+        return yPixSizeWindow;
+    }
+
+    public void setyPixSizeWindow(int yPixSizeWindow) {
+        this.yPixSizeWindow = yPixSizeWindow;
+    }
+
+
     ViewerSettings() {
     }
 
@@ -286,11 +318,34 @@ public class ViewerSettings {
         gapLength = Float.parseFloat(properties.getProperty("gapLength"));
         gapLengthExit = Float.parseFloat(properties.getProperty("gapLengthExit"));
 
-        scale = Double.parseDouble(properties.getProperty("initialScale"));
-        xOffset = Integer.parseInt(properties.getProperty("xOffset"));
-        yOffset = Integer.parseInt(properties.getProperty("yOffset"));
+
+        xPixSizeWindow = Integer.valueOf(properties.getProperty("xPixSizeWindow", "1000"));
+        yPixSizeWindow = Integer.valueOf(properties.getProperty("yPixSizeWindow", "800"));
+        setxOffset(Integer.parseInt(properties.getProperty("xOffset")));
+        setyOffset(Integer.parseInt(properties.getProperty("yOffset")));
+        setScale(Double.parseDouble(properties.getProperty("initialScale")));
 
         backgroundColor = javafx.scene.paint.Color.web(properties.getProperty("backgroundColor"));
         backgroundPicturePath = properties.getProperty("backgroundPicturePath");
+
+        backgroundPicture = readBackgroundImage(backgroundPicturePath);
+
+    }
+
+    private BufferedImage readBackgroundImage(String filename) {
+        if (StringUtils.isNotBlank(filename)) {
+            try {
+                String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
+                if (ProjectMetaData.getInstance().hasPathToProjectFile()) {
+                    currentPath = ProjectMetaData.getInstance().getPathToProjectFile();
+                }
+                File file = new File(currentPath, filename);
+                LOG.info("background image file parent={}, name={}", file.getParent(), file.getName());
+                return ImageIO.read(file);
+            } catch (Exception e) {
+                LOG.error("cannot load background image " + filename, e);
+            }
+        }
+        return null;
     }
 }

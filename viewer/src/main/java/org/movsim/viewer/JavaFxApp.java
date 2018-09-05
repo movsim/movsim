@@ -38,10 +38,39 @@ public class JavaFxApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Group root = new Group();
-        FxSimCanvas canvas = new FxSimCanvas((int) viewProperties.getOrDefault("xPixSizeWindow", 1000), (int) viewProperties.getOrDefault("yPixSizeWindow", 800), viewProperties);
-        root.getChildren().add(canvas);
+        Group main = new Group();
+        int xPixSizeWindow = Integer.valueOf(viewProperties.getProperty("xPixSizeWindow", "1000"));
+        int yPixSizeWindow = Integer.valueOf(viewProperties.getProperty("yPixSizeWindow", "800"));
+        FxSimCanvas canvas = new FxSimCanvas((int) xPixSizeWindow, yPixSizeWindow, viewProperties);
+        main.getChildren().add(canvas);
 
+        VBox vBox = new VBox(createToolBar(canvas), main);
+
+        primaryStage.setTitle("Movsim Viewer");
+        primaryStage.setScene(new Scene(vBox));
+        primaryStage.show();
+        primaryStage.setOnCloseRequest((e) -> Platform.exit());
+
+        // Dragging canvas support
+        canvas.setOnMousePressed((e) -> {
+            startDragX = (int) e.getX();
+            startDragY = (int) e.getY();
+            xOffsetSave = canvas.settings.getxOffset();
+            yOffsetSave = canvas.settings.getyOffset();
+        });
+        canvas.setOnMouseReleased((e) -> {
+            int xOffsetNew = xOffsetSave + (int) ((e.getX() - startDragX) / canvas.settings.getScale());
+            int yOffsetNew = yOffsetSave + (int) ((e.getY() - startDragY) / canvas.settings.getScale());
+            if ((xOffsetNew != canvas.settings.getxOffset()) || (yOffsetNew != canvas.settings.getyOffset())) {
+                canvas.settings.setxOffset(xOffsetNew);
+                canvas.settings.setyOffset(yOffsetNew);
+                canvas.execTranslateFx();
+                canvas.forceRepaintBackground();
+            }
+        });
+    }
+
+    private ToolBar createToolBar(FxSimCanvas canvas) {
         ToolBar toolBar = new ToolBar();
 
         Button startStopButton = new Button("Pause");
@@ -81,32 +110,7 @@ public class JavaFxApp extends Application {
         });
 
         toolBar.getItems().addAll(startStopButton, reset, zoomIn, zoomOut);
-
-        VBox vBox = new VBox(toolBar, root);
-
-        primaryStage.setTitle("Movsim Viewer");
-        primaryStage.setScene(new Scene(vBox));
-        primaryStage.show();
-        primaryStage.setOnCloseRequest((e) -> Platform.exit());
-
-
-        // Dragging canvas support
-        canvas.setOnMousePressed((e) -> {
-            startDragX = (int) e.getX();
-            startDragY = (int) e.getY();
-            xOffsetSave = canvas.settings.getxOffset();
-            yOffsetSave = canvas.settings.getyOffset();
-        });
-        canvas.setOnMouseReleased((e) -> {
-            int xOffsetNew = xOffsetSave + (int) ((e.getX() - startDragX) / canvas.settings.getScale());
-            int yOffsetNew = yOffsetSave + (int) ((e.getY() - startDragY) / canvas.settings.getScale());
-            if ((xOffsetNew != canvas.settings.getxOffset()) || (yOffsetNew != canvas.settings.getyOffset())) {
-                canvas.settings.setxOffset(xOffsetNew);
-                canvas.settings.setyOffset(yOffsetNew);
-                canvas.execTranslateFx();
-                canvas.forceRepaintBackground();
-            }
-        });
+        return toolBar;
     }
 
     @Override

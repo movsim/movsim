@@ -37,6 +37,7 @@ public class DrawBackground {
         this.roadNetwork = roadNetwork;
         this.simulationRunnable = simulationRunnable;
         this.simulator = simulator;
+        this.backgroundPicture = settings.getBackgroundPicture();
     }
 
     public void update(FXGraphics2D fxGraphics2D) {
@@ -56,11 +57,11 @@ public class DrawBackground {
      * @param g
      */
     private void drawBackground(FXGraphics2D g) {
-
-        if (backgroundPicture != null)
-            g.drawImage(backgroundPicture, 0, -(int) (backgroundPicture.getHeight()),
-                    (int) (backgroundPicture.getWidth() * 1.01), 0, 0, 0, backgroundPicture.getWidth(),
-                    backgroundPicture.getHeight(), null);
+        if (backgroundPicture != null) {
+            int height = backgroundPicture.getHeight();
+            int width = backgroundPicture.getWidth();
+            g.drawImage(backgroundPicture, 0, -(int) height, (int) (width * 1.01), 0, 0, 0, width, height, null);
+        }
 
         drawRoadSegmentsAndLines(g);
 
@@ -92,6 +93,7 @@ public class DrawBackground {
             drawNotifyObjects(g);
         }
     }
+
     private void drawRoadSegmentsAndLines(FXGraphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
@@ -150,6 +152,7 @@ public class DrawBackground {
         LOG.debug("draw road most outer edge: offset={}", offset);
         PaintRoadMappingFx.paintRoadMapping(g, roadMapping, offset);
     }
+
     private void drawSpeedLimits(FXGraphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             assert roadSegment.speedLimits() != null;
@@ -266,11 +269,4 @@ public class DrawBackground {
         }
     }
 
-    public BufferedImage getBackgroundPicture() {
-        return backgroundPicture;
-    }
-
-    public void setBackgroundPicture(BufferedImage backgroundPicture) {
-        this.backgroundPicture = backgroundPicture;
-    }
 }

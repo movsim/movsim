@@ -2,6 +2,7 @@ package org.movsim.viewer.javafx;
 
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.transform.Affine;
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.fx.FXGraphics2D;
 import org.movsim.autogen.Movsim;
@@ -39,6 +40,7 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
     // Facade to draw with awt on a javafx canvas TODO convert everything javafx to step by step -> remove
     private FXGraphics2D fxGraphics2D;
     private final GraphicsContext gc;
+    private Affine affine = new Affine();
 
     private FxSimCanvas.StatusControlCallbacks statusControlCallbacks;
 
@@ -97,18 +99,19 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
     }
 
     public void execScale() {
+//        affine.setToIdentity();
         gc.scale(settings.getScale(), settings.getScale());
     }
 
     public void execTranslateFx() {
+//        affine.setToIdentity();
         gc.translate(settings.getxOffset(), settings.getyOffset());
     }
 
     private void initGraphicSettings() {
         settings.initGraphicConfigFieldsFromProperties(viewProperties);
         setSleepTime(Integer.parseInt(viewProperties.getProperty("initial_sleep_time")));
-        execScale();
-        execTranslateFx();
+
         for (final RoadSegment roadSegment : roadNetwork) {
             roadSegment.roadMapping().setRoadColor(settings.getRoadColor().getRGB());
         }
@@ -117,16 +120,12 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
             LOG.debug("set color for vehicle label={}", vehicleTypeLabel);
             settings.getLabelColors().put(vehicleTypeLabel, color);
         }
-        if (StringUtils.isNotBlank(settings.getBackgroundPicturePath())) {
-            try {
-                String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
-                File file = new File(currentPath, settings.getBackgroundPicturePath());
-                LOG.info("background image file parent={}, name={}", file.getParent(), file.getName());
-                drawBackground.setBackgroundPicture(ImageIO.read(file));
-            } catch (Exception e) {
-                LOG.error("cannot load background image " + settings.getBackgroundPicturePath(), e);
-            }
-        }
+
+        affine.setToIdentity();
+        gc.transform(affine);
+
+        execScale();
+        execTranslateFx();
     }
 
     public void start() {

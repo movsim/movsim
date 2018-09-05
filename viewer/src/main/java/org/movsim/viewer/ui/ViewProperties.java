@@ -32,7 +32,7 @@ public class ViewProperties {
                 final InputStream is = ViewProperties.class.getResourceAsStream(defaultPropertyName);
                 defaultProperties.load(is);
                 is.close();
-                defaultProperties = new Properties(defaultProperties);
+                return defaultProperties;
             } catch (FileNotFoundException e) {
                 // ignore exception.
             } catch (IOException e) {
