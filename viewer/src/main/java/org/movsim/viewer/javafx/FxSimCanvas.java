@@ -40,7 +40,6 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
     // Facade to draw with awt on a javafx canvas TODO convert everything javafx to step by step -> remove
     private FXGraphics2D fxGraphics2D;
     private final GraphicsContext gc;
-    private Affine affine = new Affine();
 
     private FxSimCanvas.StatusControlCallbacks statusControlCallbacks;
 
@@ -99,12 +98,10 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
     }
 
     public void execScale() {
-//        affine.setToIdentity();
         gc.scale(settings.getScale(), settings.getScale());
     }
 
     public void execTranslateFx() {
-//        affine.setToIdentity();
         gc.translate(settings.getxOffset(), settings.getyOffset());
     }
 
@@ -120,9 +117,6 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
             LOG.debug("set color for vehicle label={}", vehicleTypeLabel);
             settings.getLabelColors().put(vehicleTypeLabel, color);
         }
-
-        affine.setToIdentity();
-        gc.transform(affine);
 
         execScale();
         execTranslateFx();

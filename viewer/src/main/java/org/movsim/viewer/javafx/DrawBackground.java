@@ -19,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
@@ -31,6 +33,7 @@ public class DrawBackground {
     private Simulator simulator;
 
     private BufferedImage backgroundPicture = null;
+    private AffineTransform transform = new AffineTransform();
 
     public DrawBackground(ViewerSettings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable, Simulator simulator) {
         this.settings = settings;
@@ -42,6 +45,12 @@ public class DrawBackground {
 
     public void update(FXGraphics2D fxGraphics2D) {
         clearBackground(fxGraphics2D); // TODO clearBackground not working
+
+        transform.setToIdentity();
+        transform.scale(settings.getScale(), settings.getScale());
+        transform.translate(settings.getxOffset(), settings.getyOffset());
+        fxGraphics2D.setTransform(transform);
+        
         drawBackground(fxGraphics2D);
     }
 
