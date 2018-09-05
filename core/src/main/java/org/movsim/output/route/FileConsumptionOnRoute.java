@@ -13,11 +13,10 @@ import com.google.common.base.Preconditions;
  */
 public class FileConsumptionOnRoute extends FileOutputBase {
 
-    private static final String extensionFormat = ".consumption.route_%s.csv";
-
-    private static final String outputHeading = String.format("%s%9s, %10s, %10s, %10s, %10s %n", COMMENT_CHAR, "t[s]",
+    private static final String EXTENSION_FORMAT = ".consumption.route_%s.csv";
+    private static final String OUTPUT_HEADING = String.format("%s%9s, %10s, %10s, %10s, %10s %n", COMMENT_CHAR, "t[s]",
             "instConsumptionRate[l/s]", "instConsumptionEMA[l/s]", "cumulatedConsumption[l]", "numberVehicles");
-    private static final String outputFormat = "%10.2f, %10.6f, %10.6f, %10.4f, %8d %n";
+    private static final String OUTPUT_FORMAT = "%10.2f, %10.6f, %10.6f, %10.4f, %8d %n";
 
     private double lastUpdateTime;
 
@@ -27,8 +26,8 @@ public class FileConsumptionOnRoute extends FileOutputBase {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         this.consumptionConfig = Preconditions.checkNotNull(fuelRouteInput);
         lastUpdateTime = 0;
-        writer = createWriter(String.format(extensionFormat, route.getName()));
-        writer.printf(outputHeading);
+        writer = createWriter(String.format(EXTENSION_FORMAT, route.getName()));
+        writer.printf(OUTPUT_HEADING);
         writer.flush();
     }
 
@@ -37,7 +36,7 @@ public class FileConsumptionOnRoute extends FileOutputBase {
             if (simulationTime - lastUpdateTime + MovsimConstants.SMALL_VALUE >= consumptionConfig.getDt()
                     || simulationTime == 0) {
                 lastUpdateTime = simulationTime;
-                write(outputFormat, simulationTime, consumption.getInstantaneousConsumptionRate(),
+                write(OUTPUT_FORMAT, simulationTime, consumption.getInstantaneousConsumptionRate(),
                         consumption.getInstantaneousConsumptionEMA(), consumption.getTotalConsumption(),
                         consumption.getNumberOfVehicles());
             }

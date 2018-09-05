@@ -31,8 +31,9 @@ package org.movsim.roadmappings;
  */
 // TODO - spiral is approximated by an arc - fix to use proper spiral
 public class RoadMappingSpiral extends RoadMappingArc {
-    double startCurvature;
-    double endCurvature;
+
+    private final double startCurvature;
+    private final double endCurvature;
 
     RoadMappingSpiral(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length,
             double startCurvature, double endCurvature) {

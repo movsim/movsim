@@ -33,39 +33,32 @@ import org.movsim.utilities.Units;
 
 public class FileDetector extends FileOutputBase {
 
-    private static final String extensionFormat = ".det.road_%s.x_%d.csv";
+    private static final String EXTENSION_FORMAT = ".det.road_%s.x_%d.csv";
 
-    private static final String outputHeadingTime = String.format("%s%10s,", COMMENT_CHAR, "t[s]");
-    private static final String outputHeadingLaneAverage = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,",
+    private static final String OUTPUT_HEADING_TIME = String.format("%s%10s,", COMMENT_CHAR, "t[s]");
+    private static final String OUTPUT_HEADING_LANE_AVERAGE = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,",
             "nVehTotal[1]", "nTotalAccum[1]", "V[km/h]", "flow[1/h/lane]", "occup[1]", "1/<1/v>[km/h]",
             "<1/Tbrut>[1/s]");
-    private static final String outputHeadingLane = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,", "nVeh[1]",
+    private static final String OUTPUT_HEADING_LANE = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,", "nVeh[1]",
             "nAccum[1]", "V[km/h]", "flow[1/h]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
 
     // note: number before decimal point is total width of field, not width of
     // integer part
-    private static final String outputFormatTime = "%10.1f, ";
-    private static final String outputFormat = "%10d, %10d, %10.3f, %10.1f, %10.7f, %10.3f, %10.5f, ";
+    private static final String OUTPUT_FORMAT_TIME = "%10.1f, ";
+    private static final String OUTPUT_FORMAT = "%10d, %10d, %10.3f, %10.1f, %10.7f, %10.3f, %10.5f, ";
 
     private final LoopDetector detector;
     private int laneCount;
     private final boolean loggingLanes;
 
-    /**
-     * Instantiates a new file detector.
-     * 
-     * @param detector
-     *            the detector
-     * @param laneCount
-     */
     public FileDetector(LoopDetector detector, String roadId, int laneCount, boolean loggingLanes) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         final int xDetectorInt = (int) detector.position();
         this.detector = detector;
         this.laneCount = laneCount;
-        this.loggingLanes = (loggingLanes || laneCount == 1) ? true : false;
+        this.loggingLanes = (loggingLanes || laneCount == 1);
 
-        writer = createWriter(String.format(extensionFormat, roadId, xDetectorInt));
+        writer = createWriter(String.format(EXTENSION_FORMAT, roadId, xDetectorInt));
         writeHeader();
     }
 
@@ -75,13 +68,13 @@ public class FileDetector extends FileOutputBase {
                 laneCount, Lanes.MOST_INNER_LANE);
         writer.printf(COMMENT_CHAR + " dtSample in seconds = %-8.4f%n", detector.getDtSample());
         writer.printf(COMMENT_CHAR + " logging lanes = %s%n", loggingLanes);
-        writer.printf(outputHeadingTime);
+        writer.printf(OUTPUT_HEADING_TIME);
         if (laneCount > 1) {
-            write(outputHeadingLaneAverage);
+            write(OUTPUT_HEADING_LANE_AVERAGE);
         }
         if (loggingLanes) {
             for (int i = 0; i < laneCount; i++) {
-                write(outputHeadingLane);
+                write(OUTPUT_HEADING_LANE);
             }
         }
         writer.printf("%n");
@@ -92,7 +85,7 @@ public class FileDetector extends FileOutputBase {
      * Pulls data and writes aggregated data to output file.
      */
     public void writeAggregatedData(double time) {
-        writer.printf(outputFormatTime, time);
+        writer.printf(OUTPUT_FORMAT_TIME, time);
         if (laneCount > 1) {
             writeLaneAverages();
         }
@@ -104,14 +97,14 @@ public class FileDetector extends FileOutputBase {
 
     private void writeQuantitiesPerLane() {
         for (int i = 0; i < laneCount; i++) {
-            write(outputFormat, detector.getVehCountOutput(i), detector.getVehCumulatedCountOutput(i), Units.MS_TO_KMH
+            write(OUTPUT_FORMAT, detector.getVehCountOutput(i), detector.getVehCumulatedCountOutput(i), Units.MS_TO_KMH
                     * detector.getMeanSpeed(i), Units.INVS_TO_INVH * detector.getFlow(i), detector.getOccupancy(i),
                     Units.MS_TO_KMH * detector.getMeanSpeedHarmonic(i), detector.getMeanTimegapHarmonic(i));
         }
     }
 
     private void writeLaneAverages() {
-        write(outputFormat, detector.getVehCountOutputAllLanes(), detector.getVehCumulatedCountOutputAllLanes(),
+        write(OUTPUT_FORMAT, detector.getVehCountOutputAllLanes(), detector.getVehCumulatedCountOutputAllLanes(),
                 Units.MS_TO_KMH * detector.getMeanSpeedAllLanes(), Units.INVS_TO_INVH * detector.getFlowAllLanes(),
                 detector.getOccupancyAllLanes(), Units.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(),
                 detector.getMeanTimegapHarmonicAllLanes());

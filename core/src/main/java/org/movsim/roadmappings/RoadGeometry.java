@@ -8,14 +8,10 @@ import com.google.common.base.Preconditions;
 
 /**
  * Decorates the openDRIVE {@link Geometry}.
- * 
- * <br>
- * created: Apr 7, 2013<br>
- * 
  */
 public class RoadGeometry {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RoadGeometry.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(RoadGeometry.class);
 
     public enum GeometryType {
         LINE, ARC, SPIRAL, POLY3;

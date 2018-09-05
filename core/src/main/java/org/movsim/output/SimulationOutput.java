@@ -25,37 +25,24 @@
  */
 package org.movsim.output;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import org.movsim.autogen.ConsumptionCalculation;
-import org.movsim.autogen.FloatingCarOutput;
-import org.movsim.autogen.IndividualTravelTimes;
-import org.movsim.autogen.OutputConfiguration;
-import org.movsim.autogen.SpatioTemporalConfiguration;
-import org.movsim.autogen.Trajectories;
-import org.movsim.autogen.TravelTimes;
+import com.google.common.base.Preconditions;
+import org.movsim.autogen.*;
 import org.movsim.output.floatingcars.FloatingCars;
-import org.movsim.output.route.ConsumptionOnRoute;
-import org.movsim.output.route.FileTrajectories;
-import org.movsim.output.route.IndividualTravelTimesOnRoute;
-import org.movsim.output.route.SpatioTemporal;
-import org.movsim.output.route.TravelTimeOnRoute;
+import org.movsim.output.route.*;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
-import org.movsim.simulator.vehicles.VehicleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SimulationOutput implements SimulationTimeStep {
 
@@ -80,8 +67,7 @@ public class SimulationOutput implements SimulationTimeStep {
     private final Routing routing;
 
     public SimulationOutput(double simulationTimestep, boolean writeOutput, OutputConfiguration outputConfiguration,
-            RoadNetwork roadNetwork, Routing routing, VehicleFactory vehicleFactory,
-            @Nullable ServiceProviders serviceProviders) {
+            RoadNetwork roadNetwork, Routing routing, @Nullable ServiceProviders serviceProviders) {
 
         Preconditions.checkNotNull(outputConfiguration);
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
@@ -91,7 +77,7 @@ public class SimulationOutput implements SimulationTimeStep {
         initFloatingCars(writeOutput, outputConfiguration);
         initConsumption(writeOutput, simulationTimestep, outputConfiguration);
         initTravelTimes(writeOutput, simulationTimestep, outputConfiguration);
-        initIndividualTravelTimes(writeOutput, simulationTimestep, outputConfiguration);
+        initIndividualTravelTimes(writeOutput, outputConfiguration);
         initSpatioTemporalOutput(writeOutput, outputConfiguration);
         initTrajectories(writeOutput, outputConfiguration);
 
@@ -121,12 +107,11 @@ public class SimulationOutput implements SimulationTimeStep {
         }
     }
 
-    private void initIndividualTravelTimes(boolean writeOutput, double simulationTimestep,
-            OutputConfiguration outputConfiguration) {
+    private void initIndividualTravelTimes(boolean writeOutput, OutputConfiguration outputConfiguration) {
         for (IndividualTravelTimes input : outputConfiguration.getIndividualTravelTimes()) {
             Route route = getCheckedRoute(input.getRoute());
-            IndividualTravelTimesOnRoute travelTimes = new IndividualTravelTimesOnRoute(simulationTimestep, roadNetwork,
-                    route, writeOutput);
+            IndividualTravelTimesOnRoute travelTimes = new IndividualTravelTimesOnRoute(roadNetwork, route,
+                    writeOutput);
             individualTravelTimeOnRoutes.put(route, travelTimes);
         }
     }

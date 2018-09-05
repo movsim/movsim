@@ -25,17 +25,15 @@
  */
 package org.movsim.output.route;
 
-import java.util.Comparator;
-import java.util.TreeSet;
-
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.Vehicle.Type;
 import org.movsim.utilities.LinearInterpolatedFunction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Comparator;
+import java.util.TreeSet;
 
 public class SpatioTemporal extends OutputOnRouteBase {
 
@@ -104,7 +102,9 @@ public class SpatioTemporal extends OutputOnRouteBase {
         }
     }
 
-    /** Returns sorted set with increasing vehicle positions along the route. Not efficient but robust. */
+    /**
+     * Returns sorted set with increasing vehicle positions along the route. Not efficient but robust.
+     */
     private TreeSet<SpatialTemporal> gatherData() {
         TreeSet<SpatialTemporal> dataPoints = new TreeSet<>(new Comparator<SpatialTemporal>() {
             @Override

@@ -30,14 +30,14 @@ import org.movsim.io.FileOutputBase;
 
 class FileSpatioTemporal extends FileOutputBase {
 
-    private static final String extensionFormat = ".st.route_%s.csv";
-    private static final String outputHeading = COMMENT_CHAR + "     t[s],       x[m],     v[m/s],   a[m/s^2]\n";
-    private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f%n";
+    private static final String EXTENSION_FORMAT = ".st.route_%s.csv";
+    private static final String OUTPUT_HEADING = COMMENT_CHAR + "     t[s],       x[m],     v[m/s],   a[m/s^2]\n";
+    private static final String OUTPUT_FORMAT = "%10.2f, %10.1f, %10.4f, %10.4f%n";
 
     FileSpatioTemporal(String routeLabel) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
-        writer = createWriter(String.format(extensionFormat, routeLabel));
-        writer.printf(outputHeading);
+        writer = createWriter(String.format(EXTENSION_FORMAT, routeLabel));
+        writer.printf(OUTPUT_HEADING);
         writer.flush();
     }
 
@@ -46,7 +46,7 @@ class FileSpatioTemporal extends FileOutputBase {
         final double dx = spatioTemporal.getDxOutput();
         for (int i = 0; i < count; i++) {
             final double x = i * dx;
-            writer.printf(outputFormat, simulationTime, x, spatioTemporal.getAverageSpeed(i),
+            writer.printf(OUTPUT_FORMAT, simulationTime, x, spatioTemporal.getAverageSpeed(i),
                     spatioTemporal.getAverageAcceleration(i));
         }
         write(NEWLINE); // block ends

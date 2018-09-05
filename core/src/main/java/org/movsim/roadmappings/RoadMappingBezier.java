@@ -42,23 +42,17 @@ public class RoadMappingBezier extends RoadMapping {
     protected double p2y;
     // arc length parameterization
     protected int S_COUNT = 10;
-    protected double sValues[];
+    protected double[] sValues;
 
     /**
      * Constructor.
-     * 
-     * @param x0
-     *            x-position of start of curve
-     * @param y0
-     *            y-position of start of curve
-     * @param x1
-     *            x-position of end of curve
-     * @param y1
-     *            y-position of end of curve
-     * @param cX
-     *            x-position of control point
-     * @param cY
-     *            y-position of control point
+     *
+     * @param x0 x-position of start of curve
+     * @param y0 y-position of start of curve
+     * @param x1 x-position of end of curve
+     * @param y1 y-position of end of curve
+     * @param cX x-position of control point
+     * @param cY y-position of control point
      */
     RoadMappingBezier(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1, double cX, double cY) {
         super(laneGeometries, x0, y0);
@@ -78,18 +72,13 @@ public class RoadMappingBezier extends RoadMapping {
 
     /**
      * Constructor.
-     * 
-     * @param laneCount
-     *            number of lanes in road mapping
+     *
+     * @param laneCount number of lanes in road mapping
      * @param s
-     * @param x0
-     *            x-position of start of curve
-     * @param y0
-     *            y-position of start of curve
-     * @param theta
-     *            direction of curve
-     * @param length
-     *            length of curve
+     * @param x0        x-position of start of curve
+     * @param y0        y-position of start of curve
+     * @param theta     direction of curve
+     * @param length    length of curve
      * @param a
      * @param b
      * @param c
@@ -113,15 +102,11 @@ public class RoadMappingBezier extends RoadMapping {
     /**
      * Constructor to append a bezier road mapping onto a previously existing road mapping, matching the endpoints and
      * tangents at the endpoints.
-     * 
-     * @param roadMapping
-     *            the road mapping to append to
-     * @param x1
-     *            new point, x coordinate
-     * @param y1
-     *            new point, y coordinate
-     * @param t
-     *            single degree of freedom in setting the control point
+     *
+     * @param roadMapping the road mapping to append to
+     * @param x1          new point, x coordinate
+     * @param y1          new point, y coordinate
+     * @param t           single degree of freedom in setting the control point
      */
     RoadMappingBezier(RoadMapping roadMapping, LaneGeometries laneGeometries, double x1, double y1, double t) {
         super(laneGeometries, 0, 0);
@@ -149,7 +134,7 @@ public class RoadMappingBezier extends RoadMapping {
 
     /**
      * Returns the x-coordinate of the control point.
-     * 
+     *
      * @param lateralOffset
      * @return x-coordinate of the control point
      */
@@ -162,7 +147,7 @@ public class RoadMappingBezier extends RoadMapping {
 
     /**
      * Returns the y-coordinate of the control point.
-     * 
+     *
      * @param lateralOffset
      * @return y-coordinate of the control point
      */
@@ -216,7 +201,7 @@ public class RoadMappingBezier extends RoadMapping {
     /**
      * Arc length parameterization. Convert from road position (arc length) to natural Bezier parameter(t) using linear
      * interpolation of pre-computed arc lengths.
-     * 
+     *
      * @param roadPos
      * @return natural Bezier parameter
      */
@@ -362,13 +347,11 @@ public class RoadMappingBezier extends RoadMapping {
         final double X = 4 * C * A - B * B;
         double Q = 0.0;
         // checks to avoid dividing by zero, or taking log of zero
-        if (X != 0.0) {
-            if (2 * A_2 + Sabc - C_2 != 0.0) { // equivalent to if (Y != Z)
-                final double Y = 2 * A_2 + BA + Sabc;
-                final double Z = BA + C_2;
-                assert Z != 0.0;
-                Q = X * Math.log(Y / Z);
-            }
+        if (X != 0.0 && 2 * A_2 + Sabc - C_2 != 0.0) { // equivalent to if (Y != Z)
+            final double Y = 2 * A_2 + BA + Sabc;
+            final double Z = BA + C_2;
+            assert Z != 0.0;
+            Q = X * Math.log(Y / Z);
         }
         assert A_32 != 0.0;
         return (P + Q) / (4 * A_32);

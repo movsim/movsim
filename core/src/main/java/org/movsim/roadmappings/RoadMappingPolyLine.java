@@ -44,15 +44,6 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
         return roadMappings.iterator();
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
-     */
     RoadMappingPolyLine(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
         super(laneGeometries, x0, y0);
         final RoadMappingLine roadMapping = new RoadMappingLine(laneGeometries, x0, y0, x1, y1);
@@ -60,16 +51,6 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
         roadMappings.add(roadMapping);
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     * @param s
-     * @param x0
-     * @param y0
-     * @param theta
-     * @param length
-     */
     RoadMappingPolyLine(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length) {
         super(laneGeometries, x0, y0);
         final RoadMappingLine roadMapping = new RoadMappingLine(laneGeometries, s, x0, y0, theta, length);
@@ -77,13 +58,6 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
         roadMappings.add(roadMapping);
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     * @param valuesType
-     * @param values
-     */
     RoadMappingPolyLine(LaneGeometries laneGeometries, int valuesType, double[] values) {
         super(laneGeometries, values[0], values[1]);
         assert values.length % 2 == 0;

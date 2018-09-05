@@ -25,19 +25,16 @@
  */
 package org.movsim.output.route;
 
-import java.util.EnumMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import org.movsim.autogen.TravelTimes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadNetworkUtils;
 import org.movsim.simulator.roadnetwork.RoadNetworkUtils.TravelTimeType;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.utilities.ExponentialMovingAverage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import javax.annotation.Nullable;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class TravelTimeOnRoute extends OutputOnRouteBase {
 
@@ -53,8 +50,9 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
         this.tauEMA = travelTimeInput.getTauEMA();
         this.beta = Math.exp(-simulationTimestep / tauEMA);
         for (TravelTimeType type : TravelTimeType.values()) {
-            FileTravelTimeOnRoute writer = writeOutput
-                    ? new FileTravelTimeOnRoute(travelTimeInput.getDt(), route, type.toString().toLowerCase()) : null;
+            FileTravelTimeOnRoute writer = writeOutput ?
+                    new FileTravelTimeOnRoute(travelTimeInput.getDt(), route, type.toString().toLowerCase()) :
+                    null;
             travelTimes.put(type, new TravelTime(writer));
         }
     }
@@ -68,8 +66,9 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
             tt.instantaneousTravelTime = RoadNetworkUtils.instantaneousTravelTime(route, type);
             tt.totalTravelTime += dt * numberOfVehicles;
             tt.meanSpeed = route.getLength() / tt.instantaneousTravelTime;
-            tt.instTravelTimeEMA = (simulationTime == 0) ? tt.instantaneousTravelTime
-                    : ExponentialMovingAverage.calc(tt.instantaneousTravelTime, tt.instTravelTimeEMA, beta);
+            tt.instTravelTimeEMA = (simulationTime == 0) ?
+                    tt.instantaneousTravelTime :
+                    ExponentialMovingAverage.calc(tt.instantaneousTravelTime, tt.instTravelTimeEMA, beta);
             if (tt.fileWriter != null) {
                 tt.fileWriter.write(simulationTime, tt);
             }

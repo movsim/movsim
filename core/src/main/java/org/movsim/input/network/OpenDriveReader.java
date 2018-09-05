@@ -1,15 +1,16 @@
 package org.movsim.input.network;
 
+import org.movsim.simulator.roadnetwork.RoadNetwork;
+
 import java.io.File;
 
-import javax.xml.bind.JAXBException;
+public final class OpenDriveReader {
 
-import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.xml.sax.SAXException;
+    private OpenDriveReader() {
+        // do not invoke
+    }
 
-public class OpenDriveReader {
-
-    public static boolean loadRoadNetwork(RoadNetwork roadNetwork, File xodrFile) throws JAXBException, SAXException {
+    public static boolean loadRoadNetwork(RoadNetwork roadNetwork, File xodrFile) {
         return OpenDriveHandler.loadRoadNetwork(roadNetwork, xodrFile);
     }
 

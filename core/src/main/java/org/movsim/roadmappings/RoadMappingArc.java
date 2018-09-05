@@ -57,18 +57,13 @@ public class RoadMappingArc extends RoadMapping {
 
     /**
      * The arc begins at startAngle and extends for arcAngle radians.
-     * 
+     *
      * @param s
-     * @param x0
-     *            start of arc, x coordinate
-     * @param y0
-     *            start of arc, y coordinate
-     * @param startAngle
-     *            start direction of arc, ie angle subtended at center + PI/2
-     * @param length
-     *            length of arc
-     * @param curvature
-     *            curvature of arc
+     * @param x0         start of arc, x coordinate
+     * @param y0         start of arc, y coordinate
+     * @param startAngle start direction of arc, ie angle subtended at center + PI/2
+     * @param length     length of arc
+     * @param curvature  curvature of arc
      */
     RoadMappingArc(LaneGeometries laneGeometries, double s, double x0, double y0, double startAngle, double length,
             double curvature) {
@@ -99,7 +94,7 @@ public class RoadMappingArc extends RoadMapping {
 
     /**
      * Returns the start angle of the arc.
-     * 
+     *
      * @return the start angle of the arc, radians
      */
     public double startAngle() {
@@ -108,7 +103,7 @@ public class RoadMappingArc extends RoadMapping {
 
     /**
      * Returns the sweep angle of the arc.
-     * 
+     *
      * @return sweep angle of the arc, radians
      */
     public double arcAngle() {
@@ -117,7 +112,7 @@ public class RoadMappingArc extends RoadMapping {
 
     /**
      * Returns true if the circle mapping is in a clockwise direction.
-     * 
+     *
      * @return true if the circle mapping is in a clockwise direction
      */
     public boolean clockwise() {
@@ -126,7 +121,7 @@ public class RoadMappingArc extends RoadMapping {
 
     /**
      * Returns the radius of the circle.
-     * 
+     *
      * @return the radius of the circle
      */
     public double radius() {
@@ -135,8 +130,7 @@ public class RoadMappingArc extends RoadMapping {
 
     @Override
     public String toString() {
-        return "RoadMappingArc [x0=" + x0 + ", y0=" + y0 + ", centerX=" + centerX + ", centerY=" + centerY
-                + ", radius=" + radius + ", clockwise=" + clockwise + ", startAngle=" + startAngle + ", arcAngle="
-                + arcAngle + "]";
+        return "RoadMappingArc [x0=" + x0 + ", y0=" + y0 + ", centerX=" + centerX + ", centerY=" + centerY + ", radius="
+                + radius + ", clockwise=" + clockwise + ", startAngle=" + startAngle + ", arcAngle=" + arcAngle + "]";
     }
 }

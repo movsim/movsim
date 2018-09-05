@@ -1,14 +1,11 @@
 package org.movsim.roadmappings;
 
-import org.movsim.simulator.vehicles.Vehicle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Preconditions;
+import org.movsim.simulator.vehicles.Vehicle;
 
 public class RoadMappingPeer extends RoadMapping {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RoadMappingPeer.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(RoadMappingPeer.class);
 
     private final RoadMapping roadMapping;
 

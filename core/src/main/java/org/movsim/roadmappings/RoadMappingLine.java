@@ -38,8 +38,8 @@ public class RoadMappingLine extends RoadMapping {
     }
 
     private static RoadMapping create(LaneGeometries laneGeometries, Geometry geometry) {
-        return new RoadMappingLine(laneGeometries, geometry.getS(), geometry.getX(), geometry.getY(),
-                geometry.getHdg(), geometry.getLength());
+        return new RoadMappingLine(laneGeometries, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
+                geometry.getLength());
     }
 
     protected double x1;
@@ -47,17 +47,12 @@ public class RoadMappingLine extends RoadMapping {
 
     /**
      * Constructor.
-     * 
-     * @param laneCount
-     *            number of lanes in road mapping
-     * @param x0
-     *            x-position of start of line
-     * @param y0
-     *            y-position of start of line
-     * @param x1
-     *            x-position of end of line
-     * @param y1
-     *            y-position of end of line
+     *
+     * @param laneCount number of lanes in road mapping
+     * @param x0        x-position of start of line
+     * @param y0        y-position of start of line
+     * @param x1        x-position of end of line
+     * @param y1        y-position of end of line
      */
     RoadMappingLine(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
         super(laneGeometries, x0, y0);
@@ -68,18 +63,13 @@ public class RoadMappingLine extends RoadMapping {
 
     /**
      * Constructor.
-     * 
-     * @param laneCount
-     *            number of lanes in road mapping
+     *
+     * @param laneGeometries
      * @param s
-     * @param x0
-     *            x-position of start of line
-     * @param y0
-     *            y-position of start of line
-     * @param theta
-     *            direction of line
-     * @param length
-     *            length of line
+     * @param x0        x-position of start of line
+     * @param y0        y-position of start of line
+     * @param theta     direction of line
+     * @param length    length of line
      */
     RoadMappingLine(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length) {
         super(laneGeometries, x0, y0);
@@ -92,7 +82,7 @@ public class RoadMappingLine extends RoadMapping {
 
     /**
      * Constructor.
-     * 
+     *
      * @param x0
      * @param y0
      */
@@ -102,13 +92,10 @@ public class RoadMappingLine extends RoadMapping {
 
     /**
      * Constructor to append this road mapping onto a previously existing road mapping, matching the endpoints.
-     * 
-     * @param roadMapping
-     *            the road mapping to append to
-     * @param x1
-     *            new point, x coordinate
-     * @param y1
-     *            new point, y coordinate
+     *
+     * @param roadMapping the road mapping to append to
+     * @param x1          new point, x coordinate
+     * @param y1          new point, y coordinate
      */
     RoadMappingLine(RoadMapping roadMapping, LaneGeometries laneGeometries, double x1, double y1) {
         super(laneGeometries, 0, 0);

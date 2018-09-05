@@ -28,6 +28,7 @@ package org.movsim.roadmappings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -293,7 +294,7 @@ public abstract class RoadMapping {
      * 
      * @return arraylist of the clipping polygons, or null if no clipping set.
      */
-    public ArrayList<PolygonFloat> clippingPolygons() {
+    public List<PolygonFloat> clippingPolygons() {
         return clippingPolygons;
     }
 
@@ -372,11 +373,11 @@ public abstract class RoadMapping {
         /**
          * Array of x-coordinates of the polygon.
          */
-        float xPoints[];
+        float[] xPoints;
         /**
          * Array of y-coordinates of the polygon.
          */
-        float yPoints[];
+        float[] yPoints;
 
         /**
          * Constructor, allocate arrays for polygon points.

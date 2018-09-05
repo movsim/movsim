@@ -1,18 +1,10 @@
 package org.movsim.roadmappings;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
-
-/**
- * Utilities for creating a {@link RoadMapping}.
- * 
- * <br>
- * created: Apr 7, 2013<br>
- * 
- */
 public final class RoadMappingUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadMappingUtils.class);
@@ -23,9 +15,6 @@ public final class RoadMappingUtils {
 
     /**
      * Factory for creating {@link RoadMapping}.
-     * 
-     * @param roadGeometry
-     * @return
      */
     private static final RoadMapping create(RoadGeometry roadGeometry) {
         RoadMapping roadMapping;

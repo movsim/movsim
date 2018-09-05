@@ -31,24 +31,21 @@ import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro;
 
 public class FileTrafficSourceData extends FileOutputBase implements TrafficSourceMacro.RecordDataCallback {
 
-    private static final String extensionFormat = ".source.road_%s.csv";
-    private static final String outputHeading =
+    private static final String EXTENSION_FORMAT = ".source.road_%s.csv";
+    private static final String OUTPUT_HEADING =
             COMMENT_CHAR + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
-    private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
+    private static final String OUTPUT_FORMAT = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
 
-    /**
-     * Instantiates a new file upstream boundary data.
-     */
     public FileTrafficSourceData(String roadId) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
-        writer = createWriter(String.format(extensionFormat, roadId));
-        writer.printf(outputHeading);
+        writer = createWriter(String.format(EXTENSION_FORMAT, roadId));
+        writer.printf(OUTPUT_HEADING);
     }
 
     @Override
     public void recordData(double simulationTime, int laneEnter, double xEnter, double vEnter, double totalInflow,
             int enteringVehCounter, double nWait) {
-        writer.printf(outputFormat, simulationTime, laneEnter, xEnter, 3.6 * vEnter, 3600 * totalInflow,
+        writer.printf(OUTPUT_FORMAT, simulationTime, laneEnter, xEnter, 3.6 * vEnter, 3600 * totalInflow,
                 enteringVehCounter, nWait);
         writer.flush();
     }

@@ -5,8 +5,6 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadNetworkUtils;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.utilities.ExponentialMovingAverage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ConsumptionOnRoute extends OutputOnRouteBase {
 

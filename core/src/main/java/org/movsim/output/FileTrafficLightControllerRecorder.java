@@ -36,7 +36,7 @@ import com.google.common.base.Preconditions;
 
 public class FileTrafficLightControllerRecorder extends FileOutputBase implements TrafficLightRecordDataCallback {
 
-    private static final String extensionFormat = ".controllerGroup_%s.firstSignal_%s.csv";
+    private static final String EXTENSION_FORMAT = ".controllerGroup_%s.firstSignal_%s.csv";
     private final int nTimestep;
 
     public FileTrafficLightControllerRecorder(TrafficLightController controller, int nTimestep) {
@@ -46,7 +46,7 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
         this.nTimestep = nTimestep;
         String groupName = controller.groupId().replaceAll("\\s", "");
         String firstSignalId = controller.firstSignalId().replaceAll("\\s", "");
-        writer = Preconditions.checkNotNull(createWriter(String.format(extensionFormat, groupName, firstSignalId)));
+        writer = Preconditions.checkNotNull(createWriter(String.format(EXTENSION_FORMAT, groupName, firstSignalId)));
     }
 
     /**

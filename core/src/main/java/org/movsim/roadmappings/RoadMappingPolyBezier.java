@@ -28,6 +28,7 @@ package org.movsim.roadmappings;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * RoadMapping consisting of a number of consecutive Bezier curves.
@@ -45,17 +46,6 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
         return roadMappings.iterator();
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
-     * @param cX
-     * @param cY
-     */
     RoadMappingPolyBezier(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1, double cX,
             double cY) {
         super(laneGeometries, x0, y0);
@@ -64,20 +54,6 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
         roadMappings.add(roadMapping);
     }
 
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     * @param s
-     * @param x0
-     * @param y0
-     * @param theta
-     * @param length
-     * @param a
-     * @param b
-     * @param c
-     * @param d
-     */
     RoadMappingPolyBezier(LaneGeometries laneGeometries, double s, double x0, double y0, double theta, double length,
             double a, double b, double c, double d) {
         super(laneGeometries, x0, y0);
@@ -86,14 +62,6 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
         roadLength = length;
         roadMappings.add(roadMapping);
     }
-
-    /**
-     * Constructor.
-     * 
-     * @param laneCount
-     * @param valuesType
-     * @param values
-     */
     RoadMappingPolyBezier(LaneGeometries laneGeometries, int valuesType, double[] values) {
         super(laneGeometries, values[0], values[1]);
         assert ((valuesType == RELATIVE_CALCULATE_CONTROL_POINTS && values.length % 2 == 0) || values.length % 3 == 0);
@@ -177,8 +145,8 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
 
     public void addPoint(double s, double x0, double y0, double theta, double length, double a, double b, double c,
             double d) {
-        final RoadMappingBezier roadMapping = new RoadMappingBezier(this.laneGeometries, s, x0, y0, theta, length, a,
-                b, c, d);
+        final RoadMappingBezier roadMapping = new RoadMappingBezier(this.laneGeometries, s, x0, y0, theta, length, a, b,
+                c, d);
         roadLength += length;
         roadMappings.add(roadMapping);
     }
@@ -187,8 +155,8 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
         assert roadMappings.size() >= 1;
         final RoadMappingBezier lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final PosTheta posTheta = lastRoadMapping.endPos();
-        final RoadMappingBezier roadMapping = new RoadMappingBezier(lastRoadMapping, this.laneGeometries, posTheta.x
-                + dx, posTheta.y + dy, t);
+        final RoadMappingBezier roadMapping = new RoadMappingBezier(lastRoadMapping, this.laneGeometries,
+                posTheta.x + dx, posTheta.y + dy, t);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
@@ -207,8 +175,8 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
         // System.out.println("Bezier chordLength=" + (int)chordLength); //$NON-NLS-1$
         // System.out.println("Bezier lastChordLength=" + (int)lastChordLength); //$NON-NLS-1$
         final double t = chordLength * chordLength / (chordLength + lastChordLength);
-        final RoadMappingBezier roadMapping = new RoadMappingBezier(lastRoadMapping, this.laneGeometries, posTheta.x
-                + dx, posTheta.y + dy, t);
+        final RoadMappingBezier roadMapping = new RoadMappingBezier(lastRoadMapping, this.laneGeometries,
+                posTheta.x + dx, posTheta.y + dy, t);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }

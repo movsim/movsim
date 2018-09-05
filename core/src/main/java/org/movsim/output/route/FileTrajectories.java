@@ -35,8 +35,6 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FileTrajectories extends FileOutputBase implements SimulationTimeStep {
 
@@ -61,7 +59,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         positionIntervalStart = 0;
         positionIntervalEnd = route.getLength();
 
-        LOG.info("interval for output: timeStart={}, timeEnd", traj.isSetStartTime() ? traj.getStartTime() : "--",
+        LOG.info("interval for output: timeStart={}, timeEnd={}", traj.isSetStartTime() ? traj.getStartTime() : "--",
                 traj.isSetEndTime() ? traj.getEndTime() : "--");
         writer = createWriter(String.format(EXTENSION_FORMAT, route.getName()));
         writeHeader(route);

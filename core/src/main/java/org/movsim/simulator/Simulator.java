@@ -382,8 +382,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.reset();
         if (movsimInput.getScenario().isSetOutputConfiguration()) {
             simOutput = new SimulationOutput(simulationRunnable.timeStep(), projectMetaData.isInstantaneousFileOutput(),
-                    movsimInput.getScenario().getOutputConfiguration(), roadNetwork, routing, vehicleFactory,
-                    serviceProviders);
+                    movsimInput.getScenario().getOutputConfiguration(), roadNetwork, routing, serviceProviders);
         }
         obstacleCount = roadNetwork.obstacleCount();
     }

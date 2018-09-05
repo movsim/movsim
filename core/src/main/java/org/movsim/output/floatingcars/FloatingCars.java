@@ -41,9 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-/**
- * The Class FloatingCars.
- */
 public class FloatingCars implements SimulationTimeStep {
 
     private static final Logger LOG = LoggerFactory.getLogger(FloatingCars.class);
@@ -60,13 +57,6 @@ public class FloatingCars implements SimulationTimeStep {
 
     private final Map<Vehicle, PrintWriter> printWriters;
 
-    /**
-     * Constructor.
-     * 
-     * @param floatingCarOutput
-     * @param route
-     * @param writeFileOutput
-     */
     public FloatingCars(FloatingCarOutput floatingCarOutput, Route route, boolean writeFileOutput) {
         Preconditions.checkNotNull(route);
         this.nDtOut = floatingCarOutput.getNTimestep();

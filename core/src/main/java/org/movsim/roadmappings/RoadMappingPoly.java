@@ -26,13 +26,13 @@
 
 package org.movsim.roadmappings;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.movsim.roadmappings.RoadGeometry.GeometryType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappingUtils.
@@ -54,7 +54,6 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
 
     /**
      * Constructor, adds an initial line.
-     *
      */
     public RoadMappingPoly(LaneGeometries laneGeometries, double x0, double y0, double x1, double y1) {
         super(laneGeometries, x0, y0);

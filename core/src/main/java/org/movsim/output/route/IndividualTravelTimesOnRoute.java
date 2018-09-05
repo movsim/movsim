@@ -1,18 +1,15 @@
 package org.movsim.output.route;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import com.google.common.collect.Iterators;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Iterators;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class IndividualTravelTimesOnRoute extends OutputOnRouteBase {
 
@@ -20,13 +17,14 @@ public class IndividualTravelTimesOnRoute extends OutputOnRouteBase {
 
     private final SignalPoint exitSignalPoint;
 
-    /** mapping from vehicle to its entry time on route */
+    /**
+     * mapping from vehicle to its entry time on route
+     */
     private final Map<Vehicle, Double> vehiclesOnRoute = new LinkedHashMap<>();
 
     private final FileIndividualTravelTimesOnRoute fileWriter;
 
-    public IndividualTravelTimesOnRoute(double simulationTimestep, RoadNetwork roadNetwork, Route route,
-            boolean writeOutput) {
+    public IndividualTravelTimesOnRoute(RoadNetwork roadNetwork, Route route, boolean writeOutput) {
         super(roadNetwork, route);
         this.fileWriter = writeOutput ? new FileIndividualTravelTimesOnRoute(route) : null;
 
@@ -43,7 +41,7 @@ public class IndividualTravelTimesOnRoute extends OutputOnRouteBase {
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         addNewVehicles(entrySignalPoint.passedVehicles(), simulationTime);
         calculateTravelTimes(exitSignalPoint.passedVehicles(), simulationTime);
-        LOG.debug("vehiclesOnRoute.size=" + vehiclesOnRoute.size());
+        LOG.debug("vehiclesOnRoute.size={}", vehiclesOnRoute.size());
     }
 
     private void calculateTravelTimes(Collection<Vehicle> vehicles, double simulationTime) {
