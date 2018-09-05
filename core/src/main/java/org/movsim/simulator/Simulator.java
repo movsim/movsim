@@ -11,26 +11,12 @@
  */
 package org.movsim.simulator;
 
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-
+import com.google.common.base.Preconditions;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.movsim.autogen.CrossSection;
-import org.movsim.autogen.Movsim;
-import org.movsim.autogen.Road;
-import org.movsim.autogen.Simulation;
-import org.movsim.autogen.TrafficSinkType;
-import org.movsim.autogen.TrafficSourceType;
+import org.movsim.autogen.*;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.FileTrafficSinkData;
@@ -43,17 +29,9 @@ import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.RoadTypeSpeeds;
-import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
-import org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries;
-import org.movsim.simulator.roadnetwork.boundaries.MicroscopicBoundaryConditions;
-import org.movsim.simulator.roadnetwork.boundaries.MicroscopicBoundaryInputData;
+import org.movsim.simulator.roadnetwork.boundaries.*;
 import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
-import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro;
-import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMicro;
-import org.movsim.simulator.roadnetwork.controller.FlowConservingBottleneck;
-import org.movsim.simulator.roadnetwork.controller.LoopDetector;
-import org.movsim.simulator.roadnetwork.controller.RoadObject;
-import org.movsim.simulator.roadnetwork.controller.TrafficLight;
+import org.movsim.simulator.roadnetwork.controller.*;
 import org.movsim.simulator.roadnetwork.controller.TrafficLights;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.roadnetwork.regulator.Regulators;
@@ -68,11 +46,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import com.google.common.base.Preconditions;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
-    /** The Constant LOG. */
+    /**
+     * The Constant LOG.
+     */
     private static final Logger LOG = LoggerFactory.getLogger(Simulator.class);
 
     private long startTimeMillis;
@@ -107,9 +94,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     /**
      * Constructor.
-     * 
+     *
      * @param inputData
-     * 
      */
     public Simulator(Movsim inputData) {
         this.projectMetaData = ProjectMetaData.getInstance();
@@ -248,8 +234,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         for (RoadSegment roadSegment : roadNetwork) {
             for (TrafficLight trafficLight : roadSegment.trafficLights()) {
                 if (trafficLight.status() == null) {
-                    throw new IllegalArgumentException("trafficLight=" + trafficLight.signalId() + " on road="
-                            + roadSegment.userId() + " hat not been initialized. Check movsim regulator input.");
+                    throw new IllegalArgumentException(
+                            "trafficLight=" + trafficLight.signalId() + " on road=" + roadSegment.userId()
+                                    + " hat not been initialized. Check movsim regulator input.");
                 }
             }
         }
@@ -266,9 +253,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     /**
      * Parse the OpenDrive (.xodr) file to load the network topology and road layout.
-     * 
-     * @param ProjectMetaData
-     *            .getInstance()
+     *
+     * @param ProjectMetaData .getInstance()
      * @return
      * @throws SAXException
      * @throws JAXBException
@@ -286,7 +272,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * Add input data to road segment. Note by rules of encapsulation this function is NOT a member of RoadSegment, since
      * RoadSegment should not be aware of form of XML file or RoadInput data structure.
-     * 
+     *
      * @param roadSegment
      * @param roadInput
      */
@@ -304,7 +290,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // set up the traffic source
         if (roadInput.isSetTrafficSource()) {
             TrafficSourceType trafficSourceData = roadInput.getTrafficSource();
-            AbstractTrafficSource trafficSource = null;
+            AbstractTrafficSource trafficSource;
             if (trafficSourceData.isSetInflow()) {
                 // macroscopic boundary conditions
                 InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
@@ -323,12 +309,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                                 + roadSegment.userId());
             }
 
-            if (trafficSource != null) {
-                if (trafficSourceData.isLogging()) {
-                    trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
-                }
-                roadSegment.setTrafficSource(trafficSource);
+            if (trafficSourceData.isLogging()) {
+                trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
             }
+            roadSegment.setTrafficSource(trafficSource);
         }
 
         // set up the traffic sink
@@ -420,16 +404,15 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * Returns true if the simulation has finished.
      */
     public boolean isFinished() {
-        if (simulationRunnable.simulationTime() > 60.0 && roadNetwork.vehicleCount() == obstacleCount) {
-            return true;
-        }
-        return false;
+        return simulationRunnable.simulationTime() > 60.0 && roadNetwork.vehicleCount() == obstacleCount;
     }
 
     @Override
     public void simulationComplete(double simulationTime) {
-        LOG.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s",
-                simulationTime, simulationTime / 3600., projectName));
+        if (LOG.isInfoEnabled()) {
+            LOG.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s",
+                    simulationTime, simulationTime / 3600., projectName));
+        }
 
         regulators.simulationCompleted(simulationTime);
 
@@ -441,8 +424,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             LOG.info(String.format(
                     "time elapsed=%d milliseconds --> simulation time warp = %.2f, time per 1000 update steps=%.3fs",
                     elapsedTimeMillis, simulationTime / TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis),
-                    (1000. * TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis)
-                            / simulationRunnable.iterationCount())));
+                    (1000. * TimeUnit.MILLISECONDS.toSeconds(elapsedTimeMillis) / simulationRunnable
+                            .iterationCount())));
             LOG.info("remaining vehicles in simulation after completion:\n {}", showAllVehicles());
         }
     }

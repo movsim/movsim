@@ -27,24 +27,25 @@ package org.movsim.simulator;
 
 import org.movsim.utilities.Units;
 
-/**
- * The Interface MovsimConstants.
- */
-public interface MovsimConstants {
+public final class MovsimConstants {
 
-    final double SMALL_VALUE = 1e-7;
+    private MovsimConstants() {
+        throw new IllegalStateException("do not invoke");
+    }
 
-    final double GAP_INFINITY = 10000;
+    public static final double SMALL_VALUE = 1e-7;
 
-    final double INVALID_GAP = -1;
+    public static final double GAP_INFINITY = 10000;
 
-    final double CRITICAL_GAP = 2;
+    public static final double INVALID_GAP = -1;
 
-    final String EMPTY_STRING = "";
+    public static final double CRITICAL_GAP = 2;
 
-    final double MAX_VEHICLE_SPEED = 200 * Units.KMH_TO_MS;
+    public static final double MAX_VEHICLE_SPEED = 200 * Units.KMH_TO_MS;
 
-    /** TODO just adhoc number for defining traveltime */
-    static final double MIN_POSITIVE_SPEED = 1 * Units.KMH_TO_MS;
+    /**
+     * Adhoc number for defining traveltime
+     */
+    public static final double MIN_POSITIVE_SPEED = 1 * Units.KMH_TO_MS;
 
 }

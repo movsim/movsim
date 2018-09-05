@@ -82,8 +82,7 @@ public class SimulationRun {
      *            interface
      */
     public SimulationRun(SimulationTimeStep simulation) {
-	assert simulation != null;
-	this.simulation = simulation;
+	this.simulation = Preconditions.checkNotNull(simulation);
 	initShutdownHook();
     }
 
@@ -216,11 +215,6 @@ public class SimulationRun {
             }
             simulationTime += dt;
             ++iterationCount;
-
-            // TODO testwise
-            // if (iterationCount == 1000) {
-            // throw new RuntimeException("Dummy Exception to cause JVM to exit");
-            // }
 
         }
         totalSimulationTime = System.currentTimeMillis() - timeBeforeSim_ms;

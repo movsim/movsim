@@ -28,18 +28,15 @@ package org.movsim.simulator;
 
 /**
  * TimeStep interface used to run iteration.
- * 
  */
 public interface SimulationTimeStep {
+
     /**
-     * Perform a single timestep.
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations executed
+     * Perform a single simulation timestep.
+     *
+     * @param dt             delta-t, simulation time interval, seconds
+     * @param simulationTime current simulation time, seconds
+     * @param iterationCount the number of iterations executed
      */
     public void timeStep(double dt, double simulationTime, long iterationCount);
 }

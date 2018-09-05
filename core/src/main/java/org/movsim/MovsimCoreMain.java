@@ -25,40 +25,37 @@
  */
 package org.movsim;
 
-import java.util.Locale;
-
-import javax.xml.bind.JAXBException;
-
 import org.movsim.autogen.Movsim;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.logging.Logger;
 import org.movsim.simulator.Simulator;
 import org.movsim.xml.InputLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+
+import javax.xml.bind.JAXBException;
+import java.util.Locale;
 
 /**
  * The Class MovsimCoreMain.
- * 
+ * <p>
  * MovSim core command line interface.
- * 
  */
 public class MovsimCoreMain {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MovsimCoreMain.class);
+
     /**
      * The main method.
-     * 
-     * @param args
-     *            the command line arguments
+     *
+     * @param args the command line arguments
      * @throws SAXException
      * @throws JAXBException
      */
     public static void main(String[] args) throws JAXBException, SAXException {
-
         Locale.setDefault(Locale.US);
-
-        Logger.initializeLogger();
-
+        org.movsim.logging.Logger.initializeLogger();
         MovsimCommandLine.parse(args);
 
         ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
@@ -72,7 +69,7 @@ public class MovsimCoreMain {
         // unmarshall movsim configuration file
         Movsim movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
         if (projectMetaData.isScanMode()) {
-            System.out.println("scanning mode");
+            LOG.info("scanning mode");
             SimulationScan.invokeSimulationScan(movsimInput);
         } else {
             invokeSingleSimulation(movsimInput);

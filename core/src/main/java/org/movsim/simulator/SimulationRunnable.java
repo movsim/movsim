@@ -66,26 +66,12 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     private UpdateDrawingCallback updateDrawingCallback;
     private HandleExceptionCallback handleExceptionCallback;
 
-    // private class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
-    // public DefaultExceptionHandler() {
-    // }
-    // @Override
-    // public void uncaughtException(Thread t, Throwable e) {
-    // if (callbacks != null) {
-    // callbacks.handleException((Exception)e);
-    // }
-    // e.printStackTrace();
-    // }
-    // }
-    // private final DefaultExceptionHandler defaultExceptionHandler;
-
     // Times
-    private int sleepTime_ms;
+    private int sleepTimeMS;
     private int sleepTimeUsed;
-    private static final double DEFAULT_TIMESTEP_S = 0.25; // default timestep, seconds
     private static final int DEFAULT_SLEEP_TIME_MS = 40; // default sleep time, milliseconds
     private boolean pausedWhenRunning;
-    private long lastUpdateTime_ms;
+    private long lastUpdateTimeMS;
     private double actualTimewarp = 0;
     private double smoothedTimewarp = 0;
     private final double betaTimewarp = Math.exp(-1.0 / 50); // moving exponential average scale
@@ -106,9 +92,6 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     public SimulationRunnable(SimulationTimeStep simulation) {
         super(simulation);
         setSleepTime(DEFAULT_SLEEP_TIME_MS);
-        // defaultExceptionHandler = new DefaultExceptionHandler();
-        // Cannot call Thread.setDefaultUncaughtExceptionHandler() in applet
-        // since this causes a java.security.AccessControlException
     }
 
     /**
@@ -134,19 +117,12 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     /**
      * Set the thread sleep time. This controls the animation speed.
      * 
-     * @param sleepTime_ms
+     * @param sleepTimeMilliseconds
      *            sleep time in milliseconds
      */
-    public void setSleepTime(int sleepTime_ms) {
-        this.sleepTime_ms = sleepTime_ms;
-        sleepTimeUsed = sleepTime_ms;
-        // dt = DEFAULT_TIMESTEP_S;
-        // while (sleepTimeUsed > 40) {
-        // 40ms, so less than 25 frames per second which would be too jerky
-        // so reduce the sleep time and also reduce the timestep for the simulation
-        // sleepTimeUsed /= 2;
-        // dt /= 2;
-        // }
+    public void setSleepTime(int sleepTimeMilliseconds) {
+        this.sleepTimeMS = sleepTimeMilliseconds;
+        sleepTimeUsed = sleepTimeMilliseconds;
     }
 
     /**
@@ -155,7 +131,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
      * @return sleep time in milliseconds
      */
     public int sleepTime() {
-        return sleepTime_ms;
+        return sleepTimeMS;
     }
 
     /**
@@ -182,7 +158,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
      * @return true if the tread is stopped
      */
     public boolean isStopped() {
-        return pausedWhenRunning == false && thread == null ? true : false;
+        return pausedWhenRunning && thread == null;
     }
 
     /**
@@ -316,8 +292,8 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     private void calculateTimewarp() {
         final long timeAfterSim_ms = System.currentTimeMillis();
-        actualTimewarp = dt / (0.001 * (timeAfterSim_ms - lastUpdateTime_ms));
-        lastUpdateTime_ms = timeAfterSim_ms;
+        actualTimewarp = dt / (0.001 * (timeAfterSim_ms - lastUpdateTimeMS));
+        lastUpdateTimeMS = timeAfterSim_ms;
 
         smoothedTimewarp = Math.min(1000, smoothedTimewarp == 0.0 ? actualTimewarp : betaTimewarp * smoothedTimewarp
                 + (1.0 - betaTimewarp) * actualTimewarp);
