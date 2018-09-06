@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
@@ -43,20 +42,27 @@ public class DrawBackground {
         this.backgroundPicture = settings.getBackgroundPicture();
     }
 
-    public void update(FXGraphics2D fxGraphics2D) {
-        clearBackground(fxGraphics2D); // TODO clearBackground not working
+    public void update(FXGraphics2D fxGraphics2D, double width, double height) {
+        clearBackground(fxGraphics2D, width, height);
 
         transform.setToIdentity();
         transform.scale(settings.getScale(), settings.getScale());
         transform.translate(settings.getxOffset(), settings.getyOffset());
         fxGraphics2D.setTransform(transform);
-        
+
         drawBackground(fxGraphics2D);
     }
 
-    private void clearBackground(FXGraphics2D g) {
-        g.setBackground(Color.GREEN);
-        g.clearRect(0 - settings.getxOffset(), 0 - settings.getyOffset(), 1000, 1000);
+    private void clearBackground(FXGraphics2D g, double width, double height) {
+        javafx.scene.paint.Color backgroundColor = settings.getBackgroundColor();
+
+        java.awt.Color awtColor = new java.awt.Color((float) backgroundColor.getRed(),
+                (float) backgroundColor.getGreen(),
+                (float) backgroundColor.getBlue(),
+                (float) backgroundColor.getOpacity());
+
+        g.setBackground(awtColor);
+        g.clearRect(-settings.getxOffset(), -settings.getyOffset(), (int) (width * (1/settings.getScale())), (int) (height * (1/settings.getScale())));
     }
 
     /**

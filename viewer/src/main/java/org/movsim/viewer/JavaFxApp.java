@@ -46,7 +46,7 @@ public class JavaFxApp extends Application {
 
         VBox vBox = new VBox(createToolBar(canvas), main);
 
-        primaryStage.setTitle("Movsim Viewer");
+        primaryStage.setTitle(ProjectMetaData.getInstance().getProjectName());
         primaryStage.setScene(new Scene(vBox));
         primaryStage.show();
         primaryStage.setOnCloseRequest((e) -> Platform.exit());
@@ -58,14 +58,14 @@ public class JavaFxApp extends Application {
             xOffsetSave = canvas.settings.getxOffset();
             yOffsetSave = canvas.settings.getyOffset();
         });
-        canvas.setOnMouseReleased((e) -> {
+        canvas.setOnMouseReleased   ((e) -> {
             int xOffsetNew = xOffsetSave + (int) ((e.getX() - startDragX) / canvas.settings.getScale());
             int yOffsetNew = yOffsetSave + (int) ((e.getY() - startDragY) / canvas.settings.getScale());
             if ((xOffsetNew != canvas.settings.getxOffset()) || (yOffsetNew != canvas.settings.getyOffset())) {
                 canvas.settings.setxOffset(xOffsetNew);
                 canvas.settings.setyOffset(yOffsetNew);
                 canvas.execTranslateFx();
-                canvas.forceRepaintBackground();
+                canvas.triggerRepaint();
             }
         });
     }
@@ -90,8 +90,7 @@ public class JavaFxApp extends Application {
         zoomIn.setOnMouseClicked((e) -> {
             final double zoomFactor = Math.sqrt(2.0);
             canvas.settings.setScale(canvas.settings.getScale() * zoomFactor);
-            canvas.execScale();
-            canvas.forceRepaintBackground();
+            canvas.triggerRepaint();
         });
 
         Button zoomOut = new Button("Zoom Out");
@@ -99,8 +98,7 @@ public class JavaFxApp extends Application {
         zoomOut.setOnMouseClicked((e) -> {
             final double zoomFactor = Math.sqrt(2.0);
             canvas.settings.setScale(canvas.settings.getScale() / zoomFactor);
-            canvas.execScale();
-            canvas.forceRepaintBackground();
+            canvas.triggerRepaint();
         });
 
         Button reset = new Button("Reset");

@@ -2,8 +2,6 @@ package org.movsim.viewer.javafx;
 
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.transform.Affine;
-import org.apache.commons.lang3.StringUtils;
 import org.jfree.fx.FXGraphics2D;
 import org.movsim.autogen.Movsim;
 import org.movsim.input.ProjectMetaData;
@@ -17,10 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 public class FxSimCanvas extends javafx.scene.canvas.Canvas implements SimulationRunnable.UpdateDrawingCallback, SimulationRunnable.HandleExceptionCallback {
@@ -138,7 +133,7 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
      * </p>
      */
     public void updateDrawing(double simulationTime) {
-        drawBackground.update(fxGraphics2D);
+        drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight());
         drawMovables.update(fxGraphics2D);
     }
 
@@ -163,10 +158,6 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
         if (statusControlCallbacks != null) {
             statusControlCallbacks.stateChanged();
         }
-    }
-
-    public void forceRepaintBackground() {
-        drawBackground.update(fxGraphics2D);
     }
 
     /**

@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Optimized drawing of RoadSegmentUtils based on the type of their RoadMapping
  */
-public final class PaintRoadMappingFx {
+final class PaintRoadMappingFx {
 
   /** The Constant LOG. */
   private static final Logger LOG = LoggerFactory.getLogger(PaintRoadMapping.class);
@@ -60,7 +60,7 @@ public final class PaintRoadMappingFx {
     throw new IllegalStateException("do not instanciate");
   }
 
-  public static void paintRoadMapping(FXGraphics2D g, RoadMapping roadMapping) {
+  static void paintRoadMapping(FXGraphics2D g, RoadMapping roadMapping) {
     assert !roadMapping.isPeer() : "should not be painted twice";
     double lateralOffset = roadMapping.calcOffsetToCenterline();
     LOG.debug("paint roads: roadMapping={}", roadMapping);
@@ -69,7 +69,7 @@ public final class PaintRoadMappingFx {
     paintRoadMapping(g, roadMapping, lateralOffset);
   }
 
-  public static void paintRoadMapping(FXGraphics2D g, RoadMapping roadMapping, double lateralOffset) {
+  static void paintRoadMapping(FXGraphics2D g, RoadMapping roadMapping, double lateralOffset) {
     assert !roadMapping.isPeer() : "should not be painted twice";
 
     final Line2D.Double line = new Line2D.Double();
@@ -212,7 +212,7 @@ public final class PaintRoadMappingFx {
     }
   }
 
-  public static void setClipPath(FXGraphics2D g, RoadMapping roadMapping, GeneralPath clipPath) {
+  static void setClipPath(FXGraphics2D g, RoadMapping roadMapping, GeneralPath clipPath) {
     if (roadMapping.clippingPolygons() == null) {
       g.setClip(null);
     } else {
@@ -240,7 +240,7 @@ public final class PaintRoadMappingFx {
     }
   }
 
-  public static void drawLine(FXGraphics2D g, RoadMapping roadMapping, double position, int strokeWidth, Color color) {
+  static void drawLine(FXGraphics2D g, RoadMapping roadMapping, double position, int strokeWidth, Color color) {
     Color prevColor = g.getColor();
     final double lateralExtend = roadMapping.getLaneCountInDirection() * roadMapping.laneWidth();
     final PosTheta posTheta = roadMapping.map(position, 0/* offset */);
