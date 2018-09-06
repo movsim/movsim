@@ -2,6 +2,7 @@ package org.movsim.viewer.javafx;
 
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import org.jfree.fx.FXGraphics2D;
 import org.movsim.autogen.Movsim;
 import org.movsim.input.ProjectMetaData;
@@ -108,9 +109,8 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
             roadSegment.roadMapping().setRoadColor(settings.getRoadColor().getRGB());
         }
         for (String vehicleTypeLabel : simulator.getVehiclePrototypeLabels()) {
-            final java.awt.Color color = new java.awt.Color(Colors.randomColor());
             LOG.debug("set color for vehicle label={}", vehicleTypeLabel);
-            settings.getLabelColors().put(vehicleTypeLabel, color);
+            settings.getLabelColors().put(vehicleTypeLabel, javafx.scene.paint.Color.color(Math.random(), Math.random(), Math.random()));
         }
 
         execScale();
@@ -134,7 +134,7 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
      */
     public void updateDrawing(double simulationTime) {
         drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight());
-        drawMovables.update(fxGraphics2D);
+        drawMovables.update(fxGraphics2D, gc);
     }
 
     /**
@@ -158,6 +158,11 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
         if (statusControlCallbacks != null) {
             statusControlCallbacks.stateChanged();
         }
+    }
+
+    public void triggerRepaint() {
+        drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight());
+        drawMovables.update(fxGraphics2D, gc);
     }
 
     /**

@@ -372,11 +372,11 @@ public abstract class RoadMapping {
         /**
          * Array of x-coordinates of the polygon.
          */
-        float xPoints[];
+        public float xPoints[];
         /**
          * Array of y-coordinates of the polygon.
          */
-        float yPoints[];
+        public float yPoints[];
 
         /**
          * Constructor, allocate arrays for polygon points.

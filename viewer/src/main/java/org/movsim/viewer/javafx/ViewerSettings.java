@@ -42,7 +42,7 @@ public class ViewerSettings {
 
     private double vmaxForColorSpectrum;
 
-    private final Map<String, Color> labelColors = new HashMap<>();
+    private final Map<String, javafx.scene.paint.Color> labelColors = new HashMap<>();
 
     // scale factor pixels/m, smaller value means a smaller looking view
     public double scale = 1;
@@ -68,7 +68,7 @@ public class ViewerSettings {
 
     private VehicleColorMode vehicleColorMode = VehicleColorMode.VELOCITY_COLOR;
 
-    public Map<String, Color> getLabelColors() {
+    public Map<String, javafx.scene.paint.Color> getLabelColors() {
         return labelColors;
     }
 
