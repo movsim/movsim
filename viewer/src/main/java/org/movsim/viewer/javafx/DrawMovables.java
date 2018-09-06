@@ -1,27 +1,20 @@
 package org.movsim.viewer.javafx;
 
 import javafx.scene.canvas.GraphicsContext;
-import org.jfree.fx.FXGraphics2D;
+import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.Colors;
 
-import java.awt.*;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
 import java.util.Iterator;
 
 public class DrawMovables {
     private ViewerSettings settings;
     private RoadNetwork roadNetwork;
     private final SimulationRunnable simulationRunnable;
-
-    // pre-allocate clipping path for road mappings
-    private final GeneralPath clipPath = new GeneralPath(Path2D.WIND_EVEN_ODD);
 
     private final double[] accelerations = new double[]{-7.5, -0.1, 0.2};
     private javafx.scene.paint.Color[] accelerationColors;
@@ -48,21 +41,21 @@ public class DrawMovables {
      * </p>
      * <p>
      */
-    public void update(FXGraphics2D fxGraphics2D, GraphicsContext gc) {
-        drawMovables(fxGraphics2D, gc);
+    public void update(GraphicsContext gc) {
+        drawMovables(gc);
     }
 
-    private void drawMovables(FXGraphics2D g, GraphicsContext gc) {
+    private void drawMovables(GraphicsContext gc) {
         // moveVehicles occurs in the UI thread, so must synchronize with the
         // update of the road network in the calculation thread.
         final long timeBeforePaint_ms = System.currentTimeMillis();
         synchronized (simulationRunnable.dataLock) {
-            drawTrafficLights(g);
+            drawTrafficLights(gc);
             final double simulationTime = simulationRunnable.simulationTime();
             for (final RoadSegment roadSegment : roadNetwork) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 assert roadMapping != null;
-                PaintRoadMappingFx.setClipPath(g, roadMapping, clipPath);
+                setClipPath(gc, roadMapping);
                 for (final Vehicle vehicle : roadSegment) {
                     drawVehicle(gc, simulationTime, roadMapping, vehicle);
                 }
@@ -75,14 +68,59 @@ public class DrawMovables {
         }
     }
 
-    private void drawTrafficLights(FXGraphics2D g) {
+    private void drawTrafficLights(GraphicsContext g) {
         int strokeWidth = 3;
         for (final RoadSegment roadSegment : roadNetwork) {
             assert roadSegment.trafficLights() != null;
             for (TrafficLight trafficLight : roadSegment.trafficLights()) {
-                java.awt.Color color = getTrafficLightColor(trafficLight);
-                PaintRoadMappingFx.drawLine(g, roadSegment.roadMapping(), trafficLight.position(), strokeWidth, color);
+                javafx.scene.paint.Color color = getTrafficLightColor(trafficLight);
+                drawLine(g, roadSegment.roadMapping(), trafficLight.position(), strokeWidth, color);
             }
+        }
+    }
+
+    static void drawLine(GraphicsContext g, RoadMapping roadMapping, double position, int strokeWidth, javafx.scene.paint.Color color) {
+        javafx.scene.paint.Paint prevColor = g.getStroke();
+        final double lateralExtend = roadMapping.getLaneCountInDirection() * roadMapping.laneWidth();
+        final PosTheta posTheta = roadMapping.map(position, 0/* offset */);
+        final RoadMapping.PolygonFloat line = roadMapping.mapLine(posTheta, roadMapping.isPeer() ? +lateralExtend : -lateralExtend);
+
+        g.setStroke(color);
+        g.beginPath();
+        g.moveTo(line.getXPoint(0), line.getYPoint(0));
+        g.lineTo(line.getXPoint(1), line.getYPoint(1));
+        g.closePath();
+        g.stroke();
+        g.setStroke(prevColor);
+    }
+
+    // not sure if this is of value on javafx canvas ?!?
+    static void setClipPath(GraphicsContext g, RoadMapping roadMapping) {
+        if (roadMapping.clippingPolygons() == null) {
+            return;
+        } else {
+            g.save();
+            g.beginPath();
+            // add the clip regions
+            for (final RoadMapping.PolygonFloat polygon : roadMapping.clippingPolygons()) {
+                g.moveTo(polygon.getXPoint(0), polygon.getYPoint(0));
+                g.lineTo(polygon.getXPoint(1), polygon.getYPoint(1));
+                g.lineTo(polygon.getXPoint(2), polygon.getYPoint(2));
+                g.lineTo(polygon.getXPoint(3), polygon.getYPoint(3));
+                g.lineTo(polygon.getXPoint(0), polygon.getYPoint(0));
+            }
+            // add the outer region (encloses whole road), so that everything
+            // outside the clip
+            // region is drawn
+            final RoadMapping.PolygonFloat polygon = roadMapping.outsideClippingPolygon();
+            g.moveTo(polygon.getXPoint(0), polygon.getYPoint(0));
+            g.lineTo(polygon.getXPoint(1), polygon.getYPoint(1));
+            g.lineTo(polygon.getXPoint(2), polygon.getYPoint(2));
+            g.lineTo(polygon.getXPoint(3), polygon.getYPoint(3));
+            g.lineTo(polygon.getXPoint(0), polygon.getYPoint(0));
+            g.closePath();
+            g.clip();
+            g.restore();
         }
     }
 
@@ -117,25 +155,25 @@ public class DrawMovables {
         }
     }
 
-    private javafx.scene.paint.Color awtColorToJavaFX(Color c) {
-        return javafx.scene.paint.Color.rgb(c.getRed(), c.getGreen(),
-                c.getBlue(), c.getAlpha() / 255.0);
-    }
+//    private javafx.scene.paint.Color awtColorToJavaFX(Color c) {
+//        return javafx.scene.paint.Color.rgb(c.getRed(), c.getGreen(),
+//                c.getBlue(), c.getAlpha() / 255.0);
+//    }
 
-    private java.awt.Color getTrafficLightColor(TrafficLight trafficLight) {
-        java.awt.Color color = null;
+    private javafx.scene.paint.Color getTrafficLightColor(TrafficLight trafficLight) {
+        javafx.scene.paint.Color color = null;
         switch (trafficLight.status()) {
             case GREEN:
-                color = java.awt.Color.GREEN;
+                color = javafx.scene.paint.Color.GREEN;
                 break;
             case GREEN_RED:
-                color = java.awt.Color.YELLOW;
+                color = javafx.scene.paint.Color.YELLOW;
                 break;
             case RED:
-                color = java.awt.Color.RED;
+                color = javafx.scene.paint.Color.RED;
                 break;
             case RED_GREEN:
-                color = java.awt.Color.ORANGE;
+                color = javafx.scene.paint.Color.ORANGE;
                 break;
         }
         return color;

@@ -134,7 +134,7 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
      */
     public void updateDrawing(double simulationTime) {
         drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight());
-        drawMovables.update(fxGraphics2D, gc);
+        drawMovables.update(gc);
     }
 
     /**
@@ -162,7 +162,7 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
 
     public void triggerRepaint() {
         drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight());
-        drawMovables.update(fxGraphics2D, gc);
+        drawMovables.update(gc);
     }
 
     /**
