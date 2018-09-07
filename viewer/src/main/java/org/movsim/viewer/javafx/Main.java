@@ -1,4 +1,4 @@
-package org.movsim.viewer;
+package org.movsim.viewer.javafx;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -11,12 +11,11 @@ import javafx.stage.Stage;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.logging.Logger;
-import org.movsim.viewer.javafx.FxSimCanvas;
 import org.movsim.viewer.ui.ViewProperties;
 
 import java.util.Properties;
 
-public class JavaFxApp extends Application {
+public class Main extends Application {
     private static Properties viewProperties;
     private int startDragX;
     private int startDragY;
@@ -41,7 +40,7 @@ public class JavaFxApp extends Application {
         Group main = new Group();
         int xPixSizeWindow = Integer.valueOf(viewProperties.getProperty("xPixSizeWindow", "1000"));
         int yPixSizeWindow = Integer.valueOf(viewProperties.getProperty("yPixSizeWindow", "800"));
-        FxSimCanvas canvas = new FxSimCanvas((int) xPixSizeWindow, yPixSizeWindow, viewProperties);
+        SimCanvas canvas = new SimCanvas((int) xPixSizeWindow, yPixSizeWindow, viewProperties);
         main.getChildren().add(canvas);
 
         VBox vBox = new VBox(createToolBar(canvas), main);
@@ -70,7 +69,7 @@ public class JavaFxApp extends Application {
         });
     }
 
-    private ToolBar createToolBar(FxSimCanvas canvas) {
+    private ToolBar createToolBar(SimCanvas canvas) {
         ToolBar toolBar = new ToolBar();
 
         Button startStopButton = new Button("Pause");

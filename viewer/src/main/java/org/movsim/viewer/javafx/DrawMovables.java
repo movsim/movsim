@@ -11,8 +11,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 
 import java.util.Iterator;
 
-public class DrawMovables {
-    private ViewerSettings settings;
+class DrawMovables {
+    private Settings settings;
     private RoadNetwork roadNetwork;
     private final SimulationRunnable simulationRunnable;
 
@@ -21,13 +21,11 @@ public class DrawMovables {
     private long vehicleToHighlightId = -1;
 
 
-    public DrawMovables(ViewerSettings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable) {
+    DrawMovables(Settings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable) {
         this.settings = settings;
         this.roadNetwork = roadNetwork;
         this.simulationRunnable = simulationRunnable;
-
     }
-
 
     /**
      * <p>
@@ -41,7 +39,7 @@ public class DrawMovables {
      * </p>
      * <p>
      */
-    public void update(GraphicsContext gc) {
+    void update(GraphicsContext gc) {
         drawMovables(gc);
     }
 
@@ -86,12 +84,8 @@ public class DrawMovables {
         final RoadMapping.PolygonFloat line = roadMapping.mapLine(posTheta, roadMapping.isPeer() ? +lateralExtend : -lateralExtend);
 
         g.setStroke(color);
-        g.beginPath();
-        g.moveTo(line.getXPoint(0), line.getYPoint(0));
-        g.lineTo(line.getXPoint(1), line.getYPoint(1));
-        g.closePath();
-        g.stroke();
-        g.setStroke(prevColor);
+        g.setLineWidth(strokeWidth);
+        g.strokeLine(line.getXPoint(0), line.getYPoint(0), line.getXPoint(1), line.getYPoint(1));
     }
 
     // not sure if this is of value on javafx canvas ?!?
@@ -139,7 +133,7 @@ public class DrawMovables {
 
         if (vehicle.isBrakeLightOn()) {
             // if the vehicle is decelerating then display the
-            gc.setStroke(javafx.scene.paint.Color.RED);
+            gc.setStroke(settings.getBrakeLightColor());
             gc.setLineWidth(4);
             gc.beginPath();
             // points 2 & 3 are at the rear of vehicle

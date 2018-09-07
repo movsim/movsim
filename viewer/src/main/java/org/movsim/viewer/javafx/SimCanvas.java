@@ -2,15 +2,12 @@ package org.movsim.viewer.javafx;
 
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import org.jfree.fx.FXGraphics2D;
 import org.movsim.autogen.Movsim;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.utilities.Colors;
 import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +16,15 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import java.util.Properties;
 
-public class FxSimCanvas extends javafx.scene.canvas.Canvas implements SimulationRunnable.UpdateDrawingCallback, SimulationRunnable.HandleExceptionCallback {
+class SimCanvas extends javafx.scene.canvas.Canvas implements SimulationRunnable.UpdateDrawingCallback, SimulationRunnable.HandleExceptionCallback {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FxSimCanvas.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SimCanvas.class);
 
-    public Simulator simulator;
+    Simulator simulator;
     private SimulationRunnable simulationRunnable = null;
     private RoadNetwork roadNetwork;
 
-    public ViewerSettings settings = new ViewerSettings();
+    public Settings settings = new Settings();
     private Properties viewProperties;
 
     private DrawMovables drawMovables;
@@ -35,13 +32,13 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
 
     // Facade to draw with awt on a javafx canvas TODO convert everything javafx to step by step -> remove
     private FXGraphics2D fxGraphics2D;
-    private final GraphicsContext gc;
+    final GraphicsContext gc;
 
-    private FxSimCanvas.StatusControlCallbacks statusControlCallbacks;
+    private SimCanvas.StatusControlCallbacks statusControlCallbacks;
 
     private long totalAnimationTime;
 
-    public FxSimCanvas(int width, int height, Properties viewProperties) {
+    public SimCanvas(int width, int height, Properties viewProperties) {
         super(width, height);
         this.viewProperties = viewProperties;
 
@@ -53,7 +50,7 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
     }
 
 
-    public void init() {
+    void init() {
         ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         Movsim movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
 
@@ -82,22 +79,22 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
         }
     }
 
-    public void resetSimulation() {
+    void resetSimulation() {
         simulator.reset();
     }
 
     /**
      * Set the thread sleep time. This controls the animation speed.
      */
-    public final void setSleepTime(int sleepTime_ms) {
+    final void setSleepTime(int sleepTime_ms) {
         simulationRunnable.setSleepTime(sleepTime_ms);
     }
 
-    public void execScale() {
+    void execScale() {
         gc.scale(settings.getScale(), settings.getScale());
     }
 
-    public void execTranslateFx() {
+    void execTranslateFx() {
         gc.translate(settings.getxOffset(), settings.getyOffset());
     }
 
@@ -105,9 +102,6 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
         settings.initGraphicConfigFieldsFromProperties(viewProperties);
         setSleepTime(Integer.parseInt(viewProperties.getProperty("initial_sleep_time")));
 
-        for (final RoadSegment roadSegment : roadNetwork) {
-            roadSegment.roadMapping().setRoadColor(settings.getRoadColor().getRGB());
-        }
         for (String vehicleTypeLabel : simulator.getVehiclePrototypeLabels()) {
             LOG.debug("set color for vehicle label={}", vehicleTypeLabel);
             settings.getLabelColors().put(vehicleTypeLabel, javafx.scene.paint.Color.color(Math.random(), Math.random(), Math.random()));
@@ -133,8 +127,9 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
      * </p>
      */
     public void updateDrawing(double simulationTime) {
-        drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight());
+        drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight(), gc);
         drawMovables.update(gc);
+//        simulationRunnable.pause();
     }
 
     /**
@@ -150,7 +145,7 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
     }
 
 
-    public void setStatusControlCallbacks(FxSimCanvas.StatusControlCallbacks statusCallbacks) {
+    void setStatusControlCallbacks(SimCanvas.StatusControlCallbacks statusCallbacks) {
         this.statusControlCallbacks = statusCallbacks;
     }
 
@@ -160,8 +155,8 @@ public class FxSimCanvas extends javafx.scene.canvas.Canvas implements Simulatio
         }
     }
 
-    public void triggerRepaint() {
-        drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight());
+    void triggerRepaint() {
+        drawBackground.update(fxGraphics2D, this.getWidth(), this.getHeight(), gc);
         drawMovables.update(gc);
     }
 

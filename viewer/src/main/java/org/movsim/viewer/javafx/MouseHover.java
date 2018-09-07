@@ -9,7 +9,7 @@ import org.movsim.utilities.Units;
 import java.awt.*;
 
 // TODO MouseHover
-public class MouseHover {
+class MouseHover {
 
     private SimulationRunnable simulationRunnable;
 
@@ -25,17 +25,17 @@ public class MouseHover {
     private Vehicle vehiclePopup;
     private long lastVehicleViewed = -1;
 
-    public void setMessageStrings(String popupString, String popupStringExitEndRoad) {
+    void setMessageStrings(String popupString, String popupStringExitEndRoad) {
         this.popupString = popupString;
         this.popupStringExitEndRoad = popupStringExitEndRoad;
     }
 
-    public void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString,
+    void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString,
                                   String perturbationRampingFinishedString, String perturbationAppliedString, String simulationFinished) {
         setMessageStrings(popupString, popupStringExitEndRoad);
     }
 
-    public void showSinkMouseOverInfo(Point point, TrafficSink sink) {
+    void showSinkMouseOverInfo(Point point, TrafficSink sink) {
         StringBuilder sb = new StringBuilder();
         sb.append("outflow: ");
         sb.append((int) (Units.INVS_TO_INVH * sink.measuredOutflow()));
@@ -45,7 +45,7 @@ public class MouseHover {
 //        mouseOverTipWindow.show(point, sb.toString());
     }
 
-    public void showSourceMouseOverInfo(Point point, AbstractTrafficSource source) {
+    void showSourceMouseOverInfo(Point point, AbstractTrafficSource source) {
         StringBuilder sb = new StringBuilder();
         sb.append("set inflow: ");
         sb.append((int) (Units.INVS_TO_INVH * source.getTotalInflow(simulationRunnable.simulationTime())));
@@ -58,7 +58,7 @@ public class MouseHover {
 //        mouseOverTipWindow.show(point, sb.toString());
     }
 
-    public void showVehicleMouseOverInfo(Point point, Vehicle vehicle) {
+    void showVehicleMouseOverInfo(Point point, Vehicle vehicle) {
         if (vehiclePopup == null || vehiclePopup.getId() != vehicle.getId()) {
             lastVehicleViewed = vehicle.getId();
 //            mouseOverTipWindow.setVisible(false);

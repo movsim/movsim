@@ -37,8 +37,8 @@ public class RoadMappingArc extends RoadMapping {
 
     private static final double HALF_PI = 0.5 * Math.PI;
 
-    protected double centerX;
-    protected double centerY;
+    public double centerX;
+    public double centerY;
 
     protected final double radius;
 

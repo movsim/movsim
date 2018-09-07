@@ -1,5 +1,6 @@
 package org.movsim.viewer.javafx;
 
+import javafx.scene.canvas.GraphicsContext;
 import org.jfree.fx.FXGraphics2D;
 import org.movsim.roadmappings.PosTheta;
 import org.movsim.roadmappings.RoadMapping;
@@ -23,10 +24,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
-public class DrawBackground {
+/**
+ * Everything that does not change on every timestep
+ */
+class DrawBackground {
     private static final Logger LOG = LoggerFactory.getLogger(DrawBackground.class);
 
-    private ViewerSettings settings;
+    private Settings settings;
     private RoadNetwork roadNetwork;
     private SimulationRunnable simulationRunnable;
     private Simulator simulator;
@@ -34,7 +38,7 @@ public class DrawBackground {
     private BufferedImage backgroundPicture = null;
     private AffineTransform transform = new AffineTransform();
 
-    public DrawBackground(ViewerSettings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable, Simulator simulator) {
+    DrawBackground(Settings settings, RoadNetwork roadNetwork, SimulationRunnable simulationRunnable, Simulator simulator) {
         this.settings = settings;
         this.roadNetwork = roadNetwork;
         this.simulationRunnable = simulationRunnable;
@@ -42,27 +46,20 @@ public class DrawBackground {
         this.backgroundPicture = settings.getBackgroundPicture();
     }
 
-    public void update(FXGraphics2D fxGraphics2D, double width, double height) {
-        clearBackground(fxGraphics2D, width, height);
+    void update(FXGraphics2D fxGraphics2D, double width, double height, GraphicsContext gc) {
+        clearBackground(gc, width, height);
 
         transform.setToIdentity();
         transform.scale(settings.getScale(), settings.getScale());
         transform.translate(settings.getxOffset(), settings.getyOffset());
         fxGraphics2D.setTransform(transform);
 
-        drawBackground(fxGraphics2D);
+        drawBackground(fxGraphics2D, gc);
     }
 
-    private void clearBackground(FXGraphics2D g, double width, double height) {
-        javafx.scene.paint.Color backgroundColor = settings.getBackgroundColor();
-
-        java.awt.Color awtColor = new java.awt.Color((float) backgroundColor.getRed(),
-                (float) backgroundColor.getGreen(),
-                (float) backgroundColor.getBlue(),
-                (float) backgroundColor.getOpacity());
-
-        g.setBackground(awtColor);
-        g.clearRect(-settings.getxOffset(), -settings.getyOffset(), (int) (width * (1/settings.getScale())), (int) (height * (1/settings.getScale())));
+    private void clearBackground(GraphicsContext g, double width, double height) {
+        g.setFill(settings.getBackgroundColor());
+        g.fillRect(-settings.getxOffset(), -settings.getyOffset(), (int) (width * (1/settings.getScale())), (int) (height * (1/settings.getScale())));
     }
 
     /**
@@ -70,22 +67,23 @@ public class DrawBackground {
      * sinks, if they are visible.
      *
      * @param g
+     * @param gc
      */
-    private void drawBackground(FXGraphics2D g) {
+    private void drawBackground(FXGraphics2D g, GraphicsContext gc) {
         if (backgroundPicture != null) {
             int height = backgroundPicture.getHeight();
             int width = backgroundPicture.getWidth();
             g.drawImage(backgroundPicture, 0, -(int) height, (int) (width * 1.01), 0, 0, 0, width, height, null);
         }
 
-        drawRoadSegmentsAndLines(g);
+        drawRoadSegmentsAndLines(g,gc);
 
         if (settings.isDrawSources()) {
-            drawSources(g);
+            drawSources(gc);
         }
 
         if (settings.isDrawSinks()) {
-            drawSinks(g);
+            drawSinks(gc);
         }
 
         if (settings.isDrawSpeedLimits()) {
@@ -101,32 +99,38 @@ public class DrawBackground {
         }
 
         if (settings.isDrawRoadId()) {
-            drawRoadSectionIds(g);
+            drawRoadSectionIds(gc);
         }
 
         if (settings.isDrawNotifyObjects()) {
-            drawNotifyObjects(g);
+            drawNotifyObjects(gc);
         }
     }
 
-    private void drawRoadSegmentsAndLines(FXGraphics2D g) {
+    private void drawRoadSegmentsAndLines(FXGraphics2D g, GraphicsContext gc) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             if (roadMapping.isPeer()) {
                 LOG.debug("skip painting peer element={}", roadMapping);
                 continue;
             }
-            drawRoadSegment(g, roadMapping);
+            drawRoadSegment(g, roadMapping, gc);
             drawRoadSegmentLines(g, roadMapping);
         }
     }
 
-    private void drawRoadSegment(FXGraphics2D g, RoadMapping roadMapping) {
+    private void drawRoadSegment(FXGraphics2D g, RoadMapping roadMapping, GraphicsContext gc) {
         BasicStroke roadStroke = new BasicStroke((float) roadMapping.roadWidth(), BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER);
         g.setStroke(roadStroke);
         g.setColor(new Color(roadMapping.roadColor()));
-        PaintRoadMappingFx.paintRoadMapping(g, roadMapping);
+
+
+        gc.setLineWidth(roadMapping.roadWidth());
+        gc.setStroke(settings.getRoadColor());
+
+        PaintRoadMappingFx.paintRoadMapping2(gc, roadMapping);
+
     }
 
     private void drawRoadSegmentLines(FXGraphics2D g, RoadMapping roadMapping) {
@@ -240,35 +244,35 @@ public class DrawBackground {
         g.setColor(prevColor);
     }
 
-    private void drawSources(FXGraphics2D g) {
+    private void drawSources(GraphicsContext g) {
         for (RoadSegment roadSegment : roadNetwork) {
             AbstractTrafficSource trafficSource = roadSegment.trafficSource();
             if (trafficSource != null) {
-                PaintRoadMappingFx.drawLine(g, roadSegment.roadMapping(), 0, 4, settings.getSourceColor());
+                DrawMovables.drawLine(g, roadSegment.roadMapping(), 0, 4, settings.getSourceColor());
             }
         }
     }
 
-    private void drawSinks(FXGraphics2D g) {
+    private void drawSinks(GraphicsContext g) {
         for (RoadSegment roadSegment : roadNetwork) {
             TrafficSink sink = roadSegment.sink();
             if (sink != null) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
-                PaintRoadMappingFx.drawLine(g, roadMapping, roadMapping.roadLength(), 4, settings.getSinkColor());
+                DrawMovables.drawLine(g, roadMapping, roadMapping.roadLength(), 4, settings.getSinkColor());
             }
         }
     }
 
-    private void drawNotifyObjects(FXGraphics2D g) {
+    private void drawNotifyObjects(GraphicsContext g) {
         for (Regulator regulator : simulator.getRegulators()) {
             for (NotifyObject notifyObject : regulator.getNotifyObjects()) {
                 RoadMapping roadMapping = notifyObject.getRoadSegment().roadMapping();
-                PaintRoadMappingFx.drawLine(g, roadMapping, notifyObject.getPosition(), 2, java.awt.Color.DARK_GRAY);
+                DrawMovables.drawLine(g, roadMapping, notifyObject.getPosition(), 2, javafx.scene.paint.Color.DARKGRAY);
             }
         }
     }
 
-    private void drawRoadSectionIds(FXGraphics2D g) {
+    private void drawRoadSectionIds(GraphicsContext g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             final double position = roadMapping.isPeer() ? roadMapping.roadLength() : 0.0;
@@ -276,11 +280,12 @@ public class DrawBackground {
                     ? roadMapping.getOffsetLeft(roadMapping.getLaneGeometries().getLeft().getLaneCount() - 1)
                     : roadMapping.getMaxOffsetRight();
             final PosTheta posTheta = roadMapping.map(position, offset);
-            final int fontHeight = 12;
-            final Font font = new Font("SansSerif", Font.PLAIN, fontHeight);
-            g.setFont(font);
-            g.setColor(java.awt.Color.BLACK);
-            PaintRoadMappingFx.drawTextRotated(roadSegment.userId(), posTheta, font, g);
+            g.save();
+            g.setFill(javafx.scene.paint.Color.BLACK);
+            g.setFont(javafx.scene.text.Font.font ("Verdana", 12));
+            g.fillText(roadSegment.userId(), posTheta.getScreenX(), posTheta.getScreenY());
+            g.restore();
+//            PaintRoadMappingFx.drawTextRotated(roadSegment.userId(), posTheta, font, g);
         }
     }
 
