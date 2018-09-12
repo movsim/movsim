@@ -39,8 +39,8 @@
                 </SimpleRamp>
                 <Detectors sample_interval="60" logging="true">
                     <CrossSection position="0" />
-                    <CrossSection position="1000" />
-                    <CrossSection position="2000" />
+                    <CrossSection position="100" />
+                    <CrossSection position="200" />
                 </Detectors>
             </Road>
             <Road id="3" />
