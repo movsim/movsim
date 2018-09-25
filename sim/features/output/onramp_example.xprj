@@ -65,7 +65,7 @@
                     <CrossSection position="200" />
                 </Detectors>
             </Road>
-            <Road id="6">
+            <Road id="5">
                 <TrafficSource logging="true">
                     <Inflow t="0" q_per_hour="520" v="20" />
                 </TrafficSource>
@@ -74,7 +74,7 @@
         <!-- definition of routes -->
         <Routes>
             <Route label="main">
-                <Road id="2" />
+                <Road id="1" />
                 <Road id="3" />
                 <Road id="4" />
             </Route>

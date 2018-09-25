@@ -51,7 +51,7 @@ public class TrafficCanvasController {
                 trafficCanvas.mouseOverTipWindow.setVisible(false);
             }
             trafficCanvas.resume();
-        } else if (trafficCanvas.isStopped()) {
+        } else if (!trafficCanvas.isStopped()) {
             trafficCanvas.pause();
         }
         if (trafficCanvas.statusControlCallbacks != null) {
