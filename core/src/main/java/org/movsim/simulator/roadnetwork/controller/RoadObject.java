@@ -36,7 +36,7 @@ public interface RoadObject extends Comparable<RoadObject> {
         LOOPDETECTOR,
         VMS_DIVERSION,
         FLOW_CONSERVING_BOTTLENECK,
-        GRADIENT_PROFILE;
+        GRADIENT_PROFILE
     }
 
     RoadObjectType getType();

@@ -10,7 +10,7 @@ public final class RoadNetworkUtils {
 
     public enum TravelTimeType {
         GRID,
-        MEAN;
+        MEAN
     }
 
     public static double instantaneousTravelTime(Route route, TravelTimeType type) {

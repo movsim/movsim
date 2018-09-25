@@ -14,7 +14,7 @@ public class RoadGeometry {
     // private static final Logger LOG = LoggerFactory.getLogger(RoadGeometry.class);
 
     public enum GeometryType {
-        LINE, ARC, SPIRAL, POLY3;
+        LINE, ARC, SPIRAL, POLY3
     }
 
     protected final Geometry geometry;

@@ -6,6 +6,6 @@ package org.movsim.simulator.roadnetwork;
 public enum RoadSegmentDirection {
 
     FORWARD,
-    BACKWARD;
+    BACKWARD
 
 }

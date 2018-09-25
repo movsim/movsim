@@ -4,38 +4,37 @@ public interface EquilibriumProperties {
 
     /**
      * Gets the q max.
-     * 
+     *
      * @return the q max
      */
-    public double getQMax();
+    double getQMax();
 
     /**
      * Gets the rho max.
-     * 
+     *
      * @return the rho max
      */
-    public double getRhoMax();
+    double getRhoMax();
 
     /**
      * Gets the rho q max.
-     * 
+     *
      * @return the rho q max
      */
-    public double getRhoQMax();
+    double getRhoQMax();
 
     /**
      * Gets the net distance.
-     * 
-     * @param rho
-     *            the rho
+     *
+     * @param rho the rho
      * @return the net distance
      */
-    public double getNetDistance(double rho);
+    double getNetDistance(double rho);
 
-    public double getVEq(double rho);
+    double getVEq(double rho);
 
-    public double getRho(int i);
+    double getRho(int i);
 
-    public int getVEqCount();
+    int getVEqCount();
 
 }

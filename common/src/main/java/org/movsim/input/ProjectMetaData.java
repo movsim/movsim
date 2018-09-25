@@ -24,7 +24,7 @@ import com.google.common.base.Preconditions;
  * Container for some shared information. Singleton pattern. <br>
  * created: Mar 9, 2013<br>
  */
-// TODO this class deperately needs a throughout refactoring !!!
+// TODO this class needs a throughout refactoring !!!
 public final class ProjectMetaData {
 
     private static final String MOVSIM_COMMON_LOG_PATH = "config";
@@ -42,8 +42,6 @@ public final class ProjectMetaData {
     private String outputPath;
 
     private String xodrNetworkFilename;
-
-    private String xodrPath;
 
     private String consumptionFilename;
 

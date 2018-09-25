@@ -172,7 +172,7 @@ public class Vehicle {
     private double tLaneChangeDelay;
 
     private double speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
-    ;
+
     private double slope;
 
     private int color;
@@ -256,7 +256,7 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehiclePrototypeConfiguration vehInput,
-            @Nullable LaneChangeModel lcModel) {
+                   @Nullable LaneChangeModel lcModel) {
         Preconditions.checkNotNull(longitudinalModel);
         Preconditions.checkNotNull(vehInput);
         this.label = label;
@@ -610,7 +610,7 @@ public class Vehicle {
     }
 
     public void updateAcceleration(double dt, RoadSegment roadSegment, LaneSegment laneSegment,
-            LaneSegment leftLaneSegment) {
+                                   LaneSegment leftLaneSegment) {
 
         accOld = acc;
         // acceleration noise:
@@ -747,7 +747,7 @@ public class Vehicle {
     }
 
     private double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaTLocal,
-            double alphaV0Local, double alphaALocal) {
+                                double alphaV0Local, double alphaALocal) {
         if (longitudinalModel == null) {
             return 0.0;
         }

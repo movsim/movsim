@@ -109,9 +109,9 @@ public class TrafficCanvas extends SimulationCanvasBase
          *
          * @param message the status message
          */
-        public void showStatusMessage(String message);
+        void showStatusMessage(String message);
 
-        public void stateChanged();
+        void stateChanged();
     }
 
     protected StatusControlCallbacks statusControlCallbacks;
@@ -172,7 +172,7 @@ public class TrafficCanvas extends SimulationCanvasBase
     protected Color[] accelerationColors;
     protected final Map<String, Color> labelColors = new HashMap<>();
 
-    private static final double[] ACCELERATIONS = new double[] { -7.5, -0.1, 0.2 };
+    private static final double[] ACCELERATIONS = new double[]{-7.5, -0.1, 0.2};
 
     /**
      * vehicle mouse-over support
@@ -335,12 +335,12 @@ public class TrafficCanvas extends SimulationCanvasBase
     }
 
     public void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString,
-            String perturbationRampingFinishedString, String perturbationAppliedString, String simulationFinished) {
+                                  String perturbationRampingFinishedString, String perturbationAppliedString, String simulationFinished) {
         setMessageStrings(popupString, popupStringExitEndRoad);
     }
 
     void setAccelerationColors() {
-        accelerationColors = new Color[] { Color.WHITE, Color.RED, Color.BLACK, Color.GREEN };
+        accelerationColors = new Color[]{Color.WHITE, Color.RED, Color.BLACK, Color.GREEN};
         assert ACCELERATIONS.length == accelerationColors.length - 1;
     }
 
@@ -437,49 +437,49 @@ public class TrafficCanvas extends SimulationCanvasBase
         Color color;
 
         switch (vehicleColorMode) {
-        case ACCELERATION_COLOR:
-            final double a = vehicle.physicalQuantities().getAcc();
-            final int count = ACCELERATIONS.length;
-            for (int i = 0; i < count; ++i) {
-                if (a < ACCELERATIONS[i])
-                    return accelerationColors[i];
-            }
-            color = accelerationColors[accelerationColors.length - 1];
-            break;
-        case EXIT_COLOR:
-            color = Color.BLACK;
-            if (vehicle.exitRoadSegmentId() != Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
-                color = Color.WHITE;
-            }
-            break;
-        case HIGHLIGHT_VEHICLE:
-            color = vehicle.getId() == vehicleToHighlightId ? Color.BLUE : Color.BLACK;
-            break;
-        case LANE_CHANGE:
-            color = Color.BLACK;
-            if (vehicle.inProcessOfLaneChange()) {
-                color = Color.ORANGE;
-            }
-            break;
-        case VEHICLE_COLOR:
-            // use vehicle's cache for AWT color object
-            color = (Color) vehicle.colorObject();
-            if (color == null) {
-                int vehColorInt = vehicle.color();
-                color = new Color(Colors.red(vehColorInt), Colors.green(vehColorInt), Colors.blue(vehColorInt));
-                vehicle.setColorObject(color);
-            }
-            break;
-        case VEHICLE_LABEL_COLOR:
-            String label = vehicle.getLabel();
-            color = labelColors.containsKey(label) ? labelColors.get(label) : Color.WHITE;
-            break;
-        case VELOCITY_COLOR:
-            double v = vehicle.physicalQuantities().getSpeed() * 3.6;
-            color = SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum(), v);
-            break;
-        default:
-            throw new IllegalStateException("unknown vehicleColorMode" + vehicleColorMode);
+            case ACCELERATION_COLOR:
+                final double a = vehicle.physicalQuantities().getAcc();
+                final int count = ACCELERATIONS.length;
+                for (int i = 0; i < count; ++i) {
+                    if (a < ACCELERATIONS[i])
+                        return accelerationColors[i];
+                }
+                color = accelerationColors[accelerationColors.length - 1];
+                break;
+            case EXIT_COLOR:
+                color = Color.BLACK;
+                if (vehicle.exitRoadSegmentId() != Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
+                    color = Color.WHITE;
+                }
+                break;
+            case HIGHLIGHT_VEHICLE:
+                color = vehicle.getId() == vehicleToHighlightId ? Color.BLUE : Color.BLACK;
+                break;
+            case LANE_CHANGE:
+                color = Color.BLACK;
+                if (vehicle.inProcessOfLaneChange()) {
+                    color = Color.ORANGE;
+                }
+                break;
+            case VEHICLE_COLOR:
+                // use vehicle's cache for AWT color object
+                color = (Color) vehicle.colorObject();
+                if (color == null) {
+                    int vehColorInt = vehicle.color();
+                    color = new Color(Colors.red(vehColorInt), Colors.green(vehColorInt), Colors.blue(vehColorInt));
+                    vehicle.setColorObject(color);
+                }
+                break;
+            case VEHICLE_LABEL_COLOR:
+                String label = vehicle.getLabel();
+                color = labelColors.containsKey(label) ? labelColors.get(label) : Color.WHITE;
+                break;
+            case VELOCITY_COLOR:
+                double v = vehicle.physicalQuantities().getSpeed() * 3.6;
+                color = SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum(), v);
+                break;
+            default:
+                throw new IllegalStateException("unknown vehicleColorMode" + vehicleColorMode);
         }
         return color;
     }
@@ -629,7 +629,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         final float dashPhase = (float) (roadMapping.roadLength() % (lineLength + gapLength));
 
         final Stroke lineStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
-                new float[] { lineLength, gapLength }, dashPhase);
+                new float[]{lineLength, gapLength}, dashPhase);
         g.setStroke(lineStroke);
         g.setColor(roadLineColor);
 
@@ -678,18 +678,18 @@ public class TrafficCanvas extends SimulationCanvasBase
     private static Color getTrafficLightColor(TrafficLight trafficLight) {
         Color color = null;
         switch (trafficLight.status()) {
-        case GREEN:
-            color = Color.GREEN;
-            break;
-        case GREEN_RED:
-            color = Color.YELLOW;
-            break;
-        case RED:
-            color = Color.RED;
-            break;
-        case RED_GREEN:
-            color = Color.ORANGE;
-            break;
+            case GREEN:
+                color = Color.GREEN;
+                break;
+            case GREEN_RED:
+                color = Color.YELLOW;
+                break;
+            case RED:
+                color = Color.RED;
+                break;
+            case RED_GREEN:
+                color = Color.ORANGE;
+                break;
         }
         return color;
     }

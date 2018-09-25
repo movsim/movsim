@@ -26,24 +26,10 @@ public final class CsvReaderUtil {
         List<String[]> myEntries = Lists.newArrayList();
 
         // see http://opencsv.sourceforge.net/#how-to-read
-        CSVReader reader = null;
-        try {
-            reader = new CSVReader(new FileReader(file), separator);
+        try (CSVReader reader = new CSVReader(new FileReader(file), separator)) {
             myEntries = reader.readAll();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
         }
         return myEntries;
     }
