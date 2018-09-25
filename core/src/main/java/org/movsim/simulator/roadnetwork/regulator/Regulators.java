@@ -26,12 +26,7 @@
 
 package org.movsim.simulator.roadnetwork.regulator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
+import com.google.common.base.Preconditions;
 import org.movsim.autogen.RegulatorType;
 import org.movsim.autogen.RegulatorsType;
 import org.movsim.simulator.SimulationRun;
@@ -40,11 +35,10 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import java.util.*;
 
 public final class Regulators implements Iterable<Regulator>, SimulationTimeStep, SimulationRun.CompletionCallback {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(Regulators.class);
 
     private static final Set<String> REGULATOR_ID_CACHE = new HashSet<>();
@@ -62,7 +56,7 @@ public final class Regulators implements Iterable<Regulator>, SimulationTimeStep
 
     private void initialize(RegulatorsType regulatorsType, RoadNetwork roadNetwork) {
         for (RegulatorType regulatorType : regulatorsType.getRegulator()) {
-            if(regulatorType.isSetId()){
+            if (regulatorType.isSetId()) {
                 if (!REGULATOR_ID_CACHE.add(regulatorType.getId())) {
                     throw new IllegalArgumentException("regulator id=" + regulatorType.getId() + " not unique!");
                 }
@@ -74,7 +68,7 @@ public final class Regulators implements Iterable<Regulator>, SimulationTimeStep
 
     @Override
     public final void timeStep(double dt, double simulationTime, long iterationCount) {
-        for(Regulator regulator : regulators){
+        for (Regulator regulator : regulators) {
             regulator.timeStep(dt, simulationTime, iterationCount);
         }
     }

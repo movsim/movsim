@@ -11,26 +11,22 @@
  */
 package org.movsim.simulator.roadnetwork.boundaries;
 
-import java.util.List;
-
 import org.movsim.autogen.Inflow;
 import org.movsim.utilities.LinearInterpolatedFunction;
 import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The Class InflowTimeSeries.
- */
+import java.util.List;
+
 // TODO time format not aligned with complex date format (as string)
 public class InflowTimeSeries {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(InflowTimeSeries.class);
 
-    private final double constantFlowPerLane = 1000 * Units.INVH_TO_INVS;
+    private static final double CONSTANT_FLOW_PER_LANE = 1000 * Units.INVH_TO_INVS;
 
-    private final double constantInitSpeed = 80 / 3.6;
+    private static final double CONSTANT_INIT_SPEED = 80 / 3.6;
 
     private LinearInterpolatedFunction flowFunction;
 
@@ -38,7 +34,6 @@ public class InflowTimeSeries {
 
     /**
      * Instantiates a new inflow time series.
-     * 
      */
     public InflowTimeSeries(List<Inflow> inflow) {
         LOG.info(" inflowDataPoint.size = {}", inflow.size());
@@ -67,14 +62,14 @@ public class InflowTimeSeries {
 
     public double getFlowPerLane(double time) {
         if (flowFunction == null) {
-            return constantFlowPerLane;
+            return CONSTANT_FLOW_PER_LANE;
         }
         return flowFunction.value(time);
     }
 
     public double getSpeed(double time) {
         if (flowFunction == null) {
-            return constantInitSpeed;
+            return CONSTANT_INIT_SPEED;
         }
         return speedFunction.value(time);
     }

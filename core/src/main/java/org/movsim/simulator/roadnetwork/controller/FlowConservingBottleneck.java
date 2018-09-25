@@ -41,10 +41,6 @@ import com.google.common.base.Predicate;
  * 
  * <p>
  * The spatial profile and the parameter values are configured in the movsim input file.
- * 
- * <br>
- * created: May 20, 2013<br>
- * 
  */
 public class FlowConservingBottleneck extends RoadObjectController {
 

@@ -48,10 +48,6 @@ import com.google.common.base.Predicate;
  * 
  * <p>
  * The slope is calculated from the elevation profile given in the xodr network input file.
- * 
- * <br>
- * created: May 20, 2013<br>
- * 
  */
 public class GradientProfile extends RoadObjectController {
 

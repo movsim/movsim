@@ -26,6 +26,7 @@
 
 package org.movsim.simulator.roadnetwork.boundaries;
 
+import com.google.common.base.Preconditions;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -33,14 +34,11 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-
 /**
  * Default sink: just removes vehicles that have reached the end of a road segment.
  */
 public class TrafficSink implements SimulationTimeStep {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSink.class);
 
     protected final RoadSegment roadSegment;
@@ -62,17 +60,16 @@ public class TrafficSink implements SimulationTimeStep {
     public interface RecordDataCallback {
         /**
          * Callback to allow the application to process or record the traffic sink data.
-         * 
+         *
          * @param vehicle
          * @param totalVehiclesRemoved
-         * 
          */
-        public void recordData(double simulationTime, int totalVehiclesRemoved, Vehicle vehicle);
+        void recordData(double simulationTime, int totalVehiclesRemoved, Vehicle vehicle);
     }
 
     /**
      * Constructor.
-     * 
+     *
      * @param roadSegment
      */
     public TrafficSink(RoadSegment roadSegment) {
@@ -84,7 +81,7 @@ public class TrafficSink implements SimulationTimeStep {
 
     /**
      * Sets the traffic sink recorder.
-     * 
+     *
      * @param recordDataCallback
      */
     public void setRecorder(RecordDataCallback recordDataCallback) {
@@ -93,9 +90,8 @@ public class TrafficSink implements SimulationTimeStep {
 
     /**
      * Returns the outflow, averaged over the measuring interval.
-     * 
+     *
      * @return measured outflow
-     * 
      */
     public double measuredOutflow() {
         return measuredOutflow;
@@ -104,7 +100,7 @@ public class TrafficSink implements SimulationTimeStep {
     /**
      * Returns the difference between the source road's inflow and the outflow measured at this sink,
      * averaged over <code>MEASURING_INTERVAL</code> seconds.
-     * 
+     *
      * @return difference in flow
      */
     public double dQ() {
@@ -113,7 +109,7 @@ public class TrafficSink implements SimulationTimeStep {
 
     /**
      * Returns the total travel distance of all vehicles that have been removed by this traffic sink.
-     * 
+     *
      * @return total travel distance
      */
     public final double totalVehicleTravelDistance() {
@@ -122,7 +118,7 @@ public class TrafficSink implements SimulationTimeStep {
 
     /**
      * Returns the total travel time of all vehicles that have been removed by this traffic sink.
-     * 
+     *
      * @return total travel time
      */
     public final double totalVehicleTravelTime() {
@@ -131,7 +127,7 @@ public class TrafficSink implements SimulationTimeStep {
 
     /**
      * Returns the total fuel used by all vehicles that have been removed by this traffic sink.
-     * 
+     *
      * @return total fuel used
      */
     public final double totalFuelUsedLiters() {

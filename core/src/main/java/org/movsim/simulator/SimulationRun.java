@@ -41,7 +41,7 @@ public class SimulationRun {
 	 * 
 	 * @param simulationTime
 	 */
-	public void simulationComplete(double simulationTime);
+	void simulationComplete(double simulationTime);
     }
 
     public interface UpdateStatusCallback {
@@ -228,7 +228,7 @@ public class SimulationRun {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                System.out.println("Unexpected end of simulator: perform ShutdownHooks");
+                System.err.println("Unexpected end of simulator: perform ShutdownHooks");
                 ShutdownHooks.INSTANCE.onShutDown();
             }
         });

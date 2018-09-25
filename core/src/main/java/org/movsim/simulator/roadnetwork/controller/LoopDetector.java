@@ -32,9 +32,6 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.vehicles.Vehicle;
 
-/**
- * The Class LoopDetector.
- */
 // TODO refactoring needed, add unittests
 public class LoopDetector extends RoadObjectController {
 
@@ -252,9 +249,6 @@ public class LoopDetector extends RoadObjectController {
         long vehCumulatedCountOutput;
         double meanSpeedHarmonic;
         double meanTimegapHarmonic;
-
-        public LaneQuantity() {
-        }
 
         void reset() {
             vehCount = 0;

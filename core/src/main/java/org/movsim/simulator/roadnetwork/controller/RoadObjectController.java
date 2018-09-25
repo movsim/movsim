@@ -26,25 +26,17 @@
 
 package org.movsim.simulator.roadnetwork.controller;
 
-import java.util.Iterator;
-import java.util.Set;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
+import java.util.Iterator;
+import java.util.Set;
 
-/**
- * todo
- * 
- * <br>
- * created: May 18, 2013<br>
- * 
- */
 public abstract class RoadObjectController implements RoadObject {
 
     protected static final Logger LOG = LoggerFactory.getLogger(RoadObjectController.class);
@@ -89,13 +81,10 @@ public abstract class RoadObjectController implements RoadObject {
         return "RoadObjectController [roadSegment=" + roadSegment + ", position=" + position + ", type=" + type + "]";
     }
 
-    @Override
-    public abstract void timeStep(double dt, double simulationTime, long iterationCount);
-
     /**
      * returns distance from vehicle to trafficLight (positive if trafficlight is downstream, negative if trafficlight is upstream). The
      * search radius is limited to {@code maxLookAheadDistance} while the road network links are searched recursively.
-     * 
+     *
      * @param vehicle
      * @param vehicleRoadSegment
      * @param maxLookAheadDistance

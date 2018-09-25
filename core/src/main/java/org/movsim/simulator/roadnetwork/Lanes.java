@@ -53,19 +53,18 @@ public final class Lanes {
     public static final int NONE = -2; // NOT DRIVABLE
 
     // TODO renaming: TO_OUTER, TO_INNER
-    public final static int TO_LEFT = -1; // TODO decrease index
-    public final static int TO_RIGHT = 1; // TODO increase index
-    public final static int NO_CHANGE = 0;
+    public static final int TO_LEFT = -1; // TODO decrease index
+    public static final int TO_RIGHT = 1; // TODO increase index
+    public static final int NO_CHANGE = 0;
 
     public static final int MOST_INNER_LANE = LANE1;
 
-    /** internal overtaking lane, works with mapping */
+    /**
+     * internal overtaking lane, works with mapping
+     */
     public static final int OVERTAKING = 0;
 
     /**
-     * Lanes type.
-     * 
-     * <p>
      * Mapping of OpenDRIVE laneIndex types.
      */
     public enum Type {
@@ -107,13 +106,10 @@ public final class Lanes {
 
     /**
      * center laneSection not supported
-     * 
-     * <br>
-     * created: Mar 30, 2013<br>
-     * 
      */
     public enum LaneSectionType {
-        LEFT("-", true), RIGHT("+", false);
+        LEFT("-", true),
+        RIGHT("+", false);
 
         private final String idAppender;
 
@@ -133,15 +129,9 @@ public final class Lanes {
         }
     }
 
-    /**
-     * 
-     * 
-     * <br>
-     * created: Mar 30, 2013<br>
-     * 
-     */
     public enum RoadLinkElementType {
-        ROAD("road"), JUNCTION("junction");
+        ROAD("road"),
+        JUNCTION("junction");
 
         private final String xodrIdentifier;
 

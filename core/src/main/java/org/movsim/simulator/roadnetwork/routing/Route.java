@@ -25,13 +25,12 @@
  */
 package org.movsim.simulator.roadnetwork.routing;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
+import com.google.common.base.Preconditions;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.RoadSegmentUtils;
 
-import com.google.common.base.Preconditions;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Iterable collection of the road segments that form a route that can be taken through the road network.
@@ -42,9 +41,6 @@ public class Route implements Iterable<RoadSegment> {
     private String name;
     private double length;
 
-    /**
-     * Constructor.
-     */
     public Route(String name) {
         Preconditions.checkArgument(!name.isEmpty(), "route without name");
         roadSegments = new LinkedList<>();
@@ -53,14 +49,14 @@ public class Route implements Iterable<RoadSegment> {
 
     /**
      * Adds a road segment to the road route.
-     * 
+     *
      * @param roadSegment
      * @return roadSegment for convenience
      */
     public RoadSegment add(RoadSegment roadSegment) {
         Preconditions.checkNotNull(roadSegment);
-        Preconditions.checkArgument(!roadSegments.contains(roadSegment), "roadSegment=" + roadSegment
-                + " already added to route.");
+        Preconditions.checkArgument(!roadSegments.contains(roadSegment),
+                "roadSegment=" + roadSegment + " already added to route.");
 
         if (!roadSegments.isEmpty()) {
             Preconditions.checkState(RoadSegmentUtils.isConnected(roadSegments.getLast(), roadSegment),
@@ -74,7 +70,7 @@ public class Route implements Iterable<RoadSegment> {
 
     /**
      * Returns the name of the route.
-     * 
+     *
      * @return the name of the route
      */
     public final String getName() {
@@ -83,7 +79,7 @@ public class Route implements Iterable<RoadSegment> {
 
     /**
      * Returns the length of the route.
-     * 
+     *
      * @return the length of the route
      */
     public final double getLength() {
@@ -92,7 +88,7 @@ public class Route implements Iterable<RoadSegment> {
 
     /**
      * Returns the number of RoadSegmentUtils in the route.
-     * 
+     *
      * @return the number of RoadSegmentUtils in route
      */
     public final int size() {
@@ -108,7 +104,7 @@ public class Route implements Iterable<RoadSegment> {
 
     /**
      * Returns the first {@code RoadSegment} of the {@code Route}.
-     * 
+     *
      * @return first {@code RoadSegment} of the {@code Route}
      */
     public RoadSegment getOrigin() {
@@ -118,7 +114,7 @@ public class Route implements Iterable<RoadSegment> {
 
     /**
      * Returns an iterator over all the road segments in the road network.
-     * 
+     *
      * @return an iterator over all the road segments in the road network
      */
     @Override

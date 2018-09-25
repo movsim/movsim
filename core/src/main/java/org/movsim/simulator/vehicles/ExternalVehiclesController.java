@@ -1,13 +1,6 @@
 package org.movsim.simulator.vehicles;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
+import com.google.common.base.Preconditions;
 import org.movsim.scenario.vehicle.autogen.ExternalVehicleType;
 import org.movsim.scenario.vehicle.autogen.MovsimExternalVehicleControl;
 import org.movsim.scenario.vehicle.autogen.SpeedDataType;
@@ -20,16 +13,21 @@ import org.movsim.utilities.TimeUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ExternalVehiclesController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExternalVehiclesController.class);
 
-    /** time-sorted map of external vehicle input data */
+    /**
+     * time-sorted map of external vehicle input data
+     */
     private final SortedMap<Double, List<ExternalVehicleType>> externalVehicleInputsToAdd = new TreeMap<>();
 
-    /** time-sorted map of vehicles to remove */
+    /**
+     * time-sorted map of vehicles to remove
+     */
     private final SortedMap<Double, List<Vehicle>> externalVehiclesToRemove = new TreeMap<>();
 
     private final Map<Vehicle, LinearInterpolatedFunction> controlledVehicles = new HashMap<>();
@@ -55,7 +53,7 @@ public class ExternalVehiclesController {
 
     /**
      * adds and removes externally controlled vehicles as configured in the simulation input.
-     * 
+     *
      * @param simulationTime
      * @param roadNetwork
      */
@@ -104,20 +102,13 @@ public class ExternalVehiclesController {
     }
 
     private boolean addVehicleInput(double timestamp, ExternalVehicleType externalVehicleInput) {
-        List<ExternalVehicleType> externalVehicles = externalVehicleInputsToAdd.get(timestamp);
-        if (externalVehicles == null) {
-            externalVehicles = new ArrayList<ExternalVehicleType>();
-            externalVehicleInputsToAdd.put(timestamp, externalVehicles);
-        }
+        List<ExternalVehicleType> externalVehicles = externalVehicleInputsToAdd
+                .computeIfAbsent(timestamp, it -> new ArrayList<>());
         return externalVehicles.add(externalVehicleInput);
     }
 
     private boolean addVehicleToRemoveMap(double timestamp, Vehicle vehicle) {
-        List<Vehicle> vehiclesToRemove = externalVehiclesToRemove.get(timestamp);
-        if (vehiclesToRemove == null) {
-            vehiclesToRemove = new ArrayList<Vehicle>();
-            externalVehiclesToRemove.put(timestamp, vehiclesToRemove);
-        }
+        List<Vehicle> vehiclesToRemove = externalVehiclesToRemove.computeIfAbsent(timestamp, it -> new ArrayList<>());
         return vehiclesToRemove.add(vehicle);
     }
 
@@ -126,8 +117,8 @@ public class ExternalVehiclesController {
             Vehicle vehicle = createVehicle(vehicleInput);
             String roadId = vehicleInput.getRoadId();
             RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
-            Preconditions.checkNotNull(roadSegment,
-                    "cannot find roadSegment with id=" + roadId + " for external vehicle");
+            Preconditions
+                    .checkNotNull(roadSegment, "cannot find roadSegment with id=" + roadId + " for external vehicle");
             roadSegment.addVehicle(vehicle);
             LinearInterpolatedFunction speedProfile = createSpeedProfile(vehicleInput.getSpeedData());
             controlledVehicles.put(vehicle, speedProfile);

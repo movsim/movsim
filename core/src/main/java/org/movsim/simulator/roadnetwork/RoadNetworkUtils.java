@@ -9,7 +9,8 @@ public final class RoadNetworkUtils {
     }
 
     public enum TravelTimeType {
-        GRID, MEAN;
+        GRID,
+        MEAN;
     }
 
     public static double instantaneousTravelTime(Route route, TravelTimeType type) {
@@ -48,7 +49,7 @@ public final class RoadNetworkUtils {
 
     /**
      * Returns the number of vehicles on route.
-     * 
+     *
      * @return the number of vehicles on given route.
      */
     public static int vehicleCount(Route route) {

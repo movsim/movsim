@@ -25,13 +25,6 @@
  */
 package org.movsim.simulator.roadnetwork.routing;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.ComponentAttributeProvider;
 import org.jgrapht.ext.DOTExporter;
@@ -40,9 +33,15 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 class GraphExporter {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(GraphExporter.class);
 
     static final String FILE_ENDING_DOT = ".dot";
@@ -74,13 +73,11 @@ class GraphExporter {
                 vertexAttributeProvider, edgeAttributeProvider);
         exporter.export(writer, graph);
 
-        try {
-            FileWriter fileWriter = new FileWriter(new File(fileName));
+        try (FileWriter fileWriter = new FileWriter(new File(fileName))) {
             fileWriter.write(writer.toString());
             fileWriter.flush();
-            fileWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("error while writing", e);
         }
     }
 }

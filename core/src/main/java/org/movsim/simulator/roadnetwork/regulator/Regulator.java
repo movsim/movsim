@@ -26,13 +26,10 @@
 
 package org.movsim.simulator.roadnetwork.regulator;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.CheckForNull;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.movsim.autogen.NotifyObjectType;
 import org.movsim.autogen.RegulatorType;
 import org.movsim.autogen.SignalType;
@@ -46,14 +43,14 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import javax.annotation.CheckForNull;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Set;
 
 public class Regulator implements SimulationTimeStep {
 
-    /** The Constant LOG. */
     protected static final Logger LOG = LoggerFactory.getLogger(Regulator.class);
 
     protected final RegulatorType parameter;
@@ -103,7 +100,7 @@ public class Regulator implements SimulationTimeStep {
         try {
             fileLogging = new RegulatorFileLogging(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("error while init file logger", e);
         }
     }
 
@@ -111,8 +108,8 @@ public class Regulator implements SimulationTimeStep {
         for (SignalType signalType : parameter.getSignal()) {
             TrafficLight trafficLight = findTrafficSignal(signalType.getSignalId(), roadNetwork);
             if (trafficLight == null) {
-                throw new IllegalArgumentException("cannot find TrafficLight with signalId=" + signalType.getSignalId()
-                        + "in roadNetwork");
+                throw new IllegalArgumentException(
+                        "cannot find TrafficLight with signalId=" + signalType.getSignalId() + "in roadNetwork");
             }
             trafficLight.setState(TrafficLightStatus.GREEN);
             trafficLights.add(trafficLight);
@@ -188,8 +185,9 @@ public class Regulator implements SimulationTimeStep {
     private void controllTrafficLightsDummy(long iterationCount) {
         if (iterationCount != 0 && iterationCount % 1000 == 0) {
             for (TrafficLight trafficLight : trafficLights) {
-                trafficLight.setState(trafficLight.status() == TrafficLightStatus.GREEN ? TrafficLightStatus.RED
-                        : TrafficLightStatus.GREEN);
+                trafficLight.setState(trafficLight.status() == TrafficLightStatus.GREEN ?
+                        TrafficLightStatus.RED :
+                        TrafficLightStatus.GREEN);
             }
         }
     }

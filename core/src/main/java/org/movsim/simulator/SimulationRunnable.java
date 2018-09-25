@@ -26,20 +26,24 @@
 package org.movsim.simulator;
 
 import org.movsim.shutdown.ShutdownHooks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
  * Class to encapsulate a simulation thread. Includes the necessary synchronization and callbacks to coordinate with an application UI
  * thread.
  * </p>
- * 
+ * <p>
  * <p>
  * This class is generic and can be used for any type of simulation: it can be used with any simulation object that implements the
  * SimulationTimeStep interface.
  * </p>
- * 
  */
 public class SimulationRunnable extends SimulationRun implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SimulationRunnable.class);
+
     /**
      * Callbacks from the simulation thread to the application UI thread.
      */
@@ -47,9 +51,8 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
         /**
          * Callback to get the application to do a draw after the vehicles have had their positions
          * updated.
-         * 
-         * @param simulationTime
-         *            the current logical time in the simulation
+         *
+         * @param simulationTime the current logical time in the simulation
          */
         public void updateDrawing(double simulationTime);
     }
@@ -57,7 +60,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     public interface HandleExceptionCallback {
         /**
          * Callback to allow the application to handle an exception in the main run() loop.
-         * 
+         *
          * @param e
          */
         public void handleException(Exception e);
@@ -85,9 +88,8 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Constructor, sets the simulation object and default sleep time.
-     * 
-     * @param simulation
-     *            a simulation object that implements the SimulationTimeStep interface
+     *
+     * @param simulation a simulation object that implements the SimulationTimeStep interface
      */
     public SimulationRunnable(SimulationTimeStep simulation) {
         super(simulation);
@@ -96,7 +98,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Sets the update drawing callback.
-     * 
+     *
      * @param updateDrawingCallback
      */
     public void setUpdateDrawingCallback(UpdateDrawingCallback updateDrawingCallback) {
@@ -106,7 +108,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Sets the handle exception callback.
-     * 
+     *
      * @param handleExceptionCallback
      */
     public void setHandleExceptionCallback(HandleExceptionCallback handleExceptionCallback) {
@@ -116,9 +118,8 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Set the thread sleep time. This controls the animation speed.
-     * 
-     * @param sleepTimeMilliseconds
-     *            sleep time in milliseconds
+     *
+     * @param sleepTimeMilliseconds sleep time in milliseconds
      */
     public void setSleepTime(int sleepTimeMilliseconds) {
         this.sleepTimeMS = sleepTimeMilliseconds;
@@ -127,7 +128,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Returns the sleep time.
-     * 
+     *
      * @return sleep time in milliseconds
      */
     public int sleepTime() {
@@ -136,7 +137,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Returns the time warp.
-     * 
+     *
      * @return
      */
     public double getTimewarp() {
@@ -145,7 +146,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Returns the smoothed time warp.
-     * 
+     *
      * @return
      */
     public double getSmoothedTimewarp() {
@@ -154,7 +155,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Returns true if the thread is stopped.
-     * 
+     *
      * @return true if the tread is stopped
      */
     public boolean isStopped() {
@@ -163,7 +164,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Returns true if the thread is paused.
-     * 
+     *
      * @return true if the thread is paused
      */
     public boolean isPaused() {
@@ -231,17 +232,16 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
      * Main thread loop. During the loop <code>timeStep(dt, simulationTime, iterationCount)</code> is called for the simulation object.
      * Typically the simulation object is an iterable collection of elements, each with their own timestep method.
      * </p>
-     * 
+     * <p>
      * <p>
      * This method must be synchronized (using <code>dataLock</code>) (normally with the <code>drawForeground</code> method), so that
      * elements are not updated, added or removed from the simulation while they are being drawn.
      * </p>
-     * 
+     * <p>
      * <p>
      * <code>updateStatus(simulationTime)</code> is called after the simulation object has been updated to allow the application to make
      * updates before the repaint is called.
      * </p>
-     * 
      */
     @Override
     public void run() {
@@ -273,7 +273,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
                     if (handleExceptionCallback != null) {
                         handleExceptionCallback.handleException(e);
                     }
-                    e.printStackTrace();
+                    LOG.error("error occourred", e);
                 }
 
                 for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
@@ -295,8 +295,9 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
         actualTimewarp = dt / (0.001 * (timeAfterSim_ms - lastUpdateTimeMS));
         lastUpdateTimeMS = timeAfterSim_ms;
 
-        smoothedTimewarp = Math.min(1000, smoothedTimewarp == 0.0 ? actualTimewarp : betaTimewarp * smoothedTimewarp
-                + (1.0 - betaTimewarp) * actualTimewarp);
+        smoothedTimewarp = Math.min(1000, smoothedTimewarp == 0.0 ?
+                actualTimewarp :
+                betaTimewarp * smoothedTimewarp + (1.0 - betaTimewarp) * actualTimewarp);
     }
 
     public boolean isFiniteDuration() {

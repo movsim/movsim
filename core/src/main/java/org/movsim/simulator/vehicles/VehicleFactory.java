@@ -1,12 +1,6 @@
 package org.movsim.simulator.vehicles;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
+import com.google.common.base.Preconditions;
 import org.movsim.autogen.Consumption;
 import org.movsim.autogen.PersonalNavigationDeviceType;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
@@ -21,9 +15,13 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Longitudinal
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-// singleton property
+// singleton
 public final class VehicleFactory {
     private static final Logger LOG = LoggerFactory.getLogger(VehicleFactory.class);
 
@@ -103,8 +101,9 @@ public final class VehicleFactory {
             @Nullable Consumption consumption) {
         for (VehiclePrototypeConfiguration typeConfig : configurations) {
             if (vehiclePrototypes.containsKey(typeConfig.getLabel())) {
-                throw new IllegalArgumentException("ambiguous vehicle prototype definition: prototype with label=\""
-                        + typeConfig.getLabel() + "\" already exists.");
+                throw new IllegalArgumentException(
+                        "ambiguous vehicle prototype definition: prototype with label=\"" + typeConfig.getLabel()
+                                + "\" already exists.");
             }
             VehiclePrototype vehiclePrototype = new VehiclePrototype(simulationTimestep, typeConfig);
             if (typeConfig.isSetConsumptionModelName()) {
@@ -144,7 +143,7 @@ public final class VehicleFactory {
             }
         }
     }
-    
+
     private void writeAccelerationFunctions(double simulationTimestep) {
         final String ignoreLabel = "Obstacle"; // quick hack TODO remove hack
         LOG.info("write acceleration function but ignore label {}.", ignoreLabel);

@@ -38,5 +38,5 @@ public interface SimulationTimeStep {
      * @param simulationTime current simulation time, seconds
      * @param iterationCount the number of iterations executed
      */
-    public void timeStep(double dt, double simulationTime, long iterationCount);
+    void timeStep(double dt, double simulationTime, long iterationCount);
 }

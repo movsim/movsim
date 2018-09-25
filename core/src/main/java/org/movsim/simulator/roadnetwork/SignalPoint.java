@@ -26,17 +26,16 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
+import org.movsim.simulator.roadnetwork.predicates.VehiclePassedPosition;
+import org.movsim.simulator.vehicles.Vehicle;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import org.movsim.simulator.roadnetwork.predicates.VehiclePassedPosition;
-import org.movsim.simulator.vehicles.Vehicle;
-
-import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 
 public class SignalPoint {
 

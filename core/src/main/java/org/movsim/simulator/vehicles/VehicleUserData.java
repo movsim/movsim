@@ -1,12 +1,12 @@
 package org.movsim.simulator.vehicles;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 
 public final class VehicleUserData implements Iterable<Map.Entry<String, String>> {
 
@@ -44,9 +44,9 @@ public final class VehicleUserData implements Iterable<Map.Entry<String, String>
         return getCodeValuePairs().entrySet().iterator();
     }
 
-    public String getString(String separator){
+    public String getString(String separator) {
         StringBuilder sb = new StringBuilder();
-        for(Map.Entry<String, String> entry : this){
+        for (Map.Entry<String, String> entry : this) {
             sb.append(entry.getKey()).append("=").append(entry.getValue()).append(separator);
         }
         return sb.toString();

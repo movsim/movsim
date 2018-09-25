@@ -26,36 +26,23 @@
 
 package org.movsim.simulator.roadnetwork.controller;
 
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.controller.RoadObject.RoadObjectType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
+import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.controller.RoadObject.RoadObjectType;
+
+import java.util.*;
 
 /**
  * Holds the {@link RoadObject}s of a {@link RoadSegment} in ascending order along the road. Provides iterators for single
  * {@link RoadObjectType}s and over all objects.
- * 
- * <br>
- * created: May 18, 2013<br>
- * 
  */
 public final class RoadObjects implements Iterable<RoadObject> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RoadObjects.class);
-
     final RoadSegment roadSegment;
 
-    final EnumMap<RoadObjectType, SortedSet<RoadObject>> roadObjects = new EnumMap<>(RoadObjectType.class);
+    final Map<RoadObjectType, SortedSet<RoadObject>> roadObjects = new EnumMap<>(RoadObjectType.class);
 
     public RoadObjects(RoadSegment roadSegment) {
         this.roadSegment = Preconditions.checkNotNull(roadSegment);
@@ -72,8 +59,8 @@ public final class RoadObjects implements Iterable<RoadObject> {
         Preconditions.checkNotNull(roadObject);
         SortedSet<RoadObject> sortedSet = roadObjects.get(roadObject.getType());
         if (!sortedSet.subSet(roadObject, roadObject).isEmpty()) {
-            throw new IllegalStateException("cannot have identical positions of same type of roadObjects="
-                    + roadObject.position());
+            throw new IllegalStateException(
+                    "cannot have identical positions of same type of roadObjects=" + roadObject.position());
         }
         if (!sortedSet.add(roadObject)) {
             throw new IllegalStateException("cannot add roadObject=" + roadObject);

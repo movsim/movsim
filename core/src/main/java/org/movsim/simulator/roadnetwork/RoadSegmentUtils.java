@@ -26,17 +26,11 @@
 
 package org.movsim.simulator.roadnetwork;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import org.movsim.simulator.vehicles.Vehicle;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
+import org.movsim.simulator.vehicles.Vehicle;
+
+import java.util.*;
 
 public final class RoadSegmentUtils {
 
@@ -61,8 +55,8 @@ public final class RoadSegmentUtils {
         Preconditions.checkNotNull(upstream);
         Preconditions.checkNotNull(downstream);
         for (LaneSegment laneSegment : upstream.laneSegments()) {
-            if (laneSegment.sinkLaneSegment() != null
-                    && laneSegment.sinkLaneSegment().roadSegment().equals(downstream)) {
+            if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment()
+                    .equals(downstream)) {
                 return true;
             }
         }

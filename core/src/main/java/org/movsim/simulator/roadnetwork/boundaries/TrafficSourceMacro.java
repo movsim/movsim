@@ -34,12 +34,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The Class TrafficSourceMacro.
- */
 public class TrafficSourceMacro extends AbstractTrafficSource {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSourceMacro.class);
 
     private final InflowTimeSeries inflowTimeSeries;
@@ -48,9 +44,8 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
     /**
      * Instantiates a new upstream boundary .
-     * 
-     * @param vehGenerator
-     *            the vehicle generator
+     *
+     * @param vehGenerator the vehicle generator
      */
     public TrafficSourceMacro(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
             InflowTimeSeries inflowTimeSeries) {
@@ -103,12 +98,10 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
      * stable which is not always the case. Since the time of insertion cannot be changed, one can homogenize the inflow by allowing the
      * insertion point to vary by a maximum of one vehicle-vehicle distance.
      * </p>
-     * 
+     *
      * @param laneSegment
-     * @param time
-     *            the time
-     * @param qBC
-     *            the q bc
+     * @param time        the time
+     * @param qBC         the q bc
      * @return true, if successful
      */
     private boolean tryEnteringNewVehicle(TestVehicle testVehicle, LaneSegment laneSegment, double time, double qBC) {
@@ -139,12 +132,10 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
     /**
      * Enter vehicle on empty road.
-     * 
+     *
      * @param laneSegment
-     * @param time
-     *            the time
-     * @param vehPrototype
-     *            the vehicle prototype
+     * @param time         the time
+     * @param vehPrototype the vehicle prototype
      */
     private void enterVehicleOnEmptyRoad(LaneSegment laneSegment, double time, TestVehicle testVehicle) {
         final double xEnter = 0;
@@ -155,7 +146,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
     /**
      * Enter vehicle.
-     * 
+     *
      * @param laneSegment
      * @param time
      * @param sFreeMin
@@ -176,8 +167,8 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         final double lengthLast = leader.getLength();
 
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
-        final double xEnter = Math.max(0,
-                Math.min(vEnterTest * nWait / Math.max(qBC, 0.001), xLast - sFreeMin - lengthLast));
+        final double xEnter = Math
+                .max(0, Math.min(vEnterTest * nWait / Math.max(qBC, 0.001), xLast - sFreeMin - lengthLast));
         final double rhoEnter = 1. / (xLast - xEnter);
         final double vMaxEq = testVehicle.getEquilibriumSpeed(0.5 * rhoEnter);
         final double bMax = 4; // max. kinematic deceleration at boundary
@@ -185,7 +176,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         final double vMaxKin = vLast + Math.sqrt(2 * sFree * bEff);
         final double vEnter = Math.min(Math.min(vEnterTest, vMaxEq), vMaxKin);
         if (Double.isNaN(vEnter)) {
-            System.out.println(vEnter);
+            LOG.error("invalid entering speed!");
         }
         addVehicle(laneSegment, testVehicle, xEnter, vEnter);
     }

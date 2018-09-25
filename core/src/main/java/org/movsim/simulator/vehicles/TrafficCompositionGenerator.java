@@ -15,7 +15,6 @@ import com.google.common.base.Preconditions;
 
 public class TrafficCompositionGenerator {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficCompositionGenerator.class);
 
     private final org.movsim.autogen.TrafficComposition configuration;

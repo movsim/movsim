@@ -33,16 +33,13 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The Class LaneChangeModel.
- */
 public class LaneChangeModel {
 
     private static final Logger LOG = LoggerFactory.getLogger(LaneChangeModel.class);
 
     // to avoid flips
-//    public static double LANECHANGE_TDELAY_S = 3.0; // delay after lane change
-//    public static double LANECHANGE_TDELAY_FRONT_S = 3.0; // delay after a cut-in ahead
+    //    public static double LANECHANGE_TDELAY_S = 3.0; // delay after lane change
+    //    public static double LANECHANGE_TDELAY_FRONT_S = 3.0; // delay after a cut-in ahead
 
     public enum LaneChangeDecision {
 

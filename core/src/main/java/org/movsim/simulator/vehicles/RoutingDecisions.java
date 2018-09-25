@@ -1,7 +1,6 @@
 package org.movsim.simulator.vehicles;
 
-import java.util.List;
-
+import com.google.common.base.Preconditions;
 import org.movsim.simulator.observer.RouteAlternative;
 import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.roadnetwork.Lanes;
@@ -11,11 +10,10 @@ import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import java.util.List;
 
 public class RoutingDecisions {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(RoutingDecisions.class);
 
     private static final double NOT_INIT = -1.0;
@@ -61,12 +59,12 @@ public class RoutingDecisions {
 
             List<RouteAlternative> alternatives = serviceProvider.getAlternativesForDecisionPoint(decisionPointSegment);
             if (alternatives != null) {
-                serviceProvider.updateRouteAlternatives(alternatives, uncertainty);
-                RouteAlternative newRouteAlternative = serviceProvider.selectMostProbableAlternative(alternatives,
-                        randomAlternative);
+                ServiceProvider.updateRouteAlternatives(alternatives, uncertainty);
+                RouteAlternative newRouteAlternative = ServiceProvider
+                        .selectMostProbableAlternative(alternatives, randomAlternative);
 
                 // quick-hack: assign exit lane to vehicle since routing capabilities not yet available in movsim
-                boolean doRerouting = (uncertainty > 0) ? true : checkForRerouting(newRouteAlternative, alternatives);
+                boolean doRerouting = (uncertainty > 0) || checkForRerouting(newRouteAlternative, alternatives);
                 if (doRerouting) {
                     routeAlternative = newRouteAlternative;
                     assignRoute(decisionPointSegment, routeAlternative.getRoute());
@@ -86,8 +84,8 @@ public class RoutingDecisions {
 
         RouteAlternative alternativeFromLastRouting = getAlternativeFromLastUpdate(alternatives);
 
-        boolean doRerouting = newRouteAlternative.getDisutility() + reroutingThreshold < alternativeFromLastRouting
-                .getDisutility();
+        boolean doRerouting =
+                newRouteAlternative.getDisutility() + reroutingThreshold < alternativeFromLastRouting.getDisutility();
         if (doRerouting) {
             ++countReroutings;
             LOG.info("vehicle is re-routed: diff disutility={}, counterReroutings={}",
@@ -114,8 +112,8 @@ public class RoutingDecisions {
             // activate decision to diverge at exit
             vehicle.setExitRoadSegmentId(roadSegment.id());
             if (roadSegment.laneType(roadSegment.laneCount()) != Lanes.Type.EXIT) {
-                throw new IllegalArgumentException("cannot do diverge on roadSegment " + roadSegment.userId()
-                        + " without exit lane!");
+                throw new IllegalArgumentException(
+                        "cannot do diverge on roadSegment " + roadSegment.userId() + " without exit lane!");
             }
         } else if ("A1".equals(route.getName())) {
             // reset if A2 has been chosen in previous update

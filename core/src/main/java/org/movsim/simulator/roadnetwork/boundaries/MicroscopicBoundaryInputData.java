@@ -1,8 +1,6 @@
 package org.movsim.simulator.roadnetwork.boundaries;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.common.base.Preconditions;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionType;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
 import org.movsim.scenario.boundary.autogen.VehicleUserDataType;
@@ -14,7 +12,8 @@ import org.movsim.utilities.TimeUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MicroscopicBoundaryInputData {
 
@@ -37,13 +36,14 @@ public class MicroscopicBoundaryInputData {
         Preconditions.checkNotNull(trafficSource);
         Map<Long, Vehicle> vehicles = new HashMap<>();
         int size = boundaryConditions.getBoundaryCondition().size();
-        LOG.info("number of vehicleBoundaryCondition entries=" + size);
+        LOG.info("number of vehicleBoundaryCondition entries={}", size);
         for (BoundaryConditionType boundaryCondition : boundaryConditions.getBoundaryCondition()) {
             Vehicle vehicle = createVehicle(boundaryCondition, trafficSource);
             // round to seconds
-            long time = Math.round(TimeUtilities.convertToSeconds(boundaryCondition.getTime(), timeFormat, timeOffsetMillis));
-            Preconditions.checkArgument(!vehicles.containsKey(time), "time=" + time
-                    + " already used as micro boundary condition");
+            long time = Math
+                    .round(TimeUtilities.convertToSeconds(boundaryCondition.getTime(), timeFormat, timeOffsetMillis));
+            Preconditions.checkArgument(!vehicles.containsKey(time),
+                    "time=" + time + " already used as micro boundary condition");
             vehicles.put(time, vehicle);
         }
         return vehicles;
@@ -71,8 +71,9 @@ public class MicroscopicBoundaryInputData {
         }
         if (record.isSetDestination()) {
             if (record.isSetRoute()) {
-                throw new IllegalStateException("ambiguous microscopic boundary condition: route=" + record.getRoute()
-                        + " and destination=" + record.getDestination());
+                throw new IllegalStateException(
+                        "ambiguous microscopic boundary condition: route=" + record.getRoute() + " and destination="
+                                + record.getDestination());
             }
             // determine route by destination
             route = routing.findRoute(trafficSource.roadSegment.userId(), record.getDestination());
@@ -91,13 +92,13 @@ public class MicroscopicBoundaryInputData {
             int lane = record.getLane();
             int laneCount = trafficSource.roadSegment.laneCount();
             if (lane > trafficSource.roadSegment.laneCount()) {
-                LOG.warn("input lane={} not available on road={}, set to laneCount=" + laneCount, lane,
-                        trafficSource.roadSegment.userId());
+                LOG.warn("input lane={} not available on road={}, set to laneCount={}", lane,
+                        trafficSource.roadSegment.userId(), laneCount);
                 lane = laneCount;
             }
             if (lane < Lanes.MOST_INNER_LANE) {
-                LOG.warn("input lane={} not available on road={}, set lane to lane=" + Lanes.MOST_INNER_LANE, lane,
-                        trafficSource.roadSegment.userId());
+                LOG.warn("input lane={} not available on road={}, set lane to lane={}", lane,
+                        trafficSource.roadSegment.userId(), Lanes.MOST_INNER_LANE);
                 lane = Lanes.MOST_INNER_LANE;
             }
             record.setLane(lane);

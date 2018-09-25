@@ -26,9 +26,7 @@
 
 package org.movsim.simulator.roadnetwork.boundaries;
 
-import java.util.SortedMap;
-import java.util.TreeMap;
-
+import com.google.common.base.Preconditions;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
@@ -36,7 +34,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class TrafficSourceMicro extends AbstractTrafficSource {
 
@@ -52,7 +51,6 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         Preconditions.checkArgument(vehicleQueue.put(time, vehicle) == null,
                 "cannot add vehicle to queue with same time=" + time);
         LOG.debug("added vehicle with (re)entering-time={}, queueSize={}", time, vehicleQueue.size());
-        // vehicle.setSpeed(0);
         showQueue();
     }
 
@@ -71,8 +69,9 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         Long entryTime = vehicleQueue.firstKey();
         if (simulationTime >= entryTime.longValue()) {
             Vehicle vehicle = vehicleQueue.get(entryTime);
-            int testLane = (vehicle.lane() != Vehicle.LANE_NOT_SET) ? vehicle.lane()
-                    : getNewCyclicLaneForEntering(laneEnterLast);
+            int testLane = (vehicle.lane() != Vehicle.LANE_NOT_SET) ?
+                    vehicle.lane() :
+                    getNewCyclicLaneForEntering(laneEnterLast);
             LaneSegment laneSegment = roadSegment.laneSegment(testLane);
             final boolean isEntered = tryEnteringNewVehicle(vehicle, laneSegment);
             if (isEntered) {

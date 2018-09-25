@@ -26,18 +26,13 @@
 
 package org.movsim.simulator.roadnetwork.predicates;
 
-import javax.annotation.Nullable;
-
+import com.google.common.base.Predicate;
 import org.movsim.simulator.vehicles.Vehicle;
 
-import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 /**
  * TODO
- * 
- * <br>
- * created: May 20, 2013<br>
- * 
  */
 public class VehicleWithinRange implements Predicate<Vehicle> {
     private final double begin;

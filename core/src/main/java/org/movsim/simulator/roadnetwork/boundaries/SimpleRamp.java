@@ -25,9 +25,6 @@
  */
 package org.movsim.simulator.roadnetwork.boundaries;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -38,11 +35,13 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 /**
  * simple onramp model which drops vehicles in the largest gap on the {@link RoadSegment}.
- * 
+ * <p>
  * Ignores the initial speed settings from input.
- * 
  */
 public class SimpleRamp extends AbstractTrafficSource {
 
@@ -68,8 +67,8 @@ public class SimpleRamp extends AbstractTrafficSource {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug(String.format("simple ramp timestep=%.2f, current inflow=%d, waiting vehicles=%d",
-                    simulationTime, +(int) (getTotalInflow(simulationTime) * Units.INVS_TO_INVH), getQueueLength()));
+            LOG.debug(String.format("simple ramp timestep=%.2f, current inflow=%d, waiting vehicles=%d", simulationTime,
+                    +(int) (getTotalInflow(simulationTime) * Units.INVS_TO_INVH), getQueueLength()));
         }
 
         final double totalInflow = getTotalInflow(simulationTime);
@@ -107,8 +106,9 @@ public class SimpleRamp extends AbstractTrafficSource {
                 evaluateVehicle(rearVehicleNextLaneSegment, laneSegment, testVehicle, gapCandidates);
             }
             if (rearVehicleNextLaneSegment == null && laneSegment.vehicleCountWithoutObstacles() == 0) {
-                gapCandidates.add(new GapCandidate(MovsimConstants.GAP_INFINITY, laneSegment.lane(), 0.5
-                        * roadSegment.roadLength() - testVehicle.length(), testVehicle.getRelativeRandomizationV0()));
+                gapCandidates.add(new GapCandidate(MovsimConstants.GAP_INFINITY, laneSegment.lane(),
+                        0.5 * roadSegment.roadLength() - testVehicle.length(),
+                        testVehicle.getRelativeRandomizationV0()));
             }
         }
 
@@ -133,8 +133,8 @@ public class SimpleRamp extends AbstractTrafficSource {
             return;
         }
         Vehicle rearVehicle = laneSegment.rearVehicle(vehicle.getRearPosition() - 1); // TODO finds not rear vehicle but
-                                                                                      // itself !!!
-                                                                                      // if (rearVehicle == vehicle) {
+        // itself !!!
+        // if (rearVehicle == vehicle) {
         // System.out.println("!!! rear vehicle is identical to vehicle!");
         // }
         final double gap = vehicle.getNetDistanceToRearVehicle(rearVehicle);
@@ -145,8 +145,8 @@ public class SimpleRamp extends AbstractTrafficSource {
             return;
         }
 
-        double enterFrontPosition = Math.max(testVehicle.length(), vehicle.getRearPosition() - relativeGapToLeader
-                * gap + 0.5 * testVehicle.length());
+        double enterFrontPosition = Math.max(testVehicle.length(),
+                vehicle.getRearPosition() - relativeGapToLeader * gap + 0.5 * testVehicle.length());
         final double gapToLeader = vehicle.getRearPosition() - enterFrontPosition;
         double speed = relativeSpeedToLeader * vehicle.getSpeed();
         gapCandidates.add(new GapCandidate(gapToLeader, laneSegment.lane(), enterFrontPosition, speed));

@@ -1,10 +1,7 @@
 package org.movsim.simulator.roadnetwork.controller;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import org.movsim.autogen.ControllerGroup;
 import org.movsim.autogen.Phase;
 import org.movsim.autogen.TrafficLightState;
@@ -13,14 +10,18 @@ import org.movsim.simulator.SimulationTimeStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public abstract class TrafficLightController implements SimulationTimeStep, TriggerCallback, Iterable<TrafficLight> {
-    /** The Constant LOG. */
+
     protected static final Logger LOG = LoggerFactory.getLogger(TrafficLightController.class);
 
-    /** mapping from the 'physical' controller.control.type to the 'logical' trafficlight */
+    /**
+     * mapping from the 'physical' controller.control.type to the 'logical' trafficlight
+     */
     final Map<String, TrafficLight> trafficLights;
 
     int currentPhaseIndex;
@@ -43,8 +44,8 @@ public abstract class TrafficLightController implements SimulationTimeStep, Trig
 
     void add(TrafficLight trafficLight) {
         Preconditions.checkNotNull(trafficLight);
-        Preconditions.checkArgument(!trafficLights.containsKey(trafficLight.signalType()), "trafficLight="
-                + trafficLight + " already added.");
+        Preconditions.checkArgument(!trafficLights.containsKey(trafficLight.signalType()),
+                "trafficLight=" + trafficLight + " already added.");
         if (trafficLights.isEmpty()) {
             firstSignalId = trafficLight.getController().getControl().get(0).getSignalId();
         }
@@ -92,7 +93,7 @@ public abstract class TrafficLightController implements SimulationTimeStep, Trig
         return Preconditions.checkNotNull(firstSignalId);
     }
 
-    void checkIfAllSignalTypesAdded() throws IllegalArgumentException {
+    void checkIfAllSignalTypesAdded() {
         for (Phase phase : phases) {
             for (TrafficLightState state : phase.getTrafficLightState()) {
                 if (!trafficLights.containsKey(state.getType())) {

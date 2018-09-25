@@ -44,10 +44,7 @@ import org.movsim.utilities.MyRandom;
 import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -57,9 +54,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
-    /**
-     * The Constant LOG.
-     */
     private static final Logger LOG = LoggerFactory.getLogger(Simulator.class);
 
     private long startTimeMillis;
@@ -109,7 +103,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.setCompletionCallback(this);
     }
 
-    public void initialize() throws JAXBException, SAXException {
+    public void initialize() {
         LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011-2013)");
 
         projectName = projectMetaData.getProjectName();
@@ -253,15 +247,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     /**
      * Parse the OpenDrive (.xodr) file to load the network topology and road layout.
-     *
-     * @param ProjectMetaData .getInstance()
-     * @return
-     * @throws SAXException
-     * @throws JAXBException
-     * @throws ParserConfigurationException
      */
-    private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData)
-            throws JAXBException, SAXException {
+    private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData) {
         File networkFile = projectMetaData.getFile(projectMetaData.getXodrNetworkFilename());
         LOG.info("try to load {}", networkFile);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, networkFile);

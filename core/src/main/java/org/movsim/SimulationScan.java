@@ -25,10 +25,7 @@
  */
 package org.movsim;
 
-import java.io.PrintWriter;
-
-import javax.xml.bind.JAXBException;
-
+import com.google.common.base.Preconditions;
 import org.movsim.autogen.Movsim;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.autogen.VehicleType;
@@ -39,11 +36,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import com.google.common.base.Preconditions;
+import javax.xml.bind.JAXBException;
+import java.io.PrintWriter;
 
 public final class SimulationScan {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(SimulationScan.class);
 
     private SimulationScan() {
@@ -93,8 +90,8 @@ public final class SimulationScan {
 
     private static void writeOutput(PrintWriter writer, double fraction, double uncertainty, Simulator simRun) {
         StringBuilder sb = new StringBuilder();
-        double avgTravelTime = simRun.getRoadNetwork().totalVehicleTravelTime()
-                / simRun.getRoadNetwork().totalVehiclesRemoved();
+        double avgTravelTime =
+                simRun.getRoadNetwork().totalVehicleTravelTime() / simRun.getRoadNetwork().totalVehiclesRemoved();
         sb.append(String.format("%.3f", fraction)).append(", ").append(String.format("%.3f", uncertainty)).append(", ")
                 .append(String.format("%.3f", avgTravelTime));
         writer.println(sb.toString());
@@ -102,8 +99,8 @@ public final class SimulationScan {
     }
 
     private static void modifyInput(final Movsim inputData, double fraction, double uncertainty) {
-        Preconditions.checkArgument(inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType()
-                .size() == 2);
+        Preconditions.checkArgument(
+                inputData.getScenario().getSimulation().getTrafficComposition().getVehicleType().size() == 2);
         VehicleType equippedVehicleType = inputData.getScenario().getSimulation().getTrafficComposition()
                 .getVehicleType().get(0);
         Preconditions.checkArgument(equippedVehicleType.getLabel().equals("Equipped"));

@@ -26,15 +26,15 @@
 
 package org.movsim.simulator.roadnetwork.controller;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.Lanes.Type;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.vehicles.Vehicle;
+
+import java.util.HashSet;
+import java.util.Set;
 
 // Tricky modeling: decision making may take a while until exit will be reached.
 // Assignment of exit decision at cross-sections (via SignalPoints) produces most reasonale behavior in routing game.
@@ -44,7 +44,7 @@ public class VariableMessageSignDiversion extends RoadObjectController {
     private boolean diversionActive = false; // also set in viewer !!
 
     private Set<Vehicle> controlledVehicles = new HashSet<>();
-    
+
     private final double validLength;
     private final SignalPoint begin;
     private SignalPoint end;
@@ -62,15 +62,16 @@ public class VariableMessageSignDiversion extends RoadObjectController {
         // non-local roadSegment needs fully inialized roadNetwork
         roadSegmentEnd = getRoadSegmentToPlaceEndPoint(position, validLength);
         if (roadSegmentEnd.laneType(roadSegmentEnd.laneCount()) != Type.EXIT) {
-            throw new IllegalArgumentException("end of VariableMessageSignDiversion lies on roadSegment "
-                    + roadSegmentEnd.userId() + " without exit lane!");
+            throw new IllegalArgumentException(
+                    "end of VariableMessageSignDiversion lies on roadSegment " + roadSegmentEnd.userId()
+                            + " without exit lane!");
         }
         end = new SignalPoint(roadSegmentEnd.roadLength(), roadSegmentEnd);
         roadSegmentEnd.signalPoints().add(end);
     }
 
     private RoadSegment getRoadSegmentToPlaceEndPoint(double position, double validLength) {
-        if(position + validLength < roadSegment.roadLength()){
+        if (position + validLength < roadSegment.roadLength()) {
             return roadSegment;  // downstream end lies on same roadSegment
         }
 
@@ -79,14 +80,16 @@ public class VariableMessageSignDiversion extends RoadObjectController {
         for (LaneSegment laneSegment : roadSegment.laneSegments()) {
             if (laneSegment.hasSinkLaneSegment()
                     && laneSegment.sinkLaneSegment().roadSegment() != downstreamRoadSegment) {
-                throw new IllegalArgumentException("downstream end of VariableMessageSignDiversion from RoadSegment="
-                        + roadSegment.userId() + " not unique. VMS model not intended for this case.");
+                throw new IllegalArgumentException(
+                        "downstream end of VariableMessageSignDiversion from RoadSegment=" + roadSegment.userId()
+                                + " not unique. VMS model not intended for this case.");
             }
         }
 
         if (validLength - roadSegment.roadLength() + position > downstreamRoadSegment.roadLength()) {
-            throw new IllegalArgumentException("valid length exceeds the roadlength of the downstream roadSegment="
-                    + downstreamRoadSegment.roadLength());
+            throw new IllegalArgumentException(
+                    "valid length exceeds the roadlength of the downstream roadSegment=" + downstreamRoadSegment
+                            .roadLength());
         }
         return downstreamRoadSegment;
     }
@@ -94,8 +97,8 @@ public class VariableMessageSignDiversion extends RoadObjectController {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         LOG.debug("VMS isActive={}, controlledVehicles.size={}", diversionActive, controlledVehicles.size());
-        LOG.debug("VMS vehiclesPassedBegin={}, vehiclesPassedEnd={}", begin.passedVehicles().size(), end
-                .passedVehicles().size());
+        LOG.debug("VMS vehiclesPassedBegin={}, vehiclesPassedEnd={}", begin.passedVehicles().size(),
+                end.passedVehicles().size());
 
         if (diversionActive) {
             for (Vehicle vehicle : begin.passedVehicles()) {

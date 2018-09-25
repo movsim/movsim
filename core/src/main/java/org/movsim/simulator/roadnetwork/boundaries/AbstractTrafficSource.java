@@ -12,9 +12,7 @@
 
 package org.movsim.simulator.roadnetwork.boundaries;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
-
+import com.google.common.base.Preconditions;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
@@ -26,18 +24,18 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTrafficSource.class);
 
     public interface RecordDataCallback {
         /**
          * Callback to allow the application to process or record the traffic source data.
          */
-        public void recordData(double simulationTime, int laneEnter, double xEnter, double vEnter, double totalInflow,
+        void recordData(double simulationTime, int laneEnter, double xEnter, double vEnter, double totalInflow,
                 int enteringVehCounter, double nWait);
     }
 
@@ -45,8 +43,9 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     void recordData(double simulationTime, final double totalInflow) {
         if (recordDataCallback != null) {
-            recordDataCallback.recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast, totalInflow,
-                    enteringVehCounter, nWait);
+            recordDataCallback
+                    .recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast, totalInflow, enteringVehCounter,
+                            nWait);
         }
     }
 
@@ -60,14 +59,18 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     int enteringVehCounter;
 
-    /** The x enter last. status of last merging vehicle for logging to file */
+    /**
+     * The x enter last. status of last merging vehicle for logging to file
+     */
     double xEnterLast;
 
     double vEnterLast;
 
     int laneEnterLast;
 
-    /** number of vehicles in the queue as result from integration over demand minus inserted vehicles. */
+    /**
+     * number of vehicles in the queue as result from integration over demand minus inserted vehicles.
+     */
     double nWait;
 
     final TrafficCompositionGenerator vehGenerator;
@@ -85,6 +88,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     /**
      * Sets the traffic source recorder.
+     *
      * @param recordDataCallback
      */
     public void setRecorder(RecordDataCallback recordDataCallback) {
@@ -97,16 +101,13 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         return vehGenerator;
     }
 
-    /**
-     * Gets the entering veh counter.
-     * @return the entering veh counter
-     */
     public int getEnteringVehCounter() {
         return enteringVehCounter;
     }
 
     /**
      * Gets the total inflow over all lanes.
+     *
      * @param time the time
      * @return the total inflow over all lanes
      */
@@ -114,6 +115,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     /**
      * Returns the number of vehicles in the queue.
+     *
      * @return integer queue length over all lanes
      */
     public int getQueueLength() {
@@ -146,6 +148,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     /**
      * Gets the new cyclic lane for entering.
+     *
      * @param iLane the i lane
      * @return the new cyclic lane for entering
      */
@@ -155,6 +158,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     /**
      * Returns the measured inflow in vehicles per second, averaged over the measuring interval.
+     *
      * @return measured inflow over all lanes in vehicles per seconds
      */
     public double measuredInflow() {
@@ -171,9 +175,11 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
             measuredInflow = measuredInflowCount / MEASURING_INTERVAL_S; // vehicles per second
             measuredTime = 0.0;
             measuredInflowCount = 0;
-            LOG.debug(String.format(
-                    "source=%d with measured inflow Q=%.1f/h over all lanes and queue length %d of waiting vehicles",
-                    roadSegment.id(), measuredInflow * Units.INVS_TO_INVH, getQueueLength()));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format(
+                        "source=%d with measured inflow Q=%.1f/h over all lanes and queue length %d of waiting vehicles",
+                        roadSegment.id(), measuredInflow * Units.INVS_TO_INVH, getQueueLength()));
+            }
         }
     }
 

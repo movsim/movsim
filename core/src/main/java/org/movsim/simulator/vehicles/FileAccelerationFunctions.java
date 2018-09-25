@@ -37,7 +37,9 @@ public class FileAccelerationFunctions extends FileOutputBase {
     private static final double CONST_APPROACHING_RATE = 0; // in m/s
 
     private enum QuantityRange {
-        S(0, 70), V(10, 40), DV(-8, 15);
+        S(0, 70),
+        V(10, 40),
+        DV(-8, 15);
 
         private final double minValue;
         private final double maxValue;
@@ -48,13 +50,13 @@ public class FileAccelerationFunctions extends FileOutputBase {
         }
     }
 
-    private static final String extensionFormatConstDistance = "_%s_acc_v_dv.csv";
-    private static final String extensionFormatConstRelSpeed = "_%s_acc_v_s.csv";
-    private static final String extensionFormatConstSpeed = "_%s_acc_dv_s.csv";
-    private static final String extensionFormatConstSpeedLeader = "_%s_acc_dv_s_lead.csv";
+    private static final String EXTENSION_FORMAT_CONST_DISTANCE = "_%s_acc_v_dv.csv";
+    private static final String EXTENSION_FORMAT_CONST_REL_SPEED = "_%s_acc_v_s.csv";
+    private static final String EXTENSION_FORMAT_CONST_SPEED = "_%s_acc_dv_s.csv";
+    private static final String EXTENSION_FORMAT_CONST_SPEED_LEADER = "_%s_acc_dv_s_lead.csv";
 
-    private static final String OUTPUT_HEADING = String.format("%s %8s, %8s, %8s, %8s%n", FileOutputBase.COMMENT_CHAR,
-            "s[m]", "v[m/s]", "dv[m/s]", "acc[m/s^2]");
+    private static final String OUTPUT_HEADING = String
+            .format("%s %8s, %8s, %8s, %8s%n", FileOutputBase.COMMENT_CHAR, "s[m]", "v[m/s]", "dv[m/s]", "acc[m/s^2]");
     private static final String OUTPUT_FORMAT = "%8.5f, %8.5f, %8.5f, %8.5f%n";
 
     private static final double STEPWIDTH = 0.4; // too small values causes plot problems for some (stochastic) models
@@ -63,16 +65,18 @@ public class FileAccelerationFunctions extends FileOutputBase {
         new FileAccelerationFunctions(simulationTimestep, vehiclePrototype);
     }
 
-    /** Simulation timestep is model parameter for iterated map models (and cellular automata) */
+    /**
+     * Simulation timestep is model parameter for iterated map models (and cellular automata)
+     */
     private FileAccelerationFunctions(double simulationTimestep, VehiclePrototype vehiclePrototype) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         final String label = vehiclePrototype.getLabel();
         LongitudinalModelBase accModel = vehiclePrototype.createAccelerationModel();
 
-        writeConstDistance(extensionFormatConstDistance, simulationTimestep, label, accModel);
-        writeConstRelSpeed(extensionFormatConstRelSpeed, simulationTimestep, label, accModel);
-        writeConstSpeed(extensionFormatConstSpeed, simulationTimestep, label, accModel);
-        writeConstSpeedLeader(extensionFormatConstSpeedLeader, simulationTimestep, label, accModel);
+        writeConstDistance(EXTENSION_FORMAT_CONST_DISTANCE, simulationTimestep, label, accModel);
+        writeConstRelSpeed(EXTENSION_FORMAT_CONST_REL_SPEED, simulationTimestep, label, accModel);
+        writeConstSpeed(EXTENSION_FORMAT_CONST_SPEED, simulationTimestep, label, accModel);
+        writeConstSpeedLeader(EXTENSION_FORMAT_CONST_SPEED_LEADER, simulationTimestep, label, accModel);
     }
 
     private void writeHeader(double timestep) {

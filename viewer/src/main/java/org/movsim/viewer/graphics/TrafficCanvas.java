@@ -51,10 +51,8 @@ import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
-import javax.xml.bind.JAXBException;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
@@ -260,11 +258,7 @@ public class TrafficCanvas extends SimulationCanvasBase
     @Override
     public void reset() {
         super.reset();
-        try {
-            simulator.initialize();
-        } catch (JAXBException | SAXException e) {
-            throw new RuntimeException("Jaxb exception:" + e.toString());
-        }
+        simulator.initialize();
         simulator.reset();
         vehicleToHighlightId = -1;
         initGraphicSettings();

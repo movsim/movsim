@@ -1,8 +1,7 @@
 package org.movsim.simulator.vehicles;
 
-import org.movsim.autogen.DistributionTypeEnum;
-
 import com.google.common.base.Preconditions;
+import org.movsim.autogen.DistributionTypeEnum;
 
 public class VehicleType {
 
@@ -16,7 +15,6 @@ public class VehicleType {
         this.configuration = configuration;
         this.testVehicle = new TestVehicle(this, vehiclePrototype);
     }
-    
 
     public double getFraction() {
         return configuration.getFraction();

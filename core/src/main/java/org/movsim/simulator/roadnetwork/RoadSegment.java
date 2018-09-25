@@ -12,27 +12,18 @@
 
 package org.movsim.simulator.roadnetwork;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
-
-import javax.annotation.CheckForNull;
-
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
-import org.movsim.simulator.roadnetwork.controller.FlowConservingBottleneck;
-import org.movsim.simulator.roadnetwork.controller.GradientProfile;
-import org.movsim.simulator.roadnetwork.controller.RoadObject;
+import org.movsim.simulator.roadnetwork.controller.*;
 import org.movsim.simulator.roadnetwork.controller.RoadObject.RoadObjectType;
-import org.movsim.simulator.roadnetwork.controller.RoadObjects;
-import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
-import org.movsim.simulator.roadnetwork.controller.TrafficLight;
-import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.roadnetwork.predicates.VehicleWithinRange;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -40,11 +31,8 @@ import org.movsim.simulator.vehicles.Vehicle.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
+import javax.annotation.CheckForNull;
+import java.util.*;
 
 /**
  * <p>
@@ -90,20 +78,28 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     static final int INITIAL_ID = 1;
 
-    /** vehicle's minimum speed for calculating traveltime, in m/s */
+    /**
+     * vehicle's minimum speed for calculating traveltime, in m/s
+     */
     private static final double MIN_SPEED_TT = 1;
 
     private static int nextId = INITIAL_ID;
 
     private RoadSegmentDirection directionType = RoadSegmentDirection.FORWARD;
 
-    /** the nodeId is an internally used unique identifier for the road. */
+    /**
+     * the nodeId is an internally used unique identifier for the road.
+     */
     private final int id;
 
-    /** the userId is the nodeId specified in the .xodr and .xml files. */
+    /**
+     * the userId is the nodeId specified in the .xodr and .xml files.
+     */
     private String userId;
 
-    /** road name specified in the openDrive .xodr network file. */
+    /**
+     * road name specified in the openDrive .xodr network file.
+     */
     private String roadName;
 
     private final double roadLength;
@@ -121,7 +117,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private final SignalPoints signalPoints = new SignalPoints();
 
-    /** will be initialized lazily */
+    /**
+     * will be initialized lazily
+     */
     private final LaneSegment overtakingSegment;
 
     private boolean overtakingSegmentInitialized = false;
@@ -141,13 +139,19 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private TrafficCompositionGenerator trafficComposition;
 
-    /** simple ramp (source) with dropping mechanism */
+    /**
+     * simple ramp (source) with dropping mechanism
+     */
     private SimpleRamp simpleRamp;
 
-    /** dynamic ff speed, considering speed limits. */
+    /**
+     * dynamic ff speed, considering speed limits.
+     */
     private double meanFreeFlowSpeed = -1;
 
-    /** static freeflow speed as maximum speed that is allowed. */
+    /**
+     * static freeflow speed as maximum speed that is allowed.
+     */
     private double freeFlowSpeed = RoadTypeSpeeds.INSTANCE.getDefaultFreeFlowSpeed();
 
     public static class TestCar {
@@ -169,7 +173,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the number of road segments that have been created. Used for instrumentation.
-     * 
+     *
      * @return the number of road segment that have been created
      */
     public static int count() {
@@ -178,11 +182,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Constructor.
-     * 
-     * @param roadLength
-     *            road length, in meters.
-     * @param laneCount
-     *            number of lanes in this road segment
+     *
+     * @param roadLength road length, in meters.
+     * @param laneCount  number of lanes in this road segment
      */
     public RoadSegment(double roadLength, int laneCount) {
         assert roadLength > 0.0;
@@ -218,7 +220,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns this road segment's nodeId
-     * 
+     *
      * @return this road segment's nodeId
      */
     public final int id() {
@@ -227,7 +229,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Set this road segment's userId
-     * 
+     *
      * @param userId
      */
     public final void setUserId(String userId) {
@@ -236,7 +238,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns this road segment's userId. The userId is the road's nodeId as set in the .xodr and .xml files.
-     * 
+     *
      * @return this road segment's userId
      */
     public final String userId() {
@@ -249,7 +251,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns this road segment's road mapping.
-     * 
+     *
      * @return this road segment's road mapping
      */
     public final RoadMapping roadMapping() {
@@ -259,7 +261,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Sets this road segment's road mapping.
-     * 
+     *
      * @param roadMapping
      */
     public final void setRoadMapping(RoadMapping roadMapping) {
@@ -268,7 +270,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the traffic source (upstream boundary) for this road segment.
-     * 
+     *
      * @return the traffic source
      */
     public final AbstractTrafficSource trafficSource() {
@@ -277,19 +279,18 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Sets the traffic source (upstream boundary) for this road segment.
-     * 
-     * @param trafficSource
-     *            the traffic source
+     *
+     * @param trafficSource the traffic source
      */
     public final void setTrafficSource(AbstractTrafficSource trafficSource) {
-        Preconditions.checkArgument(this.trafficSource == null,
-                "roadSegment=" + id() + " already has a traffic source.");
+        Preconditions
+                .checkArgument(this.trafficSource == null, "roadSegment=" + id() + " already has a traffic source.");
         this.trafficSource = trafficSource;
     }
 
     /**
      * Returns the traffic sink for this road segment.
-     * 
+     *
      * @return the traffic sink
      */
     public final TrafficSink sink() {
@@ -302,7 +303,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns this road segment's length.
-     * 
+     *
      * @return road segment length in meters
      */
     public final double roadLength() {
@@ -311,7 +312,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the number of lanes in this road segment.
-     * 
+     *
      * @return number of lanes
      */
     public final int laneCount() {
@@ -320,7 +321,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Sets the type of the given lane.
-     * 
+     *
      * @param lane
      * @param laneType
      */
@@ -330,7 +331,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the type of the given lane.
-     * 
+     *
      * @param lane
      * @return type of lane
      */
@@ -340,7 +341,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the minimum traffic lane (that is not an entry or exit lane).
-     * 
+     *
      * @return the minimum traffic lane
      */
     public int trafficLaneMin() {
@@ -353,7 +354,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the maximum traffic lane (that is not an entry or exit lane).
-     * 
+     *
      * @return the maximum traffic lane
      */
     public int trafficLaneMax() {
@@ -477,8 +478,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public boolean exitsOnto(int exitRoadSegmentId) {
         for (final LaneSegment laneSegment : laneSegments) {
             if (laneSegment.type() == Lanes.Type.EXIT) {
-                assert laneSegment.sinkLaneSegment() != null : "roadSegment=" + userId() + " with lane="
-                        + laneSegment.lane() + " has no downstream connection.";
+                assert laneSegment.sinkLaneSegment() != null :
+                        "roadSegment=" + userId() + " with lane=" + laneSegment.lane()
+                                + " has no downstream connection.";
                 if (laneSegment.sinkLaneSegment().roadSegment().id() == exitRoadSegmentId) {
                     return true;
                 }
@@ -498,7 +500,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the number of vehicles on this road segment, all lanes.
-     * 
+     *
      * @return the total number of vehicles on this road segment
      */
     public int getVehicleCount() {
@@ -519,7 +521,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the number of obstacle vehicles on this road segment, all lanes.
-     * 
+     *
      * @return the total number of vehicles on this road segment
      */
     public int getObstacleCount() {
@@ -532,7 +534,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the number of vehicles in the given lane on this road segment.
-     * 
+     *
      * @param lane
      * @return the number of vehicles in the given lane on this road segment
      */
@@ -543,7 +545,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the total travel time of all vehicles on this road segment, all lanes.
-     * 
+     *
      * @return the total vehicle travel time
      */
     protected double totalVehicleTravelTime() {
@@ -556,7 +558,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the total travel distance of all vehicles on this road segment, all lanes.
-     * 
+     *
      * @return the total vehicle travel distance
      */
     protected double totalVehicleTravelDistance() {
@@ -569,7 +571,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the total fuel used by all vehicles on this road segment, all lanes.
-     * 
+     *
      * @return the total vehicle fuel used
      */
     protected double totalVehicleFuelUsedLiters() {
@@ -590,7 +592,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * @return the arithmetic mean speed of all vehicles on road segment. A finite minimum speed is assumed for a robust estimation in case
-     *         of stand-stills
+     * of stand-stills
      */
     public double meanSpeedOfVehicles() {
         double sumSpeed = 0;
@@ -634,7 +636,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     /**
      * Returns the instantaneous travel time defined by the road element length and current mean speed of all vehicles.
      * An adhoc free speed is assumed in case of an empty road.
-     * 
+     *
      * @return instantantaneous travel time with adhoc assumed travel time if road is empty
      */
     public double instantaneousTravelTimeFromMeanSpeed() {
@@ -644,7 +646,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     /**
      * Returns the instantaneous travel time estimated on small sections within a {@code RoadSegment} with assuming the allowed freeflow
      * speed in case of no vehicle.
-     * 
+     *
      * @return grid-based instantaneous travel time with adhoc assumed travel time if road is empty
      */
     public double instantaneousTravelTimeOnGrid(double gridLength) {
@@ -678,7 +680,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the number of obstacles on this road segment.
-     * 
+     *
      * @return the number of obstacles on this road segment
      */
     protected int obstacleCount() {
@@ -699,7 +701,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * <p>
      * V[n+1].pos &lt; V[n].pos &lt; V[n-1].pos ... &lt; V[1].pos &lt; V[0].pos
      * </p>
-     * 
+     *
      * @param lane
      * @param index
      * @return vehicle at given index in the given lane
@@ -710,7 +712,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Removes the front vehicle on the given lane.
-     * 
+     *
      * @param lane
      */
     public void removeFrontVehicleOnLane(int lane) {
@@ -719,7 +721,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Removes any vehicles that have moved past the end of this road segment.
-     * 
+     *
      * @return the number of vehicles removed
      */
     public int removeVehiclesPastEnd() {
@@ -732,7 +734,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns all vehicles that have moved past the end of this road segment.
-     * 
+     *
      * @return the number of vehicles removed
      */
     public Iterable<Vehicle> getVehiclesPastEnd() {
@@ -745,7 +747,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Adds an obstacle to this road segment.
-     * 
+     *
      * @param obstacle
      */
     public void addObstacle(Vehicle obstacle) {
@@ -756,7 +758,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Adds a vehicle to this road segment.
-     * 
+     *
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
@@ -766,7 +768,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Adds a vehicle to the start of this road segment.
-     * 
+     *
      * @param vehicle
      */
     public void appendVehicle(Vehicle vehicle) {
@@ -776,13 +778,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Updates the road conditions.
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
+     *
+     * @param dt             delta-t, simulation time interval, seconds
+     * @param simulationTime current simulation time, seconds
+     * @param iterationCount the number of iterations that have been executed
      */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
         for (RoadObject roadObject : roadObjects) {
@@ -830,13 +829,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * <p>
      * <code>makeLaneChanges</code> preserves the vehicle sort order, since only lateral movements of vehicles are made.
      * </p>
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
+     *
+     * @param dt             delta-t, simulation time interval, seconds
+     * @param simulationTime current simulation time, seconds
+     * @param iterationCount the number of iterations that have been executed
      */
     public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
 
@@ -852,7 +848,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         // TODO assure priority for lane changes from slow to fast lanes
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
-            for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
+            for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext(); ) {
                 Vehicle vehicle = vehIterator.next();
                 assert vehicle.roadSegmentId() == id;
                 if (vehicle.inProcessOfLaneChange()) {
@@ -900,7 +896,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     private void checkFinishingOvertaking(double dt) {
-        for (Iterator<Vehicle> vehIterator = overtakingSegment.iterator(); vehIterator.hasNext();) {
+        for (Iterator<Vehicle> vehIterator = overtakingSegment.iterator(); vehIterator.hasNext(); ) {
             Vehicle vehicle = vehIterator.next();
             if (vehicle.inProcessOfLaneChange()) {
                 // assure update in each simulation timestep
@@ -918,13 +914,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Accelerate.
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
+     *
+     * @param dt             delta-t, simulation time interval, seconds
+     * @param simulationTime current simulation time, seconds
+     * @param iterationCount the number of iterations that have been executed
      */
     public void updateVehicleAccelerations(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
@@ -949,13 +942,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Update the vehicle positions and velocities by calling vehicle.updatePositionAndSpeed for each vehicle.
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
+     *
+     * @param dt             delta-t, simulation time interval, seconds
+     * @param simulationTime current simulation time, seconds
+     * @param iterationCount the number of iterations that have been executed
      */
     public void updateVehiclePositionsAndSpeeds(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
@@ -979,13 +969,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * If there is a traffic sink, use it to perform any traffic outflow.
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
+     *
+     * @param dt             delta-t, simulation time interval, seconds
+     * @param simulationTime current simulation time, seconds
+     * @param iterationCount the number of iterations that have been executed
      */
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         updateSignalPointsBeforeOutflow(simulationTime);
@@ -1001,13 +988,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * If there is a traffic source, use it to perform any traffic inflow.
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
+     *
+     * @param dt             delta-t, simulation time interval, seconds
+     * @param simulationTime current simulation time, seconds
+     * @param iterationCount the number of iterations that have been executed
      */
     public void inFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
@@ -1022,7 +1006,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the rear vehicle on the given lane.
-     * 
+     *
      * @param lane
      * @return the rear vehicle on the given lane
      */
@@ -1032,9 +1016,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Finds the vehicle in the given lane immediately at or behind the given position.
-     * 
-     * @param lane
-     *            lane in which to search
+     *
+     * @param lane lane in which to search
      * @return reference to the rear vehicle
      */
     public Vehicle rearVehicle(int lane, double vehiclePos) {
@@ -1043,7 +1026,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the front vehicle on the given lane.
-     * 
+     *
      * @param lane
      * @return the front vehicle on the given lane
      */
@@ -1053,7 +1036,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns the vehicle in front of the given vehicle in its lane.
-     * 
+     *
      * @param vehicle
      * @return the next downstream vehicle in the lane
      */
@@ -1065,9 +1048,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
      * vehicle.position() &gt; vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to be in
      * the rear.
-     * 
-     * @param lane
-     *            lane in which to search
+     *
+     * @param lane lane in which to search
      * @return reference to the front vehicle
      */
     public Vehicle frontVehicle(int lane, double vehiclePos) {
@@ -1076,7 +1058,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns true if each lane in the vehicle array is sorted.
-     * 
+     *
      * @return true if each lane in the vehicle array is sorted
      */
     public boolean eachLaneIsSorted() {
@@ -1088,8 +1070,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return true;
     }
 
-    @SuppressWarnings("synthetic-access")
-    private class VehicleIterator implements Iterator<Vehicle>, Iterable<Vehicle> {
+    @SuppressWarnings("synthetic-access") private class VehicleIterator
+            implements Iterator<Vehicle>, Iterable<Vehicle> {
         int laneIndex;
 
         int index;
@@ -1151,7 +1133,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns an iterator over all the vehicles in this road segment.
-     * 
+     *
      * @return an iterator over all the vehicles in this road segment
      */
     @Override
@@ -1170,13 +1152,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Check for inconsistencies.
-     * 
-     * @param iterationCount
-     *            the iteration count
-     * @param time
-     *            the time
-     * @param isWithCrashExit
-     *            the is with crash exit
+     *
+     * @param iterationCount  the iteration count
+     * @param time            the time
+     * @param isWithCrashExit the is with crash exit
      */
     public void checkForInconsistencies(double time, long iterationCount, boolean isWithCrashExit) {
         for (final LaneSegment laneSegment : laneSegments) {
@@ -1205,8 +1184,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                     sb.append(", obstacles=").append(laneSegment.obstacleCount());
                     sb.append("\n");
 
-                    for (int j = Math.max(0, index - 8), M = laneSegment.vehicleCount(); j <= Math.min(index + 8,
-                            M - 1); j++) {
+                    for (int j = Math.max(0, index - 8), M = laneSegment.vehicleCount();
+                         j <= Math.min(index + 8, M - 1); j++) {
                         final Vehicle veh = laneSegment.getVehicle(j);
                         sb.append(String.format(
                                 "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, lane=%d, nodeId=%d%n",
@@ -1223,8 +1202,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         }
     }
 
-    @SuppressWarnings("synthetic-access")
-    private class LaneSegmentIterator implements Iterator<LaneSegment> {
+    @SuppressWarnings("synthetic-access") private class LaneSegmentIterator implements Iterator<LaneSegment> {
         int index;
 
         public LaneSegmentIterator() {
@@ -1255,7 +1233,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns an iterator over all the lane segments in this road segment.
-     * 
+     *
      * @return an iterator over all the lane segments in this road segment
      */
     public final Iterator<LaneSegment> laneSegmentIterator() {
@@ -1264,7 +1242,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Returns an iterable over all the lane segments in this road segment.
-     * 
+     *
      * @return an iterable over all the lane segments in this road segment
      */
     public Iterable<LaneSegment> laneSegments() {

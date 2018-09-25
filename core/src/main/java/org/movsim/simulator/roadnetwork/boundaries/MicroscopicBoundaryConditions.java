@@ -1,11 +1,6 @@
 package org.movsim.simulator.roadnetwork.boundaries;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.CheckForNull;
-
+import com.google.common.base.Preconditions;
 import org.movsim.scenario.boundary.autogen.BoundaryConditionsType;
 import org.movsim.scenario.boundary.autogen.MovsimMicroscopicBoundaryConditions;
 import org.movsim.scenario.boundary.autogen.RoadMicroscopicBoundaryConditionsType;
@@ -13,7 +8,10 @@ import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import javax.annotation.CheckForNull;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MicroscopicBoundaryConditions {
 
@@ -42,7 +40,7 @@ public class MicroscopicBoundaryConditions {
      * @throws IllegalStateException
      */
     private void fillMapping(MovsimMicroscopicBoundaryConditions input) {
-        for (RoadMicroscopicBoundaryConditionsType roadConditions : input.getRoadMicroscopicBoundaryConditions()){
+        for (RoadMicroscopicBoundaryConditionsType roadConditions : input.getRoadMicroscopicBoundaryConditions()) {
             String roadId = roadConditions.getId();
             if (roadToBoundaryConditions.containsKey(roadId)) {
                 throw new IllegalStateException("roadId=" + roadId + "already used in input file=" + file);

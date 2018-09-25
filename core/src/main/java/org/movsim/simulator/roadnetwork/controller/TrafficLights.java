@@ -50,11 +50,9 @@ import com.google.common.collect.Iterables;
  * 
  * Sets the trafficlights for each road segment by connecting the 'logical' trafficlights (and the controllers) with the 'physical' traffic
  * signals on a roadSegment locations. The specific 'physical' representation is parsed from the infrastructure input.
- * 
  */
 public class TrafficLights implements SimulationTimeStep {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLights.class);
 
     private final List<TrafficLightController> trafficLightControllers;
@@ -77,14 +75,14 @@ public class TrafficLights implements SimulationTimeStep {
         }
     }
 
-    private static boolean networkContainsTrafficlights(RoadNetwork roadNetwork) {
-        for (RoadSegment roadSegment : roadNetwork) {
-            if (Iterables.size(roadSegment.roadObjects().values(RoadObjectType.TRAFFICLIGHT)) > 0) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private static boolean networkContainsTrafficlights(RoadNetwork roadNetwork) {
+//        for (RoadSegment roadSegment : roadNetwork) {
+//            if (Iterables.size(roadSegment.roadObjects().values(RoadObjectType.TRAFFICLIGHT)) > 0) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     /**
      * Update.
@@ -118,7 +116,7 @@ public class TrafficLights implements SimulationTimeStep {
                 }
                 TrafficLightController trafficLightController = signalIdToController.get(trafficLight.signalId());
                 if (trafficLightController == null) {
-                    LOG.debug("create new TrafficLightControllerGroup for trafficLight={}", trafficLight.toString());
+                    LOG.debug("create new TrafficLightControllerGroup for trafficLight={}", trafficLight);
                     trafficLightController = TrafficLightControllerFactory.create(controllerGroup);
                     trafficLightControllers.add(trafficLightController);
                     for (Control control : trafficLight.getController().getControl()) {

@@ -1,8 +1,7 @@
 package org.movsim.simulator.vehicles;
 
-import org.movsim.consumption.model.EnergyFlowModel;
-
 import com.google.common.base.Preconditions;
+import org.movsim.consumption.model.EnergyFlowModel;
 
 public class EnergyModel {
 
@@ -35,7 +34,7 @@ public class EnergyModel {
 
     /**
      * Returns the total fuel used by this vehicle.
-     * 
+     *
      * @return total fuel used
      */
     public double totalFuelUsedLiters() {

@@ -1,8 +1,6 @@
 package org.movsim.simulator.roadnetwork;
 
-import java.util.EnumMap;
-import java.util.Map;
-
+import com.google.common.base.Preconditions;
 import org.movsim.autogen.RoadTypeEnum;
 import org.movsim.autogen.RoadTypeSpeedMappingType;
 import org.movsim.autogen.RoadTypeSpeedMappingsType;
@@ -11,7 +9,8 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import java.util.EnumMap;
+import java.util.Map;
 
 public enum RoadTypeSpeeds {
 
@@ -21,7 +20,7 @@ public enum RoadTypeSpeeds {
 
     private final Map<RoadTypeEnum, Double> roadTypeSpeedMappings = new EnumMap<>(RoadTypeEnum.class);
 
-    private RoadTypeSpeeds() {
+    RoadTypeSpeeds() {
         initWithDummyValues();
     }
 
@@ -34,15 +33,15 @@ public enum RoadTypeSpeeds {
 
     /**
      * Overwrites the dummy freeflow speed mappings with the values from the configuration.
-     * 
+     *
      * @param configuration
      */
     public void init(RoadTypeSpeedMappingsType configuration) {
         for (RoadTypeSpeedMappingType roadTypeSpeedMapping : configuration.getRoadTypeSpeedMapping()) {
             RoadTypeEnum key = roadTypeSpeedMapping.getRoadType();
             roadTypeSpeedMappings.put(key, roadTypeSpeedMapping.getDefaultSpeedKmh() * Units.KMH_TO_MS);
-            LOG.info("mapping of default speed: roadtype={} --> speed={} km/h", key, roadTypeSpeedMappings.get(key)
-                    * Units.MS_TO_KMH);
+            LOG.info("mapping of default speed: roadtype={} --> speed={} km/h", key,
+                    roadTypeSpeedMappings.get(key) * Units.MS_TO_KMH);
         }
     }
 
@@ -62,8 +61,8 @@ public enum RoadTypeSpeeds {
             RoadTypeEnum roadType = RoadTypeEnum.fromValue(xodrRoadType);
             freeFlowSpeed = roadTypeSpeedMappings.get(roadType);
         } catch (IllegalArgumentException e) {
-            LOG.error("cannot map xodr road.type=" + xodrRoadType
-                    + " to a Movsim freeflow speed. Fall back to default=" + RoadTypeEnum.UNKNOWN);
+            LOG.error("cannot map xodr road.type=" + xodrRoadType + " to a Movsim freeflow speed. Fall back to default="
+                    + RoadTypeEnum.UNKNOWN);
         }
         return freeFlowSpeed;
     }

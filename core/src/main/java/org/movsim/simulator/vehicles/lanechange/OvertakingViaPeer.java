@@ -45,7 +45,6 @@ import com.google.common.collect.Iterables;
 
 public class OvertakingViaPeer {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(OvertakingViaPeer.class);
 
     private static final double INFINITE_GAP = MovsimConstants.GAP_INFINITY;

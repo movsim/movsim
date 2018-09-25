@@ -28,18 +28,15 @@ package org.movsim.simulator.roadnetwork.predicates;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
 import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Predicate;
 
 /**
- * TODO
- * <p>
+ * TODO add javadoc
+ *
  * Uses rearPosition of vehicle because this is in line with the outflow-update of the roadSegments.
- * 
- * <br>
- * created: May 20, 2013<br>
- * 
  */
 public final class VehiclePassedPosition implements Predicate<Vehicle> {
 

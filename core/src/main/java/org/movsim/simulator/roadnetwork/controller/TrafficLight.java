@@ -25,12 +25,8 @@
  */
 package org.movsim.simulator.roadnetwork.controller;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
@@ -41,26 +37,26 @@ import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.roadnetwork.regulator.Regulator;
 import org.movsim.simulator.vehicles.Vehicle;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Represents a 'traffic light' to which vehicles will react. The visibility range is limited to {@code MAX_LOOK_AHEAD_DISTANCE}, e.g.
  * {@literal 1000m}, or to two {@link RoadSegment}s.
- * 
  */
 public class TrafficLight extends RoadObjectController {
 
     public static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
 
-    /** The status. */
     private TrafficLightStatus status;
 
     private final String groupId; // unique mapping to infrastructure
 
     private TriggerCallback triggerCallback;
-
-    private final Set<TrafficLightStatus> possibleStati = new HashSet<>(); // deprecated, just for drawing trafficlights in viewer
 
     private final Signal signal;
     private final Controller controller;
@@ -76,12 +72,12 @@ public class TrafficLight extends RoadObjectController {
                     "trafficlights always apply to all lanes, cannot use xodr validity information from signal-id="
                             + signal.getId());
         }
-        this.controller = Preconditions.checkNotNull(controller);
-        this.signal = Preconditions.checkNotNull(signal);
+        this.controller = checkNotNull(controller);
+        this.signal = checkNotNull(signal);
         Preconditions.checkArgument(signal.isSetId(), "id not set");
         Preconditions.checkArgument(!signal.getId().isEmpty(), "empty id!");
         Preconditions.checkArgument(signal.isSetS(), "signal.s not set");
-        this.signalType = Preconditions.checkNotNull(checkTypesAndExtractSignalType());
+        this.signalType = checkNotNull(checkTypesAndExtractSignalType());  // TODO fix sonar
         this.groupId = controller.getId();
         signalPointEnd = new SignalPoint(position, roadSegment);
     }
@@ -90,8 +86,8 @@ public class TrafficLight extends RoadObjectController {
         String signalType = null;
         for (OpenDRIVE.Controller.Control control : controller.getControl()) {
             if (!control.isSetType()) {
-                throw new IllegalArgumentException("controller.control.type must be set in xodr for signal="
-                        + signalId());
+                throw new IllegalArgumentException(
+                        "controller.control.type must be set in xodr for signal=" + signalId());
             }
             if (control.getSignalId().equals(signalId())) {
                 signalType = control.getType();
@@ -102,7 +98,7 @@ public class TrafficLight extends RoadObjectController {
 
     /**
      * Returns the id. This id is defined in the infrastructure configuration file.
-     * 
+     *
      * @return the label
      */
     public String signalId() {
@@ -111,7 +107,7 @@ public class TrafficLight extends RoadObjectController {
 
     /**
      * Returns the signal Name.
-     * 
+     *
      * @return the label
      */
     public String signalName() {
@@ -125,7 +121,7 @@ public class TrafficLight extends RoadObjectController {
     /**
      * Returns the signal type assigned in the controller.control xodr input. This type links from a 'physical' signal to a 'logical'
      * representation of the trafficlight state.
-     * 
+     *
      * @return the signal-type id
      */
     public String signalType() {
@@ -142,7 +138,7 @@ public class TrafficLight extends RoadObjectController {
 
     /**
      * Returns the controllergroup-id which allows for a unique reference to a set of signals in the infrastructure.
-     * 
+     *
      * @return groupId
      */
     public String groupId() {
@@ -155,12 +151,12 @@ public class TrafficLight extends RoadObjectController {
 
     /**
      * sets the {@link TrafficLightStatus}.
-     * 
+     * <p>
      * <p>
      * The user has to assure that a single traffic light is not simultaneously controlled by the {@link TrafficLightController} and one (or
      * more) {@link Regulator}(s).
      * </p>
-     * 
+     *
      * @param newStatus
      */
     public void setState(TrafficLightStatus newStatus) {
@@ -179,7 +175,7 @@ public class TrafficLight extends RoadObjectController {
     }
 
     public void setTriggerCallback(TriggerCallback triggerCallback) {
-        this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
+        this.triggerCallback = checkNotNull(triggerCallback);
     }
 
     public boolean hasTriggerCallback() {
@@ -261,7 +257,8 @@ public class TrafficLight extends RoadObjectController {
                         addSignalPointBegin(Math.max(0, posSignalPoint), upstreamRoadSegment);
                     } else {
                         // call recursively
-                        addSignalPointsToUpstreamRoadSegments(upstreamRoadSegment, -posSignalPoint, visitedRoadSegments);
+                        addSignalPointsToUpstreamRoadSegments(upstreamRoadSegment, -posSignalPoint,
+                                visitedRoadSegments);
                     }
                 }
             }

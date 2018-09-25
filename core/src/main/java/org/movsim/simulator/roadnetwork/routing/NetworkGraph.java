@@ -25,9 +25,8 @@
  */
 package org.movsim.simulator.roadnetwork.routing;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.movsim.input.ProjectMetaData;
@@ -38,12 +37,11 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
+import java.util.HashMap;
+import java.util.Map;
 
 final class NetworkGraph {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(NetworkGraph.class);
 
     private static long vertexId = 0;
@@ -88,7 +86,7 @@ final class NetworkGraph {
             }
             createOrUpdateNode(connections);
         }
-        LOG.info("created graph with " + graph.edgeSet().size() + " edges and " + graph.vertexSet().size() + " nodes.");
+        LOG.info("created graph with {} edges and {} nodes", graph.edgeSet().size(), graph.vertexSet().size());
         for (RoadSegment roadSegment : roadNetwork) {
             long fromVertex = roadSegment.getOriginNode().getId();
             long toVertex = roadSegment.getDestinationNode().getId();
@@ -96,7 +94,7 @@ final class NetworkGraph {
             graph.addVertex(toVertex);
             graph.addEdge(fromVertex, toVertex, roadSegment);
             graph.setEdgeWeight(roadSegment, roadSegment.roadLength());
-            LOG.info("weight={}, roadSegment={}", graph.getEdgeWeight(roadSegment), roadSegment.toString());
+            LOG.info("weight={}, roadSegment={}", graph.getEdgeWeight(roadSegment), roadSegment);
         }
 
         if (ProjectMetaData.getInstance().isWriteDotFile()) {
@@ -130,9 +128,9 @@ final class NetworkGraph {
             Node nodeType = entry.getValue();
             if (nodeType.hasId()) {
                 if (nodeId != Long.MAX_VALUE && nodeId != nodeType.getId()) {
-                    throw new IllegalArgumentException("nodeId=" + nodeId + " contradicts node=" + nodeType.toString()
-                            + " of roadSegment=" + entry.getKey().userId() + " already set with value="
-                            + nodeType.getId());
+                    throw new IllegalArgumentException(
+                            "nodeId=" + nodeId + " contradicts node=" + nodeType.toString() + " of roadSegment=" + entry
+                                    .getKey().userId() + " already set with value=" + nodeType.getId());
                 }
                 nodeId = nodeType.getId();
             }

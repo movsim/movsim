@@ -26,15 +26,14 @@
 
 package org.movsim.simulator.roadnetwork.regulator;
 
-import java.util.Collection;
-
+import com.google.common.base.Preconditions;
 import org.movsim.autogen.NotifyObjectType;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.RoadSegmentDirection;
 import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.vehicles.Vehicle;
 
-import com.google.common.base.Preconditions;
+import java.util.Collection;
 
 public class NotifyObject {
 
@@ -47,12 +46,14 @@ public class NotifyObject {
     public NotifyObject(NotifyObjectType notifyObjectType, RoadSegment roadSegment) {
         this.parameter = Preconditions.checkNotNull(notifyObjectType);
         this.roadSegment = Preconditions.checkNotNull(roadSegment);
-        Preconditions.checkArgument(notifyObjectType.isSetPosition() || notifyObjectType.isSetS(), "no position or s-coordinate provided in NotifyObject="+notifyObjectType.getId());
+        Preconditions.checkArgument(notifyObjectType.isSetPosition() || notifyObjectType.isSetS(),
+                "no position or s-coordinate provided in NotifyObject=" + notifyObjectType.getId());
         double position;
-        
+
         if (notifyObjectType.isSetS()) {
-            position = roadSegment.directionType() == RoadSegmentDirection.FORWARD ? notifyObjectType.getS()
-                    : roadSegment.roadLength() - notifyObjectType.getS();
+            position = roadSegment.directionType() == RoadSegmentDirection.FORWARD ?
+                    notifyObjectType.getS() :
+                    roadSegment.roadLength() - notifyObjectType.getS();
         } else {
             position = notifyObjectType.getPosition();
         }

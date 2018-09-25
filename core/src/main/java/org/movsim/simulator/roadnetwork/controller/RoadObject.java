@@ -28,16 +28,15 @@ package org.movsim.simulator.roadnetwork.controller;
 
 import org.movsim.simulator.roadnetwork.RoadSegment;
 
-/**
- * 
- * <br>
- * created: May 18, 2013<br>
- * 
- */
 public interface RoadObject extends Comparable<RoadObject> {
 
-    public enum RoadObjectType {
-        TRAFFICLIGHT, SPEEDLIMIT, LOOPDETECTOR, VMS_DIVERSION, FLOW_CONSERVING_BOTTLENECK, GRADIENT_PROFILE;
+    enum RoadObjectType {
+        TRAFFICLIGHT,
+        SPEEDLIMIT,
+        LOOPDETECTOR,
+        VMS_DIVERSION,
+        FLOW_CONSERVING_BOTTLENECK,
+        GRADIENT_PROFILE;
     }
 
     RoadObjectType getType();
@@ -46,16 +45,17 @@ public interface RoadObject extends Comparable<RoadObject> {
 
     RoadSegment roadSegment();
 
-    /** Separately called, signalPoints to be added after whole roadNetwork is constructed! */
+    /**
+     * Separately called, signalPoints to be added after whole roadNetwork is constructed!
+     */
     void createSignalPositions();
 
     void timeStep(double dt, double simulationTime, long iterationCount);
 
     /**
      * Self-defined OpenDRIVE.Road.Objects.Object.type attributes.
-     * 
      */
-    public enum XodrRoadObjectType {
+    enum XodrRoadObjectType {
         SPEEDLIMIT("speedlimit");
 
         private final String openDriveIdentifier;

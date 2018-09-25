@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>
@@ -57,7 +58,7 @@ import java.util.Iterator;
  */
 public class LaneSegment implements Iterable<Vehicle> {
 
-    final static Logger logger = LoggerFactory.getLogger(LaneSegment.class);
+    private static final Logger logger = LoggerFactory.getLogger(LaneSegment.class);
 
     private static final boolean DEBUG = false;
     private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
@@ -69,7 +70,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     // physical lane, not the laneIndex
     private final int lane;
     private Lanes.Type type;
-    private final ArrayList<Vehicle> vehicles;
+    private final List<Vehicle> vehicles;
     private int removedVehicleCount; // used for calculating traffic flow
 
     /**
@@ -91,7 +92,6 @@ public class LaneSegment implements Iterable<Vehicle> {
      * Returns the lane.
      * <p>
      * The lane is an identifier of the lane in the physical network starting with a value of 1 for the most inner lane.
-     * </p>
      *
      * @return lane, not the index of the lane in the roadSegment
      */
@@ -308,7 +308,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * Removes the front vehicle on this lane segment.
      */
     public void removeFrontVehicleOnLane() {
-        if (vehicles.size() > 0) {
+        if (!vehicles.isEmpty()) {
             vehicles.remove(0);
         }
     }
@@ -403,7 +403,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         assert laneIsSorted();
         assert assertInvariant();
         if (DEBUG) {
-            if (vehicles.size() > 0) {
+            if (!vehicles.isEmpty()) {
                 final Vehicle lastVehicle = vehicles.get(vehicles.size() - 1);
                 if (lastVehicle.getRearPosition() < vehicle.getRearPosition()) {
                     assert false;
@@ -526,7 +526,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @return the front vehicle
      */
     public Vehicle frontVehicle() {
-        if (vehicles.size() > 0) {
+        if (!vehicles.isEmpty()) {
             return vehicles.get(0);
         }
         return null;

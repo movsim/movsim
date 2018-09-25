@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator.vehicles.lanechange;
 
+import com.google.common.base.Preconditions;
 import org.movsim.autogen.ModelParameterMOBIL;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
@@ -34,32 +35,25 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Longitudinal
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-
 /**
  * The Class MOBIL.
- * 
  * <p>
  * Paper for reference: <a href="http://pubsindex.trb.org/view.aspx?id=801029"> A. Kesting, M. Treiber, D. Helbing, General Lanes-Changing Model MOBIL for
  * Car-Following Models. Transportation Research Record, Volume 1999, Pages 86-94 (2007).</a>
- * </p>
  */
 
 // TODO needs refactoring and better documentation
 public class MOBIL {
 
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(MOBIL.class);
 
     private ModelParameterMOBIL param;
 
     /**
      * Instantiates a new MOBIL model
-     * 
-     * @param vehicle
-     *            the vehicle
-     * @param modelParameterMOBIL
-     *            the lane change MOBIL data
+     *
+     * @param vehicle             the vehicle
+     * @param modelParameterMOBIL the lane change MOBIL data
      */
     public MOBIL(Vehicle vehicle, ModelParameterMOBIL modelParameterMOBIL) {
         Preconditions.checkNotNull(modelParameterMOBIL);
@@ -68,11 +62,12 @@ public class MOBIL {
         if (vehicle != null && modelParameterMOBIL.getSafeDeceleration() > vehicle.getMaxDeceleration()) {
             // MOBIL bSafe parameter should be typically chosen well below the physical maximum deceleration
             LOG.error("not consistent modeling input data: MOBIL's bSafe must be <= vehicle's maximum deceleration."
-                    + " Otherwise crashes could occur! Restrict bSafe to maximum deceleration={}",
+                            + " Otherwise crashes could occur! Restrict bSafe to maximum deceleration={}",
                     vehicle.getMaxDeceleration());
-            throw new IllegalStateException("Inconsistent input configuration: MOBIL max. deceleration="
-                    + modelParameterMOBIL.getSafeDeceleration() + " is larger than vehicle's max. deceleration="
-                    + vehicle.getMaxDeceleration());
+            throw new IllegalStateException(
+                    "Inconsistent input configuration: MOBIL max. deceleration=" + modelParameterMOBIL
+                            .getSafeDeceleration() + " is larger than vehicle's max. deceleration=" + vehicle
+                            .getMaxDeceleration());
         }
     }
 
@@ -192,8 +187,8 @@ public class MOBIL {
             // assume increasing lane index from right to left
             bias = +2 * biasNormal / (laneCount - 1) * (currentLane - (0.5 * (laneCount - 1)));
 
-            prospectiveBalance = meDiffAcc + param.getPoliteness() * (oldBackDiffAcc + newBackDiffAcc)
-                    - param.getThresholdAcceleration() - bias * direction;
+            prospectiveBalance = meDiffAcc + param.getPoliteness() * (oldBackDiffAcc + newBackDiffAcc) - param
+                    .getThresholdAcceleration() - bias * direction;
 
             // ###########################################################
             // new hack: bias considering BOTH the plus and the minus lane
@@ -209,7 +204,8 @@ public class MOBIL {
 
             int lanePlus = currentLane + direction;
             int laneMinus = currentLane - direction;
-            if ((Math.min(lanePlus, laneMinus) < Lanes.MOST_INNER_LANE) || (Math.max(lanePlus, laneMinus) > laneCount)) {
+            if ((Math.min(lanePlus, laneMinus) < Lanes.MOST_INNER_LANE) || (Math.max(lanePlus, laneMinus)
+                    > laneCount)) {
                 return prospectiveBalance;
             }
 
@@ -233,8 +229,8 @@ public class MOBIL {
             int vehPerCoopVeh = (int) (1. / (fracCoop + 1e-6));
             double accCoop = 0;
             if (me.getId() % vehPerCoopVeh == 0) {
-                accCoop = -b * Math.max(0., (vc - vAdj) / vc)
-                        * (Math.min(1., Math.max(0, ((me.getSpeed() - vc) / vc))));
+                accCoop =
+                        -b * Math.max(0., (vc - vAdj) / vc) * (Math.min(1., Math.max(0, ((me.getSpeed() - vc) / vc))));
                 accCoop = Math.max(-b, accCoop + me.getAcc());
                 me.setSpeed(me.getSpeed() + dt * accCoop);
             }
@@ -258,8 +254,9 @@ public class MOBIL {
 
         final int biasSign = (changeTo == Lanes.TO_LEFT) ? 1 : -1;
 
-        prospectiveBalance = meDiffAcc + param.getPoliteness() * (oldBackDiffAcc + newBackDiffAcc)
-                - param.getThresholdAcceleration() - biasSign * param.getRightBiasAcceleration();
+        prospectiveBalance =
+                meDiffAcc + param.getPoliteness() * (oldBackDiffAcc + newBackDiffAcc) - param.getThresholdAcceleration()
+                        - biasSign * param.getRightBiasAcceleration();
 
         return prospectiveBalance;
     }

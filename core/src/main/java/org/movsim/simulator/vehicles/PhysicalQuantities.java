@@ -30,7 +30,7 @@ package org.movsim.simulator.vehicles;
  */
 public class PhysicalQuantities {
 
-    private final double tscale = 1;
+    private static final double TSCALE = 1;
 
     private final double xScale;
     private final double vScale;
@@ -42,23 +42,22 @@ public class PhysicalQuantities {
 
     /**
      * Instantiates a new physical quantities.
-     * 
-     * @param veh
-     *            the veh
+     *
+     * @param veh the veh
      */
     public PhysicalQuantities(Vehicle veh) {
         this.me = veh;
 
         xScale = veh.getLongitudinalModel() == null ? 1.0 : veh.getLongitudinalModel().getScalingLength();
 
-        vScale = xScale / tscale;
-        accScale = xScale * Math.pow(tscale, 2);
+        vScale = xScale / TSCALE;
+        accScale = xScale * Math.pow(TSCALE, 2);
         rhoScale = 1. / xScale;
     }
 
     /**
      * Returns this vehicle's length.
-     * 
+     *
      * @return vehicle's length, in meters
      */
     public double getLength() {
@@ -67,7 +66,7 @@ public class PhysicalQuantities {
 
     /**
      * Returns this vehicle's width.
-     * 
+     *
      * @return vehicle's width, in meters
      */
     public double getWidth() {
@@ -76,7 +75,7 @@ public class PhysicalQuantities {
 
     /**
      * Returns the position of the middle of this vehicle.
-     * 
+     *
      * @return position of the middle of this vehicle
      */
     public double getMidPosition() {
@@ -85,7 +84,7 @@ public class PhysicalQuantities {
 
     /**
      * Pos front bumper.
-     * 
+     *
      * @return the double
      */
     public double getFrontPosition() {
@@ -94,7 +93,7 @@ public class PhysicalQuantities {
 
     /**
      * Pos rear bumper.
-     * 
+     *
      * @return the double
      */
     public double getRearPosition() {
@@ -103,7 +102,7 @@ public class PhysicalQuantities {
 
     /**
      * Gets the position old.
-     * 
+     *
      * @return the position old
      */
     public double getFrontPositionOld() {
@@ -112,7 +111,7 @@ public class PhysicalQuantities {
 
     /**
      * Gets the speed.
-     * 
+     *
      * @return the speed
      */
     public double getSpeed() {
@@ -121,7 +120,7 @@ public class PhysicalQuantities {
 
     /**
      * Gets the acc.
-     * 
+     *
      * @return the acc
      */
     public double getAcc() {
@@ -134,9 +133,8 @@ public class PhysicalQuantities {
 
     /**
      * Gets the net distance.
-     * 
-     * @param vehFront
-     *            the veh front
+     *
+     * @param vehFront the veh front
      * @return the net distance
      */
     public double getNetDistance(Vehicle vehFront) {
@@ -149,9 +147,8 @@ public class PhysicalQuantities {
 
     /**
      * Gets the rel speed.
-     * 
-     * @param vehFront
-     *            the veh front
+     *
+     * @param vehFront the veh front
      * @return the rel speed
      */
     public double getRelSpeed(Vehicle vehFront) {

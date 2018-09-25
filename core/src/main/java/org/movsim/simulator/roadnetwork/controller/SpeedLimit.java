@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator.roadnetwork.controller;
 
+import com.google.common.base.Preconditions;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.network.autogen.opendrive.UserData;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -32,23 +33,17 @@ import org.movsim.simulator.roadnetwork.SignalPoint;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Units;
 
-import com.google.common.base.Preconditions;
-
 /**
  * Sets the externally given maximum speed for vehicles passing the position of the 'speedlimit'.
- * 
+ * <p>
  * <p>
  * The position, the speedlimit value and the validity length are given in the xodr network input file. Note that a second 'speedlimit'
  * cancelling the first speedlimit will be created if a 'validity length' is defined.
- * 
- * <br>
- * created: May 20, 2013<br>
- * 
  */
 public class SpeedLimit extends RoadObjectController {
 
     private final double speedLimitValue;
-    
+
     private final SignalPoint signalPoint;
 
     public SpeedLimit(double position, double speedLimitValue, RoadSegment roadSegment) {

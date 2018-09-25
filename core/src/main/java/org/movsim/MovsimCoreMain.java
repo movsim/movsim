@@ -38,8 +38,6 @@ import javax.xml.bind.JAXBException;
 import java.util.Locale;
 
 /**
- * The Class MovsimCoreMain.
- * <p>
  * MovSim core command line interface.
  */
 public class MovsimCoreMain {
