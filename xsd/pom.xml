@@ -17,7 +17,7 @@
                 <!-- https://github.com/highsource/maven-jaxb2-plugin -->
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.13.3</version>
+                <version>0.14.0</version>
                 <configuration>
                     <schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
                     <strict>true</strict>
