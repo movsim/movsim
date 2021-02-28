@@ -6,7 +6,7 @@ Current build status for branch *Master*: [![Build Status Master](https://api.tr
 
 Current build status for branch *develop*: [![Build Status Bidirectional](https://api.travis-ci.org/movsim/movsim.png?branch=develop)](https://travis-ci.org/movsim/movsim)
 
-Quick links to this file:
+Quick links to this file: 
 
 * [Description](#description)
 * [Documentation](#documentation)
