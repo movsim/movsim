@@ -25,6 +25,10 @@
  */
 package org.movsim;
 
+import java.util.Locale;
+
+import javax.xml.bind.JAXBException;
+
 import org.movsim.autogen.Movsim;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
@@ -33,9 +37,6 @@ import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-
-import javax.xml.bind.JAXBException;
-import java.util.Locale;
 
 /**
  * MovSim core command line interface.
@@ -74,7 +75,7 @@ public class MovsimCoreMain {
         }
     }
 
-    public static Simulator invokeSingleSimulation(Movsim inputData) throws JAXBException, SAXException {
+    public static Simulator invokeSingleSimulation(Movsim inputData) {
         Simulator simulator = new Simulator(inputData);
         simulator.initialize();
         simulator.runToCompletion();

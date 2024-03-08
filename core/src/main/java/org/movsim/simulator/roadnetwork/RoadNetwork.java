@@ -12,16 +12,18 @@
 
 package org.movsim.simulator.roadnetwork;
 
-import com.google.common.base.Preconditions;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.annotation.CheckForNull;
+
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.ExternalVehiclesController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckForNull;
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.google.common.base.Preconditions;
 
 /**
  * Iterable collection of the road segments in the road network.
@@ -329,7 +331,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public double totalVehicleTravelTime() {
         double totalVehicleTravelTime = 0.0;
         for (RoadSegment roadSegment : roadSegments) {
-            // TODO hidden vehicles are wrongly taken into account
+            // TODO hidden vehicles are wrongly taken into account. standstill vehicles? empty system at the sim end
             // totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
             if (roadSegment.sink() != null) {
                 totalVehicleTravelTime += roadSegment.sink().totalVehicleTravelTime();

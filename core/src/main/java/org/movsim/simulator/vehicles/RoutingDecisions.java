@@ -1,6 +1,7 @@
 package org.movsim.simulator.vehicles;
 
-import com.google.common.base.Preconditions;
+import java.util.List;
+
 import org.movsim.simulator.observer.RouteAlternative;
 import org.movsim.simulator.observer.ServiceProvider;
 import org.movsim.simulator.roadnetwork.Lanes;
@@ -10,7 +11,7 @@ import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import com.google.common.base.Preconditions;
 
 public class RoutingDecisions {
 
