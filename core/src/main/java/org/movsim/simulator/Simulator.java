@@ -11,12 +11,23 @@
  */
 package org.movsim.simulator;
 
-import com.google.common.base.Preconditions;
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.movsim.autogen.*;
+import org.movsim.autogen.CrossSection;
+import org.movsim.autogen.Movsim;
+import org.movsim.autogen.Road;
+import org.movsim.autogen.Simulation;
+import org.movsim.autogen.TrafficSinkType;
+import org.movsim.autogen.TrafficSourceType;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.FileTrafficSinkData;
@@ -29,9 +40,17 @@ import org.movsim.simulator.observer.ServiceProviders;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.RoadTypeSpeeds;
-import org.movsim.simulator.roadnetwork.boundaries.*;
+import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
+import org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries;
+import org.movsim.simulator.roadnetwork.boundaries.MicroscopicBoundaryConditions;
+import org.movsim.simulator.roadnetwork.boundaries.MicroscopicBoundaryInputData;
 import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
-import org.movsim.simulator.roadnetwork.controller.*;
+import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro;
+import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMicro;
+import org.movsim.simulator.roadnetwork.controller.FlowConservingBottleneck;
+import org.movsim.simulator.roadnetwork.controller.LoopDetector;
+import org.movsim.simulator.roadnetwork.controller.RoadObject;
+import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.TrafficLights;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.roadnetwork.regulator.Regulators;
@@ -45,12 +64,7 @@ import org.movsim.xml.InputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
+import com.google.common.base.Preconditions;
 
 public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
@@ -107,7 +121,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011-2013)");
 
         projectName = projectMetaData.getProjectName();
-        movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
+        if (movsimInput == null) {
+            movsimInput = InputLoader.unmarshallMovsim(projectMetaData.getInputFile());
+        }
 
         timeOffsetMillis = 0;
         if (movsimInput.getScenario().getSimulation().isSetTimeOffset()) {
