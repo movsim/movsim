@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
+<Movsim>
+    <VehiclePrototypes write_fund_diagrams="true">
+        <!-- optimal_speed_functions: 0=fullVD orig, 1=fullVD secBased, 2=threePhase, 3=complete_fvdm -->
+        <VehiclePrototypeConfiguration label="ImprovedFVDM1" length="8" maximum_deceleration="100">
+            <AccelerationModelType>
+                <ModelParameterOVM_FVDM v0="15" tau="5" s0="2" transition_width="8" beta="1.5" gamma="0.6" optimal_speed_function="improved_fvdm" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="8" maximum_deceleration="20">
+            <AccelerationModelType>
+                <ModelParameterOVM_FVDM v0="0" tau="5" s0="0" transition_width="8" beta="1.5" gamma="0.6" optimal_speed_function="bando" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="startStop.xodr" initial_conditions_filename="startStop_initialConditions.xml">
+        <Simulation timestep="0.2" duration="360" seed="42">
+            <TrafficComposition>
+                <VehicleType label="ImprovedFVDM1" fraction="1" />
+                <VehicleType label="Obstacle" fraction="0" />
+            </TrafficComposition>
+            <Road id="1" />
+        </Simulation>
+        <Routes>
+            <Route label="main">
+                <Road id="1" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <!-- output grid absorbs some information in acceleration -->
+            <FloatingCarOutput n_timestep="5" route="main">
+                <FloatingCar number="7" />
+                <FloatingCar number="12" />
+                <FloatingCar number="17" />
+                <FloatingCar number="22" />
+                <FloatingCar number="26" />  <!-- most downstram vehicle approaching obstacle -->
+            </FloatingCarOutput>
+            <Trajectories dt="1" route="main" />
+        </OutputConfiguration>
+    </Scenario>
+</Movsim>
+

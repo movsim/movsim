@@ -97,7 +97,7 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="" length="800.0" id="OVM" junction="-1">
+    <road name="" length="800.0" id="IFVDM" junction="-1">
         <planView>
             <geometry s="0.0" x="50.0" y="50.0" hdg="0.0" length="1050.0">
                 <line />
@@ -113,5 +113,21 @@
             </laneSection>
         </lanes>
     </road>
+    <road name="" length="800.0" id="OVM" junction="-1">
+            <planView>
+                <geometry s="0.0" x="50.0" y="10.0" hdg="0.0" length="1050.0">
+                    <line />
+                </geometry>
+            </planView>
+            <lanes>
+                <laneSection s="0.0">
+                    <right>
+                        <lane id="-1" type="driving" level="0">
+                            <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                        </lane>
+                    </right>
+                </laneSection>
+            </lanes>
+        </road>
 </OpenDRIVE>
 

@@ -276,6 +276,7 @@
             <xs:enumeration value="bando" />
             <xs:enumeration value="triangular" />
             <xs:enumeration value="threephase" />
+            <xs:enumeration value="improved_fvdm" />
         </xs:restriction>
     </xs:simpleType>
     <xs:element name="ModelParameterGipps">

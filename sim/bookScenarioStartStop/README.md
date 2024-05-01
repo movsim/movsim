@@ -11,6 +11,7 @@ Run and plot the simulations with `runall`.
 ## Continuous Car-Following Models
 
 * Adaptive Cruise Control model: startStop_ACC.xprj
+* Improved Full Velocity Difference Model: startStop_ImprovedFVDM.xprj
 * Full Velocity Difference Model: startStop_FVDM.xprj
 * Intelligent Driver Model with Memory: startStop_IDMM.xprj
 * Intelligent Driver Model: startStop_IDM.xprj
