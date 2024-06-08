@@ -15,34 +15,20 @@ class PTM extends LongitudinalModelBase {
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(PTM.class);
+    private static final int NTABMAX = 100;
 
     private final IModelParameterPTM param;
 
     private double delta; // 0.5*(1-gamma)
     private double dw; // 1-wm
-
     private double dt;
 
-    private Noise wienerProcess;
+    private Noise stochasticProcess;
 
-    private static final int NTABMAX = 100;
     /** tabulated d(U_PT)/da function */
     private LinearInterpolatedFunction uPTaFunction;
     /** tabulated d^2(U_PT)/da^2 */
     private LinearInterpolatedFunction uPaaFunction;
-
-    // double atab[101][inout.NYMAX];
-    // int n=101;
-    // double smax=60;
-    // double sref=20;
-    // double delta_s=smax/(n-1);
-    // double vmax=v0;
-    // double vref=20;
-    // double delta_v=vmax/(n-1);
-    // double dvmin=-vref;
-    // double dvmax=vref;
-    // double dvref=0;
-    // double delta_dv=(dvmax-dvmin)/(n-1);
 
     PTM(double simulationTimestep, IModelParameterPTM parameters) {
         super(ModelName.PTM);
@@ -55,9 +41,9 @@ class PTM extends LongitudinalModelBase {
 
     private void initNoise() {
         NoiseParameter noiseParameter = new NoiseParameter();
-        noiseParameter.setFluctStrength(1); // standard wiener process
+        noiseParameter.setFluctStrength(1); // standard Ornstein-Uhlenbeck process
         noiseParameter.setTau(param.getTauCorrelation());
-        wienerProcess = new Noise(noiseParameter);
+        stochasticProcess = new Noise(noiseParameter);
     }
 
     private void init() {
@@ -75,16 +61,16 @@ class PTM extends LongitudinalModelBase {
         double bMax = param.getBMax();
 
         double uPT = Math.min(bMax, Math.max(-bMax, uPTaFunction.value(a)));
-        return (a <= -bMax) ? wm * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta) : (a < bMax) ? uPT
-                : (wm + dw) * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta);
+        return (a <= -bMax) ? wm * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta) :
+                (a < bMax) ? uPT : (wm + dw) * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta);
     }
 
     private double get_uPTaa(double a) {
         double bmax = param.getBMax();
         double aPT = Math.min(bmax, Math.max(-bmax, uPaaFunction.value(a)));
-        return (a <= -bmax) ? -param.getWeightMinus() * 2 * delta * (1 - 2 * delta)
-                * Math.pow(a / param.getA0(), -2 * delta - 1) : (a < bmax) ? aPT : -(param.getWeightMinus() + dw) * 2
-                * delta * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta - 1);
+        return (a <= -bmax) ? -param.getWeightMinus() * 2 * delta * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta - 1) :
+                (a < bmax) ? aPT :
+                        -(param.getWeightMinus() + dw) * 2 * delta * (1 - 2 * delta) * Math.pow(a / param.getA0(), -2 * delta - 1);
     }
 
     @Override
@@ -107,7 +93,7 @@ class PTM extends LongitudinalModelBase {
         // final double localA = alphaA * param.getA();
 
         // update dynamical variables in class scope
-        wienerProcess.update(dt);
+        stochasticProcess.update(dt);
 
         return acc(s, v, dv, alphaT, localV0, 1);
     }
@@ -153,8 +139,7 @@ class PTM extends LongitudinalModelBase {
         double za = 0.5 * tau / (alphaloc * vloc); // z'(a)=const, z=arg. of std normal distr.
         double logval = Math.log(param.getA0() * param.getWeightCrash() * za / Math.sqrt(2 * Math.PI));
         if (logval <= 0) {
-            System.err
-                    .println("PTmodel.accSimple: zstar<0 or no solution => prob of approaching nearer than s0 or crash >1/2!");
+            System.err.println("PTmodel.accSimple: zstar<0 or no solution => prob of approaching nearer than s0 or crash >1/2!");
             return (-param.getBMax());
         }
         double zstar = (logval > 0) ? -Math.sqrt(2 * logval) : 0; // guess in arg of Gaussian
@@ -164,27 +149,15 @@ class PTM extends LongitudinalModelBase {
             return (-param.getBMax());
         }
 
-        // boolean test=false;
-        // if(test){
-        // cout <<"PTmodel.accSimple: in testAcc:"<<endl;
-        // cout <<" s="<<s<<" v="<<v<<" dv="<<dv<<endl;
-        // cout <<" tau="<<tau<<" za="<<za<<" zstar="<<zstar<<endl;
-        // cout << " 0th iteration: astar="<<astar<<endl;
-        // }
-
-        // PT acceleration (ii): Approximate solution for nonlineasr PT utility
-        // two times Newton
-
+        // PT acceleration (ii): Approximate solution for nonlineasr PT utility two times Newton
         // first iteration (zstar from above)
         double gaussDensity = ProbabilityUtils.getGaussDensity(zstar);
         double ua = get_uPTa(astar) - param.getWeightCrash() * gaussDensity * za; // U'(a)
         double uaa = get_uPTaa(astar) + param.getWeightCrash() * gaussDensity * zstar * za * za; // U'(a)
         astar = (uaa < 0) ? astar - ua / uaa : astar;
         if (uaa >= 0) {
-            System.err
-                    .println("PTmodel.accSimple: Warning: U''(a)>0 => Newton wants to go to utility minimum instead maximum");
+            System.err.println("PTmodel.accSimple: Warning: U''(a)>0 => Newton wants to go to utility minimum instead maximum");
         }
-        // if(testAcc){ cout << " 1th iteration: astar="<<astar<<endl;}
 
         // further iterations (zstar in recursion)
         for (int k = 1; k < 2; k++) {
@@ -193,7 +166,6 @@ class PTM extends LongitudinalModelBase {
             ua = get_uPTa(astar) - param.getWeightCrash() * gaussDensity * za; // U'(a)
             uaa = get_uPTaa(astar) + param.getWeightCrash() * gaussDensity * zstar * za * za; // U'(a)
             astar = (uaa < 0) ? astar - ua / uaa : astar;
-            // if(testAcc){ cout <<" " <<(k+1)<<"th iteration: astar="<<astar<<endl;}
         }
 
         // ######################################
@@ -207,29 +179,13 @@ class PTM extends LongitudinalModelBase {
             LOG.error("PTmodel:accSimple:Warning: variance-1/(beta*U''(a))={} negative", vara);
         }
 
-        // Implementing correlations with unit Wiener process
-        // Wiener variable updated in next higher-level function PTmodel::acc
+        // Implementing correlations with unit Ornstein-Uhlenbeck process
+        // Ornstein-Uhlenbeck variable updated in next higher-level function PTmodel::acc
 
-        double aPT = astar + stddeva * wienerProcess.getAccError();
+        double aPT = astar + stddeva * stochasticProcess.getAccError();
         double aVeryNear = -0. / Math.sqrt(sloc); // -0.2/sqrt(sloc); quick hack to introduce s0 effect !!!
         double aWanted = Math.min(afree, aPT + aVeryNear);
 
-        // nur Fehlertest!
-
-        // if (!((aWanted>-10000)&&(aWanted<10))){
-        // LOG.error("PTmodel.accSimple: acc={} not in right range!!", aWanted);
-        // cerr <<"s="<<s<<" v="<<v<<" dv="<<dv<<endl;
-        // //double tau=(dv>sloc/taumax) ? sloc/dv : taumax; // TTC lim. to taumax
-        // double tau=(dv>2*sloc/taumax) ? 2*sloc/dv : taumax; // !! other tau def
-        //
-        // double za=0.5*tau/(alphaloc*max(v,0.01)); // z'(a)=const, z=arg. of standard normal distr.
-        // double zstar=-sqrt(2*log(a0*wc*za/sqrt(2*PI))); // gues in arg of Gaussian
-        // double astar=2/tau*(sloc/tau-dv+alphaloc*v*zstar);
-        // cerr <<"Init. guess:  tau="<<tau<<" za="<<za<<" zstar="<<zstar
-        // <<" astar="<<astar<<" wiener="<<wiener<<endl;
-        // cerr<<"final value: aPT="<<aPT<<endl;
-        // exit(-1);
-        // }
         return Math.max(aWanted, -param.getBMax());
     }
 
@@ -244,62 +200,18 @@ class PTM extends LongitudinalModelBase {
             double lorenz = 1 / (1 + x * x);
             double g = x * Math.pow(lorenz, delta);
             double gx = Math.pow(lorenz, delta) - 2 * delta * x * x * Math.pow(lorenz, delta + 1);
-            double gxx = -6 * delta * x * Math.pow(lorenz, delta + 1) + 4 * delta * (delta + 1) * Math.pow(x, 3)
-                    * Math.pow(lorenz, delta + 2);
+            double gxx = -6 * delta * x * Math.pow(lorenz, delta + 1) + 4 * delta * (delta + 1) * Math.pow(x, 3) * Math.pow(lorenz,
+                    delta + 2);
             double prefactor = param.getWeightMinus() + 0.5 * dw * (1 + Math.tanh(x));
             double cosh2 = Math.pow(Math.cosh(x), 2);
 
             acc[i] = a;
             uPTatab[i] = 1 / param.getA0() * (prefactor * gx + 0.5 * dw * g / cosh2);
-            uPTaatab[i] = 1 / (param.getA0() * param.getA0())
-                    * (prefactor * gxx + dw / cosh2 * (gx - Math.tanh(x) * g));
+            uPTaatab[i] = 1 / (param.getA0() * param.getA0()) * (prefactor * gxx + dw / cosh2 * (gx - Math.tanh(x) * g));
         }
 
         this.uPTaFunction = new LinearInterpolatedFunction(acc, uPTatab);
         this.uPaaFunction = new LinearInterpolatedFunction(acc, uPTaatab);
     }
-
-    // sprintf(testfileName,"%s.acctab_s_v",fname);
-    // sprintf(titleString,"gap s\t\tv\t\taccSimple(s,v,%f,1,1)", dvref);
-    // cout <<"\nCalculating and writing "<<testfileName<<" ..."<<endl;
-    //
-    // for (int is=0; is<n; is++){
-    // for (int iv=0; iv<n; iv++){
-    // double s=is*delta_s;
-    // double v=iv*delta_v;
-    // atab[is][iv]=accSimple(s,v,dvref,1,1);
-    // }
-    // }
-    // inout.write_array2d(testfileName,0,smax,n,0,vmax,n,atab,titleString);
-
-    // acc(s,dv)
-
-    // sprintf(testfileName,"%s.acctab_s_dv",fname);
-    // sprintf(titleString,"gap s\t\tdv\t\taccSimple(s,%f,dv,1,1)", vref);
-    // cout <<"\nCalculating and writing "<<testfileName<<" ..."<<endl;
-    //
-    // for (int is=0; is<n; is++){
-    // for (int idv=0; idv<n; idv++){
-    // double s=0+is*delta_s;
-    // double dv=dvmin+idv*delta_dv;
-    // atab[is][idv]=accSimple(s,vref,dv,1,1);
-    // }
-    // }
-    // inout.write_array2d(testfileName,0,smax,n, dvmin,dvmax,n, atab,titleString);
-
-    // acc(v,dv)
-
-    // sprintf(testfileName,"%s.acctab_v_dv",fname);
-    // sprintf(titleString,"gap s\t\tdv\t\taccSimple(%f,v,dv,1,1)", sref);
-    // cout <<"\nCalculating and writing "<<testfileName<<" ..."<<endl;
-    //
-    // for (int iv=0; iv<n; iv++){
-    // for (int idv=0; idv<n; idv++){
-    // double v=iv*delta_v;
-    // double dv=dvmin+idv*delta_dv;
-    // atab[iv][idv]=accSimple(sref,v,dv,1,1);
-    // }
-    // }
-    // inout.write_array2d(testfileName,0,vmax,n, dvmin,dvmax,n, atab,titleString);
 
 }

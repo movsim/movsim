@@ -221,7 +221,8 @@ inside the *VehiclePrototypeConfiguration* block
   fluct_strength and a persistence (correlation) time *tau*:
   
 - the stochastic acceleration *A=fluct_strength* *W(tau)*
-  where *W(tau)* is a standard Wiener process
+  where *W(tau)* is a standard Ornstein-Uhlenbeck stochastic process (producing
+  temporally correlated values centered around zero)
 
 - for *tau* to infty, the noise becomes a vehicle-individual permanent acceleration
   bias, roughly comparable with defining heterogeneous  model

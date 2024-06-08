@@ -456,7 +456,7 @@
     </xs:complexType>
     <xs:element name="NoiseParameter">
         <xs:complexType>
-            <!-- wiener process if tau>0  -->
+            <!-- Ornstein-Uhlenbeck process if tau>0  -->
             <xs:attribute name="tau" type="nonNegativeDouble" default="0" />
             <xs:attribute name="fluct_strength" type="nonNegativeDouble" use="required" />
         </xs:complexType>

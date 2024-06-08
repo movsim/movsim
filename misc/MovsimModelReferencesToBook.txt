@@ -48,7 +48,7 @@ https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simul
 ------------------------------------------------------------
 
 Modeling Estimation Errors:
-* Acceleration Noise Model (Uncorrelated or correlated (Wiener) random process)
+* Acceleration Noise Model (Uncorrelated or correlated (Ornstein-Uhlenbeck) stochastic process)
 https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/Noise.java
 
 Local Traffic Context:
