@@ -47,7 +47,7 @@ public final class SimulationScan {
         throw new IllegalStateException("do not instanciate");
     }
 
-//    static final String OUTPUT_NAME = ".totalAvgTravelTime2d.csv";
+    //    static final String OUTPUT_NAME = ".totalAvgTravelTime2d.csv";
     static final String OUTPUT_NAME = ".totalAvgTravelTime_scan_uncertainty_0.csv";
 
     public static void invokeSimulationScan(final Movsim inputData) {
@@ -57,10 +57,10 @@ public final class SimulationScan {
         // double uncertaintyMax = 120;
         // double uncertaintyStep = 3;
 
-        // fix uncertainty
-          double uncertaintyMin = 0;
-          double uncertaintyMax = 0;
-          double uncertaintyStep = 3;
+        // fix uncertainty/ 1d scan only
+        double uncertaintyMin = 0;
+        double uncertaintyMax = 0;
+        double uncertaintyStep = 3;
 
         double fractionMin = 0.0;
         double fractionMax = 1;
